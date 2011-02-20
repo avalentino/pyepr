@@ -3,11 +3,29 @@
 import os
 import sys
 import unittest
+import functools
 
 sys.path.insert(0, os.pardir)
 import epr
 
 #PRODUCT_FILE = 'SAR_IMS_1PXESA20040920_034157_00000016A098_00290_49242_0715.E2'
+
+def quiet(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwds):
+        sysout = sys.stdout
+        syserr = sys.stderr
+        try:
+            with file(os.devnull) as fd:
+                sys.stdout = fd
+                sys.stderr = fd
+                ret = func(*args, **kwds)
+        finally:
+            sys.stdout = sysout
+            sys.stderr = syserr
+        return ret
+
+    return wrapper
 
 
 class TestOpenProduct(unittest.TestCase):
@@ -101,6 +119,18 @@ class TestDataset(unittest.TestCase):
     #def test_get_dsd(self):
     #    self.assertTrue(isinstance(self.dataset.get_dsd(), epr.DSD))
 
+    def test_create_record(self):
+        self.assertTrue(isinstance(self.dataset.create_record(), epr.Record))
+
+    def test_read_record(self):
+        self.assertTrue(isinstance(self.dataset.create_record(), epr.Record))
+
+    def test_read_record_passed(self):
+        created_record = self.dataset.create_record()
+        read_record = self.dataset.read_record(0, created_record)
+        self.assertTrue(created_record is read_record)
+        # @TODO: check contents
+
 
 class TestUninitializedDataset(unittest.TestCase):
     def setUp(self):
@@ -115,6 +145,61 @@ class TestUninitializedDataset(unittest.TestCase):
     def test_get_num_records(self):
         self.assertEqual(self.dataset.get_num_records(), 0)
 
+
+class TestRecord(unittest.TestCase):
+    PRODUCT_FILE = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
+    DATASET_NAME = 'MAIN_PROCESSING_PARAMS_ADS'
+
+    def setUp(self):
+        product = epr.Product(self.PRODUCT_FILE)
+        dataset = product.get_dataset(self.DATASET_NAME)
+        self.record = dataset.read_record(0)
+
+    def test_get_num_fields(self):
+        self.assertEqual(self.record.get_num_fields(), 220)
+
+    if False:
+        def test_dump_record(self):
+            self.record.dump_record()
+
+        def test_dump_element(self):
+            self.record.dump_element(0, 0)
+
+    def test_dump_element_field_out_of_range(self):
+        field = self.record.get_num_fields() + 10
+        self.assertRaises(epr.EPRError, self.record.dump_element, field, 0)
+
+    def test_dump_element_element_out_of_range(self):
+        self.assertRaises(epr.EPRError, self.record.dump_element, 0, 150)
+
+    @quiet
+    def test_print_record(self):
+        self.record.print_record()
+
+    @quiet
+    def test_print_record_ostream(self):
+        self.record.print_record(sys.stderr)
+
+    def test_print_record_invalid_ostream(self):
+        self.assertRaises(TypeError, self.record.print_record, 'invalid')
+
+    @quiet
+    def test_print_element(self):
+        self.record.print_element(0 ,0)
+
+    @quiet
+    def test_print_element_ostream(self):
+        self.record.print_element(0, 0, sys.stderr)
+
+    def test_print_element_invalid_ostream(self):
+        self.assertRaises(TypeError, self.record.print_element, 0, 0, 'invalid')
+
+    def test_print_element_field_out_of_range(self):
+        field = self.record.get_num_fields() + 10
+        self.assertRaises(epr.EPRError, self.record.print_element, field, 0)
+
+    def test_print_element_element_out_of_range(self):
+        self.assertRaises(epr.EPRError, self.record.print_element, 0, 150)
 
 if __name__ == '__main__':
     unittest.main()

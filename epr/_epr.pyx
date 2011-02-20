@@ -1,4 +1,11 @@
+cdef extern from 'Python.h':
+    ctypedef struct FILE
+    FILE* PyFile_AsFile(object)
+
 cdef extern from 'epr_api.h':
+    enum EPR_ErrCode:
+        e_err_none = 0
+
     struct EPR_ProductId:
         pass
 
@@ -8,12 +15,17 @@ cdef extern from 'epr_api.h':
     struct EPR_BandId:
         pass
 
+    struct EPR_Record:
+        pass
+
     #struct EPR_DSD:
     #    pass
 
+    ctypedef EPR_ErrCode   EPR_EErrCode
     ctypedef EPR_ProductId EPR_SProductId
     ctypedef EPR_DatasetId EPR_SDatasetId
     ctypedef EPR_BandId    EPR_SBandId
+    ctypedef EPR_Record    EPR_SRecord
     #ctypedef EPR_DSD       EPR_SDSD
 
     ctypedef unsigned int uint
@@ -24,19 +36,21 @@ cdef extern from 'epr_api.h':
         e_log_warning =  1
         e_log_error   =  2
 
-    # logging and error handling
     # @TODO: improve logging and error management (--> custom handlers)
+    # logging and error handling function pointers
     ctypedef void (*EPR_FLogHandler)(EPR_ELogLevel, char*)
     ctypedef void (*EPR_FErrHandler)(EPR_EErrCode, char*)
 
+    # logging
     #~ int epr_set_log_level(EPR_ELogLevel log_level)
     #~ void epr_set_log_handler(EPR_FLogHandler log_handler)
     void epr_log_message(EPR_ELogLevel, char*)
 
+    # error handling
     #~ void epr_set_err_handler(EPR_FErrHandler err_handler)
-    #~ EPR_EErrCode epr_get_last_err_code()
-    #~ const char* epr_get_last_err_message()
-    #~ void epr_clear_err()
+    EPR_EErrCode epr_get_last_err_code()
+    char* epr_get_last_err_message()
+    void epr_clear_err()
 
     # API initialization/finalization
     int epr_init_api(EPR_ELogLevel, EPR_FLogHandler, EPR_FErrHandler)
@@ -47,21 +61,19 @@ cdef extern from 'epr_api.h':
 
     # PRODUCT
     int epr_close_product(EPR_SProductId*)
-
     uint epr_get_scene_width(EPR_SProductId*)
     uint epr_get_scene_height(EPR_SProductId*)
-
     uint epr_get_num_datasets(EPR_SProductId*)
     EPR_SDatasetId* epr_get_dataset_id_at(EPR_SProductId*, uint)
     EPR_SDatasetId* epr_get_dataset_id(EPR_SProductId*, char*)
     uint epr_get_num_dsds(EPR_SProductId*)
     #EPR_SDSD* epr_get_dsd_at(EPR_SProductId*, uint)
-    #~ EPR_SRecord* epr_get_mph(EPR_SProductId*)
-    #~ EPR_SRecord* epr_get_sph(EPR_SProductId*)
+    EPR_SRecord* epr_get_mph(EPR_SProductId*)
+    EPR_SRecord* epr_get_sph(EPR_SProductId*)
 
     uint epr_get_num_bands(EPR_SProductId*)
-    EPR_SBandId* epr_get_band_id_at(EPR_SProductId*, uint)
-    EPR_SBandId* epr_get_band_id(EPR_SProductId*, char*)
+    #~ EPR_SBandId* epr_get_band_id_at(EPR_SProductId*, uint)
+    #~ EPR_SBandId* epr_get_band_id(EPR_SProductId*, char*)
     #~ int epr_read_bitmask_raster(EPR_SProductId* product_id, char* bm_expr, int offset_x, int offset_y, EPR_SRaster* raster);
 
     # DATASET
@@ -69,21 +81,18 @@ cdef extern from 'epr_api.h':
     char* epr_get_dsd_name(EPR_SDatasetId*)
     uint epr_get_num_records(EPR_SDatasetId*)
     #EPR_SDSD* epr_get_dsd(EPR_SDatasetId*)
-
-    #~ EPR_SRecord* epr_create_record(EPR_SDatasetId* dataset_id)
-    #~ EPR_SRecord* epr_read_record(EPR_SDatasetId* dataset_id,
-                                 #~ uint record_index,
-                                 #~ EPR_SRecord* record)
+    EPR_SRecord* epr_create_record(EPR_SDatasetId*)
+    EPR_SRecord* epr_read_record(EPR_SDatasetId*, uint, EPR_SRecord*)
 
     # RECORD
-    #~ void epr_free_record(EPR_SRecord* record)
+    void epr_free_record(EPR_SRecord*)
+    uint epr_get_num_fields(EPR_SRecord*)
+    void epr_print_record(EPR_SRecord*, FILE*)
+    void epr_print_element(EPR_SRecord*, uint, uint, FILE*)
+    void epr_dump_record(EPR_SRecord*)
+    void epr_dump_element(EPR_SRecord*, uint, uint)
     #~ const EPR_SField* epr_get_field(const EPR_SRecord* record, const char* field_name)
-    #~ uint epr_get_num_fields(const EPR_SRecord* record)
     #~ const EPR_SField* epr_get_field_at(const EPR_SRecord* record, uint field_index)
-    #~ void epr_print_record(const EPR_SRecord* record, FILE* ostream)
-    #~ void epr_print_element(const EPR_SRecord* record, uint field_index, uint element_index, FILE* ostream)
-    #~ void epr_dump_record(const EPR_SRecord* record)
-    #~ void epr_dump_element(const EPR_SRecord* record, uint field_index, uint element_index)
 
     # FIELD
     #~ void epr_print_field(const EPR_SField* field, FILE* ostream)
@@ -161,24 +170,98 @@ cdef extern from 'epr_api.h':
     #~ const char* epr_data_type_id_to_str(EPR_EDataTypeId data_type_id)
 
 
+import sys
+
+class EPRError(Exception):
+    def __init__(self, message='', code=None, *args, **kargs):
+        super(EPRError, self).__init__(message, code, *args, **kargs)
+        self.code = code
+
+cdef int pyepr_check_errors() except -1:
+    # @TODO: fine tuning of exceptions
+    cdef int code
+    code = epr_get_last_err_code()
+    if code != e_err_none:
+        msg = epr_get_last_err_message()
+        epr_clear_err()
+        raise EPRError(msg, epr_get_last_err_code())
+        return -1
+    return 0
+
 def _init_api():
-    if epr_init_api(e_log_warning, epr_log_message, NULL):
-        raise ImportError('unable to inizialize EPR API library')
+    #if epr_init_api(e_log_warning, epr_log_message, NULL):
+    if epr_init_api(e_log_warning, NULL, NULL):
+        msg = epr_get_last_err_message()
+        epr_clear_err()
+        raise ImportError('unable to inizialize EPR API library: %s' % msg)
+
 
 def _close_api():
     epr_close_api()
+    pyepr_check_errors()
 
 
 #cdef class DSD:
 #    cdef EPR_SDSD* _dsd_id
 
-
-cdef class Dataset:
-    cdef EPR_SDatasetId* _dataset_id
+cdef class Record:
+    cdef EPR_SRecord* _ptr
     cdef public object _parent
 
     def __cinit__(self):
         self._parent = None
+
+    def __dealloc__(self):
+        if self._ptr:
+            epr_free_record(self._ptr)
+            pyepr_check_errors()
+
+    def get_num_fields(self):
+        return epr_get_num_fields(self._ptr)
+
+    def print_record(self, ostream=None):
+        cdef FILE* fd
+
+        if ostream is None:
+            ostream = sys.stdout
+
+        fd = PyFile_AsFile(ostream)
+        if fd is NULL:
+            raise TypeError('invalid ostream')
+
+        epr_print_record(self._ptr, fd)
+        pyepr_check_errors()
+
+    def print_element(self, uint field_index, uint element_index, ostream=None):
+        cdef FILE* fd
+
+        if ostream is None:
+            ostream = sys.stdout
+
+        fd = PyFile_AsFile(ostream)
+        if fd is NULL:
+            raise TypeError('invalid ostream')
+
+        epr_print_element(self._ptr, field_index, element_index, fd)
+        pyepr_check_errors()
+
+    def dump_record(self):
+        epr_dump_record(self._ptr)
+        pyepr_check_errors()
+
+    def dump_element(self, uint field_index, uint element_index):
+        epr_dump_element(self._ptr, field_index, element_index)
+        pyepr_check_errors()
+
+    # @TODO: format_record, format_element --> str
+
+    #~ const EPR_SField* epr_get_field(const EPR_SRecord* record, const char* field_name)
+    #~ const EPR_SField* epr_get_field_at(const EPR_SRecord* record, uint field_index)
+
+
+cdef class Dataset:
+    cdef EPR_SDatasetId* _dataset_id
+    cdef public object _parent
 
     def get_dataset_name(self):
         if self._dataset_id:
@@ -199,23 +282,29 @@ cdef class Dataset:
     #    cdef EPR_SDSD* dsd_id
     #    # cast is used to silence warnings about constness
     #    dsd_id = <EPR_SDSD*>epr_get_dsd(self._dataset_id)
-    #    if dsd_id == NULL:
-    #        raise ValueError('unable to get DSD')
+    #    if dsd_id is NULL:
+    #        raise EPRError('unable to get DSD')
     #
     #    dsd = DSD()
     #    (<DSD>dsd)._dsd_id = dsd_id
     #    return dsd
 
-    #~ def create_record(self):
-        #~ EPR_SRecord* epr_create_record(self._dataset_id)
+    def create_record(self):
+        record = Record()
+        (<Record>record)._ptr = epr_create_record(self._dataset_id)
+        pyepr_check_errors()
+        record._parent = self
+        return record
 
-    #~ def read_record(self, index, record=None):
-        #~ if record is None:
-            #~ record = Record()
-        #~ EPR_SRecord* epr_read_record(self._dataset_id,
-                                     #~ uint record_index,
-                                     #~ EPR_SRecord* record)
-        #~ return record
+    def read_record(self, uint index, record=None):
+        if record is None:
+            record = self.create_record()
+
+        (<Record>record)._ptr = epr_read_record(self._dataset_id, index,
+                                                (<Record>record)._ptr)
+        if (<Record>record)._ptr is NULL:
+            raise ValueError('unable to read record at index "%s"' % index)
+        return record
 
 
 cdef class Product:
@@ -224,12 +313,13 @@ cdef class Product:
     def __cinit__(self, filename, *args, **kargs):
         self._product_id = epr_open_product(filename)
         if not self._product_id:
-            raise ValueError('unable to open %s' % filename)
+            msg = epr_get_last_err_message()
+            raise ValueError('unable to open %s: %s' % (filename, msg))
 
     def __dealloc__(self):
         if self._product_id:
-            if epr_close_product(self._product_id):
-                raise ValueError('an error occurred closing the product')
+            epr_close_product(self._product_id)
+            pyepr_check_errors()
 
     def get_scene_width(self):
         return epr_get_scene_width(self._product_id)
@@ -249,7 +339,7 @@ cdef class Product:
     def get_dataset_at(self, uint index):
         cdef EPR_SDatasetId* dataset_id
         dataset_id = epr_get_dataset_id_at(self._product_id, index)
-        if dataset_id == NULL:
+        if dataset_id is NULL:
             raise ValueError('unable to get dataset at index "%d"' % index)
 
         dataset = Dataset()
@@ -261,7 +351,7 @@ cdef class Product:
     def get_dataset(self, name):
         cdef EPR_SDatasetId* dataset_id
         dataset_id = epr_get_dataset_id(self._product_id, name)
-        if dataset_id == NULL:
+        if dataset_id is NULL:
             raise ValueError('unable to get dataset "%s"' % name)
 
         dataset = Dataset()
@@ -273,7 +363,7 @@ cdef class Product:
     #def get_dsd_at(self, uint index):
     #    cdef EPR_SDSD* dsd_id
     #    dsd_id = epr_get_dsd_at(self._product_id, index)
-    #    if dsd_id  == NULL:
+    #    if dsd_id is NULL:
     #        raise ValueError('unable to get DSD at index "%d"' % index)
     #
     #    dsd = DSD()
