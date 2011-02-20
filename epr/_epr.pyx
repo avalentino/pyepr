@@ -454,28 +454,28 @@ cdef class Record:
 
 
 cdef class Dataset:
-    cdef EPR_SDatasetId* _dataset_id
+    cdef EPR_SDatasetId* _ptr
     cdef public object _parent
 
     def get_dataset_name(self):
-        if self._dataset_id:
-            return epr_get_dataset_name(self._dataset_id)
+        if self._ptr:
+            return epr_get_dataset_name(self._ptr)
         return ''
 
     def get_dsd_name(self):
-        if self._dataset_id:
-            return epr_get_dsd_name(self._dataset_id)
+        if self._ptr:
+            return epr_get_dsd_name(self._ptr)
         return ''
 
     def get_num_records(self):
-        if self._dataset_id:
-            return epr_get_num_records(self._dataset_id)
+        if self._ptr:
+            return epr_get_num_records(self._ptr)
         return 0
 
     #def get_dsd(self):
     #    cdef EPR_SDSD* dsd_id
     #    # cast is used to silence warnings about constness
-    #    dsd_id = <EPR_SDSD*>epr_get_dsd(self._dataset_id)
+    #    dsd_id = <EPR_SDSD*>epr_get_dsd(self._ptr)
     #    if dsd_id is NULL:
     #        raise EPRError('unable to get DSD')
     #
@@ -485,7 +485,7 @@ cdef class Dataset:
 
     def create_record(self):
         record = Record()
-        (<Record>record)._ptr = epr_create_record(self._dataset_id)
+        (<Record>record)._ptr = epr_create_record(self._ptr)
         pyepr_check_errors()
         record._parent = self
         return record
@@ -494,7 +494,7 @@ cdef class Dataset:
         if record is None:
             record = self.create_record()
 
-        (<Record>record)._ptr = epr_read_record(self._dataset_id, index,
+        (<Record>record)._ptr = epr_read_record(self._ptr, index,
                                                 (<Record>record)._ptr)
         if (<Record>record)._ptr is NULL:
             raise ValueError('unable to read record at index "%d"' % index)
@@ -502,61 +502,61 @@ cdef class Dataset:
 
 
 cdef class Product:
-    cdef EPR_SProductId* _product_id
+    cdef EPR_SProductId* _ptr
 
     def __cinit__(self, filename, *args, **kargs):
-        self._product_id = epr_open_product(filename)
-        if not self._product_id:
+        self._ptr = epr_open_product(filename)
+        if not self._ptr:
             msg = epr_get_last_err_message()
             raise ValueError('unable to open %s: %s' % (filename, msg))
 
     def __dealloc__(self):
-        if self._product_id:
-            epr_close_product(self._product_id)
+        if self._ptr:
+            epr_close_product(self._ptr)
             pyepr_check_errors()
 
     def get_scene_width(self):
-        return epr_get_scene_width(self._product_id)
+        return epr_get_scene_width(self._ptr)
 
     def get_scene_height(self):
-        return epr_get_scene_height(self._product_id)
+        return epr_get_scene_height(self._ptr)
 
     def get_num_datasets(self):
-        return epr_get_num_datasets(self._product_id)
+        return epr_get_num_datasets(self._ptr)
 
     def get_num_dsds(self):
-        return epr_get_num_dsds(self._product_id)
+        return epr_get_num_dsds(self._ptr)
 
     def get_num_bands(self):
-        return epr_get_num_bands(self._product_id)
+        return epr_get_num_bands(self._ptr)
 
     def get_dataset_at(self, uint index):
         cdef EPR_SDatasetId* dataset_id
-        dataset_id = epr_get_dataset_id_at(self._product_id, index)
+        dataset_id = epr_get_dataset_id_at(self._ptr, index)
         if dataset_id is NULL:
             raise ValueError('unable to get dataset at index "%d"' % index)
 
         dataset = Dataset()
-        (<Dataset>dataset)._dataset_id = dataset_id
+        (<Dataset>dataset)._ptr = dataset_id
         dataset._parent = self
 
         return dataset
 
     def get_dataset(self, name):
         cdef EPR_SDatasetId* dataset_id
-        dataset_id = epr_get_dataset_id(self._product_id, name)
+        dataset_id = epr_get_dataset_id(self._ptr, name)
         if dataset_id is NULL:
             raise ValueError('unable to get dataset "%s"' % name)
 
         dataset = Dataset()
-        (<Dataset>dataset)._dataset_id = dataset_id
+        (<Dataset>dataset)._ptr = dataset_id
         dataset._parent = self
 
         return dataset
 
     #def get_dsd_at(self, uint index):
     #    cdef EPR_SDSD* dsd_id
-    #    dsd_id = epr_get_dsd_at(self._product_id, index)
+    #    dsd_id = epr_get_dsd_at(self._ptr, index)
     #    if dsd_id is NULL:
     #        raise ValueError('unable to get DSD at index "%d"' % index)
     #
@@ -572,7 +572,7 @@ cdef class Product:
     #~ EPR_SBandId* epr_get_band_id(EPR_SProductId* product_id, const char* band_name)
 
     #~ def read_bitmask_raster(self, bm_expr, offset_x, offset_y, raster):
-        #~ return epr_read_bitmask_raster(self._product_id,
+        #~ return epr_read_bitmask_raster(self._ptr,
                                 #~ const char* bm_expr,
                                 #~ int offset_x,
                                 #~ int offset_y,
