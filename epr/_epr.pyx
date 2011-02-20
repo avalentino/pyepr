@@ -1,24 +1,16 @@
 cdef extern from 'epr_api.h':
-    struct EPR_SProductId:
+    struct EPR_ProductId:
         pass
 
-    struct EPR_SDatasetId:
+    struct EPR_DatasetId:
         pass
 
-    struct EPR_SBandId:
+    struct EPR_BandId:
         pass
 
-    struct EPR_SRecord:
-        pass
-
-    struct EPR_SField:
-        pass
-
-    struct EPR_SDSD:
-        pass
-
-    struct EPR_SRaster:
-        pass
+    ctypedef EPR_ProductId EPR_SProductId
+    ctypedef EPR_DatasetId EPR_SDatasetId
+    ctypedef EPR_BandId    EPR_SBandId
 
     ctypedef unsigned int uint
 
@@ -60,8 +52,8 @@ cdef extern from 'epr_api.h':
     #~ EPR_SDSD* epr_get_dsd_at(const EPR_SProductId* product_id, uint dsd_index)
 
     uint epr_get_num_bands(EPR_SProductId*)
-    #~ EPR_SBandId* epr_get_band_id_at(EPR_SProductId* product_id, uint index)
-    #~ EPR_SBandId* epr_get_band_id(EPR_SProductId* product_id, const char* band_name)
+    EPR_SBandId* epr_get_band_id_at(EPR_SProductId*, uint)
+    EPR_SBandId* epr_get_band_id(EPR_SProductId*, char*)
     #~ int epr_read_bitmask_raster(EPR_SProductId* product_id, char* bm_expr, int offset_x, int offset_y, EPR_SRaster* raster);
 
     # DATASET
@@ -171,9 +163,10 @@ def _close_api():
 
 cdef class Dataset:
     cdef EPR_SDatasetId* _dataset_id
+    cdef public object _parent
 
-    def __init__(self, *args, **kargs):
-        self._product = None
+    def __cinit__(self):
+        self._parent = None
 
     def get_dataset_name(self):
         if self._dataset_id:
@@ -233,21 +226,30 @@ cdef class Product:
     def get_num_bands(self):
         return epr_get_num_bands(self._product_id)
 
-    #~ def get_dataset_at(self, index):
-        #~ dataset = Dataset()
-        #~ dataset._product = self
-        #~ dataset._dataset_id = epr_get_dataset_id_at(self._product_id, index)
-        #~ if not dataset._dataset_id:
-            #~ raise ValueError('unable to get dataset at index "%d"' % index)
-        #~ return dataset
+    def get_dataset_at(self, uint index):
+        cdef EPR_SDatasetId* dataset_id
+        dataset_id = epr_get_dataset_id_at(self._product_id, index)
+        if dataset_id == NULL:
+            raise ValueError('unable to get dataset at index "%d"' % index)
 
-    #~ def get_dataset(self, name):
-        #~ dataset = Dataset()
-        #~ dataset._product = self
-        #~ dataset._dataset_id = epr_get_dataset_id(self._product_id, name)
-        #~ if not dataset._dataset_id:
-            #~ raise ValueError('unable to get dataset at index "%s"' % name)
-        #~ return dataset
+        dataset = Dataset()
+        (<Dataset>dataset)._dataset_id = dataset_id
+        dataset._parent = self
+
+        return dataset
+
+    def get_dataset(self, name):
+        cdef EPR_SDatasetId* dataset_id
+        dataset_id = epr_get_dataset_id(self._product_id, name)
+        if dataset_id == NULL:
+            raise ValueError('unable to get dataset "%s"' % name)
+
+        dataset = Dataset()
+        (<Dataset>dataset)._dataset_id = dataset_id
+        dataset._parent = self
+
+        return dataset
+
 
     #~ EPR_SRecord* epr_get_mph(const EPR_SProductId* product_id)
     #~ EPR_SRecord* epr_get_sph(const EPR_SProductId* product_id)
@@ -266,3 +268,10 @@ cdef class Product:
 
 def open(filename):
     return Product(filename)
+
+# library initialization
+_init_api()
+
+import atexit
+atexit.register(_close_api)
+del atexit

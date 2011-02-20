@@ -38,13 +38,13 @@ class TestProduct(unittest.TestCase):
     def test_get_num_bands(self):
         self.assertEqual(self.product.get_num_bands(), 5)
 
-    #~ def test_get_dataset_at(self):
-        #~ dataset = self.product.get_dataset_id_at(0)
-        #~ self.assertTrue(dataset)
+    def test_get_dataset_at(self):
+        dataset = self.product.get_dataset_at(0)
+        self.assertTrue(dataset)
 
-    #~ def test_get_dataset(self):
-        #~ dataset = self.product.get_dataset_id('')
-        #~ self.assertTrue(dataset)
+    def test_get_dataset(self):
+        dataset = self.product.get_dataset('MDS1')
+        self.assertTrue(dataset)
 
 
 if __name__ == '__main__':
