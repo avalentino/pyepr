@@ -20,11 +20,9 @@ cdef extern from 'epr_api.h':
         e_log_warning =  1
         e_log_error   =  2
 
+    # @TODO: improve logging and error management (--> custom handlers)
     ctypedef void (*EPR_FLogHandler)(EPR_ELogLevel, char*)
     ctypedef void (*EPR_FErrHandler)(EPR_EErrCode, char*)
-
-    int epr_init_api(EPR_ELogLevel, EPR_FLogHandler, EPR_FErrHandler)
-    void epr_close_api()
 
     #~ int epr_set_log_level(EPR_ELogLevel log_level)
     #~ void epr_set_log_handler(EPR_FLogHandler log_handler)
@@ -34,6 +32,11 @@ cdef extern from 'epr_api.h':
     #~ EPR_EErrCode epr_get_last_err_code()
     #~ const char* epr_get_last_err_message()
     #~ void epr_clear_err()
+
+
+    int epr_init_api(EPR_ELogLevel, EPR_FLogHandler, EPR_FErrHandler)
+    void epr_close_api()
+
 
     EPR_SProductId* epr_open_product(char*)
 
