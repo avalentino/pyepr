@@ -8,9 +8,13 @@ cdef extern from 'epr_api.h':
     struct EPR_BandId:
         pass
 
+    #struct EPR_DSD:
+    #    pass
+
     ctypedef EPR_ProductId EPR_SProductId
     ctypedef EPR_DatasetId EPR_SDatasetId
     ctypedef EPR_BandId    EPR_SBandId
+    #ctypedef EPR_DSD       EPR_SDSD
 
     ctypedef unsigned int uint
 
@@ -20,6 +24,7 @@ cdef extern from 'epr_api.h':
         e_log_warning =  1
         e_log_error   =  2
 
+    # logging and error handling
     # @TODO: improve logging and error management (--> custom handlers)
     ctypedef void (*EPR_FLogHandler)(EPR_ELogLevel, char*)
     ctypedef void (*EPR_FErrHandler)(EPR_EErrCode, char*)
@@ -33,11 +38,11 @@ cdef extern from 'epr_api.h':
     #~ const char* epr_get_last_err_message()
     #~ void epr_clear_err()
 
-
+    # API initialization/finalization
     int epr_init_api(EPR_ELogLevel, EPR_FLogHandler, EPR_FErrHandler)
     void epr_close_api()
 
-
+    # open products
     EPR_SProductId* epr_open_product(char*)
 
     # PRODUCT
@@ -49,10 +54,10 @@ cdef extern from 'epr_api.h':
     uint epr_get_num_datasets(EPR_SProductId*)
     EPR_SDatasetId* epr_get_dataset_id_at(EPR_SProductId*, uint)
     EPR_SDatasetId* epr_get_dataset_id(EPR_SProductId*, char*)
+    uint epr_get_num_dsds(EPR_SProductId*)
+    #EPR_SDSD* epr_get_dsd_at(EPR_SProductId*, uint)
     #~ EPR_SRecord* epr_get_mph(EPR_SProductId*)
     #~ EPR_SRecord* epr_get_sph(EPR_SProductId*)
-    uint epr_get_num_dsds(EPR_SProductId*)
-    #~ EPR_SDSD* epr_get_dsd_at(const EPR_SProductId* product_id, uint dsd_index)
 
     uint epr_get_num_bands(EPR_SProductId*)
     EPR_SBandId* epr_get_band_id_at(EPR_SProductId*, uint)
@@ -62,8 +67,8 @@ cdef extern from 'epr_api.h':
     # DATASET
     char* epr_get_dataset_name(EPR_SDatasetId*)
     char* epr_get_dsd_name(EPR_SDatasetId*)
-    #~ const EPR_SDSD* epr_get_dsd(const EPR_SDatasetId* dataset_id)
     uint epr_get_num_records(EPR_SDatasetId*)
+    #EPR_SDSD* epr_get_dsd(EPR_SDatasetId*)
 
     #~ EPR_SRecord* epr_create_record(EPR_SDatasetId* dataset_id)
     #~ EPR_SRecord* epr_read_record(EPR_SDatasetId* dataset_id,
@@ -164,6 +169,10 @@ def _close_api():
     epr_close_api()
 
 
+#cdef class DSD:
+#    cdef EPR_SDSD* _dsd_id
+
+
 cdef class Dataset:
     cdef EPR_SDatasetId* _dataset_id
     cdef public object _parent
@@ -186,8 +195,16 @@ cdef class Dataset:
             return epr_get_num_records(self._dataset_id)
         return 0
 
-    #~ def get_dsd(self):
-        #~ const EPR_SDSD* epr_get_dsd(self._dataset_id)
+    #def get_dsd(self):
+    #    cdef EPR_SDSD* dsd_id
+    #    # cast is used to silence warnings about constness
+    #    dsd_id = <EPR_SDSD*>epr_get_dsd(self._dataset_id)
+    #    if dsd_id == NULL:
+    #        raise ValueError('unable to get DSD')
+    #
+    #    dsd = DSD()
+    #    (<DSD>dsd)._dsd_id = dsd_id
+    #    return dsd
 
     #~ def create_record(self):
         #~ EPR_SRecord* epr_create_record(self._dataset_id)
@@ -253,10 +270,20 @@ cdef class Product:
 
         return dataset
 
+    #def get_dsd_at(self, uint index):
+    #    cdef EPR_SDSD* dsd_id
+    #    dsd_id = epr_get_dsd_at(self._product_id, index)
+    #    if dsd_id  == NULL:
+    #        raise ValueError('unable to get DSD at index "%d"' % index)
+    #
+    #    dsd = DSD()
+    #    (<DSD>dsd)._dsd_id = dsd_id
+    #
+    #    return dsd
+
 
     #~ EPR_SRecord* epr_get_mph(const EPR_SProductId* product_id)
     #~ EPR_SRecord* epr_get_sph(const EPR_SProductId* product_id)
-    #~ EPR_SDSD* epr_get_dsd_at(const EPR_SProductId* product_id, uint dsd_index)
     #~ EPR_SBandId* epr_get_band_id_at(EPR_SProductId* product_id, uint index)
     #~ EPR_SBandId* epr_get_band_id(EPR_SProductId* product_id, const char* band_name)
 

@@ -77,6 +77,9 @@ class TestProduct(unittest.TestCase):
         dataset_names = [ds.get_dataset_name() for ds in datasets]
         self.assertEqual(dataset_names, self.DATASET_NAMES)
 
+    #def test_get_dsd_at(self):
+    #    self.assertTrue(isinstance(self.product.get_dsd_at(0), epr.DSD))
+
 
 class TestDataset(unittest.TestCase):
     PRODUCT_FILE = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
@@ -94,6 +97,9 @@ class TestDataset(unittest.TestCase):
 
     def test_get_num_records(self):
         self.assertEqual(self.dataset.get_num_records(), 8192)
+
+    #def test_get_dsd(self):
+    #    self.assertTrue(isinstance(self.dataset.get_dsd(), epr.DSD))
 
 
 class TestUninitializedDataset(unittest.TestCase):
