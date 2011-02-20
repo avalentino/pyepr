@@ -95,13 +95,13 @@ cdef extern from 'epr_api.h':
     #~ const EPR_SField* epr_get_field_at(const EPR_SRecord* record, uint field_index)
 
     # FIELD
-    #~ void epr_print_field(const EPR_SField* field, FILE* ostream)
-    #~ void epr_dump_field(const EPR_SField* field)
+    #~ void epr_print_field(EPR_SField*, FILE*)
+    #~ void epr_dump_field(EPR_SField*)
 
-    #~ const char* epr_get_field_unit(const EPR_SField* field)
-    #~ const char* epr_get_field_description(const EPR_SField* field)
-    #~ uint epr_get_field_num_elems(const EPR_SField* field)
-    #~ const char* epr_get_field_name(const EPR_SField* field)
+    #~ char* epr_get_field_unit(EPR_SField*)
+    #~ char* epr_get_field_description(EPR_SField*)
+    #~ uint epr_get_field_num_elems(EPR_SField*)
+    #~ char* epr_get_field_name(EPR_SField*)
     #~ EPR_EDataTypeId epr_get_field_type(const EPR_SField* field)
 
     #~ char epr_get_field_elem_as_char(const EPR_SField* field, uint elem_index)
@@ -245,13 +245,13 @@ cdef class Record:
         epr_print_element(self._ptr, field_index, element_index, fd)
         pyepr_check_errors()
 
-    def dump_record(self):
-        epr_dump_record(self._ptr)
-        pyepr_check_errors()
+    #def dump_record(self):
+    #    epr_dump_record(self._ptr)
+    #    pyepr_check_errors()
 
-    def dump_element(self, uint field_index, uint element_index):
-        epr_dump_element(self._ptr, field_index, element_index)
-        pyepr_check_errors()
+    #def dump_element(self, uint field_index, uint element_index):
+    #    epr_dump_element(self._ptr, field_index, element_index)
+    #    pyepr_check_errors()
 
     # @TODO: format_record, format_element --> str
 

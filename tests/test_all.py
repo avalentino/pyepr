@@ -158,12 +158,13 @@ class TestRecord(unittest.TestCase):
     def test_get_num_fields(self):
         self.assertEqual(self.record.get_num_fields(), 220)
 
-    if False:
-        def test_dump_record(self):
-            self.record.dump_record()
-
-        def test_dump_element(self):
-            self.record.dump_element(0, 0)
+    #ALLOW_DUMP = False
+    #if ALLOW_DUMP:
+    #    def test_dump_record(self):
+    #        self.record.dump_record()
+    #
+    #    def test_dump_element(self):
+    #        self.record.dump_element(0, 0)
 
     def test_dump_element_field_out_of_range(self):
         field = self.record.get_num_fields() + 10
