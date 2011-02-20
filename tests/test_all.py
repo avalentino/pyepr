@@ -158,20 +158,19 @@ class TestRecord(unittest.TestCase):
     def test_get_num_fields(self):
         self.assertEqual(self.record.get_num_fields(), 220)
 
-    #ALLOW_DUMP = False
     #if ALLOW_DUMP:
     #    def test_dump_record(self):
     #        self.record.dump_record()
     #
     #    def test_dump_element(self):
     #        self.record.dump_element(0, 0)
-
-    def test_dump_element_field_out_of_range(self):
-        field = self.record.get_num_fields() + 10
-        self.assertRaises(epr.EPRError, self.record.dump_element, field, 0)
-
-    def test_dump_element_element_out_of_range(self):
-        self.assertRaises(epr.EPRError, self.record.dump_element, 0, 150)
+    #
+    #    def test_dump_element_field_out_of_range(self):
+    #        field = self.record.get_num_fields() + 10
+    #        self.assertRaises(epr.EPRError, self.record.dump_element, field, 0)
+    #
+    #    def test_dump_element_element_out_of_range(self):
+    #        self.assertRaises(epr.EPRError, self.record.dump_element, 0, 150)
 
     @quiet
     def test_print_record(self):
@@ -196,11 +195,80 @@ class TestRecord(unittest.TestCase):
         self.assertRaises(TypeError, self.record.print_element, 0, 0, 'invalid')
 
     def test_print_element_field_out_of_range(self):
-        field = self.record.get_num_fields() + 10
-        self.assertRaises(epr.EPRError, self.record.print_element, field, 0)
+        index = self.record.get_num_fields() + 10
+        self.assertRaises(epr.EPRError, self.record.print_element, index, 0)
 
     def test_print_element_element_out_of_range(self):
         self.assertRaises(epr.EPRError, self.record.print_element, 0, 150)
+
+    def test_get_field(self):
+        field = self.record.get_field('range_spacing')
+        self.assertTrue(isinstance(field, epr.Field))
+
+    def test_get_field_invlid_name(self):
+        self.assertRaises(ValueError, self.record.get_field, '')
+
+    def test_get_field_at(self):
+        self.assertTrue(isinstance(self.record.get_field_at(0), epr.Field))
+
+    def test_get_field_at_invalid_index(self):
+        index = self.record.get_num_fields() + 10
+        self.assertRaises(ValueError, self.record.get_field_at, index)
+
+
+class TestField(unittest.TestCase):
+    PRODUCT_FILE = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
+    DATASET_NAME = 'MAIN_PROCESSING_PARAMS_ADS'
+
+    def setUp(self):
+        product = epr.Product(self.PRODUCT_FILE)
+        dataset = product.get_dataset(self.DATASET_NAME)
+        record = dataset.read_record(0)
+        self.field = record.get_field('range_spacing')
+
+    @quiet
+    def test_print_field(self):
+        self.field.print_field()
+
+    @quiet
+    def test_print_fied_ostream(self):
+        self.field.print_field(sys.stderr)
+
+    def test_print_fied_invalid_ostream(self):
+        self.assertRaises(TypeError, self.field.print_field, 'invalid')
+
+    #if ALLOW_DUMP:
+    #    def test_dump_field(self):
+    #        self.field.dump_field()
+
+    def test_get_field_unit(self):
+        self.assertEqual(self.field.get_field_unit(), 'm')
+
+    def test_get_field_description(self):
+        self.assertEqual(self.field.get_field_description(),
+                         'Range sample spacing')
+
+    def test_get_field_num_elems(self):
+        self.assertEqual(self.field.get_field_num_elems(), 1)
+
+    def test_get_field_name(self):
+        self.assertEqual(self.field.get_field_name(), 'range_spacing')
+
+    def test_get_field_type(self):
+        self.assertEqual(self.field.get_field_type(), epr.E_TID_FLOAT)
+
+    def test_get_field_type_name(self):
+        self.assertEqual(self.field.get_field_type_name(), 'float')
+
+    def test_get_field_elem(self):
+        self.assertEqual(self.field.get_field_elem(), 12.5)
+
+    def test_get_field_elem_index(self):
+        self.assertEqual(self.field.get_field_elem(0), 12.5)
+
+    def test_get_field_elem_invalid_index(self):
+        self.assertRaises(epr.EPRError, self.field.get_field_elem, 100)
+
 
 if __name__ == '__main__':
     unittest.main()

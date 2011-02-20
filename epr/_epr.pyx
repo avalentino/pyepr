@@ -3,8 +3,32 @@ cdef extern from 'Python.h':
     FILE* PyFile_AsFile(object)
 
 cdef extern from 'epr_api.h':
+    ctypedef unsigned char  uchar
+    ctypedef unsigned short ushort
+    ctypedef unsigned int   uint
+
     enum EPR_ErrCode:
         e_err_none = 0
+
+    enum EPR_DataTypeId:
+        e_tid_unknown = 0
+        e_tid_uchar   = 1
+        e_tid_char    = 2
+        e_tid_ushort  = 3
+        e_tid_short   = 4
+        e_tid_uint    = 5
+        e_tid_int     = 6
+        e_tid_float   = 7
+        e_tid_double  = 8
+        e_tid_string  = 11
+        e_tid_spare   = 13
+        e_tid_time    = 21
+
+    enum EPR_ELogLevel:
+        e_log_debug   = -1
+        e_log_info    =  0
+        e_log_warning =  1
+        e_log_error   =  2
 
     struct EPR_ProductId:
         pass
@@ -18,23 +42,26 @@ cdef extern from 'epr_api.h':
     struct EPR_Record:
         pass
 
+    struct EPR_Field:
+        pass
+
     #struct EPR_DSD:
     #    pass
 
-    ctypedef EPR_ErrCode   EPR_EErrCode
-    ctypedef EPR_ProductId EPR_SProductId
-    ctypedef EPR_DatasetId EPR_SDatasetId
-    ctypedef EPR_BandId    EPR_SBandId
-    ctypedef EPR_Record    EPR_SRecord
-    #ctypedef EPR_DSD       EPR_SDSD
+    struct EPR_Time:
+        int  days
+        uint seconds
+        uint microseconds
 
-    ctypedef unsigned int uint
-
-    enum EPR_ELogLevel:
-        e_log_debug   = -1
-        e_log_info    =  0
-        e_log_warning =  1
-        e_log_error   =  2
+    ctypedef EPR_ErrCode    EPR_EErrCode
+    ctypedef EPR_DataTypeId EPR_EDataTypeId
+    ctypedef EPR_ProductId  EPR_SProductId
+    ctypedef EPR_DatasetId  EPR_SDatasetId
+    ctypedef EPR_BandId     EPR_SBandId
+    ctypedef EPR_Record     EPR_SRecord
+    ctypedef EPR_Field      EPR_SField
+    #ctypedef EPR_DSD        EPR_SDSD
+    ctypedef EPR_Time       EPR_STime
 
     # @TODO: improve logging and error management (--> custom handlers)
     # logging and error handling function pointers
@@ -91,29 +118,29 @@ cdef extern from 'epr_api.h':
     void epr_print_element(EPR_SRecord*, uint, uint, FILE*)
     void epr_dump_record(EPR_SRecord*)
     void epr_dump_element(EPR_SRecord*, uint, uint)
-    #~ const EPR_SField* epr_get_field(const EPR_SRecord* record, const char* field_name)
-    #~ const EPR_SField* epr_get_field_at(const EPR_SRecord* record, uint field_index)
+    EPR_SField* epr_get_field(EPR_SRecord*, char*)
+    EPR_SField* epr_get_field_at(EPR_SRecord*, uint)
 
     # FIELD
-    #~ void epr_print_field(EPR_SField*, FILE*)
-    #~ void epr_dump_field(EPR_SField*)
+    void epr_print_field(EPR_SField*, FILE*)
+    void epr_dump_field(EPR_SField*)
 
-    #~ char* epr_get_field_unit(EPR_SField*)
-    #~ char* epr_get_field_description(EPR_SField*)
-    #~ uint epr_get_field_num_elems(EPR_SField*)
-    #~ char* epr_get_field_name(EPR_SField*)
-    #~ EPR_EDataTypeId epr_get_field_type(const EPR_SField* field)
+    char* epr_get_field_unit(EPR_SField*)
+    char* epr_get_field_description(EPR_SField*)
+    uint epr_get_field_num_elems(EPR_SField*)
+    char* epr_get_field_name(EPR_SField*)
+    EPR_EDataTypeId epr_get_field_type(EPR_SField*)
 
-    #~ char epr_get_field_elem_as_char(const EPR_SField* field, uint elem_index)
-    #~ uchar epr_get_field_elem_as_uchar(const EPR_SField* field, uint elem_index)
-    #~ short epr_get_field_elem_as_short(const EPR_SField* field, uint elem_index)
-    #~ ushort epr_get_field_elem_as_ushort(const EPR_SField* field, uint elem_index)
-    #~ int epr_get_field_elem_as_int(const EPR_SField* field, uint elem_index)
-    #~ uint epr_get_field_elem_as_uint(const EPR_SField* field, uint elem_index)
-    #~ float epr_get_field_elem_as_float(const EPR_SField* field, uint elem_index)
-    #~ double epr_get_field_elem_as_double(const EPR_SField* field, uint elem_index)
-    #~ const EPR_STime* epr_get_field_elem_as_mjd(const EPR_SField* field)
-    #~ const char* epr_get_field_elem_as_str(const EPR_SField* field)
+    char epr_get_field_elem_as_char(EPR_SField*, uint)
+    uchar epr_get_field_elem_as_uchar(EPR_SField*, uint)
+    short epr_get_field_elem_as_short(EPR_SField*, uint)
+    ushort epr_get_field_elem_as_ushort(EPR_SField*, uint)
+    int epr_get_field_elem_as_int(EPR_SField*, uint)
+    uint epr_get_field_elem_as_uint(EPR_SField*, uint)
+    float epr_get_field_elem_as_float(EPR_SField*, uint)
+    double epr_get_field_elem_as_double(EPR_SField*, uint)
+    char* epr_get_field_elem_as_str(EPR_SField*)
+    EPR_STime* epr_get_field_elem_as_mjd(EPR_SField*)
 
     #~ const char* epr_get_field_elems_char(const EPR_SField* field)
     #~ const uchar* epr_get_field_elems_uchar(const EPR_SField* field)
@@ -171,11 +198,30 @@ cdef extern from 'epr_api.h':
 
 
 import sys
+import collections
+
+
+# utils
+EPRTime = collections.namedtuple('EPRTime', ('days', 'seconds', 'microseconds'))
+
+E_TID_UNKNOWN = 0
+E_TID_UCHAR   = 1
+E_TID_CHAR    = 2
+E_TID_USHORT  = 3
+E_TID_SHORT   = 4
+E_TID_UINT    = 5
+E_TID_INT     = 6
+E_TID_FLOAT   = 7
+E_TID_DOUBLE  = 8
+E_TID_STRING  = 11
+E_TID_SPARE   = 13
+E_TID_TIME    = 21
 
 class EPRError(Exception):
     def __init__(self, message='', code=None, *args, **kargs):
         super(EPRError, self).__init__(message, code, *args, **kargs)
         self.code = code
+
 
 cdef int pyepr_check_errors() except -1:
     # @TODO: fine tuning of exceptions
@@ -188,6 +234,36 @@ cdef int pyepr_check_errors() except -1:
         return -1
     return 0
 
+TYPEMAP = {
+    e_tid_unknown: 'unknown',
+    e_tid_uchar:   'uchar',
+    e_tid_char:    'char',
+    e_tid_ushort:  'ushort',
+    e_tid_short:   'short',
+    e_tid_uint:    'uint',
+    e_tid_int:     'int',
+    e_tid_float:   'float',
+    e_tid_double:  'double',
+    e_tid_string:  'string',
+    e_tid_spare:   'spare',
+    e_tid_time:    'time',
+
+    'unknown': e_tid_unknown,
+    'uchar':   e_tid_uchar,
+    'char':    e_tid_char,
+    'ushort':  e_tid_ushort,
+    'short':   e_tid_short,
+    'uint':    e_tid_uint,
+    'int':     e_tid_int,
+    'float':   e_tid_float,
+    'double':  e_tid_double,
+    'string':  e_tid_string,
+    'spare':   e_tid_spare,
+    'time':    e_tid_time,
+}
+
+
+# library API initialization/finalization
 def _init_api():
     #if epr_init_api(e_log_warning, epr_log_message, NULL):
     if epr_init_api(e_log_warning, NULL, NULL):
@@ -204,12 +280,104 @@ def _close_api():
 #cdef class DSD:
 #    cdef EPR_SDSD* _dsd_id
 
+
+cdef class Field:
+    cdef EPR_SField* _ptr
+    cdef public object _parent
+
+    def print_field(self, ostream=None):
+        cdef FILE* fd
+
+        if ostream is None:
+            ostream = sys.stdout
+
+        fd = PyFile_AsFile(ostream)
+        if fd is NULL:
+            raise TypeError('invalid ostream')
+
+        epr_print_field(self._ptr, fd)
+        pyepr_check_errors()
+
+    #def dump_field(self):
+    #    epr_dump_field(self._ptr)
+    #    pyepr_check_errors()
+
+    def get_field_unit(self):
+        return epr_get_field_unit(self._ptr)
+
+    def get_field_description(self):
+        return epr_get_field_description(self._ptr)
+
+    def get_field_num_elems(self):
+        return epr_get_field_num_elems(self._ptr)
+
+    def get_field_name(self):
+        return epr_get_field_name(self._ptr)
+
+    def get_field_type(self):
+        return epr_get_field_type(self._ptr)
+
+    def get_field_type_name(self):
+        etype = epr_get_field_type(self._ptr)
+        return TYPEMAP[etype]
+
+    def get_field_elem(self, uint index=0):
+        cdef EPR_STime* eprtime
+        etype = epr_get_field_type(self._ptr)
+
+        if etype == e_tid_uchar:
+            val = epr_get_field_elem_as_char(self._ptr, index)
+        elif etype == e_tid_char:
+            val = epr_get_field_elem_as_uchar(self._ptr, index)
+        elif etype == e_tid_ushort:
+            val = epr_get_field_elem_as_ushort(self._ptr, index)
+        elif etype == e_tid_short:
+            val = epr_get_field_elem_as_short(self._ptr, index)
+        elif etype == e_tid_uint:
+            val = epr_get_field_elem_as_uint(self._ptr, index)
+        elif etype == e_tid_int:
+            val = epr_get_field_elem_as_int(self._ptr, index)
+        elif etype == e_tid_float:
+            val = epr_get_field_elem_as_float(self._ptr, index)
+        elif etype == e_tid_double:
+            val = epr_get_field_elem_as_double(self._ptr, index)
+        elif etype == e_tid_string:
+            if index != 0:
+                raise ValueError('invalid index: %d' % index)
+            val = epr_get_field_elem_as_str(self._ptr)
+        #elif etype == e_tid_spare:
+        #    val = epr_get_field_elem_as_str(self._ptr)
+        elif etype == e_tid_time:
+            if index != 0:
+                raise ValueError('invalid index: %d' % index)
+
+            # use casting to silence warnings
+            eprtime = <EPR_STime*>epr_get_field_elem_as_mjd(self._ptr)
+            val = EPRTime(eprtime.days, eprtime.seconds, eprtime.microseconds)
+        else:
+            raise ValueError('invalid field type')
+
+        pyepr_check_errors()
+        return val
+
+    #~ const char* epr_get_field_elems_char(const EPR_SField* field)
+    #~ const uchar* epr_get_field_elems_uchar(const EPR_SField* field)
+    #~ const short* epr_get_field_elems_short(const EPR_SField* field)
+    #~ const ushort* epr_get_field_elems_ushort(const EPR_SField* field)
+    #~ const int* epr_get_field_elems_int(const EPR_SField* field)
+    #~ const uint* epr_get_field_elems_uint(const EPR_SField* field)
+    #~ const float* epr_get_field_elems_float(const EPR_SField* field)
+    #~ const double* epr_get_field_elems_double(const EPR_SField* field)
+
+    #~ uint epr_copy_field_elems_as_ints(const EPR_SField* field, int* buffer, uint num_elems)
+    #~ uint epr_copy_field_elems_as_uints(const EPR_SField* field, uint* buffer, uint num_elems)
+    #~ uint epr_copy_field_elems_as_floats(const EPR_SField* field, float* buffer, uint num_elems)
+    #~ uint epr_copy_field_elems_as_doubles(const EPR_SField* field, double* buffer, uint num_elems)
+
+
 cdef class Record:
     cdef EPR_SRecord* _ptr
     cdef public object _parent
-
-    def __cinit__(self):
-        self._parent = None
 
     def __dealloc__(self):
         if self._ptr:
@@ -255,8 +423,34 @@ cdef class Record:
 
     # @TODO: format_record, format_element --> str
 
-    #~ const EPR_SField* epr_get_field(const EPR_SRecord* record, const char* field_name)
-    #~ const EPR_SField* epr_get_field_at(const EPR_SRecord* record, uint field_index)
+    def get_field(self, name):
+        cdef EPR_SField* ptr
+        ptr = <EPR_SField*>epr_get_field(self._ptr, name)
+        if ptr is NULL:
+            msg = epr_get_last_err_message()
+            epr_clear_err()
+            raise ValueError('unable to get field "%s": %s' % (name, msg))
+
+        field = Field()
+        (<Field>field)._ptr = ptr
+        field._parent = self
+
+        return field
+
+    def get_field_at(self, uint index):
+        cdef EPR_SField* ptr
+        ptr = <EPR_SField*>epr_get_field_at(self._ptr, index)
+        if ptr is NULL:
+            msg = epr_get_last_err_message()
+            epr_clear_err()
+            raise ValueError('unable to get field at index "%d": %s' % (index,
+                                                                        msg))
+
+        field = Field()
+        (<Field>field)._ptr = ptr
+        field._parent = self
+
+        return field
 
 
 cdef class Dataset:
@@ -303,7 +497,7 @@ cdef class Dataset:
         (<Record>record)._ptr = epr_read_record(self._dataset_id, index,
                                                 (<Record>record)._ptr)
         if (<Record>record)._ptr is NULL:
-            raise ValueError('unable to read record at index "%s"' % index)
+            raise ValueError('unable to read record at index "%d"' % index)
         return record
 
 
