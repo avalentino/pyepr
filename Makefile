@@ -1,6 +1,9 @@
 #!/usr/bin/make -f
 
-.PHONY: clean distclean
+.PHONY: default clean distclean
+
+default:
+	python setup.py build_ext --inplace
 
 clean:
 	python setup.py clean
