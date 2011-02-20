@@ -47,5 +47,39 @@ class TestProduct(unittest.TestCase):
         self.assertTrue(dataset)
 
 
+class TestDataset(unittest.TestCase):
+    DATASET_NAME = 'MDS1'
+
+    def setUp(self):
+        self.product = epr.Product(PRODUCT_FILE)
+        self.dataset = self.product.get_dataset(self.DATASET_NAME)
+
+    def test_get_dataset_name(self):
+        self.assertEqual(self.dataset.get_dataset_name(), self.DATASET_NAME)
+
+    def test_get_dsd_name(self):
+        self.assertEqual(self.dataset.get_dsd_name(), self.DATASET_NAME)
+
+    def test_get_num_records(self):
+        self.assertEqual(self.dataset.get_num_records(), 8192)
+
+
+class TestUninitializedDataset(unittest.TestCase):
+    DATASET_NAME = ''
+
+    def setUp(self):
+        self.product = epr.Product(PRODUCT_FILE)
+        self.dataset = epr.Dataset()
+
+    def test_get_dataset_name(self):
+        self.assertEqual(self.dataset.get_dataset_name(), '')
+
+    def test_get_dsd_name(self):
+        self.assertEqual(self.dataset.get_dsd_name(), '')
+
+    def test_get_num_records(self):
+        self.assertEqual(self.dataset.get_num_records(), 0)
+
+
 if __name__ == '__main__':
     unittest.main()
