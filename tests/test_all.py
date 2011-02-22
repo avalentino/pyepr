@@ -5,6 +5,8 @@ import sys
 import unittest
 import functools
 
+import numpy as np
+
 sys.path.insert(0, os.pardir)
 import epr
 
@@ -185,7 +187,7 @@ class TestRecord(unittest.TestCase):
 
     @quiet
     def test_print_element(self):
-        self.record.print_element(0 ,0)
+        self.record.print_element(3, 0)
 
     @quiet
     def test_print_element_ostream(self):
@@ -220,11 +222,19 @@ class TestField(unittest.TestCase):
     PRODUCT_FILE = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
     DATASET_NAME = 'MAIN_PROCESSING_PARAMS_ADS'
 
+    FIELD_NAME = 'range_spacing'
+    FIELD_DESCRIPTION = 'Range sample spacing'
+    FIELD_TYPE = epr.E_TID_FLOAT
+    FIELD_TYPE_NAME = 'float'
+    FIELD_NUM_ELEMS = 1
+    FIELD_VALUES = (12.5,)
+    FIELD_UNIT = 'm'
+
     def setUp(self):
         product = epr.Product(self.PRODUCT_FILE)
         dataset = product.get_dataset(self.DATASET_NAME)
         record = dataset.read_record(0)
-        self.field = record.get_field('range_spacing')
+        self.field = record.get_field(self.FIELD_NAME)
 
     @quiet
     def test_print_field(self):
@@ -242,32 +252,49 @@ class TestField(unittest.TestCase):
     #        self.field.dump_field()
 
     def test_get_field_unit(self):
-        self.assertEqual(self.field.get_field_unit(), 'm')
+        self.assertEqual(self.field.get_field_unit(), self.FIELD_UNIT)
 
     def test_get_field_description(self):
         self.assertEqual(self.field.get_field_description(),
-                         'Range sample spacing')
+                         self.FIELD_DESCRIPTION)
 
     def test_get_field_num_elems(self):
-        self.assertEqual(self.field.get_field_num_elems(), 1)
+        self.assertEqual(self.field.get_field_num_elems(), self.FIELD_NUM_ELEMS)
 
     def test_get_field_name(self):
-        self.assertEqual(self.field.get_field_name(), 'range_spacing')
+        self.assertEqual(self.field.get_field_name(), self.FIELD_NAME)
 
     def test_get_field_type(self):
-        self.assertEqual(self.field.get_field_type(), epr.E_TID_FLOAT)
+        self.assertEqual(self.field.get_field_type(), self.FIELD_TYPE)
 
     def test_get_field_type_name(self):
-        self.assertEqual(self.field.get_field_type_name(), 'float')
+        self.assertEqual(self.field.get_field_type_name(), self.FIELD_TYPE_NAME)
 
     def test_get_field_elem(self):
-        self.assertEqual(self.field.get_field_elem(), 12.5)
+        self.assertEqual(self.field.get_field_elem(), self.FIELD_VALUES[0])
 
     def test_get_field_elem_index(self):
-        self.assertEqual(self.field.get_field_elem(0), 12.5)
+        self.assertEqual(self.field.get_field_elem(0), self.FIELD_VALUES[0])
 
     def test_get_field_elem_invalid_index(self):
         self.assertRaises(epr.EPRError, self.field.get_field_elem, 100)
+
+    def test_get_field_elems(self):
+        vect = self.field.get_field_elems()
+        self.assertTrue(isinstance(vect, np.ndarray))
+        self.assertEqual(vect.shape, (self.field.get_field_num_elems(),))
+        self.assertEqual(vect.dtype, np.float32)
+        self.assertTrue(np.allclose(vect, self.FIELD_VALUES))
+
+
+class TestFieldWithMiltipleElems(TestField):
+    FIELD_NAME = 'image_parameters.first_swst_value'
+    FIELD_DESCRIPTION = 'Sampling Window Start time of first processed line'
+    FIELD_TYPE = epr.E_TID_FLOAT
+    FIELD_TYPE_NAME = 'float'
+    FIELD_NUM_ELEMS = 5
+    FIELD_VALUES = (6.0600759752560407e-05, 0., 0., 0., 0.)
+    FIELD_UNIT = 's'
 
 
 if __name__ == '__main__':

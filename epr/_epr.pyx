@@ -6,6 +6,7 @@ cdef extern from 'epr_api.h':
     ctypedef unsigned char  uchar
     ctypedef unsigned short ushort
     ctypedef unsigned int   uint
+    #ctypedef unsigned long  ulong
 
     enum EPR_ErrCode:
         e_err_none = 0
@@ -142,14 +143,14 @@ cdef extern from 'epr_api.h':
     char* epr_get_field_elem_as_str(EPR_SField*)
     EPR_STime* epr_get_field_elem_as_mjd(EPR_SField*)
 
-    #~ const char* epr_get_field_elems_char(const EPR_SField* field)
-    #~ const uchar* epr_get_field_elems_uchar(const EPR_SField* field)
-    #~ const short* epr_get_field_elems_short(const EPR_SField* field)
-    #~ const ushort* epr_get_field_elems_ushort(const EPR_SField* field)
-    #~ const int* epr_get_field_elems_int(const EPR_SField* field)
-    #~ const uint* epr_get_field_elems_uint(const EPR_SField* field)
-    #~ const float* epr_get_field_elems_float(const EPR_SField* field)
-    #~ const double* epr_get_field_elems_double(const EPR_SField* field)
+    char* epr_get_field_elems_char(EPR_SField*)
+    uchar* epr_get_field_elems_uchar(EPR_SField*)
+    short* epr_get_field_elems_short(EPR_SField*)
+    ushort* epr_get_field_elems_ushort(EPR_SField*)
+    int* epr_get_field_elems_int(EPR_SField*)
+    uint* epr_get_field_elems_uint(EPR_SField*)
+    float* epr_get_field_elems_float(EPR_SField*)
+    double* epr_get_field_elems_double(EPR_SField*)
 
     #~ uint epr_copy_field_elems_as_ints(const EPR_SField* field, int* buffer, uint num_elems)
     #~ uint epr_copy_field_elems_as_uints(const EPR_SField* field, uint* buffer, uint num_elems)
@@ -199,6 +200,8 @@ cdef extern from 'epr_api.h':
 
 import sys
 import collections
+import numpy as np
+cimport numpy as np
 
 
 # utils
@@ -233,6 +236,13 @@ cdef int pyepr_check_errors() except -1:
         raise EPRError(msg, epr_get_last_err_code())
         return -1
     return 0
+
+cdef int pyepr_null_ptr_error(msg='null pointer') except -1:
+    cdef char* eprmsg = epr_get_last_err_message()
+    epr_clear_err()
+    raise ValueError('%s: %s' % (msg, eprmsg))
+    return -1
+
 
 TYPEMAP = {
     e_tid_unknown: 'unknown',
@@ -360,14 +370,77 @@ cdef class Field:
         pyepr_check_errors()
         return val
 
-    #~ const char* epr_get_field_elems_char(const EPR_SField* field)
-    #~ const uchar* epr_get_field_elems_uchar(const EPR_SField* field)
-    #~ const short* epr_get_field_elems_short(const EPR_SField* field)
-    #~ const ushort* epr_get_field_elems_ushort(const EPR_SField* field)
-    #~ const int* epr_get_field_elems_int(const EPR_SField* field)
-    #~ const uint* epr_get_field_elems_uint(const EPR_SField* field)
-    #~ const float* epr_get_field_elems_float(const EPR_SField* field)
-    #~ const double* epr_get_field_elems_double(const EPR_SField* field)
+    def get_field_elems(self):
+        # @NOTE: internal C const pointer is not shared with numpy
+        cdef void* buf
+        cdef size_t i
+        cdef size_t n
+        cdef np.ndarray out
+
+        n = epr_get_field_num_elems(self._ptr)
+        etype = epr_get_field_type(self._ptr)
+
+        if etype == e_tid_uchar:
+            buf = <uchar*>epr_get_field_elems_char(self._ptr)
+            if buf is NULL:
+                pyepr_null_ptr_error()
+            out = np.ndarray(n, np.uchar)
+            #memcpy(out.data, buf, n*sizeof(uchar)) # @TODO: check
+            for i in range(n):
+                out[i] = (<uchar*>buf)[i]
+        elif etype == e_tid_char:
+            buf = <char*>epr_get_field_elems_uchar(self._ptr)
+            if buf is NULL:
+                pyepr_null_ptr_error()
+            out = np.ndarray(n, np.char)
+            for i in range(n):
+                out[i] = (<char*>buf)[i]
+        elif etype == e_tid_ushort:
+            buf = <ushort*>epr_get_field_elems_ushort(self._ptr)
+            if buf is NULL:
+                pyepr_null_ptr_error()
+            out = np.ndarray(n, np.ushort)
+            for i in range(n):
+                out[i] = (<ushort*>buf)[i]
+        elif etype == e_tid_short:
+            buf = <short*>epr_get_field_elems_short(self._ptr)
+            if buf is NULL:
+                pyepr_null_ptr_error()
+            out = np.ndarray(n, np.short)
+            for i in range(n):
+                out[i] = (<short*>buf)[i]
+        elif etype == e_tid_uint:
+            buf = <uint*>epr_get_field_elems_uint(self._ptr)
+            if buf is NULL:
+                pyepr_null_ptr_error()
+            out = np.ndarray(n, np.uint)
+            for i in range(n):
+                out[i] = (<uint*>buf)[i]
+        elif etype == e_tid_int:
+            buf = <int*>epr_get_field_elems_int(self._ptr)
+            if buf is NULL:
+                pyepr_null_ptr_error()
+            out = np.ndarray(n, np.int)
+            for i in range(n):
+                out[i] = (<int*>buf)[i]
+        elif etype == e_tid_float:
+            buf = <float*>epr_get_field_elems_float(self._ptr)
+            if buf is NULL:
+                pyepr_null_ptr_error()
+            out = np.ndarray(n, np.float32)
+            for i in range(n):
+                out[i] = (<float*>buf)[i]
+        elif etype == e_tid_double:
+            buf = <double*>epr_get_field_elems_double(self._ptr)
+            if buf is NULL:
+                pyepr_null_ptr_error()
+            out = np.ndarray(n, np.double)
+            for i in range(n):
+                out[i] = (<double*>buf)[i]
+        else:
+            raise ValueError('invalid field type')
+
+        return out
 
     #~ uint epr_copy_field_elems_as_ints(const EPR_SField* field, int* buffer, uint num_elems)
     #~ uint epr_copy_field_elems_as_uints(const EPR_SField* field, uint* buffer, uint num_elems)
@@ -427,9 +500,7 @@ cdef class Record:
         cdef EPR_SField* ptr
         ptr = <EPR_SField*>epr_get_field(self._ptr, name)
         if ptr is NULL:
-            msg = epr_get_last_err_message()
-            epr_clear_err()
-            raise ValueError('unable to get field "%s": %s' % (name, msg))
+            pyepr_null_ptr_error('unable to get field "%s"' % name)
 
         field = Field()
         (<Field>field)._ptr = ptr
@@ -441,10 +512,7 @@ cdef class Record:
         cdef EPR_SField* ptr
         ptr = <EPR_SField*>epr_get_field_at(self._ptr, index)
         if ptr is NULL:
-            msg = epr_get_last_err_message()
-            epr_clear_err()
-            raise ValueError('unable to get field at index "%d": %s' % (index,
-                                                                        msg))
+            pyepr_null_ptr_error('unable to get field at index %d' % index)
 
         field = Field()
         (<Field>field)._ptr = ptr
@@ -477,7 +545,7 @@ cdef class Dataset:
     #    # cast is used to silence warnings about constness
     #    dsd_id = <EPR_SDSD*>epr_get_dsd(self._ptr)
     #    if dsd_id is NULL:
-    #        raise EPRError('unable to get DSD')
+    #        pyepr_null_ptr_error('unable to get DSD')
     #
     #    dsd = DSD()
     #    (<DSD>dsd)._dsd_id = dsd_id
@@ -497,7 +565,7 @@ cdef class Dataset:
         (<Record>record)._ptr = epr_read_record(self._ptr, index,
                                                 (<Record>record)._ptr)
         if (<Record>record)._ptr is NULL:
-            raise ValueError('unable to read record at index "%d"' % index)
+            pyepr_null_ptr_error('unable to read record at index %d' % index)
         return record
 
 
@@ -506,9 +574,8 @@ cdef class Product:
 
     def __cinit__(self, filename, *args, **kargs):
         self._ptr = epr_open_product(filename)
-        if not self._ptr:
-            msg = epr_get_last_err_message()
-            raise ValueError('unable to open %s: %s' % (filename, msg))
+        if self._ptr is NULL:
+            pyepr_null_ptr_error('unable to open %s' % filename)
 
     def __dealloc__(self):
         if self._ptr:
@@ -534,7 +601,7 @@ cdef class Product:
         cdef EPR_SDatasetId* dataset_id
         dataset_id = epr_get_dataset_id_at(self._ptr, index)
         if dataset_id is NULL:
-            raise ValueError('unable to get dataset at index "%d"' % index)
+            pyepr_null_ptr_error('unable to get dataset at index %d' % index)
 
         dataset = Dataset()
         (<Dataset>dataset)._ptr = dataset_id
@@ -546,7 +613,7 @@ cdef class Product:
         cdef EPR_SDatasetId* dataset_id
         dataset_id = epr_get_dataset_id(self._ptr, name)
         if dataset_id is NULL:
-            raise ValueError('unable to get dataset "%s"' % name)
+            pyepr_null_ptr_error('unable to get dataset "%s"' % name)
 
         dataset = Dataset()
         (<Dataset>dataset)._ptr = dataset_id
@@ -558,7 +625,7 @@ cdef class Product:
     #    cdef EPR_SDSD* dsd_id
     #    dsd_id = epr_get_dsd_at(self._ptr, index)
     #    if dsd_id is NULL:
-    #        raise ValueError('unable to get DSD at index "%d"' % index)
+    #        pyepr_null_ptr_error('unable to get DSD at index "%d"' % index)
     #
     #    dsd = DSD()
     #    (<DSD>dsd)._dsd_id = dsd_id
