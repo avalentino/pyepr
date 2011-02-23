@@ -238,7 +238,7 @@ cdef int pyepr_check_errors() except -1:
     return 0
 
 cdef int pyepr_null_ptr_error(msg='null pointer') except -1:
-    cdef char* eprmsg = epr_get_last_err_message()
+    cdef char* eprmsg = <char*>epr_get_last_err_message()
     epr_clear_err()
     raise ValueError('%s: %s' % (msg, eprmsg))
     return -1
@@ -373,69 +373,69 @@ cdef class Field:
     def get_field_elems(self):
         # @NOTE: internal C const pointer is not shared with numpy
         cdef void* buf
+        cdef size_t num_elems
         cdef size_t i
-        cdef size_t n
         cdef np.ndarray out
 
-        n = epr_get_field_num_elems(self._ptr)
+        num_elems = epr_get_field_num_elems(self._ptr)
         etype = epr_get_field_type(self._ptr)
 
         if etype == e_tid_uchar:
             buf = <uchar*>epr_get_field_elems_char(self._ptr)
             if buf is NULL:
                 pyepr_null_ptr_error()
-            out = np.ndarray(n, np.uchar)
-            #memcpy(out.data, buf, n*sizeof(uchar)) # @TODO: check
-            for i in range(n):
+            out = np.ndarray(num_elems, np.uchar)
+            #memcpy(out.data, buf, num_elems*sizeof(uchar)) # @TODO: check
+            for i in range(num_elems):
                 out[i] = (<uchar*>buf)[i]
         elif etype == e_tid_char:
             buf = <char*>epr_get_field_elems_uchar(self._ptr)
             if buf is NULL:
                 pyepr_null_ptr_error()
-            out = np.ndarray(n, np.char)
-            for i in range(n):
+            out = np.ndarray(num_elems, np.char)
+            for i in range(num_elems):
                 out[i] = (<char*>buf)[i]
         elif etype == e_tid_ushort:
             buf = <ushort*>epr_get_field_elems_ushort(self._ptr)
             if buf is NULL:
                 pyepr_null_ptr_error()
-            out = np.ndarray(n, np.ushort)
-            for i in range(n):
+            out = np.ndarray(num_elems, np.ushort)
+            for i in range(num_elems):
                 out[i] = (<ushort*>buf)[i]
         elif etype == e_tid_short:
             buf = <short*>epr_get_field_elems_short(self._ptr)
             if buf is NULL:
                 pyepr_null_ptr_error()
-            out = np.ndarray(n, np.short)
-            for i in range(n):
+            out = np.ndarray(num_elems, np.short)
+            for i in range(num_elems):
                 out[i] = (<short*>buf)[i]
         elif etype == e_tid_uint:
             buf = <uint*>epr_get_field_elems_uint(self._ptr)
             if buf is NULL:
                 pyepr_null_ptr_error()
-            out = np.ndarray(n, np.uint)
-            for i in range(n):
+            out = np.ndarray(num_elems, np.uint)
+            for i in range(num_elems):
                 out[i] = (<uint*>buf)[i]
         elif etype == e_tid_int:
             buf = <int*>epr_get_field_elems_int(self._ptr)
             if buf is NULL:
                 pyepr_null_ptr_error()
-            out = np.ndarray(n, np.int)
-            for i in range(n):
+            out = np.ndarray(num_elems, np.int)
+            for i in range(num_elems):
                 out[i] = (<int*>buf)[i]
         elif etype == e_tid_float:
             buf = <float*>epr_get_field_elems_float(self._ptr)
             if buf is NULL:
                 pyepr_null_ptr_error()
-            out = np.ndarray(n, np.float32)
-            for i in range(n):
+            out = np.ndarray(num_elems, np.float32)
+            for i in range(num_elems):
                 out[i] = (<float*>buf)[i]
         elif etype == e_tid_double:
             buf = <double*>epr_get_field_elems_double(self._ptr)
             if buf is NULL:
                 pyepr_null_ptr_error()
-            out = np.ndarray(n, np.double)
-            for i in range(n):
+            out = np.ndarray(num_elems, np.double)
+            for i in range(num_elems):
                 out[i] = (<double*>buf)[i]
         else:
             raise ValueError('invalid field type')
