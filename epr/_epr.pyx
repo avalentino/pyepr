@@ -156,10 +156,10 @@ cdef extern from 'epr_api.h':
     float* epr_get_field_elems_float(EPR_SField*)
     double* epr_get_field_elems_double(EPR_SField*)
 
-    #~ uint epr_copy_field_elems_as_ints(const EPR_SField* field, int* buffer, uint num_elems)
-    #~ uint epr_copy_field_elems_as_uints(const EPR_SField* field, uint* buffer, uint num_elems)
-    #~ uint epr_copy_field_elems_as_floats(const EPR_SField* field, float* buffer, uint num_elems)
-    #~ uint epr_copy_field_elems_as_doubles(const EPR_SField* field, double* buffer, uint num_elems)
+    #uint epr_copy_field_elems_as_ints(EPR_SField*, int*, uint)
+    #uint epr_copy_field_elems_as_uints(EPR_SField*, uint*, uint)
+    #uint epr_copy_field_elems_as_floats(EPR_SField*, float*, uint)
+    #uint epr_copy_field_elems_as_doubles(EPR_SField*, double*, uint)
 
     # BAND
     #~ EPR_SRaster* epr_create_compatible_raster(EPR_SBandId* band_id,
