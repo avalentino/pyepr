@@ -267,9 +267,6 @@ class TestField(unittest.TestCase):
     def test_get_field_type(self):
         self.assertEqual(self.field.get_field_type(), self.FIELD_TYPE)
 
-    def test_get_field_type_name(self):
-        self.assertEqual(self.field.get_field_type_name(), self.FIELD_TYPE_NAME)
-
     def test_get_field_elem(self):
         self.assertEqual(self.field.get_field_elem(), self.FIELD_VALUES[0])
 
@@ -295,6 +292,46 @@ class TestFieldWithMiltipleElems(TestField):
     FIELD_NUM_ELEMS = 5
     FIELD_VALUES = (6.0600759752560407e-05, 0., 0., 0., 0.)
     FIELD_UNIT = 's'
+
+
+class TestDataypeFunctions(unittest.TestCase):
+    TYPE_NAMES = {
+        epr.E_TID_UNKNOWN: '',
+        epr.E_TID_UCHAR:   'uchar',
+        epr.E_TID_CHAR:    'char',
+        epr.E_TID_USHORT:  'ushort',
+        epr.E_TID_SHORT:   'short',
+        epr.E_TID_UINT:    'uint',
+        epr.E_TID_INT:     'int',
+        epr.E_TID_FLOAT:   'float',
+        epr.E_TID_DOUBLE:  'double',
+        epr.E_TID_STRING:  'string',
+        epr.E_TID_SPARE:   'spare',
+        epr.E_TID_TIME:    'time',
+    }
+
+    TYPE_SIZES = {
+        epr.E_TID_UNKNOWN: 0,
+        epr.E_TID_UCHAR:   1,
+        epr.E_TID_CHAR:    1,
+        epr.E_TID_USHORT:  2,
+        epr.E_TID_SHORT:   2,
+        epr.E_TID_UINT:    4,
+        epr.E_TID_INT:     4,
+        epr.E_TID_FLOAT:   4,
+        epr.E_TID_DOUBLE:  8,
+        epr.E_TID_STRING:  1,
+        epr.E_TID_SPARE:   1,
+        epr.E_TID_TIME:    12,
+    }
+
+    def test_data_type_id_to_str(self):
+        for type_id, type_name in self.TYPE_NAMES.items():
+            self.assertEqual(epr.data_type_id_to_str(type_id), type_name)
+
+    def test_get_data_type_size(self):
+        for type_id, type_size in self.TYPE_SIZES.items():
+            self.assertEqual(epr.get_data_type_size(type_id), type_size)
 
 
 if __name__ == '__main__':

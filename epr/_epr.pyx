@@ -84,6 +84,10 @@ cdef extern from 'epr_api.h':
     int epr_init_api(EPR_ELogLevel, EPR_FLogHandler, EPR_FErrHandler)
     void epr_close_api()
 
+    # DATATYPE
+    uint epr_get_data_type_size(EPR_EDataTypeId)
+    char* epr_data_type_id_to_str(EPR_EDataTypeId)
+
     # open products
     EPR_SProductId* epr_open_product(char*)
 
@@ -193,10 +197,6 @@ cdef extern from 'epr_api.h':
     #~ float epr_get_pixel_as_float(const EPR_SRaster* raster, int x, int y)
     #~ double epr_get_pixel_as_double(const EPR_SRaster* raster, int x, int y)
 
-    # DATATYPE
-    #~ uint epr_get_data_type_size(EPR_EDataTypeId data_type_id)
-    #~ const char* epr_data_type_id_to_str(EPR_EDataTypeId data_type_id)
-
 
 import sys
 import collections
@@ -207,18 +207,20 @@ cimport numpy as np
 # utils
 EPRTime = collections.namedtuple('EPRTime', ('days', 'seconds', 'microseconds'))
 
-E_TID_UNKNOWN = 0
-E_TID_UCHAR   = 1
-E_TID_CHAR    = 2
-E_TID_USHORT  = 3
-E_TID_SHORT   = 4
-E_TID_UINT    = 5
-E_TID_INT     = 6
-E_TID_FLOAT   = 7
-E_TID_DOUBLE  = 8
-E_TID_STRING  = 11
-E_TID_SPARE   = 13
-E_TID_TIME    = 21
+
+E_TID_UNKNOWN = e_tid_unknown
+E_TID_UCHAR   = e_tid_uchar
+E_TID_CHAR    = e_tid_char
+E_TID_USHORT  = e_tid_ushort
+E_TID_SHORT   = e_tid_short
+E_TID_UINT    = e_tid_uint
+E_TID_INT     = e_tid_int
+E_TID_FLOAT   = e_tid_float
+E_TID_DOUBLE  = e_tid_double
+E_TID_STRING  = e_tid_string
+E_TID_SPARE   = e_tid_spare
+E_TID_TIME    = e_tid_time
+
 
 class EPRError(Exception):
     def __init__(self, message='', code=None, *args, **kargs):
@@ -244,35 +246,6 @@ cdef int pyepr_null_ptr_error(msg='null pointer') except -1:
     return -1
 
 
-TYPEMAP = {
-    e_tid_unknown: 'unknown',
-    e_tid_uchar:   'uchar',
-    e_tid_char:    'char',
-    e_tid_ushort:  'ushort',
-    e_tid_short:   'short',
-    e_tid_uint:    'uint',
-    e_tid_int:     'int',
-    e_tid_float:   'float',
-    e_tid_double:  'double',
-    e_tid_string:  'string',
-    e_tid_spare:   'spare',
-    e_tid_time:    'time',
-
-    'unknown': e_tid_unknown,
-    'uchar':   e_tid_uchar,
-    'char':    e_tid_char,
-    'ushort':  e_tid_ushort,
-    'short':   e_tid_short,
-    'uint':    e_tid_uint,
-    'int':     e_tid_int,
-    'float':   e_tid_float,
-    'double':  e_tid_double,
-    'string':  e_tid_string,
-    'spare':   e_tid_spare,
-    'time':    e_tid_time,
-}
-
-
 # library API initialization/finalization
 def _init_api():
     #if epr_init_api(e_log_warning, epr_log_message, NULL):
@@ -281,10 +254,15 @@ def _init_api():
         epr_clear_err()
         raise ImportError('unable to inizialize EPR API library: %s' % msg)
 
-
 def _close_api():
     epr_close_api()
     pyepr_check_errors()
+
+def get_data_type_size(EPR_EDataTypeId type_id):
+    return epr_get_data_type_size(type_id)
+
+def data_type_id_to_str(EPR_EDataTypeId type_id):
+    return epr_data_type_id_to_str(type_id)
 
 
 #cdef class DSD:
@@ -326,10 +304,6 @@ cdef class Field:
 
     def get_field_type(self):
         return epr_get_field_type(self._ptr)
-
-    def get_field_type_name(self):
-        etype = epr_get_field_type(self._ptr)
-        return TYPEMAP[etype]
 
     def get_field_elem(self, uint index=0):
         cdef EPR_STime* eprtime
