@@ -162,11 +162,18 @@ cdef extern from 'epr_api.h':
     #uint epr_copy_field_elems_as_doubles(EPR_SField*, double*, uint)
 
     # BAND
+    #~ const char* epr_get_band_name(EPR_SBandId* band_id)
     #~ EPR_SRaster* epr_create_compatible_raster(EPR_SBandId* band_id,
                                               #~ uint source_width,
                                               #~ uint source_height,
                                               #~ uint source_step_x,
                                               #~ uint source_step_y)
+    #~ int epr_read_band_raster(EPR_SBandId* band_id,
+                             #~ int offset_x,
+                             #~ int offset_y,
+                             #~ EPR_SRaster* raster)
+
+    # RASTER
     #~ EPR_SRaster* epr_create_raster(EPR_EDataTypeId data_type,
                                    #~ uint source_width,
                                    #~ uint source_height,
@@ -176,14 +183,6 @@ cdef extern from 'epr_api.h':
                                            #~ uint source_height,
                                            #~ uint source_step_x,
                                            #~ uint source_step_y)
-    #~ int epr_read_band_raster(EPR_SBandId* band_id,
-                             #~ int offset_x,
-                             #~ int offset_y,
-                             #~ EPR_SRaster* raster)
-
-    #~ const char* epr_get_band_name(EPR_SBandId* band_id)
-
-    # RASTER
     #~ uint epr_get_raster_elem_size(const EPR_SRaster* raster)
     #~ void* epr_get_raster_elem_addr(const EPR_SRaster* raster, uint offset)
     #~ void* epr_get_raster_pixel_addr(const EPR_SRaster* raster, uint x, uint y)
@@ -344,6 +343,7 @@ cdef class Field:
         pyepr_check_errors()
         return val
 
+    # @TODO: use tuples insteac od ndarrays
     def get_field_elems(self):
         # @NOTE: internal C const pointer is not shared with numpy
         cdef void* buf

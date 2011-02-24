@@ -100,6 +100,16 @@ class TestProduct(unittest.TestCase):
     #def test_get_dsd_at(self):
     #    self.assertTrue(isinstance(self.product.get_dsd_at(0), epr.DSD))
 
+    #~ def test_get_mph(self):
+        #~ record = self.product.get_mph()
+        #~ self.assertTrue(isinstance(record, epr.Record))
+        #~ self.assertEqual(record.get_name(), 'mph')
+
+    #~ def test_get_sph(self):
+        #~ record = self.product.get_sph()
+        #~ self.assertTrue(isinstance(record, epr.Record))
+        #~ self.assertEqual(record.get_name(), 'sph')
+
 
 class TestDataset(unittest.TestCase):
     PRODUCT_FILE = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
