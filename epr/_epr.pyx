@@ -265,7 +265,7 @@ def data_type_id_to_str(EPR_EDataTypeId type_id):
 
 
 #cdef class DSD:
-#    cdef EPR_SDSD* _dsd_id
+#    cdef EPR_SDSD* _ptr
 
 
 cdef class Field:
@@ -471,25 +471,25 @@ cdef class Record:
     # @TODO: format_record, format_element --> str
 
     def get_field(self, name):
-        cdef EPR_SField* ptr
-        ptr = <EPR_SField*>epr_get_field(self._ptr, name)
-        if ptr is NULL:
+        cdef EPR_SField* field_ptr
+        field_ptr = <EPR_SField*>epr_get_field(self._ptr, name)
+        if field_ptr is NULL:
             pyepr_null_ptr_error('unable to get field "%s"' % name)
 
         field = Field()
-        (<Field>field)._ptr = ptr
+        (<Field>field)._ptr = field_ptr
         field._parent = self
 
         return field
 
     def get_field_at(self, uint index):
-        cdef EPR_SField* ptr
-        ptr = <EPR_SField*>epr_get_field_at(self._ptr, index)
-        if ptr is NULL:
+        cdef EPR_SField* field_ptr
+        field_ptr = <EPR_SField*>epr_get_field_at(self._ptr, index)
+        if field_ptr is NULL:
             pyepr_null_ptr_error('unable to get field at index %d' % index)
 
         field = Field()
-        (<Field>field)._ptr = ptr
+        (<Field>field)._ptr = field_ptr
         field._parent = self
 
         return field
@@ -515,21 +515,27 @@ cdef class Dataset:
         return 0
 
     #def get_dsd(self):
-    #    cdef EPR_SDSD* dsd_id
+    #    cdef EPR_SDSD* dsd_ptr
     #    # cast is used to silence warnings about constness
-    #    dsd_id = <EPR_SDSD*>epr_get_dsd(self._ptr)
-    #    if dsd_id is NULL:
+    #    dsd_ptr = <EPR_SDSD*>epr_get_dsd(self._ptr)
+    #    if dsd_ptr is NULL:
     #        pyepr_null_ptr_error('unable to get DSD')
     #
     #    dsd = DSD()
-    #    (<DSD>dsd)._dsd_id = dsd_id
+    #    (<DSD>dsd)._ptr = dsd_ptr
+    #
     #    return dsd
 
     def create_record(self):
+        cdef EPR_Record* record_ptr
+        record_ptr = epr_create_record(self._ptr)
+        if record_ptr is NULL:
+            pyepr_null_ptr_error('unable to create a new record')
+
         record = Record()
-        (<Record>record)._ptr = epr_create_record(self._ptr)
-        pyepr_check_errors()
+        (<Record>record)._ptr = record_ptr
         record._parent = self
+
         return record
 
     def read_record(self, uint index, record=None):
@@ -540,6 +546,7 @@ cdef class Dataset:
                                                 (<Record>record)._ptr)
         if (<Record>record)._ptr is NULL:
             pyepr_null_ptr_error('unable to read record at index %d' % index)
+
         return record
 
 
@@ -596,21 +603,22 @@ cdef class Product:
         return dataset
 
     #def get_dsd_at(self, uint index):
-    #    cdef EPR_SDSD* dsd_id
-    #    dsd_id = epr_get_dsd_at(self._ptr, index)
-    #    if dsd_id is NULL:
+    #    cdef EPR_SDSD* dsd_ptr
+    #    dsd_ptr = epr_get_dsd_at(self._ptr, index)
+    #    if dsd_ptr is NULL:
     #        pyepr_null_ptr_error('unable to get DSD at index "%d"' % index)
     #
     #    dsd = DSD()
-    #    (<DSD>dsd)._dsd_id = dsd_id
+    #    (<DSD>dsd)._ptr = dsd_ptr
     #
     #    return dsd
 
 
-    #~ EPR_SRecord* epr_get_mph(const EPR_SProductId* product_id)
-    #~ EPR_SRecord* epr_get_sph(const EPR_SProductId* product_id)
-    #~ EPR_SBandId* epr_get_band_id_at(EPR_SProductId* product_id, uint index)
-    #~ EPR_SBandId* epr_get_band_id(EPR_SProductId* product_id, const char* band_name)
+    #~ EPR_SRecord* epr_get_mph(const EPR_SProductId*)
+    #~ EPR_SRecord* epr_get_sph(const EPR_SProductId*)
+
+    #~ EPR_SBandId* epr_get_band_id_at(EPR_SProductId*, uint)
+    #~ EPR_SBandId* epr_get_band_id(EPR_SProductId*, char*)
 
     #~ def read_bitmask_raster(self, bm_expr, offset_x, offset_y, raster):
         #~ return epr_read_bitmask_raster(self._ptr,
