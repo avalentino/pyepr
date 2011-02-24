@@ -425,8 +425,15 @@ cdef class Field:
 cdef class Record:
     cdef EPR_SRecord* _ptr
     cdef public object _parent
+    cdef public bool _dealloc
+
+    #def __cinit__(self, *args, **kargs):
+    #    self._dealloc = True
 
     def __dealloc__(self):
+        if not self._dealloc:
+            return
+
         if self._ptr:
             epr_free_record(self._ptr)
             pyepr_check_errors()
@@ -478,7 +485,7 @@ cdef class Record:
 
         field = Field()
         (<Field>field)._ptr = field_ptr
-        field._parent = self
+        (<Field>field)._parent = self
 
         return field
 
@@ -490,7 +497,7 @@ cdef class Record:
 
         field = Field()
         (<Field>field)._ptr = field_ptr
-        field._parent = self
+        (<Field>field)._parent = self
 
         return field
 
@@ -534,18 +541,25 @@ cdef class Dataset:
 
         record = Record()
         (<Record>record)._ptr = record_ptr
-        record._parent = self
+        (<Record>record)._dealloc = True
+        (<Record>record)._parent = self   # None    # @TODO: check
 
         return record
 
     def read_record(self, uint index, record=None):
-        if record is None:
-            record = self.create_record()
+        cdef EPR_SRecord* record_ptr = NULL
+        if record:
+            record_ptr = (<Record>record)._ptr
+        else:
+            record = Record()
+            (<Record>record)._dealloc = True
 
-        (<Record>record)._ptr = epr_read_record(self._ptr, index,
-                                                (<Record>record)._ptr)
-        if (<Record>record)._ptr is NULL:
+        record_ptr = epr_read_record(self._ptr, index, record_ptr)
+        if record_ptr is NULL:
             pyepr_null_ptr_error('unable to read record at index %d' % index)
+
+        (<Record>record)._ptr = record_ptr
+        (<Record>record)._parent = self   # None    # @TODO: check
 
         return record
 
@@ -586,7 +600,7 @@ cdef class Product:
 
         dataset = Dataset()
         (<Dataset>dataset)._ptr = dataset_id
-        dataset._parent = self
+        (<Dataset>dataset)._parent = self
 
         return dataset
 
@@ -598,7 +612,7 @@ cdef class Product:
 
         dataset = Dataset()
         (<Dataset>dataset)._ptr = dataset_id
-        dataset._parent = self
+        (<Dataset>dataset)._parent = self
 
         return dataset
 
@@ -613,9 +627,31 @@ cdef class Product:
     #
     #    return dsd
 
+    def get_mph(self):
+        cdef EPR_SRecord* record_ptr
+        record_ptr = epr_get_mph(self._ptr)
+        if record_ptr is NULL:
+            pyepr_null_ptr_error('unable to get MPH record')
 
-    #~ EPR_SRecord* epr_get_mph(const EPR_SProductId*)
-    #~ EPR_SRecord* epr_get_sph(const EPR_SProductId*)
+        record = Record()
+        (<Record>record)._ptr = record_ptr
+        (<Record>record)._dealloc = False
+        (<Record>record)._parent = self   # None    # @TODO: check
+
+        return record
+
+    def get_sph(self):
+        cdef EPR_SRecord* record_ptr
+        record_ptr = epr_get_sph(self._ptr)
+        if record_ptr is NULL:
+            pyepr_null_ptr_error('unable to get SPH record')
+
+        record = Record()
+        (<Record>record)._ptr = record_ptr
+        (<Record>record)._dealloc = False
+        (<Record>record)._parent = self   # None    # @TODO: check
+
+        return record
 
     #~ EPR_SBandId* epr_get_band_id_at(EPR_SProductId*, uint)
     #~ EPR_SBandId* epr_get_band_id(EPR_SProductId*, char*)

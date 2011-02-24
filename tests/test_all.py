@@ -100,15 +100,13 @@ class TestProduct(unittest.TestCase):
     #def test_get_dsd_at(self):
     #    self.assertTrue(isinstance(self.product.get_dsd_at(0), epr.DSD))
 
-    #~ def test_get_mph(self):
-        #~ record = self.product.get_mph()
-        #~ self.assertTrue(isinstance(record, epr.Record))
-        #~ self.assertEqual(record.get_name(), 'mph')
+    def test_get_mph(self):
+        record = self.product.get_mph()
+        self.assertTrue(isinstance(record, epr.Record))
 
-    #~ def test_get_sph(self):
-        #~ record = self.product.get_sph()
-        #~ self.assertTrue(isinstance(record, epr.Record))
-        #~ self.assertEqual(record.get_name(), 'sph')
+    def test_get_sph(self):
+        record = self.product.get_sph()
+        self.assertTrue(isinstance(record, epr.Record))
 
 
 class TestDataset(unittest.TestCase):
