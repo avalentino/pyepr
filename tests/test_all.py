@@ -112,6 +112,30 @@ class TestProduct(unittest.TestCase):
         self.assertEqual(record.get_field('SPH_DESCRIPTOR').get_field_elem(),
                          "Image Mode Precision Image")
 
+    def test_get_band_id(self):
+        self.assertTrue(isinstance(self.product.get_band_id('proc_data'), epr.Band))
+
+    def test_get_band_id_invalid_name(self):
+        self.assertRaises(ValueError, self.product.get_band_id, '')
+
+    def test_get_band_id_at(self):
+        self.assertTrue(isinstance(self.product.get_band_id_at(0), epr.Band))
+
+    def test_get_band_id_at_invalif_index(self):
+        self.assertRaises(ValueError, self.product.get_band_id_at,
+                            self.product.get_num_bands())
+
+    #~ def get_band_id_at(self, uint index):
+        #~ cdef EPR_SBandId* band_id
+        #~ band_id = epr_get_band_id_at(self._ptr, index)
+        #~ if band_id is NULL:
+            #~ pyepr_null_ptr_error('unable to get band at index "%d"' % index)
+
+        #~ band = Band()
+        #~ (<Band>band)._ptr = band_id
+        #~ (<Band>band)._parent = self
+
+        #~ return band
 
 class TestDataset(unittest.TestCase):
     PRODUCT_FILE = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
@@ -158,6 +182,26 @@ class TestUninitializedDataset(unittest.TestCase):
 
     def test_get_num_records(self):
         self.assertEqual(self.dataset.get_num_records(), 0)
+
+
+class TestBand(unittest.TestCase):
+    PRODUCT_FILE = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
+    BAND_NAMES = (
+        'slant_range_time',
+        'incident_angle',
+        'latitude',
+        'longitude',
+        'proc_data',
+    )
+
+    def setUp(self):
+        self.product = epr.Product(self.PRODUCT_FILE)
+        #self.band = product.get_band_id('proc_data')
+
+    def test_get_band_name(self):
+        for index in range(len(self.BAND_NAMES)):
+            b = self.product.get_band_id_at(index)
+            self.assertEqual(b.get_band_name(), self.BAND_NAMES[index])
 
 
 class TestRecord(unittest.TestCase):

@@ -104,8 +104,8 @@ cdef extern from 'epr_api.h':
     EPR_SRecord* epr_get_sph(EPR_SProductId*)
 
     uint epr_get_num_bands(EPR_SProductId*)
-    #~ EPR_SBandId* epr_get_band_id_at(EPR_SProductId*, uint)
-    #~ EPR_SBandId* epr_get_band_id(EPR_SProductId*, char*)
+    EPR_SBandId* epr_get_band_id_at(EPR_SProductId*, uint)
+    EPR_SBandId* epr_get_band_id(EPR_SProductId*, char*)
     #~ int epr_read_bitmask_raster(EPR_SProductId* product_id, char* bm_expr, int offset_x, int offset_y, EPR_SRaster* raster);
 
     # DATASET
@@ -162,16 +162,10 @@ cdef extern from 'epr_api.h':
     #uint epr_copy_field_elems_as_doubles(EPR_SField*, double*, uint)
 
     # BAND
-    #~ const char* epr_get_band_name(EPR_SBandId* band_id)
-    #~ EPR_SRaster* epr_create_compatible_raster(EPR_SBandId* band_id,
-                                              #~ uint source_width,
-                                              #~ uint source_height,
-                                              #~ uint source_step_x,
-                                              #~ uint source_step_y)
-    #~ int epr_read_band_raster(EPR_SBandId* band_id,
-                             #~ int offset_x,
-                             #~ int offset_y,
-                             #~ EPR_SRaster* raster)
+    char* epr_get_band_name(EPR_SBandId*)
+    #~ EPR_SRaster* epr_create_compatible_raster(EPR_SBandId*, uint, uint, uint,
+                                              #~ uint)
+    #~ int epr_read_band_raster(EPR_SBandId*, int, int, EPR_SRaster*)
 
     # RASTER
     #~ EPR_SRaster* epr_create_raster(EPR_EDataTypeId data_type,
@@ -502,6 +496,32 @@ cdef class Record:
         return field
 
 
+cdef class Band:
+    cdef EPR_SBandId* _ptr
+    cdef public object _parent
+
+    def get_band_name(self):
+        return epr_get_band_name(self._ptr)
+
+    #~ def create_compatible_raster(self, uint width, uint height,
+                                 #~ uint xstep, uint ystep):
+        #~ cdef EPR_SRaster* raster_ptr
+        #~ raster_ptr = epr_create_compatible_raster(self._ptr, width, height,
+                                                  #~ xstep, ystep)
+        #~ if raster_ptr is NULL:
+            #~ pyepr_null_ptr_error('unable to create compatible raster with '
+                                 #~ 'width=%d, height=%d xstep=%d, ystep=%d' %
+                                                #~ (width, height, xstep, ystep))
+
+        #~ raster = Raster()
+        #~ (<Raster>raster)._ptr = raster_ptr
+        #~ (<Raster>raster)._parent = raster_self
+
+    #~ def read_band_raster(self, int xoffset, int yoffset, raster=None):
+        #~ cdef EPR_SRaster* raster_ptr
+        #~ int epr_read_band_raster(self._ptr, xoffset, yoffset, raster_ptr)
+
+
 cdef class Dataset:
     cdef EPR_SDatasetId* _ptr
     cdef public object _parent
@@ -653,8 +673,29 @@ cdef class Product:
 
         return record
 
-    #~ EPR_SBandId* epr_get_band_id_at(EPR_SProductId*, uint)
-    #~ EPR_SBandId* epr_get_band_id(EPR_SProductId*, char*)
+    def get_band_id(self, name):
+        cdef EPR_SBandId* band_id
+        band_id = epr_get_band_id(self._ptr, name)
+        if band_id is NULL:
+            pyepr_null_ptr_error('unable to get band "%s"' % name)
+
+        band = Band()
+        (<Band>band)._ptr = band_id
+        (<Band>band)._parent = self
+
+        return band
+
+    def get_band_id_at(self, uint index):
+        cdef EPR_SBandId* band_id
+        band_id = epr_get_band_id_at(self._ptr, index)
+        if band_id is NULL:
+            pyepr_null_ptr_error('unable to get band at index "%d"' % index)
+
+        band = Band()
+        (<Band>band)._ptr = band_id
+        (<Band>band)._parent = self
+
+        return band
 
     #~ def read_bitmask_raster(self, bm_expr, offset_x, offset_y, raster):
         #~ return epr_read_bitmask_raster(self._ptr,
