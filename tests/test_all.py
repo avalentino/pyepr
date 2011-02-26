@@ -59,29 +59,29 @@ class TestProduct(unittest.TestCase):
         'GEOLOCATION_GRID_ADS',
         'MDS1'
     ]
-    WIDTH = 8439
-    HEIGHT = 8192
-    NDSDS = 18
-    NBANDS = 5
+    DATASET_WIDTH = 8439
+    DATASET_HEIGHT = 8192
+    DATASET_NDSDS = 18
+    DATASET_NBANDS = 5
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
 
     def test_get_scene_width(self):
-        self.assertEqual(self.product.get_scene_width(), self.WIDTH)
+        self.assertEqual(self.product.get_scene_width(), self.DATASET_WIDTH)
 
     def test_get_scene_height(self):
-        self.assertEqual(self.product.get_scene_height(), self.HEIGHT)
+        self.assertEqual(self.product.get_scene_height(), self.DATASET_HEIGHT)
 
     def test_get_num_datasets(self):
         self.assertEqual(self.product.get_num_datasets(),
                          len(self.DATASET_NAMES))
 
     def test_get_num_dsds(self):
-        self.assertEqual(self.product.get_num_dsds(), self.NDSDS)
+        self.assertEqual(self.product.get_num_dsds(), self.DATASET_NDSDS)
 
     def test_get_num_bands(self):
-        self.assertEqual(self.product.get_num_bands(), self.NBANDS)
+        self.assertEqual(self.product.get_num_bands(), self.DATASET_NBANDS)
 
     def test_get_dataset_at(self):
         dataset = self.product.get_dataset_at(0)
@@ -113,7 +113,8 @@ class TestProduct(unittest.TestCase):
                          "Image Mode Precision Image")
 
     def test_get_band_id(self):
-        self.assertTrue(isinstance(self.product.get_band_id('proc_data'), epr.Band))
+        self.assertTrue(isinstance(self.product.get_band_id('proc_data'),
+                                   epr.Band))
 
     def test_get_band_id_invalid_name(self):
         self.assertRaises(ValueError, self.product.get_band_id, '')
@@ -121,21 +122,25 @@ class TestProduct(unittest.TestCase):
     def test_get_band_id_at(self):
         self.assertTrue(isinstance(self.product.get_band_id_at(0), epr.Band))
 
-    def test_get_band_id_at_invalif_index(self):
+    def test_get_band_id_at_invalid_index(self):
         self.assertRaises(ValueError, self.product.get_band_id_at,
                             self.product.get_num_bands())
 
-    #~ def get_band_id_at(self, uint index):
-        #~ cdef EPR_SBandId* band_id
-        #~ band_id = epr_get_band_id_at(self._ptr, index)
-        #~ if band_id is NULL:
-            #~ pyepr_null_ptr_error('unable to get band at index "%d"' % index)
+    #def test_read_bitmask_raster(self):
+    #    bm_expr = 'l2_flags.LAND and !l2_flags.BRIGHT'
+    #
+    #    xoffset = self.DATASET_WIDTH / 2
+    #    yoffset = self.DATASET_HEIGHT / 2
+    #    width = self.DATASET_WIDTH / 2
+    #    height = self.DATASET_HEIGHT / 2
+    #
+    #    raster = epr.create_bitmask_raster(width, height)
+    #    raster = self.product.read_bitmask_raster(bm_expr, xoffset, yoffset,
+    #                                              raster)
+    #    self.assertTrue(isinstance(raster, epr.Raster))
+    #    self.assertEqual(raster.get_raster_width(), width)
+    #    self.assertEqual(raster.get_raster_height(), height)
 
-        #~ band = Band()
-        #~ (<Band>band)._ptr = band_id
-        #~ (<Band>band)._parent = self
-
-        #~ return band
 
 class TestDataset(unittest.TestCase):
     PRODUCT_FILE = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'

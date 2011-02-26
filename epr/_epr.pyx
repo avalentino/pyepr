@@ -112,7 +112,7 @@ cdef extern from 'epr_api.h':
     uint epr_get_num_bands(EPR_SProductId*)
     EPR_SBandId* epr_get_band_id_at(EPR_SProductId*, uint)
     EPR_SBandId* epr_get_band_id(EPR_SProductId*, char*)
-    #~ int epr_read_bitmask_raster(EPR_SProductId* product_id, char* bm_expr, int offset_x, int offset_y, EPR_SRaster* raster);
+    int epr_read_bitmask_raster(EPR_SProductId*, char*, int, int, EPR_SRaster*)
 
     # DATASET
     char* epr_get_dataset_name(EPR_SDatasetId*)
@@ -662,6 +662,12 @@ cdef class Dataset:
         if record_ptr is NULL:
             pyepr_null_ptr_error('unable to read record at index %d' % index)
 
+        # @TODO: fix
+        # dealloc existing structure
+        #~ if (<Record>record)._ptr is not NULL and (<Record>record)._dealloc:
+            #~ epr_free_record((<Record>record)._ptr)
+            #~ pyepr_check_errors()
+
         (<Record>record)._ptr = record_ptr
         (<Record>record)._parent = self   # None    # @TODO: check
 
@@ -781,13 +787,15 @@ cdef class Product:
 
         return band
 
-    #~ def read_bitmask_raster(self, bm_expr, offset_x, offset_y, raster):
-        #~ return epr_read_bitmask_raster(self._ptr,
-                                #~ const char* bm_expr,
-                                #~ int offset_x,
-                                #~ int offset_y,
-                                #~ EPR_SRaster* raster)
-
+    # @TODO: complete
+    #def read_bitmask_raster(self, bm_expr, int xoffset, int yoffset, raster):
+    #    cdef int ret = epr_read_bitmask_raster(self._ptr, bm_expr,
+    #                                           xoffset, yoffset,
+    #                                           (<Raster>raster)._ptr)
+    #    if ret != 0:
+    #        pyepr_check_errors()
+    #
+    #    return raster
 
 
 def open(filename):
