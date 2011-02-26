@@ -7,10 +7,10 @@ default:
 
 clean:
 	python setup.py clean
-	$(RM) epr/*.py[co] tests/*.py[co]
+	$(RM) src/*.py[co] tests/*.py[co]
 
 distclean: clean
-	$(RM) epr/*.c epr/*.o epr/*.so
+	$(RM) src/*.c src/*.o *.so
 	#$(RM) tests/*.N1
 
 check:
