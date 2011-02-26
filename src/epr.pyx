@@ -3,13 +3,43 @@ cdef extern from 'Python.h':
     FILE* PyFile_AsFile(object)
 
 cdef extern from 'epr_api.h':
+    ctypedef int            epr_boolean
     ctypedef unsigned char  uchar
     ctypedef unsigned short ushort
     ctypedef unsigned int   uint
-    #ctypedef unsigned long  ulong
+    ctypedef unsigned long  ulong
 
     enum EPR_ErrCode:
-        e_err_none = 0
+        e_err_none                 =    0
+        e_err_null_pointer         =    1
+        e_err_illegal_arg          =    2
+        e_err_illegal_state        =    3
+        e_err_out_of_memory        =    4
+        e_err_index_out_of_range   =    5
+        e_err_illegal_conversion   =    6
+        e_err_illegal_data_type	   =    7
+        e_err_file_not_found       =  101
+        e_err_file_access_denied   =  102
+        e_err_file_read_error      =  103
+        e_err_file_write_error     =  104
+        e_err_file_open_failed     =  105
+        e_err_file_close_failed    =  106
+        e_err_api_not_initialized  =  201
+        e_err_invalid_product_id   =  203
+        e_err_invalid_record       =  204
+        e_err_invalid_band         =  205
+        e_err_invalid_raster       =  206
+        e_err_invalid_dataset_name =  207
+        e_err_invalid_field_name   =  208
+        e_err_invalid_record_name  =  209
+        e_err_invalid_product_name =  210
+        e_err_invalid_band_name    =  211
+        e_err_invalid_data_format  =  212
+        e_err_invalid_value        =  213
+        e_err_invalid_keyword_name =  214
+        e_err_unknown_endian_order =  216
+        e_err_flag_not_found       =  301
+        e_err_invalid_ddbb_format  =  402
 
     enum EPR_DataTypeId:
         e_tid_unknown = 0
@@ -25,50 +55,144 @@ cdef extern from 'epr_api.h':
         e_tid_spare   = 13
         e_tid_time    = 21
 
-    enum EPR_ELogLevel:
+    enum EPR_LogLevel:
         e_log_debug   = -1
         e_log_info    =  0
         e_log_warning =  1
         e_log_error   =  2
 
-    struct EPR_ProductId:
-        pass
+    enum EPR_SampleModel:
+        e_smod_1OF1 = 0
+        e_smod_1OF2 = 1
+        e_smod_2OF2 = 2
+        e_smod_3TOI = 3
+        e_smod_2TOF = 4
 
-    struct EPR_DatasetId:
-        pass
+    enum EPR_ScalingMethod:
+        e_smid_non = 0
+        e_smid_lin = 1
+        e_smid_log = 2
 
-    struct EPR_BandId:
-        pass
-
-    struct EPR_Raster:
-        EPR_DataTypeId data_type
-        uint raster_width
-        uint raster_height
-
-    struct EPR_Record:
-        pass
-
-    struct EPR_Field:
-        pass
-
-    struct EPR_DSD:
-        pass
 
     struct EPR_Time:
         int  days
         uint seconds
         uint microseconds
 
-    ctypedef EPR_ErrCode    EPR_EErrCode
-    ctypedef EPR_DataTypeId EPR_EDataTypeId
-    ctypedef EPR_ProductId  EPR_SProductId
-    ctypedef EPR_DatasetId  EPR_SDatasetId
-    ctypedef EPR_BandId     EPR_SBandId
-    ctypedef EPR_Raster     EPR_SRaster
-    ctypedef EPR_Record     EPR_SRecord
-    ctypedef EPR_Field      EPR_SField
-    ctypedef EPR_DSD        EPR_SDSD
-    ctypedef EPR_Time       EPR_STime
+
+    struct EPR_FlagDef:
+        #EPR_Magic magic
+        char* name
+        uint bit_mask
+        char* description
+
+
+    struct EPR_Field:
+        #EPR_Magic magic
+        #EPR_FieldInfo* info
+        #void* elems
+        pass
+
+
+    struct EPR_Record:
+        #EPR_Magic magic
+        #EPR_RecordInfo* info
+        uint num_fields
+        EPR_Field** fields
+
+
+    struct EPR_DSD:
+        #EPR_Magic magic
+        int index
+        char* ds_name
+        char* ds_type
+        char* filename
+        uint ds_offset
+        uint ds_size
+        uint num_dsr
+        uint dsr_size
+
+
+    struct EPR_Raster:
+        #EPR_Magic magic
+        EPR_DataTypeId data_type
+        uint elem_size
+        uint source_width
+        uint source_height
+        uint source_step_x
+        uint source_step_y
+        uint raster_width
+        uint raster_height
+        void* buffer
+
+
+    struct EPR_ProductId:
+        #EPR_Magic magic
+        char* file_path
+        FILE* istream
+        uint  tot_size
+        uint  scene_width
+        uint  scene_height
+        char* id_string
+        EPR_Record* mph_record
+        EPR_Record* sph_record
+        #EPR_PtrArray* dsd_array
+        #EPR_PtrArray* record_info_cache
+        #EPR_PtrArray* param_table
+        #EPR_PtrArray* dataset_ids
+        #EPR_PtrArray* band_ids
+        int meris_iodd_version
+
+
+    struct EPR_DatasetId:
+        #EPR_Magic magic
+        EPR_ProductId* product_id
+        char* dsd_name
+        EPR_DSD* dsd
+        char* dataset_name
+        #struct RecordDescriptor* record_descriptor
+        #EPR_SRecordInfo* record_info
+        char* description
+
+
+    struct EPR_DatasetRef:
+        EPR_DatasetId* dataset_id
+        int field_index             # -1 if not used
+        int elem_index              # -1 if not used
+
+
+    struct EPR_BandId:
+        #EPR_Magic magic
+        EPR_ProductId* product_id
+        char* band_name
+        int spectr_band_index
+        EPR_DatasetRef dataset_ref
+        EPR_SampleModel sample_model
+        EPR_DataTypeId data_type
+        EPR_ScalingMethod scaling_method
+        float scaling_offset
+        float scaling_factor
+        char* bm_expr
+        #EPR_SPtrArray* flag_coding
+        char* unit
+        char* description
+        epr_boolean lines_mirrored
+
+
+    ctypedef EPR_ErrCode       EPR_EErrCode
+    ctypedef EPR_LogLevel      EPR_ELogLevel
+    ctypedef EPR_SampleModel   EPR_ESampleModel
+    ctypedef EPR_ScalingMethod EPR_EScalingMethod
+    ctypedef EPR_DataTypeId    EPR_EDataTypeId
+    ctypedef EPR_ProductId     EPR_SProductId
+    ctypedef EPR_DatasetId     EPR_SDatasetId
+    ctypedef EPR_BandId        EPR_SBandId
+    ctypedef EPR_Raster        EPR_SRaster
+    ctypedef EPR_Record        EPR_SRecord
+    ctypedef EPR_Field         EPR_SField
+    ctypedef EPR_DSD           EPR_SDSD
+    ctypedef EPR_Time          EPR_STime
+
 
     # @TODO: improve logging and error management (--> custom handlers)
     # logging and error handling function pointers
@@ -231,7 +355,10 @@ cdef int pyepr_check_errors() except -1:
     if code != e_err_none:
         msg = epr_get_last_err_message()
         epr_clear_err()
-        if 203 <= code < 220 or code in (1, 2, 5):
+        if (e_err_invalid_product_id <= code <= e_err_invalid_keyword_name or
+            code in (e_err_null_pointer,
+                     e_err_illegal_arg,
+                     e_err_index_out_of_range)):
             raise EPRValueError(msg, epr_get_last_err_code())
         else:
             raise EPRError(msg, epr_get_last_err_code())
