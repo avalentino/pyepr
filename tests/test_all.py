@@ -103,10 +103,14 @@ class TestProduct(unittest.TestCase):
     def test_get_mph(self):
         record = self.product.get_mph()
         self.assertTrue(isinstance(record, epr.Record))
+        self.assertEqual(record.get_field('PRODUCT').get_field_elem(),
+                         self.PRODUCT_FILE)
 
     def test_get_sph(self):
         record = self.product.get_sph()
         self.assertTrue(isinstance(record, epr.Record))
+        self.assertEqual(record.get_field('SPH_DESCRIPTOR').get_field_elem(),
+                         "Image Mode Precision Image")
 
 
 class TestDataset(unittest.TestCase):
