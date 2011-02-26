@@ -295,24 +295,18 @@ class TestBand(unittest.TestCase):
         raster = self.band.create_compatible_raster(width, height)
 
         # @TODO: check
-        self.assertRaises((ValueError, epr.EPRError),
-                          self.band.read_band_raster,
+        self.assertRaises(ValueError, self.band.read_band_raster,
                           -1, 0, raster)
-        self.assertRaises((ValueError, epr.EPRError),
-                          self.band.read_band_raster,
+        self.assertRaises(ValueError, self.band.read_band_raster,
                           0, -1, raster)
-        self.assertRaises((ValueError, epr.EPRError),
-                          self.band.read_band_raster,
+        self.assertRaises(ValueError, self.band.read_band_raster,
                           -1, -1, raster)
         # @TODO: check
-        #self.assertRaises((ValueError, epr.EPRError),
-        #                  self.band.read_band_raster,
+        #self.assertRaises(ValueError, self.band.read_band_raster,
         #                  width + 10, 0, raster)
-        #self.assertRaises((ValueError, epr.EPRError),
-        #                  self.band.read_band_raster,
+        #self.assertRaises(ValueError, self.band.read_band_raster,
         #                  0, height + 10, raster)
-        #self.assertRaises((ValueError, epr.EPRError),
-        #                  self.band.read_band_raster,
+        #self.assertRaises(ValueError, self.band.read_band_raster,
         #                  width + 10, height + 10, raster)
 
 
@@ -444,10 +438,10 @@ class TestRecord(unittest.TestCase):
     #
     #    def test_dump_element_field_out_of_range(self):
     #        field = self.record.get_num_fields() + 10
-    #        self.assertRaises(epr.EPRError, self.record.dump_element, field, 0)
+    #        self.assertRaises(ValueError, self.record.dump_element, field, 0)
     #
     #    def test_dump_element_element_out_of_range(self):
-    #        self.assertRaises(epr.EPRError, self.record.dump_element, 0, 150)
+    #        self.assertRaises(ValueError, self.record.dump_element, 0, 150)
 
     @quiet
     def test_print_record(self):
@@ -473,10 +467,10 @@ class TestRecord(unittest.TestCase):
 
     def test_print_element_field_out_of_range(self):
         index = self.record.get_num_fields() + 10
-        self.assertRaises(epr.EPRError, self.record.print_element, index, 0)
+        self.assertRaises(ValueError, self.record.print_element, index, 0)
 
     def test_print_element_element_out_of_range(self):
-        self.assertRaises(epr.EPRError, self.record.print_element, 0, 150)
+        self.assertRaises(ValueError, self.record.print_element, 0, 150)
 
     def test_get_field(self):
         field = self.record.get_field('range_spacing')
@@ -549,7 +543,7 @@ class TestField(unittest.TestCase):
         self.assertEqual(self.field.get_field_elem(0), self.FIELD_VALUES[0])
 
     def test_get_field_elem_invalid_index(self):
-        self.assertRaises(epr.EPRError, self.field.get_field_elem, 100)
+        self.assertRaises(ValueError, self.field.get_field_elem, 100)
 
     def test_get_field_elems(self):
         vect = self.field.get_field_elems()

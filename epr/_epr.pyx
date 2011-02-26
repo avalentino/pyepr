@@ -221,14 +221,20 @@ class EPRError(Exception):
         self.code = code
 
 
+class EPRValueError(EPRError, ValueError):
+    pass
+
+
 cdef int pyepr_check_errors() except -1:
-    # @TODO: fine tuning of exceptions
     cdef int code
     code = epr_get_last_err_code()
     if code != e_err_none:
         msg = epr_get_last_err_message()
         epr_clear_err()
-        raise EPRError(msg, epr_get_last_err_code())
+        if 203 <= code < 220 or code in (1, 2, 5):
+            raise EPRValueError(msg, epr_get_last_err_code())
+        else:
+            raise EPRError(msg, epr_get_last_err_code())
         return -1
     return 0
 
