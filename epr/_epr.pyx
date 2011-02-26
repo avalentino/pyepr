@@ -40,6 +40,11 @@ cdef extern from 'epr_api.h':
     struct EPR_BandId:
         pass
 
+    struct EPR_Raster:
+        EPR_DataTypeId data_type
+        uint raster_width
+        uint raster_height
+
     struct EPR_Record:
         pass
 
@@ -59,6 +64,7 @@ cdef extern from 'epr_api.h':
     ctypedef EPR_ProductId  EPR_SProductId
     ctypedef EPR_DatasetId  EPR_SDatasetId
     ctypedef EPR_BandId     EPR_SBandId
+    ctypedef EPR_Raster     EPR_SRaster
     ctypedef EPR_Record     EPR_SRecord
     ctypedef EPR_Field      EPR_SField
     #ctypedef EPR_DSD        EPR_SDSD
@@ -163,32 +169,26 @@ cdef extern from 'epr_api.h':
 
     # BAND
     char* epr_get_band_name(EPR_SBandId*)
-    #~ EPR_SRaster* epr_create_compatible_raster(EPR_SBandId*, uint, uint, uint,
-                                              #~ uint)
+    #~ EPR_SRaster* epr_create_compatible_raster(EPR_SBandId*, uint, uint, uint, uint)
     #~ int epr_read_band_raster(EPR_SBandId*, int, int, EPR_SRaster*)
 
     # RASTER
-    #~ EPR_SRaster* epr_create_raster(EPR_EDataTypeId data_type,
-                                   #~ uint source_width,
-                                   #~ uint source_height,
-                                   #~ uint source_step_x,
-                                   #~ uint source_step_y)
-    #~ EPR_SRaster* epr_create_bitmask_raster(uint source_width,
-                                           #~ uint source_height,
-                                           #~ uint source_step_x,
-                                           #~ uint source_step_y)
-    #~ uint epr_get_raster_elem_size(const EPR_SRaster* raster)
+    void epr_free_raster(EPR_SRaster*)
+    uint epr_get_raster_width(EPR_SRaster*)
+    uint epr_get_raster_height(EPR_SRaster*)
+    uint epr_get_raster_elem_size(EPR_SRaster*)
+
+    uint epr_get_pixel_as_uint(EPR_SRaster*, int, int)
+    int epr_get_pixel_as_int(EPR_SRaster*, int, int)
+    float epr_get_pixel_as_float(EPR_SRaster*, int, int)
+    double epr_get_pixel_as_double(EPR_SRaster*, int, int)
+
     #~ void* epr_get_raster_elem_addr(const EPR_SRaster* raster, uint offset)
     #~ void* epr_get_raster_pixel_addr(const EPR_SRaster* raster, uint x, uint y)
     #~ void* epr_get_raster_line_addr(const EPR_SRaster* raster, uint y)
-    #~ uint epr_get_raster_width(EPR_SRaster* raster)
-    #~ uint epr_get_raster_height(EPR_SRaster* raster)
-    #~ void epr_free_raster(EPR_SRaster* raster)
 
-    #~ uint epr_get_pixel_as_uint(const EPR_SRaster* raster, int x, int y)
-    #~ int epr_get_pixel_as_int(const EPR_SRaster* raster, int x, int y)
-    #~ float epr_get_pixel_as_float(const EPR_SRaster* raster, int x, int y)
-    #~ double epr_get_pixel_as_double(const EPR_SRaster* raster, int x, int y)
+    EPR_SRaster* epr_create_raster(EPR_EDataTypeId, uint, uint, uint, uint)
+    EPR_SRaster* epr_create_bitmask_raster(uint, uint, uint, uint)
 
 
 import sys
@@ -428,7 +428,7 @@ cdef class Record:
         if not self._dealloc:
             return
 
-        if self._ptr:
+        if self._ptr is not NULL:
             epr_free_record(self._ptr)
             pyepr_check_errors()
 
@@ -496,6 +496,90 @@ cdef class Record:
         return field
 
 
+cdef class Raster:
+    cdef EPR_SRaster* _ptr
+    cdef public object _parent
+
+    def __dealloc__(self):
+        if self._ptr is not NULL:
+            epr_free_raster(self._ptr)
+
+    def get_raster_width(self):
+        return epr_get_raster_width(self._ptr)
+
+    def get_raster_height(self):
+        return epr_get_raster_height(self._ptr)
+
+    def get_raster_data_type(self):
+        return self._ptr.data_type
+
+    def get_raster_elem_size(self):
+        return epr_get_raster_elem_size(self._ptr)
+
+    def get_pixel(self, int x, int y):
+        if (x < 0 or x >= self._ptr.raster_width or
+            y < 0  or y >= self._ptr.raster_height):
+            raise ValueError('index out of range: x=%d, y=%d' % (x, y))
+
+        cdef EPR_EDataTypeId dtype = self._ptr.data_type
+
+        if dtype == e_tid_uint:
+            val = epr_get_pixel_as_uint(self._ptr, x, y)
+        elif dtype == e_tid_int:
+            val = epr_get_pixel_as_int(self._ptr, x, y)
+        elif dtype == e_tid_float:
+            val = epr_get_pixel_as_float(self._ptr, x, y)
+        elif dtype == e_tid_double:
+            val = epr_get_pixel_as_double(self._ptr, x, y)
+        else:
+            raise ValueError('invalid data type: "%s"' %
+                                                epr_data_type_id_to_str(dtype))
+
+        pyepr_check_errors()    # @TODO: check
+
+        return val
+
+    #void* epr_get_raster_elem_addr(self._ptr, uint offset)
+    #void* epr_get_raster_pixel_addr(self._ptr, uint x, uint y)
+    #void* epr_get_raster_line_addr(self._ptr, uint y)
+
+    # @TODO: __getitem__ with slicing
+
+
+def create_raster(EPR_EDataTypeId data_type, uint src_width, uint src_height,
+                  uint xstep=1, uint ystep=1):
+
+    if xstep == 0 or ystep ==0:
+        raise ValueError('invalid step: xspet=%d, ystep=%d' % (xstep, ystep))
+
+    cdef EPR_SRaster* raster_ptr
+    raster_ptr = epr_create_raster(data_type, src_width, src_height,
+                                   xstep, ystep)
+    if raster_ptr is NULL:
+        pyepr_null_ptr_error('unable to create a new raster')
+
+    raster = Raster()
+    (<Raster>raster)._ptr = raster_ptr
+
+    return raster
+
+def create_bitmask_raster(uint src_width, uint src_height,
+                          uint xstep=1, uint ystep=1):
+
+    if xstep == 0 or ystep ==0:
+        raise ValueError('invalid step: xspet=%d, ystep=%d' % (xstep, ystep))
+
+    cdef EPR_SRaster* raster_ptr
+    raster_ptr = epr_create_bitmask_raster(src_width, src_height, xstep, ystep)
+    if raster_ptr is NULL:
+        pyepr_null_ptr_error('unable to create a new raster')
+
+    raster = Raster()
+    (<Raster>raster)._ptr = raster_ptr
+
+    return raster
+
+
 cdef class Band:
     cdef EPR_SBandId* _ptr
     cdef public object _parent
@@ -527,17 +611,17 @@ cdef class Dataset:
     cdef public object _parent
 
     def get_dataset_name(self):
-        if self._ptr:
+        if self._ptr is not NULL:
             return epr_get_dataset_name(self._ptr)
         return ''
 
     def get_dsd_name(self):
-        if self._ptr:
+        if self._ptr is not NULL:
             return epr_get_dsd_name(self._ptr)
         return ''
 
     def get_num_records(self):
-        if self._ptr:
+        if self._ptr is not NULL:
             return epr_get_num_records(self._ptr)
         return 0
 
@@ -593,7 +677,7 @@ cdef class Product:
             pyepr_null_ptr_error('unable to open %s' % filename)
 
     def __dealloc__(self):
-        if self._ptr:
+        if self._ptr is not NULL:
             epr_close_product(self._ptr)
             pyepr_check_errors()
 
