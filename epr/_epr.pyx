@@ -112,7 +112,7 @@ cdef extern from 'epr_api.h':
     uint epr_get_num_bands(EPR_SProductId*)
     EPR_SBandId* epr_get_band_id_at(EPR_SProductId*, uint)
     EPR_SBandId* epr_get_band_id(EPR_SProductId*, char*)
-    int epr_read_bitmask_raster(EPR_SProductId*, char*, int, int, EPR_SRaster*)
+    #int epr_read_bitmask_raster(EPR_SProductId*, char*, int, int, EPR_SRaster*)
 
     # DATASET
     char* epr_get_dataset_name(EPR_SDatasetId*)
