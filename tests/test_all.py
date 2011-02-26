@@ -216,7 +216,7 @@ class TestBand(unittest.TestCase):
         self.assertEquals(raster.get_raster_width(), width)
         self.assertEquals(raster.get_raster_height(), height)
         # @NOTE: data type on disk is epr.E_TID_USHORT
-        self.assertEquals(raster.get_raster_data_type(), epr.E_TID_FLOAT)
+        self.assertEquals(raster.data_type, epr.E_TID_FLOAT)
 
     def test_create_compatible_raster_with_invalid_size(self):
         width = self.product.get_scene_width()
@@ -247,7 +247,7 @@ class TestBand(unittest.TestCase):
         self.assertEquals(raster.get_raster_width(), width)
         self.assertEquals(raster.get_raster_height(), height)
         # @NOTE: data type on disk is epr.E_TID_USHORT
-        self.assertEquals(raster.get_raster_data_type(), epr.E_TID_FLOAT)
+        self.assertEquals(raster.data_type, epr.E_TID_FLOAT)
 
     def test_create_compatible_raster_with_invalid_step(self):
         width = self.product.get_scene_width()
@@ -287,7 +287,7 @@ class TestBand(unittest.TestCase):
         self.assertEquals(raster.get_raster_width(), width)
         self.assertEquals(raster.get_raster_height(), height)
         # @NOTE: data type on disk is epr.E_TID_USHORT
-        self.assertEquals(raster.get_raster_data_type(), epr.E_TID_FLOAT)
+        self.assertEquals(raster.data_type, epr.E_TID_FLOAT)
 
     def test_read_band_raster_with_invalid_offset(self):
         width = 400
@@ -319,7 +319,7 @@ class TestCreateRaster(unittest.TestCase):
         raster = epr.create_raster(self.RASTER_DATA_TYPE, self.RASTER_WIDTH,
                                    self.RASTER_HEIGHT)
         self.assertTrue(isinstance(raster, epr.Raster))
-        self.assertEqual(raster.get_raster_data_type(), self.RASTER_DATA_TYPE)
+        self.assertEqual(raster.data_type, self.RASTER_DATA_TYPE)
         self.assertEqual(raster.get_raster_width(), self.RASTER_WIDTH)
         self.assertEqual(raster.get_raster_height(), self.RASTER_HEIGHT)
 
@@ -329,7 +329,7 @@ class TestCreateRaster(unittest.TestCase):
         raster = epr.create_raster(self.RASTER_DATA_TYPE,
                                    src_width, src_height, 3, 2)
         self.assertTrue(isinstance(raster, epr.Raster))
-        self.assertEqual(raster.get_raster_data_type(), self.RASTER_DATA_TYPE)
+        self.assertEqual(raster.data_type, self.RASTER_DATA_TYPE)
         self.assertEqual(raster.get_raster_width(), self.RASTER_WIDTH)
         self.assertEqual(raster.get_raster_height(), self.RASTER_HEIGHT)
 
@@ -347,7 +347,7 @@ class TestCreateRaster(unittest.TestCase):
         raster = epr.create_bitmask_raster(self.RASTER_WIDTH,
                                            self.RASTER_HEIGHT)
         self.assertTrue(isinstance(raster, epr.Raster))
-        self.assertEqual(raster.get_raster_data_type(), epr.E_TID_UCHAR)
+        self.assertEqual(raster.data_type, epr.E_TID_UCHAR)
         self.assertEqual(raster.get_raster_width(), self.RASTER_WIDTH)
         self.assertEqual(raster.get_raster_height(), self.RASTER_HEIGHT)
 
@@ -356,7 +356,7 @@ class TestCreateRaster(unittest.TestCase):
         src_height = 2 * self.RASTER_HEIGHT
         raster = epr.create_bitmask_raster(src_width, src_height, 3, 2)
         self.assertTrue(isinstance(raster, epr.Raster))
-        self.assertEqual(raster.get_raster_data_type(), epr.E_TID_UCHAR)
+        self.assertEqual(raster.data_type, epr.E_TID_UCHAR)
         self.assertEqual(raster.get_raster_width(), self.RASTER_WIDTH)
         self.assertEqual(raster.get_raster_height(), self.RASTER_HEIGHT)
 
@@ -387,10 +387,6 @@ class TestRaster(unittest.TestCase):
     def test_get_raster_height(self):
         self.assertEqual(self.raster.get_raster_height(), self.RASTER_HEIGHT)
 
-    def test_get_raster_data_type(self):
-        self.assertEqual(self.raster.get_raster_data_type(),
-                         self.RASTER_DATA_TYPE)
-
     def test_get_raster_elem_size(self):
         self.assertEqual(self.raster.get_raster_elem_size(),
                          self.RASTER_ELEM_SIZE)
@@ -415,6 +411,25 @@ class TestRaster(unittest.TestCase):
 
     def test_get_pixel_type(self):
         self.assertEqual(type(self.raster.get_pixel(0, 0)), float)
+
+    def test_data_type_property(self):
+        self.assertEqual(self.raster.data_type, self.RASTER_DATA_TYPE)
+
+    def test_source_width_property(self):
+        self.assertEqual(self.raster.source_width, self.RASTER_WIDTH)
+        self.assertTrue(isinstance(self.raster.source_width, int))
+
+    def test_source_height_property(self):
+        self.assertEqual(self.raster.source_height, self.RASTER_HEIGHT)
+        self.assertTrue(isinstance(self.raster.source_height, int))
+
+    def test_source_step_x_property(self):
+        self.assertEqual(self.raster.source_step_x, 1)
+        self.assertTrue(isinstance(self.raster.source_step_x, int))
+
+    def test_source_step_y_property(self):
+        self.assertEqual(self.raster.source_step_y, 1)
+        self.assertTrue(isinstance(self.raster.source_step_y, int))
 
 
 class TestRecord(unittest.TestCase):

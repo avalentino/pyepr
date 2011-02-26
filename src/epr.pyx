@@ -665,14 +665,31 @@ cdef class Raster:
         if self._ptr is not NULL:
             epr_free_raster(self._ptr)
 
+    property data_type:
+        def __get__(self):
+            return self._ptr.data_type
+
+    property source_width:
+        def __get__(self):
+            return self._ptr.source_width
+
+    property source_height:
+        def __get__(self):
+            return self._ptr.source_height
+
+    property source_step_x:
+        def __get__(self):
+            return self._ptr.source_step_x
+
+    property source_step_y:
+        def __get__(self):
+            return self._ptr.source_step_y
+
     def get_raster_width(self):
         return epr_get_raster_width(self._ptr)
 
     def get_raster_height(self):
         return epr_get_raster_height(self._ptr)
-
-    def get_raster_data_type(self):
-        return self._ptr.data_type
 
     def get_raster_elem_size(self):
         return epr_get_raster_elem_size(self._ptr)
