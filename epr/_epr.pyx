@@ -51,8 +51,8 @@ cdef extern from 'epr_api.h':
     struct EPR_Field:
         pass
 
-    #struct EPR_DSD:
-    #    pass
+    struct EPR_DSD:
+        pass
 
     struct EPR_Time:
         int  days
@@ -67,7 +67,7 @@ cdef extern from 'epr_api.h':
     ctypedef EPR_Raster     EPR_SRaster
     ctypedef EPR_Record     EPR_SRecord
     ctypedef EPR_Field      EPR_SField
-    #ctypedef EPR_DSD        EPR_SDSD
+    ctypedef EPR_DSD        EPR_SDSD
     ctypedef EPR_Time       EPR_STime
 
     # @TODO: improve logging and error management (--> custom handlers)
@@ -76,12 +76,12 @@ cdef extern from 'epr_api.h':
     ctypedef void (*EPR_FErrHandler)(EPR_EErrCode, char*)
 
     # logging
-    #~ int epr_set_log_level(EPR_ELogLevel log_level)
-    #~ void epr_set_log_handler(EPR_FLogHandler log_handler)
+    int epr_set_log_level(EPR_ELogLevel)
+    void epr_set_log_handler(EPR_FLogHandler)
     void epr_log_message(EPR_ELogLevel, char*)
 
     # error handling
-    #~ void epr_set_err_handler(EPR_FErrHandler err_handler)
+    void epr_set_err_handler(EPR_FErrHandler)
     EPR_EErrCode epr_get_last_err_code()
     char* epr_get_last_err_message()
     void epr_clear_err()
@@ -105,20 +105,20 @@ cdef extern from 'epr_api.h':
     EPR_SDatasetId* epr_get_dataset_id_at(EPR_SProductId*, uint)
     EPR_SDatasetId* epr_get_dataset_id(EPR_SProductId*, char*)
     uint epr_get_num_dsds(EPR_SProductId*)
-    #EPR_SDSD* epr_get_dsd_at(EPR_SProductId*, uint)
+    EPR_SDSD* epr_get_dsd_at(EPR_SProductId*, uint)
     EPR_SRecord* epr_get_mph(EPR_SProductId*)
     EPR_SRecord* epr_get_sph(EPR_SProductId*)
 
     uint epr_get_num_bands(EPR_SProductId*)
     EPR_SBandId* epr_get_band_id_at(EPR_SProductId*, uint)
     EPR_SBandId* epr_get_band_id(EPR_SProductId*, char*)
-    #int epr_read_bitmask_raster(EPR_SProductId*, char*, int, int, EPR_SRaster*)
+    int epr_read_bitmask_raster(EPR_SProductId*, char*, int, int, EPR_SRaster*)
 
     # DATASET
     char* epr_get_dataset_name(EPR_SDatasetId*)
     char* epr_get_dsd_name(EPR_SDatasetId*)
     uint epr_get_num_records(EPR_SDatasetId*)
-    #EPR_SDSD* epr_get_dsd(EPR_SDatasetId*)
+    EPR_SDSD* epr_get_dsd(EPR_SDatasetId*)
     EPR_SRecord* epr_create_record(EPR_SDatasetId*)
     EPR_SRecord* epr_read_record(EPR_SDatasetId*, uint, EPR_SRecord*)
 
@@ -162,10 +162,10 @@ cdef extern from 'epr_api.h':
     float* epr_get_field_elems_float(EPR_SField*)
     double* epr_get_field_elems_double(EPR_SField*)
 
-    #uint epr_copy_field_elems_as_ints(EPR_SField*, int*, uint)
-    #uint epr_copy_field_elems_as_uints(EPR_SField*, uint*, uint)
-    #uint epr_copy_field_elems_as_floats(EPR_SField*, float*, uint)
-    #uint epr_copy_field_elems_as_doubles(EPR_SField*, double*, uint)
+    uint epr_copy_field_elems_as_ints(EPR_SField*, int*, uint)
+    uint epr_copy_field_elems_as_uints(EPR_SField*, uint*, uint)
+    uint epr_copy_field_elems_as_floats(EPR_SField*, float*, uint)
+    uint epr_copy_field_elems_as_doubles(EPR_SField*, double*, uint)
 
     # BAND
     char* epr_get_band_name(EPR_SBandId*)
@@ -183,9 +183,9 @@ cdef extern from 'epr_api.h':
     float epr_get_pixel_as_float(EPR_SRaster*, int, int)
     double epr_get_pixel_as_double(EPR_SRaster*, int, int)
 
-    #void* epr_get_raster_elem_addr(EPR_SRaster*, uint)
-    #void* epr_get_raster_pixel_addr(EPR_SRaster*, uint, uint)
-    #void* epr_get_raster_line_addr(EPR_SRaster*, uint)
+    void* epr_get_raster_elem_addr(EPR_SRaster*, uint)
+    void* epr_get_raster_pixel_addr(EPR_SRaster*, uint, uint)
+    void* epr_get_raster_line_addr(EPR_SRaster*, uint)
 
     EPR_SRaster* epr_create_raster(EPR_EDataTypeId, uint, uint, uint, uint)
     EPR_SRaster* epr_create_bitmask_raster(uint, uint, uint, uint)
@@ -258,6 +258,7 @@ def data_type_id_to_str(EPR_EDataTypeId type_id):
     return epr_data_type_id_to_str(type_id)
 
 
+# @TODO: complete
 #cdef class DSD:
 #    cdef EPR_SDSD* _ptr
 
@@ -631,6 +632,7 @@ cdef class Dataset:
             return epr_get_num_records(self._ptr)
         return 0
 
+    # @TODO: complete
     #def get_dsd(self):
     #    cdef EPR_SDSD* dsd_ptr
     #    # cast is used to silence warnings about constness
