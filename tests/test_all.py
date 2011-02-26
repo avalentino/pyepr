@@ -201,12 +201,120 @@ class TestBand(unittest.TestCase):
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
-        #self.band = self.product.get_band_id('proc_data')
+        self.band = self.product.get_band_id('proc_data')
 
     def test_get_band_name(self):
         for index in range(len(self.BAND_NAMES)):
             b = self.product.get_band_id_at(index)
             self.assertEqual(b.get_band_name(), self.BAND_NAMES[index])
+
+    def test_create_compatible_raster(self):
+        width = self.product.get_scene_width()
+        height = self.product.get_scene_height()
+        raster = self.band.create_compatible_raster(width, height)
+        self.assertTrue(isinstance(raster, epr.Raster))
+        self.assertEquals(raster.get_raster_width(), width)
+        self.assertEquals(raster.get_raster_height(), height)
+        # @NOTE: data type on disk is epr.E_TID_USHORT
+        self.assertEquals(raster.get_raster_data_type(), epr.E_TID_FLOAT)
+
+    def test_create_compatible_raster_with_invalid_size(self):
+        width = self.product.get_scene_width()
+        height = self.product.get_scene_height()
+
+        self.assertRaises((ValueError, OverflowError),
+                          self.band.create_compatible_raster,
+                          -1, height)
+        self.assertRaises((ValueError, OverflowError),
+                          self.band.create_compatible_raster,
+                          width, -1)
+        # @TODO: check
+        #self.assertRaises(ValueError, self.band.create_compatible_raster,
+        #                  self.product.get_scene_width() + 10, height)
+        #self.assertRaises(ValueError, self.band.create_compatible_raster,
+        #                  width, self.product.get_scene_height() + 10)
+
+    def test_create_compatible_raster_with_step(self):
+        src_width = self.product.get_scene_width()
+        src_height = self.product.get_scene_height()
+        xstep = 2
+        ystep = 3
+        width = (src_width - 1) / xstep + 1
+        height = (src_height - 1) / ystep + 1
+        raster = self.band.create_compatible_raster(src_width, src_height,
+                                                    xstep, ystep)
+        self.assertTrue(isinstance(raster, epr.Raster))
+        self.assertEquals(raster.get_raster_width(), width)
+        self.assertEquals(raster.get_raster_height(), height)
+        # @NOTE: data type on disk is epr.E_TID_USHORT
+        self.assertEquals(raster.get_raster_data_type(), epr.E_TID_FLOAT)
+
+    def test_create_compatible_raster_with_invalid_step(self):
+        width = self.product.get_scene_width()
+        height = self.product.get_scene_height()
+
+        self.assertRaises((ValueError, OverflowError),
+                          self.band.create_compatible_raster,
+                          width, height, -1, 2)
+        self.assertRaises((ValueError, OverflowError),
+                          self.band.create_compatible_raster,
+                          width, height, 2, -1)
+        self.assertRaises((ValueError, OverflowError),
+                          self.band.create_compatible_raster,
+                          width, height, -2, -1)
+
+        # @TODO: check
+        #self.assertRaises((ValueError, OverflowError),
+        #                  self.band.create_compatible_raster,
+        #                  width, height, width + 10, 2)
+        #self.assertRaises((ValueError, OverflowError),
+        #                  self.band.create_compatible_raster,
+        #                  width, height, 2, height + 10)
+        #self.assertRaises((ValueError, OverflowError),
+        #                  self.band.create_compatible_raster,
+        #                  width, height, width + 10, height + 10)
+
+    def test_read_band_raster(self):
+        width = 400
+        height = 300
+        xoffset = 40
+        yoffset = 30
+        raster = self.band.create_compatible_raster(width, height)
+
+        self.band.read_band_raster(xoffset, yoffset, raster)
+
+        self.assertTrue(isinstance(raster, epr.Raster))
+        self.assertEquals(raster.get_raster_width(), width)
+        self.assertEquals(raster.get_raster_height(), height)
+        # @NOTE: data type on disk is epr.E_TID_USHORT
+        self.assertEquals(raster.get_raster_data_type(), epr.E_TID_FLOAT)
+
+    def test_read_band_raster_with_invalid_offset(self):
+        width = 400
+        height = 300
+        raster = self.band.create_compatible_raster(width, height)
+
+        # @TODO: check
+        self.assertRaises((ValueError, epr.EPRError),
+                          self.band.read_band_raster,
+                          -1, 0, raster)
+        self.assertRaises((ValueError, epr.EPRError),
+                          self.band.read_band_raster,
+                          0, -1, raster)
+        self.assertRaises((ValueError, epr.EPRError),
+                          self.band.read_band_raster,
+                          -1, -1, raster)
+        # @TODO: check
+        #self.assertRaises((ValueError, epr.EPRError),
+        #                  self.band.read_band_raster,
+        #                  width + 10, 0, raster)
+        #self.assertRaises((ValueError, epr.EPRError),
+        #                  self.band.read_band_raster,
+        #                  0, height + 10, raster)
+        #self.assertRaises((ValueError, epr.EPRError),
+        #                  self.band.read_band_raster,
+        #                  width + 10, height + 10, raster)
+
 
 class TestCreateRaster(unittest.TestCase):
     RASTER_WIDTH = 400

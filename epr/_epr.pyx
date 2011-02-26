@@ -169,8 +169,8 @@ cdef extern from 'epr_api.h':
 
     # BAND
     char* epr_get_band_name(EPR_SBandId*)
-    #~ EPR_SRaster* epr_create_compatible_raster(EPR_SBandId*, uint, uint, uint, uint)
-    #~ int epr_read_band_raster(EPR_SBandId*, int, int, EPR_SRaster*)
+    EPR_SRaster* epr_create_compatible_raster(EPR_SBandId*, uint, uint, uint, uint)
+    int epr_read_band_raster(EPR_SBandId*, int, int, EPR_SRaster*)
 
     # RASTER
     void epr_free_raster(EPR_SRaster*)
@@ -183,9 +183,9 @@ cdef extern from 'epr_api.h':
     float epr_get_pixel_as_float(EPR_SRaster*, int, int)
     double epr_get_pixel_as_double(EPR_SRaster*, int, int)
 
-    #~ void* epr_get_raster_elem_addr(const EPR_SRaster* raster, uint offset)
-    #~ void* epr_get_raster_pixel_addr(const EPR_SRaster* raster, uint x, uint y)
-    #~ void* epr_get_raster_line_addr(const EPR_SRaster* raster, uint y)
+    #void* epr_get_raster_elem_addr(EPR_SRaster*, uint)
+    #void* epr_get_raster_pixel_addr(EPR_SRaster*, uint, uint)
+    #void* epr_get_raster_line_addr(EPR_SRaster*, uint)
 
     EPR_SRaster* epr_create_raster(EPR_EDataTypeId, uint, uint, uint, uint)
     EPR_SRaster* epr_create_bitmask_raster(uint, uint, uint, uint)
@@ -410,11 +410,6 @@ cdef class Field:
 
         return out
 
-    #~ uint epr_copy_field_elems_as_ints(const EPR_SField* field, int* buffer, uint num_elems)
-    #~ uint epr_copy_field_elems_as_uints(const EPR_SField* field, uint* buffer, uint num_elems)
-    #~ uint epr_copy_field_elems_as_floats(const EPR_SField* field, float* buffer, uint num_elems)
-    #~ uint epr_copy_field_elems_as_doubles(const EPR_SField* field, double* buffer, uint num_elems)
-
 
 cdef class Record:
     cdef EPR_SRecord* _ptr
@@ -543,7 +538,7 @@ cdef class Raster:
     #void* epr_get_raster_pixel_addr(self._ptr, uint x, uint y)
     #void* epr_get_raster_line_addr(self._ptr, uint y)
 
-    # @TODO: __getitem__ with slicing
+    # @TODO: __getitem__ with generalized slicing
 
 
 def create_raster(EPR_EDataTypeId data_type, uint src_width, uint src_height,
@@ -587,23 +582,34 @@ cdef class Band:
     def get_band_name(self):
         return epr_get_band_name(self._ptr)
 
-    #~ def create_compatible_raster(self, uint width, uint height,
-                                 #~ uint xstep, uint ystep):
-        #~ cdef EPR_SRaster* raster_ptr
-        #~ raster_ptr = epr_create_compatible_raster(self._ptr, width, height,
-                                                  #~ xstep, ystep)
-        #~ if raster_ptr is NULL:
-            #~ pyepr_null_ptr_error('unable to create compatible raster with '
-                                 #~ 'width=%d, height=%d xstep=%d, ystep=%d' %
-                                                #~ (width, height, xstep, ystep))
+    def create_compatible_raster(self, uint width, uint height,
+                                 uint xstep=1, uint ystep=1):
+        cdef EPR_SRaster* raster_ptr
+        raster_ptr = epr_create_compatible_raster(self._ptr, width, height,
+                                                  xstep, ystep)
+        if raster_ptr is NULL:
+            pyepr_null_ptr_error('unable to create compatible raster with '
+                                 'width=%d, height=%d xstep=%d, ystep=%d' %
+                                                (width, height, xstep, ystep))
 
-        #~ raster = Raster()
-        #~ (<Raster>raster)._ptr = raster_ptr
-        #~ (<Raster>raster)._parent = raster_self
+        raster = Raster()
+        (<Raster>raster)._ptr = raster_ptr
+        (<Raster>raster)._parent = self
 
-    #~ def read_band_raster(self, int xoffset, int yoffset, raster=None):
-        #~ cdef EPR_SRaster* raster_ptr
-        #~ int epr_read_band_raster(self._ptr, xoffset, yoffset, raster_ptr)
+        return raster
+
+    # @TODO: make it more pythonic
+    def read_band_raster(self, int xoffset, int yoffset, raster):
+        if not isinstance(raster, Raster):
+            raise TypeError('raster parameter is not an instance of epr.Raster')
+
+        cdef int ret
+        ret = epr_read_band_raster(self._ptr, xoffset, yoffset,
+                                   (<Raster>raster)._ptr)
+        if ret != 0:
+            pyepr_check_errors()
+
+        return raster
 
 
 cdef class Dataset:
@@ -653,6 +659,9 @@ cdef class Dataset:
     def read_record(self, uint index, record=None):
         cdef EPR_SRecord* record_ptr = NULL
         if record:
+            if not isinstance(record, Record):
+                raise TypeError('record parameter is not an instance of '
+                                'epr.Record')
             record_ptr = (<Record>record)._ptr
         else:
             record = Record()
@@ -787,7 +796,7 @@ cdef class Product:
 
         return band
 
-    # @TODO: complete
+    # @TODO: complete and make it more pythonic
     #def read_bitmask_raster(self, bm_expr, int xoffset, int yoffset, raster):
     #    cdef int ret = epr_read_bitmask_raster(self._ptr, bm_expr,
     #                                           xoffset, yoffset,
