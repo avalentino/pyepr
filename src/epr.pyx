@@ -391,14 +391,46 @@ def data_type_id_to_str(EPR_EDataTypeId type_id):
     return epr_data_type_id_to_str(type_id)
 
 
-# @TODO: complete
-#cdef class DSD:
-#    cdef EPR_SDSD* _ptr
+cdef class DSD:
+    cdef EPR_SDSD* _ptr
+    cdef object _parent
+
+    property index:
+        def __get__(self):
+            return self._ptr.index
+
+    property ds_name:
+        def __get__(self):
+            return self._ptr.ds_name
+
+    property ds_type:
+        def __get__(self):
+            return self._ptr.ds_type
+
+    property filename:
+        def __get__(self):
+            return self._ptr.filename
+
+    property ds_offset:
+        def __get__(self):
+            return self._ptr.ds_offset
+
+    property ds_size:
+        def __get__(self):
+            return self._ptr.ds_size
+
+    property num_dsr:
+        def __get__(self):
+            return self._ptr.num_dsr
+
+    property dsr_size:
+        def __get__(self):
+            return self._ptr.dsr_size
 
 
 cdef class Field:
     cdef EPR_SField* _ptr
-    cdef public object _parent
+    cdef object _parent
 
     def print_field(self, ostream=None):
         cdef FILE* fd
@@ -547,8 +579,8 @@ cdef class Field:
 
 cdef class Record:
     cdef EPR_SRecord* _ptr
-    cdef public object _parent
-    cdef public bool _dealloc
+    cdef object _parent
+    cdef bool _dealloc
 
     #def __cinit__(self, *args, **kargs):
     #    self._dealloc = True
@@ -627,7 +659,7 @@ cdef class Record:
 
 cdef class Raster:
     cdef EPR_SRaster* _ptr
-    cdef public object _parent
+    cdef object _parent
 
     def __dealloc__(self):
         if self._ptr is not NULL:
@@ -711,7 +743,7 @@ def create_bitmask_raster(uint src_width, uint src_height,
 
 cdef class Band:
     cdef EPR_SBandId* _ptr
-    cdef public object _parent
+    cdef object _parent
 
     def get_band_name(self):
         return epr_get_band_name(self._ptr)
@@ -748,7 +780,7 @@ cdef class Band:
 
 cdef class Dataset:
     cdef EPR_SDatasetId* _ptr
-    cdef public object _parent
+    cdef object _parent
 
     def get_dataset_name(self):
         if self._ptr is not NULL:
@@ -765,18 +797,18 @@ cdef class Dataset:
             return epr_get_num_records(self._ptr)
         return 0
 
-    # @TODO: complete
-    #def get_dsd(self):
-    #    cdef EPR_SDSD* dsd_ptr
-    #    # cast is used to silence warnings about constness
-    #    dsd_ptr = <EPR_SDSD*>epr_get_dsd(self._ptr)
-    #    if dsd_ptr is NULL:
-    #        pyepr_null_ptr_error('unable to get DSD')
-    #
-    #    dsd = DSD()
-    #    (<DSD>dsd)._ptr = dsd_ptr
-    #
-    #    return dsd
+    def get_dsd(self):
+        cdef EPR_SDSD* dsd_ptr
+        # cast is used to silence warnings about constness
+        dsd_ptr = <EPR_SDSD*>epr_get_dsd(self._ptr)
+        if dsd_ptr is NULL:
+            pyepr_null_ptr_error('unable to get DSD')
+
+        dsd = DSD()
+        (<DSD>dsd)._ptr = dsd_ptr
+        (<DSD>dsd)._parent = self
+
+        return dsd
 
     def create_record(self):
         cdef EPR_Record* record_ptr
@@ -870,16 +902,17 @@ cdef class Product:
 
         return dataset
 
-    #def get_dsd_at(self, uint index):
-    #    cdef EPR_SDSD* dsd_ptr
-    #    dsd_ptr = epr_get_dsd_at(self._ptr, index)
-    #    if dsd_ptr is NULL:
-    #        pyepr_null_ptr_error('unable to get DSD at index "%d"' % index)
-    #
-    #    dsd = DSD()
-    #    (<DSD>dsd)._ptr = dsd_ptr
-    #
-    #    return dsd
+    def get_dsd_at(self, uint index):
+        cdef EPR_SDSD* dsd_ptr
+        dsd_ptr = epr_get_dsd_at(self._ptr, index)
+        if dsd_ptr is NULL:
+            pyepr_null_ptr_error('unable to get DSD at index "%d"' % index)
+
+        dsd = DSD()
+        (<DSD>dsd)._ptr = dsd_ptr
+        (<DSD>dsd)._parent = self
+
+        return dsd
 
     def get_mph(self):
         cdef EPR_SRecord* record_ptr

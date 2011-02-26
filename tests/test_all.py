@@ -97,8 +97,8 @@ class TestProduct(unittest.TestCase):
         dataset_names = [ds.get_dataset_name() for ds in datasets]
         self.assertEqual(dataset_names, self.DATASET_NAMES)
 
-    #def test_get_dsd_at(self):
-    #    self.assertTrue(isinstance(self.product.get_dsd_at(0), epr.DSD))
+    def test_get_dsd_at(self):
+        self.assertTrue(isinstance(self.product.get_dsd_at(0), epr.DSD))
 
     def test_get_mph(self):
         record = self.product.get_mph()
@@ -159,8 +159,8 @@ class TestDataset(unittest.TestCase):
     def test_get_num_records(self):
         self.assertEqual(self.dataset.get_num_records(), 8192)
 
-    #def test_get_dsd(self):
-    #    self.assertTrue(isinstance(self.dataset.get_dsd(), epr.DSD))
+    def test_get_dsd(self):
+        self.assertTrue(isinstance(self.dataset.get_dsd(), epr.DSD))
 
     def test_create_record(self):
         self.assertTrue(isinstance(self.dataset.create_record(), epr.Record))
@@ -601,6 +601,46 @@ class TestDataypeFunctions(unittest.TestCase):
     def test_get_data_type_size(self):
         for type_id, type_size in self.TYPE_SIZES.items():
             self.assertEqual(epr.get_data_type_size(type_id), type_size)
+
+
+class TestDSD(unittest.TestCase):
+    PRODUCT_FILE = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
+
+    def setUp(self):
+        product = epr.Product(self.PRODUCT_FILE)
+        self.dsd = product.get_dsd_at(0)
+
+    def test_index(self):
+        self.assertEqual(self.dsd.index, 0)
+        self.assertTrue(isinstance(self.dsd.index, int))
+
+    def test_ds_name(self):
+        self.assertEqual(self.dsd.ds_name, 'MDS1 SQ ADS')
+        self.assertTrue(isinstance(self.dsd.ds_name, basestring))
+
+    def test_ds_type(self):
+        self.assertEqual(self.dsd.ds_type, 'A')
+        self.assertTrue(isinstance(self.dsd.ds_type, basestring))
+
+    def test_filename(self):
+        self.assertEqual(self.dsd.filename, '')
+        self.assertTrue(isinstance(self.dsd.filename, basestring))
+
+    def test_ds_offset(self):
+        self.assertEqual(self.dsd.ds_offset, 7346)
+        self.assertTrue(isinstance(self.dsd.ds_offset, int))
+
+    def test_ds_size(self):
+        self.assertEqual(self.dsd.ds_size, 170)
+        self.assertTrue(isinstance(self.dsd.ds_size, int))
+
+    def test_num_dsr(self):
+        self.assertEqual(self.dsd.num_dsr, 1)
+        self.assertTrue(isinstance(self.dsd.num_dsr, int))
+
+    def test_dsr_size(self):
+        self.assertEqual(self.dsd.dsr_size, 170)
+        self.assertTrue(isinstance(self.dsd.dsr_size, int))
 
 
 if __name__ == '__main__':
