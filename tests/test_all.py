@@ -10,7 +10,7 @@ import numpy as np
 sys.path.insert(0, os.pardir)
 import epr
 
-#PRODUCT_FILE = 'SAR_IMS_1PXESA20040920_034157_00000016A098_00290_49242_0715.E2'
+TEST_PRODUCT = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
 
 def quiet(func):
     @functools.wraps(func)
@@ -31,7 +31,7 @@ def quiet(func):
 
 
 class TestOpenProduct(unittest.TestCase):
-    PRODUCT_FILE = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
+    PRODUCT_FILE = TEST_PRODUCT
 
     def test_open(self):
         product = epr.open(self.PRODUCT_FILE)
@@ -49,7 +49,7 @@ class TestOpenProduct(unittest.TestCase):
 
 
 class TestProduct(unittest.TestCase):
-    PRODUCT_FILE = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
+    PRODUCT_FILE = TEST_PRODUCT
     DATASET_NAMES = [
         'MDS1_SQ_ADS',
         'MAIN_PROCESSING_PARAMS_ADS',
@@ -68,8 +68,7 @@ class TestProduct(unittest.TestCase):
         self.product = epr.Product(self.PRODUCT_FILE)
 
     def test_file_path_property(self):
-        self.assertEqual(self.product.file_path,
-            'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1')
+        self.assertEqual(self.product.file_path, TEST_PRODUCT)
 
     def test_tot_size_property(self):
         self.assertEqual(self.product.tot_size, 138422957)
@@ -157,7 +156,7 @@ class TestProduct(unittest.TestCase):
 
 
 class TestDataset(unittest.TestCase):
-    PRODUCT_FILE = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
+    PRODUCT_FILE = TEST_PRODUCT
     DATASET_NAME = 'MDS1'
 
     def setUp(self):
@@ -209,7 +208,7 @@ class TestDataset(unittest.TestCase):
 
 
 class TestBand(unittest.TestCase):
-    PRODUCT_FILE = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
+    PRODUCT_FILE = TEST_PRODUCT
     BAND_NAMES = (
         'slant_range_time',
         'incident_angle',
@@ -494,7 +493,7 @@ class TestRaster(unittest.TestCase):
 
 
 class TestRecord(unittest.TestCase):
-    PRODUCT_FILE = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
+    PRODUCT_FILE = TEST_PRODUCT
     DATASET_NAME = 'MAIN_PROCESSING_PARAMS_ADS'
 
     def setUp(self):
@@ -564,7 +563,7 @@ class TestRecord(unittest.TestCase):
 
 
 class TestField(unittest.TestCase):
-    PRODUCT_FILE = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
+    PRODUCT_FILE = TEST_PRODUCT
     DATASET_NAME = 'MAIN_PROCESSING_PARAMS_ADS'
 
     FIELD_NAME = 'range_spacing'
@@ -640,7 +639,7 @@ class TestFieldWithMiltipleElems(TestField):
 
 
 class TestDSD(unittest.TestCase):
-    PRODUCT_FILE = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
+    PRODUCT_FILE = TEST_PRODUCT
 
     def setUp(self):
         product = epr.Product(self.PRODUCT_FILE)
