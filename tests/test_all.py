@@ -191,6 +191,9 @@ class TestDataset(unittest.TestCase):
         self.assertTrue(created_record is read_record)
         # @TODO: check contents
 
+    def test_read_record_passed_invalid(self):
+        self.assertRaises(TypeError, self.dataset.read_record, 0, 0)
+
 
 class TestUninitializedDataset(unittest.TestCase):
     def setUp(self):
@@ -344,6 +347,9 @@ class TestBand(unittest.TestCase):
         self.assertEquals(raster.get_raster_height(), height)
         # @NOTE: data type on disk is epr.E_TID_USHORT
         self.assertEquals(raster.data_type, epr.E_TID_FLOAT)
+
+    def test_read_band_raster_with_invalid_raster(self):
+        self.assertRaises(TypeError, self.band.read_band_raster, 0, 0, 0)
 
     def test_read_band_raster_with_invalid_offset(self):
         width = 400

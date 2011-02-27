@@ -880,10 +880,7 @@ cdef class Band:
         return raster
 
     # @TODO: make it more pythonic
-    def read_band_raster(self, int xoffset, int yoffset, raster):
-        if not isinstance(raster, Raster):
-            raise TypeError('raster parameter is not an instance of epr.Raster')
-
+    def read_band_raster(self, int xoffset, int yoffset, Raster raster not None):
         cdef int ret
         ret = epr_read_band_raster(self._ptr, xoffset, yoffset,
                                    (<Raster>raster)._ptr)
@@ -950,12 +947,9 @@ cdef class Dataset:
 
         return record
 
-    def read_record(self, uint index, record=None):
+    def read_record(self, uint index, Record record=None):
         cdef EPR_SRecord* record_ptr = NULL
         if record:
-            if not isinstance(record, Record):
-                raise TypeError('record parameter is not an instance of '
-                                'epr.Record')
             record_ptr = (<Record>record)._ptr
         else:
             record = Record()
@@ -1122,7 +1116,8 @@ cdef class Product:
         return band
 
     # @TODO: complete and make it more pythonic
-    #def read_bitmask_raster(self, bm_expr, int xoffset, int yoffset, raster):
+    #def read_bitmask_raster(self, bm_expr, int xoffset, int yoffset,
+    #                        Raster raster not Null):
     #    cdef int ret = epr_read_bitmask_raster(self._ptr, bm_expr,
     #                                           xoffset, yoffset,
     #                                           (<Raster>raster)._ptr)
