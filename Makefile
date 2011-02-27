@@ -16,13 +16,16 @@ distclean: clean
 	$(RM) src/*.c src/*.o *.so
 	#$(RM) tests/*.N1
 
-check: $(TEST_DATSET)
+check: epr.so $(TEST_DATSET)
 	cd tests && python test_all.py --verbose
 
 debug:
 	python setup.py build_ext --inplace --debug
 
 data: $(TEST_DATSET)
+
+epr.so: src/epr.pyx
+	python setup.py build_ext --inplace
 
 $(TEST_DATSET):
 	wget -P tests $(TEST_DATSET_URL)
