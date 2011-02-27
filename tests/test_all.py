@@ -161,8 +161,21 @@ class TestDataset(unittest.TestCase):
     DATASET_NAME = 'MDS1'
 
     def setUp(self):
-        product = epr.Product(self.PRODUCT_FILE)
-        self.dataset = product.get_dataset(self.DATASET_NAME)
+        self.product = epr.Product(self.PRODUCT_FILE)
+        self.dataset = self.product.get_dataset(self.DATASET_NAME)
+
+    def test_product_id_property(self):
+        product_id = self.dataset.product_id
+        self.assertEqual(type(product_id), type(self.product))
+
+        for name in ('file_path', 'tot_size', 'id_string', 'meris_iodd_version'):
+            self.assertEqual(getattr(product_id, name),
+                             getattr(self.product, name))
+
+        for name in ('get_scene_width', 'get_scene_height', 'get_num_datasets',
+                     'get_num_dsds', 'get_num_bands', ):
+            self.assertEqual(getattr(product_id, name)(),
+                             getattr(self.product, name)())
 
     def test_description_property(self):
         self.assertEqual(self.dataset.description, 'Measurement Data Set 1')
@@ -193,20 +206,6 @@ class TestDataset(unittest.TestCase):
 
     def test_read_record_passed_invalid(self):
         self.assertRaises(TypeError, self.dataset.read_record, 0, 0)
-
-
-class TestUninitializedDataset(unittest.TestCase):
-    def setUp(self):
-        self.dataset = epr.Dataset()
-
-    def test_get_dataset_name(self):
-        self.assertEqual(self.dataset.get_dataset_name(), '')
-
-    def test_get_dsd_name(self):
-        self.assertEqual(self.dataset.get_dsd_name(), '')
-
-    def test_get_num_records(self):
-        self.assertEqual(self.dataset.get_num_records(), 0)
 
 
 class TestBand(unittest.TestCase):
@@ -756,6 +755,26 @@ class TestSampleModelFunctions(unittest.TestCase):
 
     def test_get_scaling_method_name_invalid(self):
         self.assertRaises(ValueError, epr.get_sample_model_name, 500)
+
+
+class TestDirectInstantiation(unittest.TestCase):
+    def test_direct_dsd_instantiation(self):
+        self.assertRaises(TypeError, epr.DSD)
+
+    def test_direct_field_instantiation(self):
+        self.assertRaises(TypeError, epr.Field)
+
+    def test_direct_record_instantiation(self):
+        self.assertRaises(TypeError, epr.Record)
+
+    def test_direct_raster_instantiation(self):
+        self.assertRaises(TypeError, epr.Raster)
+
+    def test_direct_band_instantiation(self):
+        self.assertRaises(TypeError, epr.Band)
+
+    def test_direct_dataset_instantiation(self):
+        self.assertRaises(TypeError, epr.Dataset)
 
 
 if __name__ == '__main__':

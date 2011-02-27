@@ -434,6 +434,10 @@ cdef class DSD:
     cdef EPR_SDSD* _ptr
     cdef object _parent
 
+    def __init__(self):
+        raise TypeError('"%s" class cannot be instantiated from Python' %
+                                                    self.__class__.__name__)
+
     property index:
         def __get__(self):
             return self._ptr.index
@@ -467,9 +471,25 @@ cdef class DSD:
             return self._ptr.dsr_size
 
 
+cdef new_dsd(EPR_SDSD* ptr, object parent=None):
+    if ptr is NULL:
+        pyepr_null_ptr_error()
+
+    cdef DSD instance = DSD.__new__(DSD)
+
+    instance._ptr = ptr
+    instance._parent = parent
+
+    return instance
+
+
 cdef class Field:
     cdef EPR_SField* _ptr
     cdef object _parent
+
+    def __init__(self):
+        raise TypeError('"%s" class cannot be instantiated from Python' %
+                                                    self.__class__.__name__)
 
     def print_field(self, ostream=None):
         cdef FILE* fd
@@ -616,13 +636,22 @@ cdef class Field:
         return out
 
 
+cdef new_field(EPR_SField* ptr, object parent=None):
+    if ptr is NULL:
+        pyepr_null_ptr_error()
+
+    cdef Field instance = Field.__new__(Field)
+
+    instance._ptr = ptr
+    instance._parent = parent
+
+    return instance
+
+
 cdef class Record:
     cdef EPR_SRecord* _ptr
     cdef object _parent
     cdef bool _dealloc
-
-    #def __cinit__(self, *args, **kargs):
-    #    self._dealloc = True
 
     def __dealloc__(self):
         if not self._dealloc:
@@ -631,6 +660,10 @@ cdef class Record:
         if self._ptr is not NULL:
             epr_free_record(self._ptr)
             pyepr_check_errors()
+
+    def __init__(self):
+        raise TypeError('"%s" class cannot be instantiated from Python' %
+                                                    self.__class__.__name__)
 
     def get_num_fields(self):
         return epr_get_num_fields(self._ptr)
@@ -677,11 +710,7 @@ cdef class Record:
         if field_ptr is NULL:
             pyepr_null_ptr_error('unable to get field "%s"' % name)
 
-        field = Field()
-        (<Field>field)._ptr = field_ptr
-        (<Field>field)._parent = self
-
-        return field
+        return new_field(field_ptr, self)
 
     def get_field_at(self, uint index):
         cdef EPR_SField* field_ptr
@@ -689,11 +718,20 @@ cdef class Record:
         if field_ptr is NULL:
             pyepr_null_ptr_error('unable to get field at index %d' % index)
 
-        field = Field()
-        (<Field>field)._ptr = field_ptr
-        (<Field>field)._parent = self
+        return new_field(field_ptr, self)
 
-        return field
+
+cdef new_record(EPR_SRecord* ptr, object parent=None, bool dealloc=False):
+    if ptr is NULL:
+        pyepr_null_ptr_error()
+
+    cdef Record instance = Record.__new__(Record)
+
+    instance._ptr = ptr
+    instance._parent = parent
+    instance._dealloc = dealloc
+
+    return instance
 
 
 cdef class Raster:
@@ -703,6 +741,10 @@ cdef class Raster:
     def __dealloc__(self):
         if self._ptr is not NULL:
             epr_free_raster(self._ptr)
+
+    def __init__(self):
+        raise TypeError('"%s" class cannot be instantiated from Python' %
+                                                    self.__class__.__name__)
 
     property data_type:
         def __get__(self):
@@ -763,10 +805,22 @@ cdef class Raster:
     # @TODO: __getitem__ with generalized slicing
 
 
+cdef new_raster(EPR_SRaster* ptr, object parent=None):
+    if ptr is NULL:
+        pyepr_null_ptr_error()
+
+    cdef Raster instance = Raster.__new__(Raster)
+
+    instance._ptr = ptr
+    instance._parent = parent
+
+    return instance
+
+
 def create_raster(EPR_EDataTypeId data_type, uint src_width, uint src_height,
                   uint xstep=1, uint ystep=1):
 
-    if xstep == 0 or ystep ==0:
+    if xstep == 0 or ystep == 0:
         raise ValueError('invalid step: xspet=%d, ystep=%d' % (xstep, ystep))
 
     cdef EPR_SRaster* raster_ptr
@@ -775,15 +829,12 @@ def create_raster(EPR_EDataTypeId data_type, uint src_width, uint src_height,
     if raster_ptr is NULL:
         pyepr_null_ptr_error('unable to create a new raster')
 
-    raster = Raster()
-    (<Raster>raster)._ptr = raster_ptr
-
-    return raster
+    return new_raster(raster_ptr)
 
 def create_bitmask_raster(uint src_width, uint src_height,
                           uint xstep=1, uint ystep=1):
 
-    if xstep == 0 or ystep ==0:
+    if xstep == 0 or ystep == 0:
         raise ValueError('invalid step: xspet=%d, ystep=%d' % (xstep, ystep))
 
     cdef EPR_SRaster* raster_ptr
@@ -791,15 +842,16 @@ def create_bitmask_raster(uint src_width, uint src_height,
     if raster_ptr is NULL:
         pyepr_null_ptr_error('unable to create a new raster')
 
-    raster = Raster()
-    (<Raster>raster)._ptr = raster_ptr
-
-    return raster
+    return new_raster(raster_ptr)
 
 
 cdef class Band:
     cdef EPR_SBandId* _ptr
     cdef object _parent
+
+    def __init__(self):
+        raise TypeError('"%s" class cannot be instantiated from Python' %
+                                                    self.__class__.__name__)
 
     # @TODO: check
     #property product_id:
@@ -873,11 +925,7 @@ cdef class Band:
                                  'width=%d, height=%d xstep=%d, ystep=%d' %
                                                 (width, height, xstep, ystep))
 
-        raster = Raster()
-        (<Raster>raster)._ptr = raster_ptr
-        (<Raster>raster)._parent = self
-
-        return raster
+        return new_raster(raster_ptr, self)
 
     # @TODO: make it more pythonic
     def read_band_raster(self, int xoffset, int yoffset, Raster raster not None):
@@ -890,14 +938,29 @@ cdef class Band:
         return raster
 
 
+cdef new_band(EPR_SBandId* ptr, object parent=None):
+    if ptr is NULL:
+        pyepr_null_ptr_error()
+
+    cdef Band instance = Band.__new__(Band)
+
+    instance._ptr = ptr
+    instance._parent = parent
+
+    return instance
+
+
 cdef class Dataset:
     cdef EPR_SDatasetId* _ptr
     cdef object _parent
 
-    # @TODO: check
-    #property product_id:
-    #    def __get__(self):
-    #        return self._parent
+    def __init__(self):
+        raise TypeError('"%s" class cannot be instantiated from Python' %
+                                                    self.__class__.__name__)
+
+    property product_id:
+        def __get__(self):
+            return self._parent
 
     property description:
         def __get__(self):
@@ -922,53 +985,36 @@ cdef class Dataset:
         return 0
 
     def get_dsd(self):
-        cdef EPR_SDSD* dsd_ptr
-        # cast is used to silence warnings about constness
-        dsd_ptr = <EPR_SDSD*>epr_get_dsd(self._ptr)
-        if dsd_ptr is NULL:
-            pyepr_null_ptr_error('unable to get DSD')
-
-        dsd = DSD()
-        (<DSD>dsd)._ptr = dsd_ptr
-        (<DSD>dsd)._parent = self
-
-        return dsd
+        return new_dsd(<EPR_SDSD*>epr_get_dsd(self._ptr), self)
 
     def create_record(self):
-        cdef EPR_Record* record_ptr
-        record_ptr = epr_create_record(self._ptr)
-        if record_ptr is NULL:
-            pyepr_null_ptr_error('unable to create a new record')
-
-        record = Record()
-        (<Record>record)._ptr = record_ptr
-        (<Record>record)._dealloc = True
-        (<Record>record)._parent = self   # None    # @TODO: check
-
-        return record
+        return new_record(epr_create_record(self._ptr), self, True)
 
     def read_record(self, uint index, Record record=None):
         cdef EPR_SRecord* record_ptr = NULL
         if record:
             record_ptr = (<Record>record)._ptr
-        else:
-            record = Record()
-            (<Record>record)._dealloc = True
 
         record_ptr = epr_read_record(self._ptr, index, record_ptr)
         if record_ptr is NULL:
             pyepr_null_ptr_error('unable to read record at index %d' % index)
 
-        # @TODO: fix
-        # dealloc existing structure
-        #~ if (<Record>record)._ptr is not NULL and (<Record>record)._dealloc:
-            #~ epr_free_record((<Record>record)._ptr)
-            #~ pyepr_check_errors()
-
-        (<Record>record)._ptr = record_ptr
-        (<Record>record)._parent = self   # None    # @TODO: check
+        if not record:
+            record = new_record(record_ptr, self, True)
 
         return record
+
+
+cdef new_dataset(EPR_SDatasetId* ptr, object parent=None):
+    if ptr is NULL:
+        pyepr_null_ptr_error()
+
+    cdef Dataset instance = Dataset.__new__(Dataset)
+
+    instance._ptr = ptr
+    instance._parent = parent
+
+    return instance
 
 
 cdef class Product:
@@ -1035,11 +1081,7 @@ cdef class Product:
         if dataset_id is NULL:
             pyepr_null_ptr_error('unable to get dataset at index %d' % index)
 
-        dataset = Dataset()
-        (<Dataset>dataset)._ptr = dataset_id
-        (<Dataset>dataset)._parent = self
-
-        return dataset
+        return new_dataset(dataset_id, self)
 
     def get_dataset(self, name):
         cdef EPR_SDatasetId* dataset_id
@@ -1047,11 +1089,7 @@ cdef class Product:
         if dataset_id is NULL:
             pyepr_null_ptr_error('unable to get dataset "%s"' % name)
 
-        dataset = Dataset()
-        (<Dataset>dataset)._ptr = dataset_id
-        (<Dataset>dataset)._parent = self
-
-        return dataset
+        return new_dataset(dataset_id, self)
 
     def get_dsd_at(self, uint index):
         cdef EPR_SDSD* dsd_ptr
@@ -1059,11 +1097,7 @@ cdef class Product:
         if dsd_ptr is NULL:
             pyepr_null_ptr_error('unable to get DSD at index "%d"' % index)
 
-        dsd = DSD()
-        (<DSD>dsd)._ptr = dsd_ptr
-        (<DSD>dsd)._parent = self
-
-        return dsd
+        return new_dsd(dsd_ptr, self)
 
     def get_mph(self):
         cdef EPR_SRecord* record_ptr
@@ -1071,12 +1105,7 @@ cdef class Product:
         if record_ptr is NULL:
             pyepr_null_ptr_error('unable to get MPH record')
 
-        record = Record()
-        (<Record>record)._ptr = record_ptr
-        (<Record>record)._dealloc = False
-        (<Record>record)._parent = self   # None    # @TODO: check
-
-        return record
+        return new_record(record_ptr, self, False)
 
     def get_sph(self):
         cdef EPR_SRecord* record_ptr
@@ -1084,12 +1113,7 @@ cdef class Product:
         if record_ptr is NULL:
             pyepr_null_ptr_error('unable to get SPH record')
 
-        record = Record()
-        (<Record>record)._ptr = record_ptr
-        (<Record>record)._dealloc = False
-        (<Record>record)._parent = self   # None    # @TODO: check
-
-        return record
+        return new_record(record_ptr, self, False)
 
     def get_band_id(self, name):
         cdef EPR_SBandId* band_id
@@ -1097,11 +1121,7 @@ cdef class Product:
         if band_id is NULL:
             pyepr_null_ptr_error('unable to get band "%s"' % name)
 
-        band = Band()
-        (<Band>band)._ptr = band_id
-        (<Band>band)._parent = self
-
-        return band
+        return new_band(band_id, self)
 
     def get_band_id_at(self, uint index):
         cdef EPR_SBandId* band_id
@@ -1109,11 +1129,7 @@ cdef class Product:
         if band_id is NULL:
             pyepr_null_ptr_error('unable to get band at index "%d"' % index)
 
-        band = Band()
-        (<Band>band)._ptr = band_id
-        (<Band>band)._parent = self
-
-        return band
+        return new_band(band_id, self)
 
     # @TODO: complete and make it more pythonic
     #def read_bitmask_raster(self, bm_expr, int xoffset, int yoffset,
