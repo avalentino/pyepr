@@ -29,6 +29,21 @@ def quiet(func):
 
     return wrapper
 
+def equal_products(product1, product2):
+    if type(product1) != type(product2):
+        return False
+
+    for name in ('file_path', 'tot_size', 'id_string', 'meris_iodd_version'):
+        if getattr(product1, name) != getattr(product2, name):
+            return False
+
+    for name in ('get_scene_width', 'get_scene_height', 'get_num_datasets',
+                 'get_num_dsds', 'get_num_bands', ):
+        if getattr(product1, name)() != getattr(product2, name)():
+            return False
+
+    return True
+
 
 class TestOpenProduct(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
@@ -164,17 +179,7 @@ class TestDataset(unittest.TestCase):
         self.dataset = self.product.get_dataset(self.DATASET_NAME)
 
     def test_product_id_property(self):
-        product_id = self.dataset.product_id
-        self.assertEqual(type(product_id), type(self.product))
-
-        for name in ('file_path', 'tot_size', 'id_string', 'meris_iodd_version'):
-            self.assertEqual(getattr(product_id, name),
-                             getattr(self.product, name))
-
-        for name in ('get_scene_width', 'get_scene_height', 'get_num_datasets',
-                     'get_num_dsds', 'get_num_bands', ):
-            self.assertEqual(getattr(product_id, name)(),
-                             getattr(self.product, name)())
+        self.assertTrue(equal_products(self.dataset.product_id, self.product))
 
     def test_description_property(self):
         self.assertEqual(self.dataset.description, 'Measurement Data Set 1')
@@ -221,9 +226,8 @@ class TestBand(unittest.TestCase):
         self.product = epr.Product(self.PRODUCT_FILE)
         self.band = self.product.get_band_id('proc_data')
 
-    # @TODO: check
-    #def test_product_id_property(self):
-    #    self.assertEqual(self.band.product_id, self.product)
+    def test_product_id_property(self):
+        self.assertTrue(equal_products(self.band.product_id, self.product))
 
     # @TODO: check
     #def test_dataset_ref_property(self):

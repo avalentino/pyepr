@@ -562,7 +562,7 @@ cdef class Field:
         pyepr_check_errors()
         return val
 
-    # @TODO: use tuples insteac od ndarrays
+    # @TODO: use tuples instead od ndarrays
     def get_field_elems(self):
         # @NOTE: internal C const pointer is not shared with numpy
         cdef void* buf
@@ -853,10 +853,9 @@ cdef class Band:
         raise TypeError('"%s" class cannot be instantiated from Python' %
                                                     self.__class__.__name__)
 
-    # @TODO: check
-    #property product_id:
-    #    def __get__(self):
-    #        return self._parent
+    property product_id:
+        def __get__(self):
+            return self._parent
 
     # @TODO: complete
     #property dataset_ref:
@@ -1038,7 +1037,7 @@ cdef class Product:
                 return self._ptr.file_path
 
     # @TODO: check
-    #property file_path:
+    #property istream:
     #    def __get__(self):
     #        if self._ptr.istream is NULL:
     #            return None
