@@ -5,8 +5,7 @@ TEST_DATSET = tests/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.
 
 .PHONY: default clean distclean check debug data
 
-default:
-	python setup.py build_ext --inplace
+default: epr.so
 
 clean:
 	python setup.py clean
