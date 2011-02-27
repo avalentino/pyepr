@@ -1,6 +1,9 @@
 #!/usr/bin/make -f
 
-.PHONY: default clean distclean check debug
+TEST_DATSET_URL = "http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz"
+TEST_DATSET = tests/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1
+
+.PHONY: default clean distclean check debug data
 
 default:
 	python setup.py build_ext --inplace
@@ -13,8 +16,14 @@ distclean: clean
 	$(RM) src/*.c src/*.o *.so
 	#$(RM) tests/*.N1
 
-check:
+check: $(TEST_DATSET)
 	cd tests && python test_all.py --verbose
 
 debug:
 	python setup.py build_ext --inplace --debug
+
+data: $(TEST_DATSET)
+
+$(TEST_DATSET):
+	wget -P tests $(TEST_DATSET_URL)
+	gunzip $@
