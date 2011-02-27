@@ -67,6 +67,20 @@ class TestProduct(unittest.TestCase):
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
 
+    def test_file_path_property(self):
+        self.assertEqual(self.product.file_path,
+            'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1')
+
+    def test_tot_size_property(self):
+        self.assertEqual(self.product.tot_size, 138422957)
+
+    def test_id_string_property(self):
+        self.assertEqual(self.product.id_string,
+             'ASA_IMP_1PNUPA20060202_062233_000000152044_00435')
+
+    def test_meris_iodd_version_property(self):
+        self.assertEqual(self.product.meris_iodd_version, 0)
+
     def test_get_scene_width(self):
         self.assertEqual(self.product.get_scene_width(), self.DATASET_WIDTH)
 
@@ -150,6 +164,9 @@ class TestDataset(unittest.TestCase):
         product = epr.Product(self.PRODUCT_FILE)
         self.dataset = product.get_dataset(self.DATASET_NAME)
 
+    def test_description_property(self):
+        self.assertEqual(self.dataset.description, 'Measurement Data Set 1')
+
     def test_get_dataset_name(self):
         self.assertEqual(self.dataset.get_dataset_name(), self.DATASET_NAME)
 
@@ -202,6 +219,45 @@ class TestBand(unittest.TestCase):
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
         self.band = self.product.get_band_id('proc_data')
+
+    # @TODO: check
+    #def test_product_id_property(self):
+    #    self.assertEqual(self.band.product_id, self.product)
+
+    # @TODO: check
+    #def test_dataset_ref_property(self):
+    #    self.assertEqual(self.band.dataset_ref, ???)
+
+    def test_spectr_band_index_property(self):
+        self.assertEqual(self.band.spectr_band_index, -1)
+
+    def test_sample_model_property(self):
+        self.assertEqual(self.band.sample_model, 0)
+
+    def test_data_type_property(self):
+        self.assertEqual(self.band.data_type, epr.E_TID_FLOAT)
+
+    def test_scaling_method_property(self):
+        self.assertEqual(self.band.scaling_method, epr.E_SMID_LIN)
+
+    def test_scaling_offset_property(self):
+        self.assertEqual(self.band.scaling_offset, 0)
+
+    def test_scaling_factor_property(self):
+        self.assertEqual(self.band.scaling_factor, 1.0)
+        self.assertTrue(isinstance(self.band.scaling_factor, float))
+
+    def test_bm_expr_property(self):
+        self.assertEqual(self.band.bm_expr, None)
+
+    def test_unit_property(self):
+        self.assertEqual(self.band.unit, None)
+
+    def test_description_property(self):
+        self.assertEqual(self.band.description, 'Image Mode Precision Image')
+
+    def test_lines_mirrored_property(self):
+        self.assertEqual(self.band.lines_mirrored, True)
 
     def test_get_band_name(self):
         for index in range(len(self.BAND_NAMES)):
@@ -578,46 +634,6 @@ class TestFieldWithMiltipleElems(TestField):
     FIELD_UNIT = 's'
 
 
-class TestDataypeFunctions(unittest.TestCase):
-    TYPE_NAMES = {
-        epr.E_TID_UNKNOWN: '',
-        epr.E_TID_UCHAR:   'uchar',
-        epr.E_TID_CHAR:    'char',
-        epr.E_TID_USHORT:  'ushort',
-        epr.E_TID_SHORT:   'short',
-        epr.E_TID_UINT:    'uint',
-        epr.E_TID_INT:     'int',
-        epr.E_TID_FLOAT:   'float',
-        epr.E_TID_DOUBLE:  'double',
-        epr.E_TID_STRING:  'string',
-        epr.E_TID_SPARE:   'spare',
-        epr.E_TID_TIME:    'time',
-    }
-
-    TYPE_SIZES = {
-        epr.E_TID_UNKNOWN: 0,
-        epr.E_TID_UCHAR:   1,
-        epr.E_TID_CHAR:    1,
-        epr.E_TID_USHORT:  2,
-        epr.E_TID_SHORT:   2,
-        epr.E_TID_UINT:    4,
-        epr.E_TID_INT:     4,
-        epr.E_TID_FLOAT:   4,
-        epr.E_TID_DOUBLE:  8,
-        epr.E_TID_STRING:  1,
-        epr.E_TID_SPARE:   1,
-        epr.E_TID_TIME:    12,
-    }
-
-    def test_data_type_id_to_str(self):
-        for type_id, type_name in self.TYPE_NAMES.items():
-            self.assertEqual(epr.data_type_id_to_str(type_id), type_name)
-
-    def test_get_data_type_size(self):
-        for type_id, type_size in self.TYPE_SIZES.items():
-            self.assertEqual(epr.get_data_type_size(type_id), type_size)
-
-
 class TestDSD(unittest.TestCase):
     PRODUCT_FILE = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
 
@@ -656,6 +672,84 @@ class TestDSD(unittest.TestCase):
     def test_dsr_size(self):
         self.assertEqual(self.dsd.dsr_size, 170)
         self.assertTrue(isinstance(self.dsd.dsr_size, int))
+
+
+class TestDataypeFunctions(unittest.TestCase):
+    TYPE_NAMES = {
+        epr.E_TID_UNKNOWN: '',
+        epr.E_TID_UCHAR:   'uchar',
+        epr.E_TID_CHAR:    'char',
+        epr.E_TID_USHORT:  'ushort',
+        epr.E_TID_SHORT:   'short',
+        epr.E_TID_UINT:    'uint',
+        epr.E_TID_INT:     'int',
+        epr.E_TID_FLOAT:   'float',
+        epr.E_TID_DOUBLE:  'double',
+        epr.E_TID_STRING:  'string',
+        epr.E_TID_SPARE:   'spare',
+        epr.E_TID_TIME:    'time',
+    }
+
+    TYPE_SIZES = {
+        epr.E_TID_UNKNOWN: 0,
+        epr.E_TID_UCHAR:   1,
+        epr.E_TID_CHAR:    1,
+        epr.E_TID_USHORT:  2,
+        epr.E_TID_SHORT:   2,
+        epr.E_TID_UINT:    4,
+        epr.E_TID_INT:     4,
+        epr.E_TID_FLOAT:   4,
+        epr.E_TID_DOUBLE:  8,
+        epr.E_TID_STRING:  1,
+        epr.E_TID_SPARE:   1,
+        epr.E_TID_TIME:    12,
+    }
+
+    def test_data_type_id_to_str(self):
+        for type_id, type_name in self.TYPE_NAMES.items():
+            self.assertEqual(epr.data_type_id_to_str(type_id), type_name)
+
+    def test_data_type_id_to_str_invalid(self):
+        self.assertEqual(epr.data_type_id_to_str(500), '')
+
+    def test_get_data_type_size(self):
+        for type_id, type_size in self.TYPE_SIZES.items():
+            self.assertEqual(epr.get_data_type_size(type_id), type_size)
+
+    def test_get_data_type_size_invalid(self):
+        self.assertEqual(epr.get_data_type_size(500), 0)
+
+
+class TestScalingMethodFunctions(unittest.TestCase):
+    METHOD_NAMES = {
+        epr.E_SMID_NON: 'NONE',
+        epr.E_SMID_LIN: 'LIN',
+        epr.E_SMID_LOG: 'LOG',
+    }
+
+    def test_get_scaling_method_name(self):
+        for id_, name in self.METHOD_NAMES.items():
+            self.assertEqual(epr.get_scaling_method_name(id_), name)
+
+    def test_get_scaling_method_name_invalid(self):
+        self.assertRaises(ValueError, epr.get_scaling_method_name, 500)
+
+
+class TestSampleModelFunctions(unittest.TestCase):
+    MODEL_NAMES = {
+        epr.E_SMOD_1OF1: '1OF1',
+        epr.E_SMOD_1OF2: '1OF2',
+        epr.E_SMOD_2OF2: '2OF2',
+        epr.E_SMOD_3TOI: '3TOI',
+        epr.E_SMOD_2TOF: '2TOF',
+    }
+
+    def test_get_scaling_method_name(self):
+        for id_, name in self.MODEL_NAMES.items():
+            self.assertEqual(epr.get_sample_model_name(id_), name)
+
+    def test_get_scaling_method_name_invalid(self):
+        self.assertRaises(ValueError, epr.get_sample_model_name, 500)
 
 
 if __name__ == '__main__':

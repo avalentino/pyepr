@@ -324,7 +324,7 @@ cimport numpy as np
 # utils
 EPRTime = collections.namedtuple('EPRTime', ('days', 'seconds', 'microseconds'))
 
-
+# EPR_DataTypeId
 E_TID_UNKNOWN = e_tid_unknown
 E_TID_UCHAR   = e_tid_uchar
 E_TID_CHAR    = e_tid_char
@@ -337,6 +337,18 @@ E_TID_DOUBLE  = e_tid_double
 E_TID_STRING  = e_tid_string
 E_TID_SPARE   = e_tid_spare
 E_TID_TIME    = e_tid_time
+
+# EPR_SampleModel
+E_SMOD_1OF1 = e_smod_1OF1
+E_SMOD_1OF2 = e_smod_1OF2
+E_SMOD_2OF2 = e_smod_2OF2
+E_SMOD_3TOI = e_smod_3TOI
+E_SMOD_2TOF = e_smod_2TOF
+
+# EPR_ScalingMethod
+E_SMID_NON = e_smid_non
+E_SMID_LIN = e_smid_lin
+E_SMID_LOG = e_smid_log
 
 
 class EPRError(Exception):
@@ -389,6 +401,33 @@ def get_data_type_size(EPR_EDataTypeId type_id):
 
 def data_type_id_to_str(EPR_EDataTypeId type_id):
     return epr_data_type_id_to_str(type_id)
+
+def get_scaling_method_name(method):
+    mmap = {
+        E_SMID_NON: 'NONE',
+        E_SMID_LIN: 'LIN',
+        E_SMID_LOG: 'LOG',
+    }
+
+    try:
+        return mmap[method]
+    except KeyError:
+        raise ValueError('invalid scaling method: "%s"' % method)
+
+
+def get_sample_model_name(model):
+    mmap = {
+        E_SMOD_1OF1: '1OF1',
+        E_SMOD_1OF2: '1OF2',
+        E_SMOD_2OF2: '2OF2',
+        E_SMOD_3TOI: '3TOI',
+        E_SMOD_2TOF: '2TOF',
+    }
+
+    try:
+        return mmap[model]
+    except KeyError:
+        raise ValueError('invalid sample model: "%s"' % model)
 
 
 cdef class DSD:
@@ -762,6 +801,65 @@ cdef class Band:
     cdef EPR_SBandId* _ptr
     cdef object _parent
 
+    # @TODO: check
+    #property product_id:
+    #    def __get__(self):
+    #        return self._parent
+
+    # @TODO: complete
+    #property dataset_ref:
+    #    def __get__(self):
+    #        return self._ptr.dataset_ref
+
+    property spectr_band_index:
+        def __get__(self):
+            return self._ptr.spectr_band_index
+
+    property sample_model:
+        def __get__(self):
+            return self._ptr.sample_model
+
+    property data_type:
+        def __get__(self):
+            return self._ptr.data_type
+
+    property scaling_method:
+        def __get__(self):
+            return self._ptr.scaling_method
+
+    property scaling_offset:
+        def __get__(self):
+            return self._ptr.scaling_offset
+
+    property scaling_factor:
+        def __get__(self):
+            return self._ptr.scaling_factor
+
+    property bm_expr:
+        def __get__(self):
+            if self._ptr.bm_expr is NULL:
+                return None
+            else:
+                return self._ptr.bm_expr
+
+    property unit:
+        def __get__(self):
+            if self._ptr.unit is NULL:
+                return None
+            else:
+                return self._ptr.unit
+
+    property description:
+        def __get__(self):
+            if self._ptr.description is NULL:
+                return None
+            else:
+                return self._ptr.description
+
+    property lines_mirrored:
+        def __get__(self):
+            return bool(self._ptr.lines_mirrored)
+
     def get_band_name(self):
         return epr_get_band_name(self._ptr)
 
@@ -798,6 +896,18 @@ cdef class Band:
 cdef class Dataset:
     cdef EPR_SDatasetId* _ptr
     cdef object _parent
+
+    # @TODO: check
+    #property product_id:
+    #    def __get__(self):
+    #        return self._parent
+
+    property description:
+        def __get__(self):
+            if self._ptr.description is NULL:
+                return ''
+            else:
+                return self._ptr.description
 
     def get_dataset_name(self):
         if self._ptr is not NULL:
@@ -879,6 +989,36 @@ cdef class Product:
         if self._ptr is not NULL:
             epr_close_product(self._ptr)
             pyepr_check_errors()
+
+    property file_path:
+        def __get__(self):
+            if self._ptr.file_path is NULL:
+                return None
+            else:
+                return self._ptr.file_path
+
+    # @TODO: check
+    #property file_path:
+    #    def __get__(self):
+    #        if self._ptr.istream is NULL:
+    #            return None
+    #        else:
+    #            return os.fdopen(self._ptr.istream)
+
+    property tot_size:
+        def __get__(self):
+            return self._ptr.tot_size
+
+    property id_string:
+        def __get__(self):
+            if self._ptr.id_string is NULL:
+                return None
+            else:
+                return self._ptr.id_string
+
+    property meris_iodd_version:
+        def __get__(self):
+            return self._ptr.meris_iodd_version
 
     def get_scene_width(self):
         return epr_get_scene_width(self._ptr)
