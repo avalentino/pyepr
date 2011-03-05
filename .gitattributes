@@ -1,0 +1,5 @@
+*.py ident
+*.pyx ident
+*.px[di] ident
+*.txt ident
+

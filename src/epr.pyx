@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
-__revision__ = '$Id: $'
+__revision__ = '$Id$'
 __version__  = '0.1'
 
 
