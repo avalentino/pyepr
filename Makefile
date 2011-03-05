@@ -9,9 +9,10 @@ default: epr.so
 
 clean:
 	python setup.py clean
-	$(RM) src/*.py[co] tests/*.py[co]
+	$(RM) src/*.py[co] tests/*.py[co] README.html
 
 distclean: clean
+	$(RM) -r build
 	$(RM) src/*.c src/*.o *.so
 	#$(RM) tests/*.N1
 
@@ -29,3 +30,6 @@ epr.so: src/epr.pyx
 $(TEST_DATSET):
 	wget -P tests $(TEST_DATSET_URL)
 	gunzip $@
+
+README.html: README.txt
+	rst2html -s -d -g --title "Python EPR API" --cloak-email-addresses $< $@
