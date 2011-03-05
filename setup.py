@@ -59,6 +59,7 @@ any data field contained in a product file.
         'Operating System :: POSIX',
         'Programming Language :: Python',
         'Programming Language :: Cython',
+        'Topic :: Software Development :: Libraries',
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: GIS',
     ],
