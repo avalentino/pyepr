@@ -19,11 +19,11 @@ PyEPR_ provides Python_ bindings for the ENVISAT Product Reader C API
 (`EPR API`_) for reading satellite data from ENVISAT_ ESA_ (European
 Space Agency) mission.
 
-PyEPR_, as well as `EPR API`_, supports ENVISAT_ MERIS, AATSR Level 1B
-and Level 2 and also ASAR data products. It provides access to the data
-either on a geophysical (decoded, ready-to-use pixel samples) or on a
-raw data layer. The raw data access makes it possible to read any data
-field contained in a product file.
+PyEPR_, as well as the `EPR API`_ for C, supports ENVISAT_ MERIS, AATSR
+Level 1B and Level 2 and also ASAR data products. It provides access to
+the data either on a geophysical (decoded, ready-to-use pixel samples)
+or on a raw data layer. The raw data access makes it possible to read
+any data field contained in a product file.
 
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _Python: http://www.python.org
@@ -68,7 +68,7 @@ the following command::
 For a user specific installation use::
 
     $ python setup.py install --user
-    
+
 To install PyEPR_ in a non-standard path::
 
     $ python setup.py install --prefix=<TARGET_PATH>
@@ -87,7 +87,7 @@ Testing
 PyEPR_ package comes with a complete test suite but in order to run it
 the ENVISAT sample product used for testing
 ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1__
-have to be downloaded from the ESA_ website, saved in the ``tests`` 
+have to be downloaded from the ESA_ website, saved in the ``tests``
 directory and decompressed.
 
 __ http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz
@@ -171,7 +171,7 @@ Enumerators
 -----------
 
 Python_ does not have *enumerators* at language level.
-Enumerations are simply mapped as module constants that have the same name 
+Enumerations are simply mapped as module constants that have the same name
 of the C enumerate but are spelled all in capital letters.
 
 For example:
@@ -181,7 +181,7 @@ For example:
 ============ ============
 e_tid_double E_TID_DOUBLE
 e_smod_1OF1  E_SMOD_1OF1
-e_smid_log   E_SMID_LOG 
+e_smid_log   E_SMID_LOG
 ============ ============
 
 
@@ -218,7 +218,7 @@ The following snippet open an ASAR product and dumps the "Main Processing
 Parameters" record to the standard output::
 
     import epr
-    
+
     product = epr.Product('ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1')
     dataset = product.get_dataset('MAIN_PROCESSING_PARAMS_ADS')
     record = dataset.read_record(0)
