@@ -1045,11 +1045,27 @@ cdef class Band:
 
         return raster
 
-    #~ def read_as_array(self, uint xoffset=0, uint yoffset=0,
-                      #~ uint xsize=None, uint ysize=None,
-                      #~ uint xstep=None, uint ystep=None, np.ndarray data=None):
+    def read_as_array(self, width=None, height=None,
+                      uint xoffset=0, uint yoffset=0,
+                      uint xstep=1, uint ystep=1):
+        if width is None:
+            w = self.product_id.get_scene_width()
+            if w > xoffset:
+                width = w - xoffset
+            else:
+                raise ValueError('xoffset os larger that he scene width')
 
-        #~ pass
+        if height is None:
+            h = self.product_id.get_scene_height()
+            if h > yoffset:
+                height = h - yoffset
+            else:
+                raise ValueError('yoffset os larger that he scene height')
+
+        raster = self.create_compatible_raster(width, height, xstep, ystep)
+        self.read_band_raster(xoffset, yoffset, raster)
+
+        return raster.data
 
 
 cdef new_band(EPR_SBandId* ptr, object parent=None):
@@ -1251,6 +1267,16 @@ cdef class Product:
             pyepr_null_ptr_error('unable to get band at index "%d"' % index)
 
         return new_band(band_id, self)
+
+    # @TODO: add to high evel interface
+    #def get_band_ids(self):
+    #    cdef EPR_SBandId band_ptr
+    #    cder int idx
+    #    names = []
+    #    for idx in range(self.get_num_bands()):
+    #        band_ptr = epr_get_band_id(self._ptr, idx)
+    #        names.apped(epr_get_band_name(band_ptr))
+    #    return names
 
     # @TODO: complete and make it more pythonic
     #def read_bitmask_raster(self, bm_expr, int xoffset, int yoffset,

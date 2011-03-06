@@ -239,6 +239,21 @@ class TestBand(unittest.TestCase):
         'longitude',
         'proc_data',
     )
+    XOFFSET = 40
+    YOFFSET = 30
+    DATA_TYPE = np.float32
+    TEST_DATA = np.asarray([
+        [ 98.,  90.,  64.,  82.,  84.,  79.,  66.,  46.,  59.,  54.],
+        [ 73., 119., 101.,  90.,  89.,  76.,  44.,  52.,  91.,  72.],
+        [ 85., 106., 107.,  73.,  78.,  65.,  37.,  55., 103.,  82.],
+        [118.,  77.,  97.,  70.,  87.,  67.,  45.,  51.,  65.,  83.],
+        [122.,  66.,  63.,  60.,  81.,  91.,  61.,  40.,  44.,  46.],
+        [ 89.,  88.,  59.,  87.,  86., 101.,  68.,  29.,  67.,  54.],
+        [121., 131., 108.,  85.,  81.,  88.,  67.,  19.,  53.,  47.],
+        [153., 155., 141.,  81.,  64.,  73.,  64.,  47.,  44.,  69.],
+        [105., 102.,  87.,  69.,  76.,  80.,  63.,  75.,  67.,  84.],
+        [ 85.,  90.,  69.,  77.,  84.,  73.,  69.,  91.,  77.,  37.],
+    ])
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
@@ -292,10 +307,10 @@ class TestBand(unittest.TestCase):
         height = self.product.get_scene_height()
         raster = self.band.create_compatible_raster(width, height)
         self.assertTrue(isinstance(raster, epr.Raster))
-        self.assertEquals(raster.get_raster_width(), width)
-        self.assertEquals(raster.get_raster_height(), height)
+        self.assertEqual(raster.get_raster_width(), width)
+        self.assertEqual(raster.get_raster_height(), height)
         # @NOTE: data type on disk is epr.E_TID_USHORT
-        self.assertEquals(raster.data_type, epr.E_TID_FLOAT)
+        self.assertEqual(raster.data_type, epr.E_TID_FLOAT)
 
     def test_create_compatible_raster_with_invalid_size(self):
         width = self.product.get_scene_width()
@@ -323,10 +338,10 @@ class TestBand(unittest.TestCase):
         raster = self.band.create_compatible_raster(src_width, src_height,
                                                     xstep, ystep)
         self.assertTrue(isinstance(raster, epr.Raster))
-        self.assertEquals(raster.get_raster_width(), width)
-        self.assertEquals(raster.get_raster_height(), height)
+        self.assertEqual(raster.get_raster_width(), width)
+        self.assertEqual(raster.get_raster_height(), height)
         # @NOTE: data type on disk is epr.E_TID_USHORT
-        self.assertEquals(raster.data_type, epr.E_TID_FLOAT)
+        self.assertEqual(raster.data_type, epr.E_TID_FLOAT)
 
     def test_create_compatible_raster_with_invalid_step(self):
         width = self.product.get_scene_width()
@@ -356,29 +371,27 @@ class TestBand(unittest.TestCase):
     def test_read_band_raster(self):
         width = 400
         height = 300
-        xoffset = 40
-        yoffset = 30
         raster = self.band.create_compatible_raster(width, height)
 
-        self.band.read_band_raster(xoffset, yoffset, raster)
+        self.band.read_band_raster(self.XOFFSET, self.YOFFSET, raster)
 
         self.assertTrue(isinstance(raster, epr.Raster))
-        self.assertEquals(raster.get_raster_width(), width)
-        self.assertEquals(raster.get_raster_height(), height)
+        self.assertEqual(raster.get_raster_width(), width)
+        self.assertEqual(raster.get_raster_height(), height)
         # @NOTE: data type on disk is epr.E_TID_USHORT
-        self.assertEquals(raster.data_type, epr.E_TID_FLOAT)
+        self.assertEqual(raster.data_type, epr.E_TID_FLOAT)
 
     def test_read_band_raster_default_offset(self):
-        width = 40
-        height = 30
+        height, width = self.TEST_DATA.shape
+
         raster1 = self.band.create_compatible_raster(width, height)
         raster2 = self.band.create_compatible_raster(width, height)
 
         self.band.read_band_raster(0, 0, raster1)
         self.band.read_band_raster(raster=raster2)
 
-        self.assertEquals(raster1.get_pixel(0, 0), raster2.get_pixel(0, 0))
-        self.assertEquals(raster1.get_pixel(width - 1, height -1),
+        self.assertEqual(raster1.get_pixel(0, 0), raster2.get_pixel(0, 0))
+        self.assertEqual(raster1.get_pixel(width - 1, height -1),
                           raster2.get_pixel(width - 1, height -1))
 
     def test_read_band_raster_with_invalid_raster(self):
@@ -403,6 +416,38 @@ class TestBand(unittest.TestCase):
         #                  0, height + 10, raster)
         #self.assertRaises(ValueError, self.band.read_band_raster,
         #                  width + 10, height + 10, raster)
+
+    def test_read_as_array(self):
+        width = 400
+        height = 300
+
+        data = self.band.read_as_array(width, height,
+                                       self.XOFFSET, self.YOFFSET)
+
+        self.assertTrue(isinstance(data, np.ndarray))
+        self.assertEqual(data.shape, (height, width))
+        self.assertEqual(data.dtype, self.DATA_TYPE)
+
+        h, w = self.TEST_DATA.shape
+        self.assertTrue(np.all(data[:h, :w] == self.TEST_DATA))
+
+    # @TODO: check, it seems to be an upstream bug or a metter of data mirroring
+    #def test_read_as_array_with_step(self):
+    #    width = 400
+    #    height = 300
+    #
+    #    data = self.band.read_as_array(width, height,
+    #                                   self.XOFFSET, self.YOFFSET, 2, 2)
+    #
+    #    self.assertTrue(isinstance(data, np.ndarray))
+    #    self.assertEqual(data.shape, (height/2, width/2))
+    #    self.assertEqual(data.dtype, self.DATA_TYPE)
+    #
+    #    h, w = self.TEST_DATA.shape
+    #    self.assertTrue(np.all(data[:h/2, :w/2] == self.TEST_DATA[::2, ::2]))
+    #    #self.assertTrue(np.all(data[:h/2, :w/2] == self.TEST_DATA[::2, 1::2]))
+
+    # @TODO: more read_as_array testing
 
 
 class TestCreateRaster(unittest.TestCase):
