@@ -381,6 +381,43 @@ E_SMID_NON = e_smid_non
 E_SMID_LIN = e_smid_lin
 E_SMID_LOG = e_smid_log
 
+cdef np.NPY_TYPES _epr_to_numpy_type_id(EPR_DataTypeId epr_type):
+    if epr_type == E_TID_UCHAR:
+        return np.NPY_UBYTE
+    if epr_type == E_TID_CHAR:
+        return np.NPY_BYTE
+    if epr_type == E_TID_USHORT:
+        return np.NPY_USHORT
+    if epr_type == E_TID_SHORT:
+        return np.NPY_SHORT
+    if epr_type == E_TID_UINT:
+        return np.NPY_UINT
+    if epr_type == E_TID_INT:
+        return np.NPY_INT
+    if epr_type == E_TID_FLOAT:
+        return np.NPY_FLOAT
+    if epr_type == E_TID_DOUBLE:
+        return np.NPY_DOUBLE
+    if epr_type == E_TID_STRING:
+        return np.NPY_STRING
+
+    return np.NPY_NOTYPE
+
+epr_to_numpy_type = {
+    #E_TID_UNKNOWN:  np.NPY_NOTYPE,
+    E_TID_UCHAR:    np.ubyte,
+    E_TID_CHAR:     np.byte,
+    E_TID_USHORT:   np.ushort,
+    E_TID_SHORT:    np.short,
+    E_TID_UINT:     np.uint,
+    E_TID_INT:      np.int,
+    E_TID_FLOAT:    np.float32,
+    E_TID_DOUBLE:   np.double,
+    E_TID_STRING:   np.str,
+    #E_TID_SPARE   = e_tid_spare,
+    #E_TID_TIME    = e_tid_time,
+}
+
 
 class EPRError(Exception):
     def __init__(self, message='', code=None, *args, **kargs):
@@ -838,11 +875,30 @@ cdef class Raster:
 
         return val
 
-    #void* epr_get_raster_elem_addr(self._ptr, uint offset)
-    #void* epr_get_raster_pixel_addr(self._ptr, uint x, uint y)
-    #void* epr_get_raster_line_addr(self._ptr, uint y)
+    cdef np.ndarray toarray(Raster self):
+        cdef np.ndarray result
+        cdef np.NPY_TYPES dtype = _epr_to_numpy_type_id(self._ptr.data_type)
+        cdef np.npy_intp shape[2]
 
-    # @TODO: __getitem__ with generalized slicing
+        shape[0] = self._ptr.raster_height
+        shape[1] = self._ptr.raster_width
+
+        result = np.PyArray_SimpleNewFromData(2, shape, dtype, self._ptr.buffer)
+
+        # Make the ndarray keep a reference to this object
+        np.set_array_base(result, self)
+
+        return result
+
+    property data:
+        def __get__(self):
+            if self._ptr.buffer is NULL:
+                return np.ndarray(())
+
+            if self.data_type not in epr_to_numpy_type:
+                raise ValueError('invalid data type identifier')
+
+            return self.toarray()
 
 
 cdef new_raster(EPR_SRaster* ptr, object parent=None):

@@ -458,6 +458,7 @@ class TestRaster(unittest.TestCase):
     RASTER_HEIGHT = 300
     RASTER_DATA_TYPE = epr.E_TID_FLOAT
     RASTER_ELEM_SIZE = 4
+    TEST_DATA = np.zeros((10, 10))
 
     def setUp(self):
         self.raster = epr.create_raster(self.RASTER_DATA_TYPE,
@@ -474,7 +475,7 @@ class TestRaster(unittest.TestCase):
                          self.RASTER_ELEM_SIZE)
 
     def test_get_pixel(self):
-        self.assertEqual(self.raster.get_pixel(0, 0), 0)
+        self.assertEqual(self.raster.get_pixel(0, 0), self.TEST_DATA[0, 0])
 
     def test_get_pixel_invalid_x(self):
         self.assertRaises(ValueError, self.raster.get_pixel, -1, 0)
@@ -512,6 +513,83 @@ class TestRaster(unittest.TestCase):
     def test_source_step_y_property(self):
         self.assertEqual(self.raster.source_step_y, 1)
         self.assertTrue(isinstance(self.raster.source_step_y, int))
+
+    def test_data_property(self):
+        height = self.raster.get_raster_height()
+        width = self.raster.get_raster_width()
+
+        data = self.raster.data
+
+        self.assertTrue(isinstance(data, np.ndarray))
+        self.assertEqual(data.ndim, 2)
+        self.assertEqual(data.shape, (height, width))
+        self.assertEqual(data.dtype,
+                         epr.epr_to_numpy_type[self.raster.data_type])
+        self.assertTrue(np.all(data[:10, :10] == self.TEST_DATA))
+
+    def test_data_property_two_times(self):
+        data1 = self.raster.data
+        data2 = self.raster.data
+        self.assertFalse(data1 is data2)    # @TODO: check
+        self.assertTrue(np.all(data1 == data2))
+
+    def test_data_property_shared_data_semantic(self):
+        data1 = self.raster.data
+        data1[0, 0] *= 2
+        data2 = self.raster.data
+        self.assertTrue(np.all(data1 == data2))
+
+    def test_data_property_data_scope(self):
+        data1 = self.raster.data
+        self.assertTrue(isinstance(data1, np.ndarray))
+        data1 = None
+        data2 = self.raster.data
+        self.assertTrue(isinstance(data2, np.ndarray))
+
+    def test_data_property_raster_scope(self):
+        data = self.raster.data
+        self.assertTrue(isinstance(data, np.ndarray))
+        self.raster = None
+        self.assertTrue(isinstance(data, np.ndarray))
+        self.assertTrue(np.all(data[:10, :10] == self.TEST_DATA))
+
+
+class TestRasterRead(TestRaster):
+    PRODUCT_FILE = TEST_PRODUCT
+    BAND_NAME = 'proc_data'
+    RASTER_XOFFSET = 40
+    RASTER_YOFFSET = 30
+    TEST_DATA = np.asarray([
+        [ 98.,  90.,  64.,  82.,  84.,  79.,  66.,  46.,  59.,  54.],
+        [ 73., 119., 101.,  90.,  89.,  76.,  44.,  52.,  91.,  72.],
+        [ 85., 106., 107.,  73.,  78.,  65.,  37.,  55., 103.,  82.],
+        [118.,  77.,  97.,  70.,  87.,  67.,  45.,  51.,  65.,  83.],
+        [122.,  66.,  63.,  60.,  81.,  91.,  61.,  40.,  44.,  46.],
+        [ 89.,  88.,  59.,  87.,  86., 101.,  68.,  29.,  67.,  54.],
+        [121., 131., 108.,  85.,  81.,  88.,  67.,  19.,  53.,  47.],
+        [153., 155., 141.,  81.,  64.,  73.,  64.,  47.,  44.,  69.],
+        [105., 102.,  87.,  69.,  76.,  80.,  63.,  75.,  67.,  84.],
+        [ 85.,  90.,  69.,  77.,  84.,  73.,  69.,  91.,  77.,  37.],
+    ])
+
+    def setUp(self):
+        self.product = epr.Product(self.PRODUCT_FILE)
+        self.band = self.product.get_band_id(self.BAND_NAME)
+        self.raster = self.band.create_compatible_raster(self.RASTER_WIDTH,
+                                                         self.RASTER_HEIGHT)
+
+        self.band.read_band_raster(self.RASTER_XOFFSET, self.RASTER_YOFFSET,
+                                   self.raster)
+
+    def test_data_property_shared_semantics_readload(self):
+        data1 = self.raster.data
+        data1[0, 0] *= 2
+        self.band.read_band_raster(self.RASTER_XOFFSET, self.RASTER_YOFFSET,
+                                   self.raster)
+        data2 = self.raster.data
+        self.assertEqual(data1[0, 0], data2[0, 0])
+        self.assertTrue(np.all(data1 == data2))
+
 
 
 class TestRecord(unittest.TestCase):
