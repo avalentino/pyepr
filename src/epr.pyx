@@ -27,6 +27,11 @@ cdef extern from 'Python.h':
     ctypedef struct FILE
     FILE* PyFile_AsFile(object)
 
+    # To release global interpreter lock (GIL) for threading
+    void Py_BEGIN_ALLOW_THREADS()
+    void Py_END_ALLOW_THREADS()
+
+
 cdef extern from 'epr_api.h':
     ctypedef int            epr_boolean
     ctypedef unsigned char  uchar
@@ -344,6 +349,7 @@ import sys
 import collections
 import numpy as np
 cimport numpy as np
+np.import_array()
 
 
 # utils
@@ -526,7 +532,10 @@ cdef class Field:
         if fd is NULL:
             raise TypeError('invalid ostream')
 
+        Py_BEGIN_ALLOW_THREADS
         epr_print_field(self._ptr, fd)
+        Py_END_ALLOW_THREADS
+
         pyepr_check_errors()
 
     #def dump_field(self):
@@ -703,7 +712,10 @@ cdef class Record:
         if fd is NULL:
             raise TypeError('invalid ostream')
 
+        Py_BEGIN_ALLOW_THREADS
         epr_print_record(self._ptr, fd)
+        Py_END_ALLOW_THREADS
+
         pyepr_check_errors()
 
     def print_element(self, uint field_index, uint element_index, ostream=None):
@@ -716,7 +728,10 @@ cdef class Record:
         if fd is NULL:
             raise TypeError('invalid ostream')
 
+        Py_BEGIN_ALLOW_THREADS
         epr_print_element(self._ptr, field_index, element_index, fd)
+        Py_END_ALLOW_THREADS
+
         pyepr_check_errors()
 
     #def dump_record(self):
@@ -954,8 +969,12 @@ cdef class Band:
     # @TODO: make it more pythonic
     def read_band_raster(self, int xoffset, int yoffset, Raster raster not None):
         cdef int ret
+
+        Py_BEGIN_ALLOW_THREADS
         ret = epr_read_band_raster(self._ptr, xoffset, yoffset,
                                    (<Raster>raster)._ptr)
+        Py_END_ALLOW_THREADS
+
         if ret != 0:
             pyepr_check_errors()
 
@@ -1019,7 +1038,10 @@ cdef class Dataset:
         if record:
             record_ptr = (<Record>record)._ptr
 
+        Py_BEGIN_ALLOW_THREADS
         record_ptr = epr_read_record(self._ptr, index, record_ptr)
+        Py_END_ALLOW_THREADS
+
         if record_ptr is NULL:
             pyepr_null_ptr_error('unable to read record at index %d' % index)
 
@@ -1045,7 +1067,11 @@ cdef class Product:
     cdef EPR_SProductId* _ptr
 
     def __cinit__(self, filename, *args, **kargs):
+
+        Py_BEGIN_ALLOW_THREADS
         self._ptr = epr_open_product(filename)
+        Py_END_ALLOW_THREADS
+
         if self._ptr is NULL:
             pyepr_null_ptr_error('unable to open %s' % filename)
 
