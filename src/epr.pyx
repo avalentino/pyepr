@@ -1012,6 +1012,13 @@ cdef class Band:
 
     def create_compatible_raster(self, uint width, uint height,
                                  uint xstep=1, uint ystep=1):
+        # @TODO: improve
+        #if width is None:
+        #    width = self.product_id.get_scene_width()
+        #
+        #if height is None:
+        #    height = self.product_id.get_scene_height()
+
         cdef EPR_SRaster* raster_ptr
         raster_ptr = epr_create_compatible_raster(self._ptr, width, height,
                                                   xstep, ystep)
@@ -1022,19 +1029,27 @@ cdef class Band:
 
         return new_raster(raster_ptr, self)
 
-    # @TODO: make it more pythonic
-    def read_band_raster(self, int xoffset, int yoffset, Raster raster not None):
+    cpdef read_band_raster(self, int xoffset=0, int yoffset=0,
+                           Raster raster=None):
         cdef int ret
 
+        if raster is None:
+            raster = self.create_compatible_raster()
+
         Py_BEGIN_ALLOW_THREADS
-        ret = epr_read_band_raster(self._ptr, xoffset, yoffset,
-                                   (<Raster>raster)._ptr)
+        ret = epr_read_band_raster(self._ptr, xoffset, yoffset, raster._ptr)
         Py_END_ALLOW_THREADS
 
         if ret != 0:
             pyepr_check_errors()
 
         return raster
+
+    #~ def read_as_array(self, uint xoffset=0, uint yoffset=0,
+                      #~ uint xsize=None, uint ysize=None,
+                      #~ uint xstep=None, uint ystep=None, np.ndarray data=None):
+
+        #~ pass
 
 
 cdef new_band(EPR_SBandId* ptr, object parent=None):

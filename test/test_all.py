@@ -368,6 +368,19 @@ class TestBand(unittest.TestCase):
         # @NOTE: data type on disk is epr.E_TID_USHORT
         self.assertEquals(raster.data_type, epr.E_TID_FLOAT)
 
+    def test_read_band_raster_default_offset(self):
+        width = 40
+        height = 30
+        raster1 = self.band.create_compatible_raster(width, height)
+        raster2 = self.band.create_compatible_raster(width, height)
+
+        self.band.read_band_raster(0, 0, raster1)
+        self.band.read_band_raster(raster=raster2)
+
+        self.assertEquals(raster1.get_pixel(0, 0), raster2.get_pixel(0, 0))
+        self.assertEquals(raster1.get_pixel(width - 1, height -1),
+                          raster2.get_pixel(width - 1, height -1))
+
     def test_read_band_raster_with_invalid_raster(self):
         self.assertRaises(TypeError, self.band.read_band_raster, 0, 0, 0)
 
