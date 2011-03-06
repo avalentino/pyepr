@@ -167,6 +167,16 @@ object is destroyed (assumed there is no other reference to it).
 The entire machinery is completely automatic and transparent to the user.
 
 
+Arrays
+------
+
+@TBW
+
+* Raster caveas *
+
+@TBW
+
+
 Enumerators
 -----------
 
