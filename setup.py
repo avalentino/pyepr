@@ -67,4 +67,6 @@ any data field contained in a product file.
     license='GPL-3',
     cmdclass = {'build_ext': build_ext},
     ext_modules=[Extension('epr', ['src/epr.pyx'], libraries=['epr_api'])],
+    #build_requires=['cython'],
+    #install_requires=['cython'],
 )
