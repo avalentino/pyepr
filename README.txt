@@ -54,7 +54,15 @@ correctly installed and configured:
 Download
 ========
 
-@TBW
+Source code is available at
+
+    https://github.com/avalentino/pyepr
+
+To clone the git_ repository the following command can be used::
+
+    $ git clone https://github.com/avalentino/pyepr.git
+
+.. _git: http://git-scm.com
 
 
 Installation
@@ -170,11 +178,31 @@ The entire machinery is completely automatic and transparent to the user.
 Arrays
 ------
 
-@TBW
+PyEPR_ uses numpy_ in order to manage efficiently the potentially large
+amount of data contained in ENVISAT_ products.
 
-* Raster caveas *
-
-@TBW
+* `Field.get_field_elems()` return an 1D array containing elements of the
+  field
+* the `Raster.data` property is a 2D array exposes data contained in the
+  *Raster* object in form of `numpy.ndarray`
+  
+  .. note:: `Raster.data` directly exposes *Raster* data i.e. shares the
+            same memory buffer with *Raster*::
+                
+                >>> raster.get_pixel(i, j)
+                5
+                >>> raster.data[i, j]
+                5
+                >>> raster.data[i, j] = 3
+                >>> raster.get_pixel(i, j)
+                3
+                
+* Band.read_as_array(...) is an additional method provided by the Python
+  EPR API (does not exist any correspondent function in the C API).
+  It is mainly a facility method that allows users to get access to band
+  data without creating an intermediate *Raster* object.
+  It read a slice of data from the *Band* and returns it as a 2D
+  `numpy.ndarray`.
 
 
 Enumerators
