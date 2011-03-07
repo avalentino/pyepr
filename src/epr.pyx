@@ -633,7 +633,6 @@ cdef class Field:
         pyepr_check_errors()
         return val
 
-    # @TODO: use tuples instead od ndarrays
     def get_field_elems(self):
         # @NOTE: internal C const pointer is not shared with numpy
         cdef void* buf
