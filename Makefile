@@ -30,7 +30,7 @@ clean:
 	$(RM) src/*.py[co] tests/*.py[co] README.html
 
 distclean: clean
-	$(RM) -r build dist
+	$(RM) -r build dist pyepr.egg-info
 	$(RM) MANIFEST src/*.c src/*.o *.so
 	#$(RM) tests/*.N1
 
