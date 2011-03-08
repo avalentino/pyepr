@@ -53,7 +53,7 @@ any data field contained in a product file.
         'Environment :: Other Environment',
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: GNU Affero General Public License v3',
+        'License :: OSI Approved :: GNU General Public License (GPL)',
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX',
@@ -63,10 +63,12 @@ any data field contained in a product file.
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: GIS',
     ],
-    #platforms=,
-    license='GPL-3',
+    platforms=['any'],
+    license='GPL3',
     cmdclass = {'build_ext': build_ext},
-    ext_modules=[Extension('epr', ['src/epr.pyx'], libraries=['epr_api'])],
-    #build_requires=['cython'],
-    #install_requires=['cython'],
+    ext_modules=[
+        Extension('epr', sources=['src/epr.pyx'], libraries=['epr_api'])
+    ],
+    #requires=['numpy'],
+    #setup_requires=['numpy', 'cython'],
 )
