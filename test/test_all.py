@@ -558,19 +558,19 @@ class TestRaster(unittest.TestCase):
 
     def test_source_width_property(self):
         self.assertEqual(self.raster.source_width, self.RASTER_WIDTH)
-        self.assertTrue(isinstance(self.raster.source_width, int))
+        self.assertTrue(isinstance(self.raster.source_width, (int, long)))
 
     def test_source_height_property(self):
         self.assertEqual(self.raster.source_height, self.RASTER_HEIGHT)
-        self.assertTrue(isinstance(self.raster.source_height, int))
+        self.assertTrue(isinstance(self.raster.source_height, (int, long)))
 
     def test_source_step_x_property(self):
         self.assertEqual(self.raster.source_step_x, 1)
-        self.assertTrue(isinstance(self.raster.source_step_x, int))
+        self.assertTrue(isinstance(self.raster.source_step_x, (int, long)))
 
     def test_source_step_y_property(self):
         self.assertEqual(self.raster.source_step_y, 1)
-        self.assertTrue(isinstance(self.raster.source_step_y, int))
+        self.assertTrue(isinstance(self.raster.source_step_y, (int, long)))
 
     def test_data_property(self):
         height = self.raster.get_raster_height()
@@ -821,19 +821,19 @@ class TestDSD(unittest.TestCase):
 
     def test_ds_offset(self):
         self.assertEqual(self.dsd.ds_offset, 7346)
-        self.assertTrue(isinstance(self.dsd.ds_offset, int))
+        self.assertTrue(isinstance(self.dsd.ds_offset, (int, long)))
 
     def test_ds_size(self):
         self.assertEqual(self.dsd.ds_size, 170)
-        self.assertTrue(isinstance(self.dsd.ds_size, int))
+        self.assertTrue(isinstance(self.dsd.ds_size, (int, long)))
 
     def test_num_dsr(self):
         self.assertEqual(self.dsd.num_dsr, 1)
-        self.assertTrue(isinstance(self.dsd.num_dsr, int))
+        self.assertTrue(isinstance(self.dsd.num_dsr, (int, long)))
 
     def test_dsr_size(self):
         self.assertEqual(self.dsd.dsr_size, 170)
-        self.assertTrue(isinstance(self.dsd.dsr_size, int))
+        self.assertTrue(isinstance(self.dsd.dsr_size, (int, long)))
 
 
 class TestDataypeFunctions(unittest.TestCase):

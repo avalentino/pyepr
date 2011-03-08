@@ -382,26 +382,27 @@ E_SMID_LIN = e_smid_lin
 E_SMID_LOG = e_smid_log
 
 cdef np.NPY_TYPES _epr_to_numpy_type_id(EPR_DataTypeId epr_type):
+    cdef np.NPY_TYPES result = np.NPY_NOTYPE
     if epr_type == E_TID_UCHAR:
-        return np.NPY_UBYTE
+        result = np.NPY_UBYTE
     if epr_type == E_TID_CHAR:
-        return np.NPY_BYTE
+        result = np.NPY_BYTE
     if epr_type == E_TID_USHORT:
-        return np.NPY_USHORT
+        result = np.NPY_USHORT
     if epr_type == E_TID_SHORT:
-        return np.NPY_SHORT
+        result = np.NPY_SHORT
     if epr_type == E_TID_UINT:
-        return np.NPY_UINT
+        result = np.NPY_UINT
     if epr_type == E_TID_INT:
-        return np.NPY_INT
+        result = np.NPY_INT
     if epr_type == E_TID_FLOAT:
-        return np.NPY_FLOAT
+        result = np.NPY_FLOAT
     if epr_type == E_TID_DOUBLE:
-        return np.NPY_DOUBLE
+        result = np.NPY_DOUBLE
     if epr_type == E_TID_STRING:
-        return np.NPY_STRING
+        result = np.NPY_STRING
 
-    return np.NPY_NOTYPE
+    return result
 
 epr_to_numpy_type = {
     #E_TID_UNKNOWN:  np.NPY_NOTYPE,
@@ -431,17 +432,18 @@ class EPRValueError(EPRError, ValueError):
 
 cdef int pyepr_check_errors() except -1:
     cdef int code
+    cdef char* msg
     code = epr_get_last_err_code()
     if code != e_err_none:
-        msg = epr_get_last_err_message()
+        msg = <char*>epr_get_last_err_message()
         epr_clear_err()
         if (e_err_invalid_product_id <= code <= e_err_invalid_keyword_name or
             code in (e_err_null_pointer,
                      e_err_illegal_arg,
                      e_err_index_out_of_range)):
-            raise EPRValueError(msg, epr_get_last_err_code())
+            raise EPRValueError(msg, code)
         else:
-            raise EPRError(msg, epr_get_last_err_code())
+            raise EPRError(msg, code)
         return -1
     return 0
 
@@ -454,9 +456,10 @@ cdef int pyepr_null_ptr_error(msg='null pointer') except -1:
 
 # library API initialization/finalization
 def _init_api():
+    cdef char* msg
     #if epr_init_api(e_log_warning, epr_log_message, NULL):
     if epr_init_api(e_log_warning, NULL, NULL):
-        msg = epr_get_last_err_message()
+        msg = <char*>epr_get_last_err_message()
         epr_clear_err()
         raise ImportError('unable to inizialize EPR API library: %s' % msg)
 
@@ -721,7 +724,7 @@ cdef new_field(EPR_SField* ptr, object parent=None):
 cdef class Record:
     cdef EPR_SRecord* _ptr
     cdef object _parent
-    cdef bool _dealloc
+    cdef bint _dealloc
 
     def __dealloc__(self):
         if not self._dealloc:
@@ -797,7 +800,7 @@ cdef class Record:
         return new_field(field_ptr, self)
 
 
-cdef new_record(EPR_SRecord* ptr, object parent=None, bool dealloc=False):
+cdef new_record(EPR_SRecord* ptr, object parent=None, bint dealloc=False):
     if ptr is NULL:
         pyepr_null_ptr_error()
 
@@ -1004,7 +1007,7 @@ cdef class Band:
 
     property lines_mirrored:
         def __get__(self):
-            return bool(self._ptr.lines_mirrored)
+            return <bint>self._ptr.lines_mirrored
 
     def get_band_name(self):
         return epr_get_band_name(self._ptr)
