@@ -7,7 +7,7 @@ PyEPR - Python bindings for ENVISAT Product Reader API
 :Contact:   antonio.valentino@tiscali.it
 :Date:      05/03/2011
 :Copyright: 2011, Antonio Valentino <antonio.valentino@tiscali.it>
-:Version:   0.1
+:Version:   0.2
 
 .. contents::
 
@@ -185,10 +185,10 @@ amount of data contained in ENVISAT_ products.
   field
 * the `Raster.data` property is a 2D array exposes data contained in the
   *Raster* object in form of `numpy.ndarray`
-  
+
   .. note:: `Raster.data` directly exposes *Raster* data i.e. shares the
             same memory buffer with *Raster*::
-                
+
                 >>> raster.get_pixel(i, j)
                 5
                 >>> raster.data[i, j]
@@ -196,7 +196,7 @@ amount of data contained in ENVISAT_ products.
                 >>> raster.data[i, j] = 3
                 >>> raster.get_pixel(i, j)
                 3
-                
+
 * Band.read_as_array(...) is an additional method provided by the Python
   EPR API (does not exist any correspondent function in the C API).
   It is mainly a facility method that allows users to get access to band

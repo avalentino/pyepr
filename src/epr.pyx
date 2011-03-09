@@ -20,7 +20,7 @@
 # along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
 __revision__ = '$Id$'
-__version__  = '0.1'
+__version__  = '0.2a'
 
 
 cdef extern from 'Python.h':
