@@ -22,7 +22,12 @@ import os
 
 from distutils.core import setup
 from distutils.extension import Extension
-from Cython.Distutils import build_ext
+try:
+    from Cython.Distutils import build_ext
+    sources = [os.path.join('src', 'epr.pyx')]
+except ImportError:
+    from distutils.command.build_ext import build_ext
+    sources = [os.path.join('src', 'epr.c')]
 
 
 setup(
@@ -66,9 +71,6 @@ any data field contained in a product file.
     platforms=['any'],
     license='GPL3',
     cmdclass = {'build_ext': build_ext},
-    ext_modules=[
-        Extension('epr', sources=['src/epr.pyx'], libraries=['epr_api'])
-    ],
+    ext_modules=[Extension('epr', sources=sources, libraries=['epr_api'])],
     requires=['numpy'],
-    #setup_requires=['numpy', 'cython'],
 )
