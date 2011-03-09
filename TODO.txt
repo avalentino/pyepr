@@ -1,0 +1,35 @@
+PyEPR TODO
+==========
+
+
+PyEPR 0.2
+---------
+
+* improve docstrings
+* test on interactive console
+* test library finalization
+* debug mode (error handlers and logging)
+* suppress compilation warnings
+* improve docs
+* fix setuptools search paths
+* high level interface (package + .so)
+* objects caching (wirh weackref, in case oe Raster --> data: check size)
+
+
+PyEPR 0.3
+---------
+
+* support for multiple version of EPR API (2.2 and 2.1)
+
+
+PyEPR 0.4
+---------
+
+* code examples
+* test
+
+
+PyEPR 2.2.0
+-----------
+
+* final release
