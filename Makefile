@@ -21,9 +21,15 @@
 TEST_DATSET_URL = "http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz"
 TEST_DATSET = test/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1
 
-.PHONY: default clean distclean check debug data
+.PHONY: default sdist clean distclean check debug data
 
 default: epr.so
+
+sdist:
+	python setup.py build_ext --inplace
+	python setup.py clean
+	$(RM) epr.so
+	python setup.py sdist
 
 clean:
 	python setup.py clean

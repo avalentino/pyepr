@@ -69,6 +69,6 @@ any data field contained in a product file.
     ext_modules=[
         Extension('epr', sources=['src/epr.pyx'], libraries=['epr_api'])
     ],
-    #requires=['numpy'],
+    requires=['numpy'],
     #setup_requires=['numpy', 'cython'],
 )
