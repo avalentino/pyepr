@@ -13,7 +13,7 @@ PyEPR 0.2
 * improve docs
 * fix setuptools search paths
 * high level interface (package + .so)
-* objects caching (wirh weackref, in case oe Raster --> data: check size)
+* objects caching (with weackref, in case of Raster --> data: check size)
 
 
 PyEPR 0.3
@@ -27,6 +27,7 @@ PyEPR 0.4
 
 * code examples
 * test
+* use a smaller test dataset
 
 
 PyEPR 2.2.0
