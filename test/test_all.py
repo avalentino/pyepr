@@ -295,6 +295,7 @@ class TestBand(unittest.TestCase):
         self.assertEqual(self.band.description, 'Image Mode Precision Image')
 
     def test_lines_mirrored_property(self):
+        self.assertTrue(isinstance(self.band.lines_mirrored, bool))
         self.assertEqual(self.band.lines_mirrored, True)
 
     def test_get_band_name(self):
