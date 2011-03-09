@@ -52,7 +52,7 @@ any data field contained in a product file.
 .. _ENVISAT: http://envisat.esa.int
 .. _ESA: http://earth.esa.int
 ''',
-    #download_url='',
+    download_url='http://pypi.python.org/pypi/pyepr',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Other Environment',
