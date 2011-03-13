@@ -159,17 +159,17 @@ class TestProduct(unittest.TestCase):
                          "Image Mode Precision Image")
 
     def test_get_band_id(self):
-        self.assertTrue(isinstance(self.product.get_band_id('proc_data'),
+        self.assertTrue(isinstance(self.product.get_band('proc_data'),
                                    epr.Band))
 
     def test_get_band_id_invalid_name(self):
-        self.assertRaises(ValueError, self.product.get_band_id, '')
+        self.assertRaises(ValueError, self.product.get_band, '')
 
     def test_get_band_id_at(self):
-        self.assertTrue(isinstance(self.product.get_band_id_at(0), epr.Band))
+        self.assertTrue(isinstance(self.product.get_band_at(0), epr.Band))
 
     def test_get_band_id_at_invalid_index(self):
-        self.assertRaises(ValueError, self.product.get_band_id_at,
+        self.assertRaises(ValueError, self.product.get_band_at,
                             self.product.get_num_bands())
 
     #def test_read_bitmask_raster(self):
@@ -257,7 +257,7 @@ class TestBand(unittest.TestCase):
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
-        self.band = self.product.get_band_id('proc_data')
+        self.band = self.product.get_band('proc_data')
 
     def test_product_id_property(self):
         self.assertTrue(equal_products(self.band.product_id, self.product))
@@ -300,7 +300,7 @@ class TestBand(unittest.TestCase):
 
     def test_get_band_name(self):
         for index in range(len(self.BAND_NAMES)):
-            b = self.product.get_band_id_at(index)
+            b = self.product.get_band_at(index)
             self.assertEqual(b.get_band_name(), self.BAND_NAMES[index])
 
     def test_create_compatible_raster(self):
@@ -633,7 +633,7 @@ class TestRasterRead(TestRaster):
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
-        self.band = self.product.get_band_id(self.BAND_NAME)
+        self.band = self.product.get_band(self.BAND_NAME)
         self.raster = self.band.create_compatible_raster(self.RASTER_WIDTH,
                                                          self.RASTER_HEIGHT)
 

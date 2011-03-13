@@ -1018,7 +1018,7 @@ cdef class Band:
     def get_band_name(self):
         return epr_get_band_name(self._ptr)
 
-    def create_compatible_raster(self, uint width, uint height,
+    def create_compatible_raster(self, uint src_width, uint src_height,
                                  uint xstep=1, uint ystep=1):
         # @TODO: improve
         #if width is None:
@@ -1028,12 +1028,13 @@ cdef class Band:
         #    height = self.product_id.get_scene_height()
 
         cdef EPR_SRaster* raster_ptr
-        raster_ptr = epr_create_compatible_raster(self._ptr, width, height,
+        raster_ptr = epr_create_compatible_raster(self._ptr,
+                                                  src_width, src_height,
                                                   xstep, ystep)
         if raster_ptr is NULL:
             pyepr_null_ptr_error('unable to create compatible raster with '
                                  'width=%d, height=%d xstep=%d, ystep=%d' %
-                                                (width, height, xstep, ystep))
+                                        (src_width, src_height, xstep, ystep))
 
         return new_raster(raster_ptr, self)
 
@@ -1260,7 +1261,7 @@ cdef class Product:
 
         return new_record(record_ptr, self, False)
 
-    def get_band_id(self, name):
+    def get_band(self, name):
         cdef EPR_SBandId* band_id
         band_id = epr_get_band_id(self._ptr, name)
         if band_id is NULL:
@@ -1268,7 +1269,7 @@ cdef class Product:
 
         return new_band(band_id, self)
 
-    def get_band_id_at(self, uint index):
+    def get_band_at(self, uint index):
         cdef EPR_SBandId* band_id
         band_id = epr_get_band_id_at(self._ptr, index)
         if band_id is NULL:
