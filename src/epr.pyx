@@ -679,7 +679,7 @@ cdef class Field:
         :param index:
             the zero-based index of element to be returned, must not be
             negative
-        :return:
+        :returns:
             the typed value from given field
 
         '''
@@ -728,7 +728,7 @@ cdef class Field:
         This function is for getting an array of field elements of the
         field.
 
-        :return:
+        :returns:
             the data array (numpy.ndarray) having the type of the field
 
         '''
@@ -929,7 +929,7 @@ cdef class Record:
 
         :param name:
             the the name of required field
-        :return:
+        :returns:
             the specified :class:`Field` or raises an exception
             (:class:`EPRValueError`) if an error occured
 
@@ -947,7 +947,7 @@ cdef class Record:
 
         :param index:
             the zero-based index (position within record) of the field
-        :return:
+        :returns:
             the field or raises and exception (:class:`EPRValueError`)
             if an error occured
 
@@ -1052,7 +1052,7 @@ cdef class Raster:
             the (zero-based) X co-ordinate of the pixel
         :param y:
             the (zero-based) Y co-ordinate of the pixel
-        :return:
+        :returns:
             the typed value at the given co-ordinate
 
         '''
@@ -1147,7 +1147,7 @@ def create_raster(EPR_EDataTypeId data_type, uint src_width, uint src_height,
     :param ystep:
         the subsampling step along track of the source when reading
         into the raster
-    :return:
+    :returns:
         the new :class:`Raster` instance
 
     .. seealso:: description of :meth:`Band.create_compatible_raster`
@@ -1183,7 +1183,7 @@ def create_bitmask_raster(uint src_width, uint src_height,
     :param ystep:
         the subsampling step along track of the source when reading
         into the raster
-    :return:
+    :returns:
         the new raster instance or raises an exception
         (:class:`EPRValueError`) if an error occured
 
@@ -1383,7 +1383,7 @@ cdef class Band:
         '''Creates a raster which is compatible with the data type of the band
 
         The created raster is used to read the data in it (see
-        :meth:`Band.read_band_raster).
+        :meth:`Band.read_band_raster`).
 
         The raster is defined on the grid of the product, from which the
         data are read. Spatial subsets and undersampling are possible)
@@ -1424,9 +1424,9 @@ cdef class Band:
         :param ystep:
             the subsampling step along track of the source when reading
             into the raster
-        :return:
+        :returns:
             the new raster instance or raises an exception
-            (:class:`EPRValueError) if an error occured
+            (:class:`EPRValueError`) if an error occured
 
         '''
 
@@ -1457,19 +1457,19 @@ cdef class Band:
         image, which shall be read into a raster.
         In this routine the co-ordinates are specified, where the
         source-region to be read starts.
-        The dimension of the region and the sub-sampling are attributes of
-        the raster into which the data are read.
+        The dimension of the region and the sub-sampling are attributes
+        of the raster into which the data are read.
 
         :param xoffset:
             across-track source co-ordinate in pixel co-ordinates
             (zero-based) of the upper right corner of the source-region
-        param yoffset:
+        :param yoffset:
             along-track source co-ordinate in pixel co-ordinates
             (zero-based) of the upper right corner of the source-region
         :param raster:
             (optional) :class:`Raster` instance set with appropriate
             parameters
-        :return:
+        :returns:
             the :class:`Raster` instance in which dara are read
 
         This method raises an instance of the appropriete :class:`EPRError`
@@ -1503,8 +1503,8 @@ cdef class Band:
         image, which shall be read into a raster.
         In this routine the co-ordinates are specified, where the
         source-region to be read starts.
-        The dimension of the region and the sub-sampling are attributes of
-        the raster into which the data are read.
+        The dimension of the region and the sub-sampling are attributes
+        of the raster into which the data are read.
 
         :param src_width:
             the width (across track dimension) of the source to be read
@@ -1515,7 +1515,7 @@ cdef class Band:
         :param xoffset:
             across-track source co-ordinate in pixel co-ordinates
             (zero-based) of the upper right corner of the source-region
-        param yoffset:
+        :param yoffset:
             along-track source co-ordinate in pixel co-ordinates
             (zero-based) of the upper right corner of the source-region
         :param xstep:
@@ -1524,7 +1524,7 @@ cdef class Band:
         :param ystep:
             the subsampling step along track of the source when reading
             into the raster
-        :return:
+        :returns:
             the numpy.ndarray instance in which dara are read
 
         This method raises an instance of the appropriete :class:`EPRError`
@@ -1532,6 +1532,7 @@ cdef class Band:
 
         .. seealso:: :meth:`Band.create_compatible_raster`,
                      :func:`create_rater` and :meth:`Band.read_band_raster`
+
         '''
 
         if width is None:
@@ -1633,7 +1634,7 @@ cdef class Dataset:
         the dataset. Such a record is typically used in subsequent
         calls to :meth:`Dataset.read_record`.
 
-        :return:
+        :returns:
             the new record instance
 
         '''
@@ -1661,7 +1662,7 @@ cdef class Dataset:
             a pre-created record to reduce memory reallocation, can be
             ``None`` (default) to let the function allocate a new
             record
-        :return:
+        :returns:
             the record in which the data has been read into or raises
             an exception (:class:`EPRValueError`) if an error occured
 
@@ -1804,7 +1805,7 @@ cdef class Product:
         :param index:
             the index identifying the position of the dataset, starting
             with 0, must not be negative
-        :return:
+        :returns:
             the requested :class:`Dataset`
 
         '''
@@ -1821,7 +1822,7 @@ cdef class Product:
 
         :param name:
             the dataset name
-        :return:
+        :returns:
             the requested :class:`Dataset` instance
 
         '''
@@ -1842,7 +1843,7 @@ cdef class Product:
         :param index:
             the index identifying the position of the DSD, starting
             with 0, must not be negative
-        :return:
+        :returns:
             the requested :class:`DSD` instance
 
         '''
@@ -1879,7 +1880,7 @@ cdef class Product:
 
         :param name:
             the name of the band, must not be <code>NULL</code>
-        :return:
+        :returns:
             the requested :class:`Band` instance, or taises a
             :class:`EPRValueError` if not found
 
@@ -1898,7 +1899,7 @@ cdef class Product:
         :param index:
             the index identifying the position of the band, starting
             with 0, must not be negative
-        :return:
+        :returns:
             the requested :class:`Band` instance, or raises a
             :class:`EPRValueError` if not found
 
@@ -1953,7 +1954,7 @@ cdef class Product:
     #   :param raster:
     #       the raster for the bit-mask. The data type of the raster
     #       must be either e_tid_uchar or e_tid_char
-    #   :return:
+    #   :returns:
     #       zero for success, an error code otherwise
     #
     #   .. seealso: :func:`create_band_raster`
@@ -1978,9 +1979,9 @@ def open(filename):
 
     :param product_file_path:
         the path to the ENVISAT product file
-    :return:
+    :returns:
         the :class:`Product` instance representing the specified
-        product. An exception (:class:`ValueError) is raised if the
+        product. An exception (:class:`ValueError`) is raised if the
         file could not be opened.
 
     '''
