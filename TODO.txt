@@ -11,7 +11,6 @@ PyEPR 0.2
 * debug mode (error handlers and logging)
 * suppress compilation warnings
 * improve docs
-* fix setuptools search paths
 * high level interface (package + .so)
 * objects caching (with weackref, in case of Raster --> data: check size)
 
