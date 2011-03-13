@@ -448,9 +448,15 @@ cdef int pyepr_check_errors() except -1:
     return 0
 
 cdef int pyepr_null_ptr_error(msg='null pointer') except -1:
+    cdef int code
     cdef char* eprmsg = <char*>epr_get_last_err_message()
+
+    code = epr_get_last_err_code()
+    if not code:
+        code = None
+
     epr_clear_err()
-    raise ValueError('%s: %s' % (msg, eprmsg))
+    raise EPRValueError('%s: %s' % (msg, eprmsg), code=code)
     return -1
 
 
