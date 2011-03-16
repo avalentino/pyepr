@@ -28,6 +28,23 @@ import numpy as np
 sys.path.insert(0, os.pardir)
 import epr
 
+
+EPR_TO_NUMPY_TYPE = {
+    #epr.E_TID_UNKNOWN:  np.NPY_NOTYPE,
+    epr.E_TID_UCHAR:    np.ubyte,
+    epr.E_TID_CHAR:     np.byte,
+    epr.E_TID_USHORT:   np.ushort,
+    epr.E_TID_SHORT:    np.short,
+    epr.E_TID_UINT:     np.uint,
+    epr.E_TID_INT:      np.int,
+    epr.E_TID_FLOAT:    np.float32,
+    epr.E_TID_DOUBLE:   np.double,
+    epr.E_TID_STRING:   np.str,
+    #epr.E_TID_SPARE   = e_tid_spare,
+    #epr.E_TID_TIME    = e_tid_time,
+}
+
+
 TEST_PRODUCT = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
 
 def quiet(func):
@@ -582,8 +599,7 @@ class TestRaster(unittest.TestCase):
         self.assertTrue(isinstance(data, np.ndarray))
         self.assertEqual(data.ndim, 2)
         self.assertEqual(data.shape, (height, width))
-        self.assertEqual(data.dtype,
-                         epr.epr_to_numpy_type[self.raster.data_type])
+        self.assertEqual(data.dtype, EPR_TO_NUMPY_TYPE[self.raster.data_type])
         self.assertTrue(np.all(data[:10, :10] == self.TEST_DATA))
 
     def test_data_property_two_times(self):
