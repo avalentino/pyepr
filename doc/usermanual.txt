@@ -1,5 +1,6 @@
-PyEPR User Manual
-=================
+User Manual
+===========
+
 
 Quick start
 -----------

@@ -14,8 +14,8 @@ Documentation
    :maxdepth: 2
 
    usermanual
-   NEWS
    reference
+   NEWS
 
 
 Indices and tables

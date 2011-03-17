@@ -26,7 +26,7 @@ needs_sphinx = '1.0'
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
-    'sphinx.ext.autodoc',
+    #'sphinx.ext.autodoc',
     #'sphinx.ext.autosummary',
     #'sphinx.ext.doctest',
     #'sphinx.ext.intersphinx',
@@ -105,11 +105,11 @@ pygments_style = 'sphinx'
 
 # Autodoc configuration
 #autoclass_content = 'both'
-autodoc_default_flags = ['members', 'undoc-members', 'show-inheritance']
-                        #,'inherited-members']
+#autodoc_default_flags = ['members', 'undoc-members', 'show-inheritance']
+#                        #,'inherited-members']
 
 # Auto summary generation
-autosummary_generate = ['reference']
+#autosummary_generate = ['reference']
 
 # Enable todo list reporting
 todo_include_todos = True
@@ -208,7 +208,7 @@ latex_font_size = '12pt'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'PyEPR.tex', u'PyEPR Documentation',
+  ('doc', 'pyepr.tex', u'PyEPR Documentation',
    u'Antonio Valentino', 'manual'),
 ]
 

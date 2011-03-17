@@ -1,5 +1,5 @@
-PyEPR Change history
-====================
+Change history
+==============
 
 
 PyEPR 0.2 (in development)

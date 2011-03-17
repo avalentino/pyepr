@@ -1,5 +1,5 @@
-PyEPR API Reference
-===================
+API Reference
+=============
 
 .. module:: epr
    :synopsis: Python bindings for ENVISAT Product Reader C API
