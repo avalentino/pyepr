@@ -166,13 +166,13 @@ class TestProduct(unittest.TestCase):
     def test_get_mph(self):
         record = self.product.get_mph()
         self.assertTrue(isinstance(record, epr.Record))
-        self.assertEqual(record.get_field('PRODUCT').get_field_elem(),
+        self.assertEqual(record.get_field('PRODUCT').get_elem(),
                          self.PRODUCT_FILE)
 
     def test_get_sph(self):
         record = self.product.get_sph()
         self.assertTrue(isinstance(record, epr.Record))
-        self.assertEqual(record.get_field('SPH_DESCRIPTOR').get_field_elem(),
+        self.assertEqual(record.get_field('SPH_DESCRIPTOR').get_elem(),
                          "Image Mode Precision Image")
 
     def test_get_band_id(self):
@@ -757,48 +757,48 @@ class TestField(unittest.TestCase):
 
     @quiet
     def test_print_field(self):
-        self.field.print_field()
+        self.field.print_()
 
     @quiet
-    def test_print_fied_ostream(self):
-        self.field.print_field(sys.stderr)
+    def test_print_field_ostream(self):
+        self.field.print_(sys.stderr)
 
     def test_print_fied_invalid_ostream(self):
-        self.assertRaises(TypeError, self.field.print_field, 'invalid')
+        self.assertRaises(TypeError, self.field.print_, 'invalid')
 
     #if ALLOW_DUMP:
     #    def test_dump_field(self):
     #        self.field.dump_field()
 
-    def test_get_field_unit(self):
-        self.assertEqual(self.field.get_field_unit(), self.FIELD_UNIT)
+    def test_get_unit(self):
+        self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
 
-    def test_get_field_description(self):
-        self.assertEqual(self.field.get_field_description(),
+    def test_get_description(self):
+        self.assertEqual(self.field.get_description(),
                          self.FIELD_DESCRIPTION)
 
-    def test_get_field_num_elems(self):
-        self.assertEqual(self.field.get_field_num_elems(), self.FIELD_NUM_ELEMS)
+    def test_get_num_elems(self):
+        self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
 
-    def test_get_field_name(self):
-        self.assertEqual(self.field.get_field_name(), self.FIELD_NAME)
+    def test_get_name(self):
+        self.assertEqual(self.field.get_name(), self.FIELD_NAME)
 
-    def test_get_field_type(self):
-        self.assertEqual(self.field.get_field_type(), self.FIELD_TYPE)
+    def test_get_type(self):
+        self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
 
-    def test_get_field_elem(self):
-        self.assertEqual(self.field.get_field_elem(), self.FIELD_VALUES[0])
+    def test_get_elem(self):
+        self.assertEqual(self.field.get_elem(), self.FIELD_VALUES[0])
 
-    def test_get_field_elem_index(self):
-        self.assertEqual(self.field.get_field_elem(0), self.FIELD_VALUES[0])
+    def test_get_elem_index(self):
+        self.assertEqual(self.field.get_elem(0), self.FIELD_VALUES[0])
 
-    def test_get_field_elem_invalid_index(self):
-        self.assertRaises(ValueError, self.field.get_field_elem, 100)
+    def test_get_elem_invalid_index(self):
+        self.assertRaises(ValueError, self.field.get_elem, 100)
 
-    def test_get_field_elems(self):
-        vect = self.field.get_field_elems()
+    def test_get_elems(self):
+        vect = self.field.get_elems()
         self.assertTrue(isinstance(vect, np.ndarray))
-        self.assertEqual(vect.shape, (self.field.get_field_num_elems(),))
+        self.assertEqual(vect.shape, (self.field.get_num_elems(),))
         self.assertEqual(vect.dtype, np.float32)
         self.assertTrue(np.allclose(vect, self.FIELD_VALUES))
 

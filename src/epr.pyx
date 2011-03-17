@@ -599,7 +599,7 @@ cdef class Field:
         raise TypeError('"%s" class cannot be instantiated from Python' %
                                                     self.__class__.__name__)
 
-    def print_field(self, ostream=None):
+    def print_(self, ostream=None):
         '''Write the field to specified file (default: sys.stdout)
 
         This method writes formatted contents of the field to
@@ -633,32 +633,32 @@ cdef class Field:
     #    epr_dump_field(self._ptr)
     #    pyepr_check_errors()
 
-    def get_field_unit(self):
+    def get_unit(self):
         '''Gets the unit of the field'''
 
         return epr_get_field_unit(self._ptr)
 
-    def get_field_description(self):
+    def get_description(self):
         '''Gets the description of the field'''
 
         return epr_get_field_description(self._ptr)
 
-    def get_field_num_elems(self):
+    def get_num_elems(self):
         '''Gets the number of elements of the field'''
 
         return epr_get_field_num_elems(self._ptr)
 
-    def get_field_name(self):
+    def get_name(self):
         '''Gets the name of the field'''
 
         return epr_get_field_name(self._ptr)
 
-    def get_field_type(self):
+    def get_type(self):
         '''Gets the type of the field'''
 
         return epr_get_field_type(self._ptr)
 
-    def get_field_elem(self, uint index=0):
+    def get_elem(self, uint index=0):
         '''Field single element access
 
         This function is for getting the elements of a field.
@@ -709,7 +709,7 @@ cdef class Field:
         pyepr_check_errors()
         return val
 
-    def get_field_elems(self):
+    def get_elems(self):
         '''Field array element access
 
         This function is for getting an array of field elements of the
