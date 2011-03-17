@@ -157,7 +157,7 @@ class TestProduct(unittest.TestCase):
     def test_datasets(self):
         datasets = [self.product.get_dataset_at(idx)
                         for idx in range(self.product.get_num_datasets())]
-        dataset_names = [ds.get_dataset_name() for ds in datasets]
+        dataset_names = [ds.get_name() for ds in datasets]
         self.assertEqual(dataset_names, self.DATASET_NAMES)
 
     def test_get_dsd_at(self):
@@ -219,8 +219,8 @@ class TestDataset(unittest.TestCase):
     def test_description_property(self):
         self.assertEqual(self.dataset.description, 'Measurement Data Set 1')
 
-    def test_get_dataset_name(self):
-        self.assertEqual(self.dataset.get_dataset_name(), self.DATASET_NAME)
+    def test_get_name(self):
+        self.assertEqual(self.dataset.get_name(), self.DATASET_NAME)
 
     def test_get_dsd_name(self):
         self.assertEqual(self.dataset.get_dsd_name(), self.DATASET_NAME)

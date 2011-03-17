@@ -1587,7 +1587,7 @@ cdef class Dataset:
             else:
                 return self._ptr.description
 
-    def get_dataset_name(self):
+    def get_name(self):
         '''Gets the name of the dataset'''
 
         if self._ptr is not NULL:
