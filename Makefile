@@ -37,13 +37,14 @@ doc:
 clean:
 	python setup.py clean
 	$(RM) src/*.py[co] tests/*.py[co] README.html
+	$(MAKE) -C doc clean
+	$(RM) -r doc/_build
 
 distclean: clean
 	$(RM) -r build dist pyepr.egg-info
 	$(RM) MANIFEST src/*.c src/*.o *.so
 	#$(RM) tests/*.N1
-	$(MAKE) -C doc clean
-	rm -rf doc/_build
+	$(RM) -r doc/html
 
 check: epr.so $(TEST_DATSET)
 	cd test && python test_all.py --verbose
