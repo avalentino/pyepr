@@ -29,6 +29,8 @@ sdist:
 	python setup.py build_ext --inplace
 	python setup.py clean
 	$(RM) epr.so
+	$(MAKE) -C doc html
+	$(RM) -r doc/_build
 	python setup.py sdist
 
 doc:
