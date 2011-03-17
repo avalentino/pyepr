@@ -13,6 +13,7 @@ PyEPR 0.2
 * __str__, __eq__, __ne__, __iter__, __contains__
 * objects caching (with weackref, in case of Raster --> data: check size)
 * better test of print methods (compare with __str__)
+* read_bitmask_raster
 
 
 PyEPR 0.3
