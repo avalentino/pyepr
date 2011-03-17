@@ -173,7 +173,7 @@ Classes
       A short description of the band's contents
 
 
-   .. attribute:: product_id
+   .. attribute:: product
 
       The :class:`Product` instance to which this dataset belongs to
 
@@ -477,7 +477,7 @@ Classes
       from WEST to EAST.
 
 
-   .. attribute:: product_id
+   .. attribute:: product
 
       The :class:`Product` instance to which this band belongs to
 

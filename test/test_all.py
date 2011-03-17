@@ -213,8 +213,8 @@ class TestDataset(unittest.TestCase):
         self.product = epr.Product(self.PRODUCT_FILE)
         self.dataset = self.product.get_dataset(self.DATASET_NAME)
 
-    def test_product_id_property(self):
-        self.assertTrue(equal_products(self.dataset.product_id, self.product))
+    def test_product_property(self):
+        self.assertTrue(equal_products(self.dataset.product, self.product))
 
     def test_description_property(self):
         self.assertEqual(self.dataset.description, 'Measurement Data Set 1')
@@ -276,8 +276,8 @@ class TestBand(unittest.TestCase):
         self.product = epr.Product(self.PRODUCT_FILE)
         self.band = self.product.get_band('proc_data')
 
-    def test_product_id_property(self):
-        self.assertTrue(equal_products(self.band.product_id, self.product))
+    def test_product_property(self):
+        self.assertTrue(equal_products(self.band.product, self.product))
 
     # @TODO: check
     #def test_dataset_ref_property(self):

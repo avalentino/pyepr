@@ -1232,7 +1232,7 @@ cdef class Band:
         raise TypeError('"%s" class cannot be instantiated from Python' %
                                                     self.__class__.__name__)
 
-    property product_id:
+    property product:
         '''The :class:`Product` instance to which this band belongs to'''
 
         def __get__(self):
@@ -1445,10 +1445,10 @@ cdef class Band:
 
         # @TODO: improve
         #if width is None:
-        #    width = self.product_id.get_scene_width()
+        #    width = self._parent.get_scene_width()
         #
         #if height is None:
-        #    height = self.product_id.get_scene_height()
+        #    height = self._parent.get_scene_height()
 
         cdef EPR_SRaster* raster_ptr
         raster_ptr = epr_create_compatible_raster(self._ptr,
@@ -1548,14 +1548,14 @@ cdef class Band:
         '''
 
         if width is None:
-            w = self.product_id.get_scene_width()
+            w = self.product.get_scene_width()
             if w > xoffset:
                 width = w - xoffset
             else:
                 raise ValueError('xoffset os larger that he scene width')
 
         if height is None:
-            h = self.product_id.get_scene_height()
+            h = self.product.get_scene_height()
             if h > yoffset:
                 height = h - yoffset
             else:
@@ -1598,7 +1598,7 @@ cdef class Dataset:
         raise TypeError('"%s" class cannot be instantiated from Python' %
                                                     self.__class__.__name__)
 
-    property product_id:
+    property product:
         '''The :class:`Product` instance to which this dataset belongs to'''
 
         def __get__(self):
