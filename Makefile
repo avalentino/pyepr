@@ -21,7 +21,7 @@
 TEST_DATSET_URL = "http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz"
 TEST_DATSET = test/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1
 
-.PHONY: default sdist clean distclean check debug data
+.PHONY: default sdist doc clean distclean check debug data
 
 default: epr.so
 
@@ -31,6 +31,9 @@ sdist:
 	$(RM) epr.so
 	python setup.py sdist
 
+doc:
+	$(MAKE) -C doc html
+
 clean:
 	python setup.py clean
 	$(RM) src/*.py[co] tests/*.py[co] README.html
@@ -39,6 +42,8 @@ distclean: clean
 	$(RM) -r build dist pyepr.egg-info
 	$(RM) MANIFEST src/*.c src/*.o *.so
 	#$(RM) tests/*.N1
+	$(MAKE) -C doc clean
+	rmdir doc/_build
 
 check: epr.so $(TEST_DATSET)
 	cd test && python test_all.py --verbose

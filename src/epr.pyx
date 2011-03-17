@@ -622,17 +622,17 @@ cdef class Field:
                                                     self.__class__.__name__)
 
     def print_(self, ostream=None):
-        '''Write the field to specified file (default: sys.stdout)
+        '''Write the field to specified file (default: :data:`sys.stdout`)
 
         This method writes formatted contents of the field to
         specified *ostream* text file or (default) the ASCII output
-        is be printed to standard output (sys.stdout)
+        is be printed to standard output (:data:`sys.stdout`)
 
         :param ostream:
             the (opened) output file object
 
         .. note:: the *ostream* parameter have to be a *real* file not
-                  a generic stream object like *StringIO* instances
+                  a generic stream object like :class:`StringIO` instances
 
         '''
 
@@ -738,7 +738,8 @@ cdef class Field:
         field.
 
         :returns:
-            the data array (numpy.ndarray) having the type of the field
+            the data array (:class:`numpy.ndarray`) having the type of
+            the field
 
         '''
 
@@ -857,17 +858,17 @@ cdef class Record:
         return epr_get_num_fields(self._ptr)
 
     def print_(self, ostream=None):
-        '''Write the record to specified file (default: sys.stdout)
+        '''Write the record to specified file (default: :data:`sys.stdout`)
 
         This method writes formatted contents of the record to
         specified *ostream* text file or (default) the ASCII output
-        is be printed to standard output (sys.stdout)
+        is be printed to standard output (:data:`sys.stdout`)
 
         :param ostream:
             the (opened) output file object
 
         .. note:: the *ostream* parameter have to be a *real* file not
-                  a generic stream object like *StringIO* instances
+                  a generic stream object like :class:`StringIO` instances
 
         '''
 
@@ -887,11 +888,11 @@ cdef class Record:
         pyepr_check_errors()
 
     def print_element(self, uint field_index, uint element_index, ostream=None):
-        '''Write the specified field element to file (default: sys.stdout)
+        '''Write the specified field element to file (default: :data:`sys.stdout`)
 
         This method writes formatted contents of the specified field
         element to the *ostream* text file or (default) the ASCII output
-        will be printed to standard output (sys.stdout)
+        will be printed to standard output (:data:`sys.stdout`)
 
         :param field_index:
             the index of field in the record
@@ -901,7 +902,7 @@ cdef class Record:
             the (opened) output file object
 
         .. note:: the *ostream* parameter have to be a *real* file not
-                  a generic stream object like *StringIO* instances
+                  a generic stream object like :class:`StringIO` instances
 
         '''
 
@@ -940,7 +941,7 @@ cdef class Record:
             the the name of required field
         :returns:
             the specified :class:`Field` or raises an exception
-            (:class:`EPRValueError`) if an error occured
+            (:class:`EPRValueError`) if an error occurred
 
         '''
 
@@ -958,7 +959,7 @@ cdef class Record:
             the zero-based index (position within record) of the field
         :returns:
             the field or raises and exception (:class:`EPRValueError`)
-            if an error occured
+            if an error occurred
 
         '''
 
@@ -1058,9 +1059,9 @@ cdef class Raster:
         raster (i.e. pixel)
 
         :param x:
-            the (zero-based) X co-ordinate of the pixel
+            the (zero-based) X coordinate of the pixel
         :param y:
-            the (zero-based) Y co-ordinate of the pixel
+            the (zero-based) Y coordinate of the pixel
         :returns:
             the typed value at the given co-ordinate
 
@@ -1107,7 +1108,7 @@ cdef class Raster:
         return result
 
     property data:
-        '''Raster data exposed as ``numpy.ndarray`` object
+        '''Raster data exposed as :class:`numpy.ndarray` object
 
         .. note:: this property shares the data buffer with the
                   :class:`Raster` object so any change in its contents
@@ -1145,16 +1146,18 @@ def create_raster(EPR_EDataTypeId data_type, uint src_width, uint src_height,
         the type of the data to stored in the raster, must be one of
         E_TID_*
     :param src_width:
-        the width (across track dimension) of the source to be read into
-        the raster. See description of epr_create_compatible_raster
+        the width (across track dimension) of the source to be read
+        into the raster.
+        See description of :meth:`Band.create_compatible_raster`
     :param src_height:
-        the height (along track dimension) of the source to be read into
-        the raster. See description of epr_create_compatible_raster
+        the height (along track dimension) of the source to be read
+        into the raster.
+        See description of :meth:`Band.create_compatible_raster`
     :param xstep:
-        the subsampling step across track of the source when reading
+        the sub-sampling step across track of the source when reading
         into the raster
     :param ystep:
-        the subsampling step along track of the source when reading
+        the sub-sampling step along track of the source when reading
         into the raster
     :returns:
         the new :class:`Raster` instance
@@ -1187,14 +1190,14 @@ def create_bitmask_raster(uint src_width, uint src_height,
         the height (along track dimension) of the source to be read
         into the raster
     :param xstep:
-        the subsampling step across track of the source when reading
+        the sub-sampling step across track of the source when reading
         into the raster
     :param ystep:
-        the subsampling step along track of the source when reading
+        the sub-sampling step along track of the source when reading
         into the raster
     :returns:
         the new raster instance or raises an exception
-        (:class:`EPRValueError`) if an error occured
+        (:class:`EPRValueError`) if an error occurred
 
     .. seealso:: the description of :meth:`Band.create_compatible_raster`
 
@@ -1212,7 +1215,7 @@ def create_bitmask_raster(uint src_width, uint src_height,
 
 
 cdef class Band:
-    '''The aand of an ENVISAT product
+    '''The band of an ENVISAT product
 
     The Band class contains information about a band within an ENVISAT
     product file which has been opened with the :func:`open` function.
@@ -1371,7 +1374,7 @@ cdef class Band:
                 return self._ptr.description
 
     property lines_mirrored:
-        '''Mirrored lined flag
+        '''Mirrored lines flag
 
         If true (=1) lines will be mirrored (flipped) after read into a
         raster in order to ensure a pixel ordering in raster X direction
@@ -1395,10 +1398,10 @@ cdef class Band:
         :meth:`Band.read_band_raster`).
 
         The raster is defined on the grid of the product, from which the
-        data are read. Spatial subsets and undersampling are possible)
+        data are read. Spatial subsets and under-sampling are possible)
         through the parameter of the method.
 
-        A raster is an object that allows direct acces to data of a
+        A raster is an object that allows direct access to data of a
         certain portion of the ENVISAT product that are read into the it.
         Such a portion is called the source. The complete ENVISAT product
         can be much greater than the source. One can move the raster over
@@ -1415,8 +1418,8 @@ cdef class Band:
         for a MERIS RR product), and a height of 1). One can loop over
         all blocks read into the raster and process it.
 
-        In addition, it is possible to defined a subsampling step for a
-        raster. This means, that the source is not read 1:1 into the
+        In addition, it is possible to defined a sub-sampling step for
+        a raster. This means, that the source is not read 1:1 into the
         raster, but that only every 2nd or 3rd pixel is read. This step
         can be set differently for the across track (source_step_x) and
         along track (source_step_y) directions.
@@ -1428,14 +1431,14 @@ cdef class Band:
             the height (along track dimension) of the source to be read
             into the raster
         :param xstep:
-            the subsampling step across track of the source when reading
+            the sub-sampling step across track of the source when reading
             into the raster
         :param ystep:
-            the subsampling step along track of the source when reading
+            the sub-sampling step along track of the source when reading
             into the raster
         :returns:
             the new raster instance or raises an exception
-            (:class:`EPRValueError`) if an error occured
+            (:class:`EPRValueError`) if an error occurred
 
         '''
 
@@ -1478,9 +1481,9 @@ cdef class Band:
             (optional) :class:`Raster` instance set with appropriate
             parameters
         :returns:
-            the :class:`Raster` instance in which dara are read
+            the :class:`Raster` instance in which data are read
 
-        This method raises an instance of the appropriete :class:`EPRError`
+        This method raises an instance of the appropriate :class:`EPRError`
         sub-class if case of errors
 
         .. seealso:: :meth:`Band.create_compatible_raster` and
@@ -1505,7 +1508,7 @@ cdef class Band:
     def read_as_array(self, width=None, height=None,
                       uint xoffset=0, uint yoffset=0,
                       uint xstep=1, uint ystep=1):
-        '''Rads the specified source region as an numpy.ndarray
+        '''Reads the specified source region as an :class:`numpy.ndarray`
 
         The source-region is a defined part of the whole ENVISAT product
         image, which shall be read into a raster.
@@ -1527,15 +1530,15 @@ cdef class Band:
             along-track source co-ordinate in pixel co-ordinates
             (zero-based) of the upper right corner of the source-region
         :param xstep:
-            the subsampling step across track of the source when reading
+            the sub-sampling step across track of the source when reading
             into the raster
         :param ystep:
-            the subsampling step along track of the source when reading
+            the sub-sampling step along track of the source when reading
             into the raster
         :returns:
-            the numpy.ndarray instance in which dara are read
+            the :class:`numpy.ndarray` instance in which data are read
 
-        This method raises an instance of the appropriete :class:`EPRError`
+        This method raises an instance of the appropriate :class:`EPRError`
         sub-class if case of errors
 
         .. seealso:: :meth:`Band.create_compatible_raster`,
@@ -1595,7 +1598,7 @@ cdef class Dataset:
                                                     self.__class__.__name__)
 
     property product_id:
-        '''The ID of the product to which this dataset belongs to'''
+        '''The :class:`Product` instance to which this dataset belongs to'''
 
         def __get__(self):
             return self._parent
@@ -1672,7 +1675,7 @@ cdef class Dataset:
             record
         :returns:
             the record in which the data has been read into or raises
-            an exception (:class:`EPRValueError`) if an error occured
+            an exception (:class:`EPRValueError`) if an error occurred
 
         '''
 
@@ -1708,7 +1711,7 @@ cdef new_dataset(EPR_SDatasetId* ptr, object parent=None):
 cdef class Product:
     '''ENVISAT product
 
-    The Product class provides methos and properties to get information
+    The Product class provides methods and properties to get information
     about an ENVISAT product files.
 
     .. seealso:: :func:`open`
@@ -1826,7 +1829,7 @@ cdef class Product:
         return new_dataset(dataset_id, self)
 
     def get_dataset(self, name):
-        '''Gets the dataset coresponding to the specified dataset name
+        '''Gets the dataset corresponding to the specified dataset name
 
         :param name:
             the dataset name
@@ -1889,7 +1892,7 @@ cdef class Product:
         :param name:
             the name of the band, must not be <code>NULL</code>
         :returns:
-            the requested :class:`Band` instance, or taises a
+            the requested :class:`Band` instance, or raises a
             :class:`EPRValueError` if not found
 
         '''

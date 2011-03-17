@@ -1,0 +1,19 @@
+PyEPR Change history
+====================
+
+
+PyEPR 0.2 (in development)
+--------------------------
+
+* in case of null pointers a EPRValueError is raised
+* renamed some method and parameter in order to avoid redundancies and
+  have a more *pythonic*  API
+* added docstrings to all method and classes
+* sphinx documentation added
+
+
+PyEPR 0.1 (09/03/2011)
+----------------------
+
+Initial releases
+
