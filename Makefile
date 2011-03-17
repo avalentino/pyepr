@@ -60,6 +60,3 @@ epr.so: src/epr.pyx
 $(TEST_DATSET):
 	wget -P test $(TEST_DATSET_URL)
 	gunzip $@
-
-README.html: README.txt
-	rst2html -s -d -g --title "Python EPR API" --cloak-email-addresses $< $@
