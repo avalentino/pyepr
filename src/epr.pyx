@@ -1013,17 +1013,17 @@ cdef class Raster:
         def __get__(self):
             return self._ptr.source_step_y
 
-    def get_raster_width(self):
+    def get_width(self):
         '''Gets the raster's width in pixels'''
 
         return epr_get_raster_width(self._ptr)
 
-    def get_raster_height(self):
+    def get_height(self):
         '''Gets the raster's height in pixels'''
 
         return epr_get_raster_height(self._ptr)
 
-    def get_raster_elem_size(self):
+    def get_elem_size(self):
         '''The size in byte of a single element (sample) of this raster's
         buffer'''
 
