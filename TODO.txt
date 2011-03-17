@@ -11,15 +11,16 @@ PyEPR 0.2
 * suppress compilation warnings
 * high level interface (package + .so)
 * __str__, __eq__, __ne__, __iter__, __contains__
-* objects caching (with weackref, in case of Raster --> data: check size)
 * better test of print methods (compare with __str__)
 * read_bitmask_raster
+* split .pxi, .pxd
 
 
 PyEPR 0.3
 ---------
 
 * support for multiple version of EPR API (2.2 and 2.1)
+* python 3
 
 
 PyEPR 0.4

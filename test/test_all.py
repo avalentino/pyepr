@@ -601,7 +601,7 @@ class TestRaster(unittest.TestCase):
     def test_data_property_two_times(self):
         data1 = self.raster.data
         data2 = self.raster.data
-        self.assertFalse(data1 is data2)    # @TODO: check
+        self.assertTrue(data1 is data2)
         self.assertTrue(np.all(data1 == data2))
 
     def test_data_property_shared_data_semantic(self):

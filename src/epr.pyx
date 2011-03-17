@@ -992,6 +992,7 @@ cdef class Raster:
 
     cdef EPR_SRaster* _ptr
     cdef object _parent
+    cdef object _data
 
     def __dealloc__(self):
         if self._ptr is not NULL:
@@ -1116,10 +1117,15 @@ cdef class Raster:
         '''
 
         def __get__(self):
+            if self._data is not None:
+                return self._data
+
             if self._ptr.buffer is NULL:
                 return np.ndarray(())
 
-            return self.toarray()
+            self._data = self.toarray()
+
+            return self._data
 
 
 cdef new_raster(EPR_SRaster* ptr, object parent=None):
@@ -1130,6 +1136,7 @@ cdef new_raster(EPR_SRaster* ptr, object parent=None):
 
     instance._ptr = ptr
     instance._parent = parent
+    instance._data = None
 
     return instance
 
@@ -1497,6 +1504,8 @@ cdef class Band:
 
         if ret != 0:
             pyepr_check_errors()
+
+        raster._data = None
 
         return raster
 
