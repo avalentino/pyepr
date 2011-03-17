@@ -5,8 +5,6 @@ PyEPR TODO
 PyEPR 0.2
 ---------
 
-* test on interactive console
-* test library finalization
 * debug mode (error handlers and logging)
 * suppress compilation warnings
 * high level interface (package + .so)
