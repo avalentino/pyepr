@@ -1,15 +1,13 @@
-======================================================
-PyEPR - Python bindings for ENVISAT Product Reader API
-======================================================
+=================================
+ENVISAT Product Reader Python API
+=================================
 
 :Home Page: https://github.com/avalentino/pyepr
 :Author:    Antonio Valentino
 :Contact:   antonio.valentino@tiscali.it
-:Date:      05/03/2011
+:Date:      17/03/2011
 :Copyright: 2011, Antonio Valentino <antonio.valentino@tiscali.it>
 :Version:   0.2
-
-.. contents::
 
 
 Introduction
@@ -106,7 +104,7 @@ the ``PYTHONPATH``.
 .. _pip: http://pypi.python.org/pypi/pip
 .. _distutils: http://docs.python.org/distutils
 
-<
+
 Testing
 =======
 
@@ -130,8 +128,8 @@ in the ``tests`` directory::
     $ python test_all.py
 
 
-Python vs C EPR API
-===================
+Python vs C API
+===============
 
 The Python_ EPR API is fully object oriented.
 The main structures of the C API have been implemented as objects while
