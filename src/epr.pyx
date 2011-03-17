@@ -757,7 +757,6 @@ cdef class Field:
             if buf is NULL:
                 pyepr_null_ptr_error()
             out = np.ndarray(num_elems, np.uchar)
-            #memcpy(out.data, buf, num_elems*sizeof(uchar)) # @TODO: check
             for i in range(num_elems):
                 out[i] = (<uchar*>buf)[i]
         elif etype == e_tid_char:
@@ -1238,11 +1237,6 @@ cdef class Band:
         def __get__(self):
             return self._parent
 
-    # @TODO: complete
-    #property dataset_ref:
-    #    def __get__(self):
-    #        return self._ptr.dataset_ref
-
     property spectr_band_index:
         '''The (zero-based) spectral band index
 
@@ -1390,7 +1384,7 @@ cdef class Band:
 
         return epr_get_band_name(self._ptr)
 
-    # @TODO: default values for src_width and src_heiight
+    # @TODO: default values for src_width and src_height
     def create_compatible_raster(self, uint src_width, uint src_height,
                                  uint xstep=1, uint ystep=1):
         '''Creates a raster which is compatible with the data type of the band
