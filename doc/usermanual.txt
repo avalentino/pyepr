@@ -25,7 +25,8 @@ Parameters" record to the standard output::
 
     import epr
 
-    product = epr.Product('ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1')
+    product = epr.Product(
+        'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1')
     dataset = product.get_dataset('MAIN_PROCESSING_PARAMS_ADS')
     record = dataset.read_record(0)
     record.print_record()
@@ -126,7 +127,8 @@ __ http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202
 On GNU Linux platforms the following shell commands can be used::
 
     $ cd pyepr-0.x/tests
-    $ wget http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz
+    $ wget http://earth.esa.int/services/sample_products/asar/IMP/\
+      ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz
     $ guinzip ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1
 
 After installation the test suite can be run using the following command
