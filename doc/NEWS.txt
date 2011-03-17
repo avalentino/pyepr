@@ -15,5 +15,5 @@ PyEPR 0.2 (in development)
 PyEPR 0.1 (09/03/2011)
 ----------------------
 
-Initial releases
+Initial release
 
