@@ -33,11 +33,11 @@ Classes
    ENVISAT product
 
    The Product class provides methods and properties to get information
-   about an ENVISAT product files.
+   about an ENVISAT product file.
 
    .. seealso:: :func:`open`
 
-
+   
    .. attribute:: file_path
 
       The file's path including the file name
@@ -62,18 +62,18 @@ Classes
       The total size in bytes of the product file
 
 
-   .. method:: get_band
+   .. method:: get_band(name)
 
       Gets the band corresponding to the specified name.
 
       :param name:
-            the name of the band, must not be <code>NULL</code>
+            the name of the band
       :returns:
             the requested :class:`Band` instance, or raises a
             :class:`EPRValueError` if not found
 
 
-   .. method:: get_band_at
+   .. method:: get_band_at(index)
 
       Gets the band at the specified position within the product
 
@@ -85,7 +85,7 @@ Classes
             :class:`EPRValueError` if not found
 
 
-   .. method:: get_dataset
+   .. method:: get_dataset(name)
 
       Gets the dataset corresponding to the specified dataset name
 
@@ -95,7 +95,7 @@ Classes
             the requested :class:`Dataset` instance
 
 
-   .. method:: get_dataset_at
+   .. method:: get_dataset_at(index)
 
       Gets the dataset at the specified position within the product
 
@@ -106,7 +106,7 @@ Classes
             the requested :class:`Dataset`
 
 
-   .. method:: get_dsd_at
+   .. method:: get_dsd_at(index)
 
       Gets the DSD at the specified position
 
@@ -210,7 +210,7 @@ Classes
             the new record instance
 
 
-   .. method:: read_record
+   .. method:: read_record(index[, record])
 
       Reads specified record of the dataset
 
@@ -246,7 +246,7 @@ Classes
    .. seealso:: :class:`Field`
 
 
-   .. method:: get_field
+   .. method:: get_field(name)
 
       Gets a field specified by name
 
@@ -260,7 +260,7 @@ Classes
             (:class:`EPRValueError`) if an error occurred
 
 
-   .. method:: get_field_at
+   .. method:: get_field_at(index)
 
       Gets a field at the specified position within the record
 
@@ -276,7 +276,7 @@ Classes
       Gets the number of fields contained in the record
 
 
-   .. method:: print_
+   .. method:: print_([ostream])
 
       Write the record to specified file (default: :data:`sys.stdout`)
 
@@ -291,7 +291,7 @@ Classes
                 a generic stream object like :class:`StringIO` instances
 
 
-   .. method:: print_element
+   .. method:: print_element(field_index, element_index[, ostream])
 
       Write the specified field element to file (default: :data:`sys.stdout`)
 
@@ -345,7 +345,7 @@ Classes
       Gets the unit of the field
 
 
-   .. method:: get_elem
+   .. method:: get_elem([index])
 
       Field single element access
 
@@ -353,7 +353,7 @@ Classes
 
       :param index:
             the zero-based index of element to be returned, must not be
-            negative
+            negative. Default: 0.
       :returns:
             the typed value from given field
 
@@ -370,7 +370,7 @@ Classes
             the field
 
 
-   .. method:: print_
+   .. method:: print_([ostream])
 
       Write the field to specified file (default: :data:`sys.stdout`)
 
@@ -557,7 +557,7 @@ Classes
       Gets the name of the band
 
 
-   .. method:: create_compatible_raster
+   .. method:: create_compatible_raster(src_width, src_height[, xstep, ystep])
 
       Creates a raster which is compatible with the data type of the band
 
@@ -599,16 +599,16 @@ Classes
             into the raster
       :param xstep:
             the sub-sampling step across track of the source when reading
-            into the raster
+            into the raster. Default 1.
       :param ystep:
             the sub-sampling step along track of the source when reading
-            into the raster
+            into the raster. Default 1.
       :returns:
             the new raster instance or raises an exception
             (:class:`EPRValueError`) if an error occurred
 
 
-   .. method:: read_band_raster
+   .. method:: read_band_raster([xoffset, yoffset, raster])
 
       Reads (geo-)physical values of the band of the specified
       source-region
@@ -622,13 +622,15 @@ Classes
 
       :param xoffset:
             across-track source co-ordinate in pixel co-ordinates
-            (zero-based) of the upper right corner of the source-region
+            (zero-based) of the upper right corner of the source-region.
+            Default 0.
       :param yoffset:
             along-track source co-ordinate in pixel co-ordinates
-            (zero-based) of the upper right corner of the source-region
+            (zero-based) of the upper right corner of the source-region.
+            Default 0.
       :param raster:
-            (optional) :class:`Raster` instance set with appropriate
-            parameters
+            :class:`Raster` instance set with appropriate parameters to
+            read into. If not provided a new :class:`Raster` is instantiated
       :returns:
             the :class:`Raster` instance in which data are read
 
@@ -639,7 +641,7 @@ Classes
                    :func:`create_rater`
 
 
-   .. method:: read_as_array
+   .. method:: read_as_array([width, height, xoffset, yoffset, xstep, ystep])
 
       Reads the specified source region as an :class:`numpy.ndarray`
 
@@ -652,22 +654,24 @@ Classes
 
       :param src_width:
             the width (across track dimension) of the source to be read
-            into the raster
+            into the raster. If not provided reads as much as possible
       :param src_height:
             the height (along track dimension) of the source to be read
-            into the raster
+            into the raster, If not provided reads as much as possible
       :param xoffset:
             across-track source co-ordinate in pixel co-ordinates
-            (zero-based) of the upper right corner of the source-region
+            (zero-based) of the upper right corner of the source-region.
+            Default 0.
       :param yoffset:
             along-track source co-ordinate in pixel co-ordinates
-            (zero-based) of the upper right corner of the source-region
+            (zero-based) of the upper right corner of the source-region.
+            Default 0.
       :param xstep:
             the sub-sampling step across track of the source when reading
-            into the raster
+            into the raster. Default 1
       :param ystep:
             the sub-sampling step along track of the source when reading
-            into the raster
+            into the raster. Default 1
       :returns:
             the :class:`numpy.ndarray` instance in which data are read
 
@@ -721,7 +725,7 @@ Classes
                 is also reflected to the :class:`Raster` object
 
 
-   .. method:: get_pixel
+   .. method:: get_pixel(x, y)
 
       Single pixel access
 
@@ -766,7 +770,7 @@ Classes
 Functions
 ---------
 
-.. function:: open
+.. function:: open(filename)
 
    Opens the ENVISAT product
 
@@ -781,6 +785,9 @@ Functions
         product. An exception (:class:`ValueError`) is raised if the
         file could not be opened.
 
+   .. seealso :class:`Product`
+   
+   
 .. function:: data_type_id_to_str
 
    Gets the 'C' data type string for the given data type
@@ -801,7 +808,7 @@ Functions
    Return the name of the specified scaling method
 
 
-.. function:: create_raster
+.. function:: create_raster(data_type, src_width, src_height[, xstep, ystep])
 
    Creates a raster of the specified data type
 
@@ -810,7 +817,10 @@ Functions
 
    :param data_type:
         the type of the data to stored in the raster, must be one of
-        E_TID_*
+        E_TID_*.
+        
+        .. seealso:: `Data type Identifiers`_ 
+        
    :param src_width:
         the width (across track dimension) of the source to be read
         into the raster.
@@ -821,17 +831,17 @@ Functions
         See description of :meth:`Band.create_compatible_raster`
    :param xstep:
         the sub-sampling step across track of the source when reading
-        into the raster
+        into the raster. Default 1.
    :param ystep:
         the sub-sampling step along track of the source when reading
-        into the raster
+        into the raster. Default 1.
    :returns:
         the new :class:`Raster` instance
 
    .. seealso:: description of :meth:`Band.create_compatible_raster`
 
 
-.. function:: create_bitmask_raster
+.. function:: create_bitmask_raster(src_width, src_height[, xstep, ystep])
 
    Creates a raster to be used for reading bitmasks
 
@@ -845,10 +855,10 @@ Functions
         into the raster
    :param xstep:
         the sub-sampling step across track of the source when reading
-        into the raster
+        into the raster. Default 1.
    :param ystep:
         the sub-sampling step along track of the source when reading
-        into the raster
+        into the raster. Default 1.
    :returns:
         the new raster instance or raises an exception
         (:class:`EPRValueError`) if an error occurred
@@ -866,6 +876,16 @@ Exceptions
    .. attribute:: code
 
       EPR API error code
+
+
+   .. method:: __init__([message[, code, *args, **kwargs]])
+   
+      Initializer
+      
+      :param message:
+            error message
+      :pram code:
+            EPR error code
 
 
 .. exception:: EPRValueError

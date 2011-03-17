@@ -1390,6 +1390,7 @@ cdef class Band:
 
         return epr_get_band_name(self._ptr)
 
+    # @TODO: default values for src_width and src_heiight
     def create_compatible_raster(self, uint src_width, uint src_height,
                                  uint xstep=1, uint ystep=1):
         '''Creates a raster which is compatible with the data type of the band
@@ -1478,8 +1479,8 @@ cdef class Band:
             along-track source co-ordinate in pixel co-ordinates
             (zero-based) of the upper right corner of the source-region
         :param raster:
-            (optional) :class:`Raster` instance set with appropriate
-            parameters
+            :class:`Raster` instance set with appropriate parameters to
+            read into. If not provided a new :class:`Raster` is instantiated
         :returns:
             the :class:`Raster` instance in which data are read
 
@@ -1519,10 +1520,10 @@ cdef class Band:
 
         :param src_width:
             the width (across track dimension) of the source to be read
-            into the raster
+            into the raster. If not provided reads as much as possible
         :param src_height:
             the height (along track dimension) of the source to be read
-            into the raster
+            into the raster. If not provided reads as much as possible
         :param xoffset:
             across-track source co-ordinate in pixel co-ordinates
             (zero-based) of the upper right corner of the source-region
@@ -1712,7 +1713,7 @@ cdef class Product:
     '''ENVISAT product
 
     The Product class provides methods and properties to get information
-    about an ENVISAT product files.
+    about an ENVISAT product file.
 
     .. seealso:: :func:`open`
 
@@ -1890,7 +1891,7 @@ cdef class Product:
         '''Gets the band corresponding to the specified name.
 
         :param name:
-            the name of the band, must not be <code>NULL</code>
+            the name of the band
         :returns:
             the requested :class:`Band` instance, or raises a
             :class:`EPRValueError` if not found
@@ -1994,6 +1995,8 @@ def open(filename):
         the :class:`Product` instance representing the specified
         product. An exception (:class:`ValueError`) is raised if the
         file could not be opened.
+
+    .. seealso :class:`Product`
 
     '''
 
