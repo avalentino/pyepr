@@ -37,7 +37,7 @@ Classes
 
    .. seealso:: :func:`open`
 
-   
+
    .. attribute:: file_path
 
       The file's path including the file name
@@ -786,8 +786,8 @@ Functions
         file could not be opened.
 
    .. seealso :class:`Product`
-   
-   
+
+
 .. function:: data_type_id_to_str
 
    Gets the 'C' data type string for the given data type
@@ -818,9 +818,9 @@ Functions
    :param data_type:
         the type of the data to stored in the raster, must be one of
         E_TID_*.
-        
-        .. seealso:: `Data type Identifiers`_ 
-        
+
+        .. seealso:: `Data type Identifiers`_
+
    :param src_width:
         the width (across track dimension) of the source to be read
         into the raster.
@@ -879,9 +879,9 @@ Exceptions
 
 
    .. method:: __init__([message[, code, *args, **kwargs]])
-   
+
       Initializer
-      
+
       :param message:
             error message
       :pram code:
