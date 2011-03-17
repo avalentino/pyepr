@@ -1488,7 +1488,7 @@ cdef class Band:
         sub-class if case of errors
 
         .. seealso:: :meth:`Band.create_compatible_raster` and
-                     :func:`create_rater`
+                     :func:`create_raster`
 
         '''
 
@@ -1543,7 +1543,7 @@ cdef class Band:
         sub-class if case of errors
 
         .. seealso:: :meth:`Band.create_compatible_raster`,
-                     :func:`create_rater` and :meth:`Band.read_band_raster`
+                     :func:`create_raster` and :meth:`Band.read_band_raster`
 
         '''
 
