@@ -267,7 +267,3 @@ Library initialization
 Differently from the C API library initialization is not needed: it is
 performed internally the first time the *epr* module is imported in
 Python_.
-
-
-
-

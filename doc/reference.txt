@@ -939,4 +939,3 @@ Scalin gMethods
 .. data:: E_SMID_LOG
 
    Logarithmic pixel scaling
-
