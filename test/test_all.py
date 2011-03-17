@@ -315,10 +315,10 @@ class TestBand(unittest.TestCase):
         self.assertTrue(isinstance(self.band.lines_mirrored, bool))
         self.assertEqual(self.band.lines_mirrored, True)
 
-    def test_get_band_name(self):
+    def test_get_name(self):
         for index in range(len(self.BAND_NAMES)):
             b = self.product.get_band_at(index)
-            self.assertEqual(b.get_band_name(), self.BAND_NAMES[index])
+            self.assertEqual(b.get_name(), self.BAND_NAMES[index])
 
     def test_create_compatible_raster(self):
         width = self.product.get_scene_width()
@@ -386,12 +386,12 @@ class TestBand(unittest.TestCase):
         #                  self.band.create_compatible_raster,
         #                  width, height, width + 10, height + 10)
 
-    def test_read_band_raster(self):
+    def test_read_raster(self):
         width = 400
         height = 300
         raster = self.band.create_compatible_raster(width, height)
 
-        self.band.read_band_raster(self.XOFFSET, self.YOFFSET, raster)
+        self.band.read_raster(self.XOFFSET, self.YOFFSET, raster)
 
         self.assertTrue(isinstance(raster, epr.Raster))
         self.assertEqual(raster.get_width(), width)
@@ -399,40 +399,37 @@ class TestBand(unittest.TestCase):
         # @NOTE: data type on disk is epr.E_TID_USHORT
         self.assertEqual(raster.data_type, epr.E_TID_FLOAT)
 
-    def test_read_band_raster_default_offset(self):
+    def test_read_raster_default_offset(self):
         height, width = self.TEST_DATA.shape
 
         raster1 = self.band.create_compatible_raster(width, height)
         raster2 = self.band.create_compatible_raster(width, height)
 
-        self.band.read_band_raster(0, 0, raster1)
-        self.band.read_band_raster(raster=raster2)
+        self.band.read_raster(0, 0, raster1)
+        self.band.read_raster(raster=raster2)
 
         self.assertEqual(raster1.get_pixel(0, 0), raster2.get_pixel(0, 0))
         self.assertEqual(raster1.get_pixel(width - 1, height -1),
                           raster2.get_pixel(width - 1, height -1))
 
-    def test_read_band_raster_with_invalid_raster(self):
-        self.assertRaises(TypeError, self.band.read_band_raster, 0, 0, 0)
+    def test_read_raster_with_invalid_raster(self):
+        self.assertRaises(TypeError, self.band.read_raster, 0, 0, 0)
 
-    def test_read_band_raster_with_invalid_offset(self):
+    def test_read_raster_with_invalid_offset(self):
         width = 400
         height = 300
         raster = self.band.create_compatible_raster(width, height)
 
         # @TODO: check
-        self.assertRaises(ValueError, self.band.read_band_raster,
-                          -1, 0, raster)
-        self.assertRaises(ValueError, self.band.read_band_raster,
-                          0, -1, raster)
-        self.assertRaises(ValueError, self.band.read_band_raster,
-                          -1, -1, raster)
+        self.assertRaises(ValueError, self.band.read_raster, -1, 0, raster)
+        self.assertRaises(ValueError, self.band.read_raster, 0, -1, raster)
+        self.assertRaises(ValueError, self.band.read_raster, -1, -1, raster)
         # @TODO: check
-        #self.assertRaises(ValueError, self.band.read_band_raster,
+        #self.assertRaises(ValueError, self.band.read_raster,
         #                  width + 10, 0, raster)
-        #self.assertRaises(ValueError, self.band.read_band_raster,
+        #self.assertRaises(ValueError, self.band.read_raster,
         #                  0, height + 10, raster)
-        #self.assertRaises(ValueError, self.band.read_band_raster,
+        #self.assertRaises(ValueError, self.band.read_raster,
         #                  width + 10, height + 10, raster)
 
     def test_read_as_array(self):
@@ -652,14 +649,14 @@ class TestRasterRead(TestRaster):
         self.raster = self.band.create_compatible_raster(self.RASTER_WIDTH,
                                                          self.RASTER_HEIGHT)
 
-        self.band.read_band_raster(self.RASTER_XOFFSET, self.RASTER_YOFFSET,
-                                   self.raster)
+        self.band.read_raster(self.RASTER_XOFFSET, self.RASTER_YOFFSET,
+                              self.raster)
 
     def test_data_property_shared_semantics_readload(self):
         data1 = self.raster.data
         data1[0, 0] *= 2
-        self.band.read_band_raster(self.RASTER_XOFFSET, self.RASTER_YOFFSET,
-                                   self.raster)
+        self.band.read_raster(self.RASTER_XOFFSET, self.RASTER_YOFFSET,
+                              self.raster)
         data2 = self.raster.data
         self.assertEqual(data1[0, 0], data2[0, 0])
         self.assertTrue(np.all(data1 == data2))

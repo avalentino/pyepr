@@ -1360,7 +1360,7 @@ cdef class Band:
         def __get__(self):
             return <bint>self._ptr.lines_mirrored
 
-    def get_band_name(self):
+    def get_name(self):
         '''Gets the name of the band'''
 
         return epr_get_band_name(self._ptr)
@@ -1435,8 +1435,7 @@ cdef class Band:
 
         return new_raster(raster_ptr, self)
 
-    cpdef read_band_raster(self, int xoffset=0, int yoffset=0,
-                           Raster raster=None):
+    cpdef read_raster(self, int xoffset=0, int yoffset=0, Raster raster=None):
         '''Reads (geo-)physical values of the band of the specified
         source-region
 
@@ -1537,7 +1536,7 @@ cdef class Band:
                 raise ValueError('yoffset os larger that he scene height')
 
         raster = self.create_compatible_raster(width, height, xstep, ystep)
-        self.read_band_raster(xoffset, yoffset, raster)
+        self.read_raster(xoffset, yoffset, raster)
 
         return raster.data
 
