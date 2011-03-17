@@ -19,6 +19,28 @@
 # You should have received a copy of the GNU General Public License
 # along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
+
+'''Python bindings for ENVISAT Product Reader C API
+
+PyEPR_ provides Python_ bindings for the ENVISAT Product Reader C API
+(`EPR API`_) for reading satellite data from ENVISAT_ ESA_ (European
+Space Agency) mission.
+
+PyEPR_ is fully object oriented and, as well as the `EPR API`_ for C,
+supports ENVISAT_ MERIS, AATSR Level 1B and Level 2 and also ASAR data
+products. It provides access to the data either on a geophysical
+(decoded, ready-to-use pixel samples) or on a raw data layer.
+The raw data access makes it possible to read any data field contained
+in a product file.
+
+.. _PyEPR: https://github.com/avalentino/pyepr
+.. _Python: http://www.python.org
+.. _`EPR API`: https://github.com/bcdev/epr-api
+.. _ENVISAT: http://envisat.esa.int
+.. _ESA: http://earth.esa.int
+
+'''
+
 __revision__ = '$Id$'
 __version__  = '0.2a'
 
@@ -408,12 +430,12 @@ cdef np.NPY_TYPES _epr_to_numpy_type_id(EPR_DataTypeId epr_type):
 
 
 class EPRError(Exception):
-    '''Error in the EPR C API'''
+    '''EPR API error'''
 
     def __init__(self, message='', code=None, *args, **kargs):
         super(EPRError, self).__init__(message, code, *args, **kargs)
 
-        #: error code of the generated in the C library
+        #: EPR API error code
         self.code = code
 
 
