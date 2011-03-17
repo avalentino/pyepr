@@ -834,7 +834,7 @@ cdef class Record:
 
         return epr_get_num_fields(self._ptr)
 
-    def print_record(self, ostream=None):
+    def print_(self, ostream=None):
         '''Write the record to specified file (default: sys.stdout)
 
         This method writes formatted contents of the record to

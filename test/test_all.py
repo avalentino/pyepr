@@ -690,15 +690,15 @@ class TestRecord(unittest.TestCase):
     #        self.assertRaises(ValueError, self.record.dump_element, 0, 150)
 
     @quiet
-    def test_print_record(self):
-        self.record.print_record()
+    def test_print_(self):
+        self.record.print_()
 
     @quiet
-    def test_print_record_ostream(self):
-        self.record.print_record(sys.stderr)
+    def test_print_ostream(self):
+        self.record.print_(sys.stderr)
 
-    def test_print_record_invalid_ostream(self):
-        self.assertRaises(TypeError, self.record.print_record, 'invalid')
+    def test_print_invalid_ostream(self):
+        self.assertRaises(TypeError, self.record.print_, 'invalid')
 
     @quiet
     def test_print_element(self):
