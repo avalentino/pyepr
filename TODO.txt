@@ -9,11 +9,10 @@ PyEPR 0.2
 * test library finalization
 * debug mode (error handlers and logging)
 * suppress compilation warnings
-* improve docs
 * high level interface (package + .so)
 * __str__, __eq__, __ne__, __iter__, __contains__
 * objects caching (with weackref, in case of Raster --> data: check size)
-* better test of print methods (compere with __str__)
+* better test of print methods (compare with __str__)
 
 
 PyEPR 0.3

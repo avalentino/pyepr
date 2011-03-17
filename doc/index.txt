@@ -7,14 +7,15 @@
 .. include:: ../README.txt
 
 
-Other documents
-===============
+Documentation
+=============
 
 .. toctree::
    :maxdepth: 2
 
-   NEWS.txt
-   reference.txt
+   usermanual
+   NEWS
+   reference
 
 
 Indices and tables
