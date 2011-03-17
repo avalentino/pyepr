@@ -43,7 +43,7 @@ distclean: clean
 	$(RM) MANIFEST src/*.c src/*.o *.so
 	#$(RM) tests/*.N1
 	$(MAKE) -C doc clean
-	rmdir doc/_build
+	rm -rf doc/_build
 
 check: epr.so $(TEST_DATSET)
 	cd test && python test_all.py --verbose
