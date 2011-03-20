@@ -15,7 +15,7 @@ the data either on a geophysical (decoded, ready-to-use pixel samples)
 or on a raw data layer. The raw data access makes it possible to read
 any data field contained in a product file.
 
-Full access to the Python EPR API is provided by the ``epr`` module that
+Full access to the Python EPR API is provided by the :mod:`epr` module that
 have to be imported by the client program e-g- as follows::
 
     import epr
@@ -105,7 +105,7 @@ To install PyEPR_ in a non-standard path::
 
     $ python setup.py install --prefix=<TARGET_PATH>
 
-just make sure that ``<TARGET_PATH>/lib/pythonX.Y/site-packages`` is in
+just make sure that :file:`<TARGET_PATH>/lib/pythonX.Y/site-packages` is in
 the ``PYTHONPATH``.
 
 .. _easy_install: http://pypi.python.org/pypi/setuptools#using-setuptools-and-easyinstall
@@ -119,20 +119,20 @@ Testing
 PyEPR_ package comes with a complete test suite but in order to run it
 the ENVISAT sample product used for testing
 ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1__
-have to be downloaded from the ESA_ website, saved in the ``tests``
+have to be downloaded from the ESA_ website, saved in the :file:`test`
 directory and decompressed.
 
 __ http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz
 
 On GNU Linux platforms the following shell commands can be used::
 
-    $ cd pyepr-0.x/tests
+    $ cd pyepr-0.X/test
     $ wget http://earth.esa.int/services/sample_products/asar/IMP/\
       ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz
-    $ guinzip ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1
+    $ gunzip ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1
 
 After installation the test suite can be run using the following command
-in the ``tests`` directory::
+in the :file:`test` directory::
 
     $ python test_all.py
 
@@ -179,7 +179,7 @@ to read a record using the `epr_read_record` function::
     EPR_SRecord* epr_read_record(EPR_SDatasetId* dataset_id, ...);
 
 The function takes a `EPR_SDatasetId` as a parameter and assumes all
-fields (including `dataset->product_id`) are valid.
+fields (including ``dataset->product_id``) are valid.
 It is responsibility of the programmer tho keep all structures valid and
 free them at the right moment and in the correct order.
 
@@ -195,7 +195,7 @@ Even if the *product* variable goes out of scope and is no more directly
 accessible in the program the *dataset* object keeps staying valid since
 it holds an internal reference to the *product* instance it depends on.
 
-When *record* is destroyed automatically also the parent *Product*
+When *record* is destroyed automatically also the parent :class:`Product`
 object is destroyed (assumed there is no other reference to it).
 
 The entire machinery is completely automatic and transparent to the user.
@@ -207,13 +207,13 @@ Arrays
 PyEPR_ uses numpy_ in order to manage efficiently the potentially large
 amount of data contained in ENVISAT_ products.
 
-* `Field.get_field_elems()` return an 1D array containing elements of the
-  field
+* :meth:`epr.Field.get_elems` return an 1D array containing elements of
+  the field
 * the `Raster.data` property is a 2D array exposes data contained in the
-  *Raster* object in form of `numpy.ndarray`
+  :class:`epr.Raster` object in form of :class:`numpy.ndarray`
 
-  .. note:: `Raster.data` directly exposes *Raster* data i.e. shares the
-            same memory buffer with *Raster*::
+  .. note:: :attr:`epr.Raster.data` directly exposes :class:`epr.Raster`
+            data i.e. shares the same memory buffer with :class:`epr.Raster`::
 
                 >>> raster.get_pixel(i, j)
                 5
@@ -223,20 +223,20 @@ amount of data contained in ENVISAT_ products.
                 >>> raster.get_pixel(i, j)
                 3
 
-* Band.read_as_array(...) is an additional method provided by the Python
-  EPR API (does not exist any correspondent function in the C API).
-  It is mainly a facility method that allows users to get access to band
-  data without creating an intermediate *Raster* object.
-  It read a slice of data from the *Band* and returns it as a 2D
-  `numpy.ndarray`.
+* :meth:`epr.Band.read_as_array` is an additional method provided by
+  the Python_ EPR API (does not exist any correspondent function in the
+  C API). It is mainly a facility method that allows users to get access
+  to band data without creating an intermediate :class:`epr.Raster` object.
+  It read a slice of data from the :class:`epr.Band` and returns it as a
+  2D :class:`numpy.ndarray`.
 
 
 Enumerators
 -----------
 
 Python_ does not have *enumerators* at language level.
-Enumerations are simply mapped as module constants that have the same name
-of the C enumerate but are spelled all in capital letters.
+Enumerations are simply mapped as module constants that have the same
+name of the C enumerate but are spelled all in capital letters.
 
 For example:
 
@@ -258,12 +258,13 @@ exposed to python.
 Internal library logging is completely silenced and errors are converted
 to Python_ exceptions.
 Where appropriate standard Python_ exception types are use in other cases
-custom exception types (e.g. *EPRError*, *EPRValueError*) are used.
+custom exception types (e.g. :class:`epr.EPRError`,
+:class:`epr.EPRValueError`) are used.
 
 
 Library initialization
 ----------------------
 
 Differently from the C API library initialization is not needed: it is
-performed internally the first time the *epr* module is imported in
-Python_.
+performed internally the first time the :mod:`epr` module is imported
+in Python_.
