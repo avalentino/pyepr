@@ -1,10 +1,6 @@
 PyEPR TODO
 ==========
 
-
-PyEPR 0.2
----------
-
 * debug mode (error handlers and logging)
 * suppress compilation warnings
 * high level interface (package + .so)
@@ -12,24 +8,8 @@ PyEPR 0.2
 * better test of print methods (compare with __str__)
 * read_bitmask_raster
 * split .pxi, .pxd
-
-
-PyEPR 0.3
----------
-
 * support for multiple version of EPR API (2.2 and 2.1)
 * python 3
-
-
-PyEPR 0.4
----------
-
 * code examples
 * test
 * use a smaller test dataset
-
-
-PyEPR 2.2.0
------------
-
-* final release
