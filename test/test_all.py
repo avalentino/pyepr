@@ -19,6 +19,7 @@
 # along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import re
 import sys
 import unittest
 import functools
@@ -927,23 +928,59 @@ class TestSampleModelFunctions(unittest.TestCase):
 
 
 class TestDirectInstantiation(unittest.TestCase):
+    MSG_PATTERN = '"%s" class cannot be instantiated from Python'
+
+    if sys.version_info[:2] > (3,2):
+        # @COMPATIBILITY: python >= 3.2
+        pass
+    elif sys.version_info[:2] in ((2.7), (3,1)):
+        # @COMPATIBILITY: unittest2, python2.7, python3.1
+        assertRaiserRegex = assertRaiserRegexp
+    else:
+        # @COMPATIBILITY: python < 2.7
+        def assertRaisesRegex(self, expected_exception, expected_regexp,
+                              callable_obj=None, *args, **kwargs):
+            try:
+                callable_obj(*args, **kwargs)
+            except expected_exception, exc_value:
+                if isinstance(expected_regexp, basestring):
+                    expected_regexp = re.compile(expected_regexp)
+                if not expected_regexp.search(str(exc_value)):
+                    raise self.failureException('"%s" does not match "%s"' %
+                             (expected_regexp.pattern, str(exc_value)))
+            else:
+                if hasattr(expected_exception, '__name__'):
+                    excName = expected_exception.__name__
+                else:
+                    excName = str(expected_exception)
+                raise self.failureException, "%s not raised" % excName
+
     def test_direct_dsd_instantiation(self):
-        self.assertRaises(TypeError, epr.DSD)
+        pattern = self.MSG_PATTERN % epr.DSD.__name__
+        self.assertRaisesRegex(TypeError, pattern, epr.DSD)
 
     def test_direct_field_instantiation(self):
-        self.assertRaises(TypeError, epr.Field)
+        pattern = self.MSG_PATTERN % epr.Field.__name__
+        self.assertRaisesRegex(TypeError, pattern, epr.Field)
 
     def test_direct_record_instantiation(self):
-        self.assertRaises(TypeError, epr.Record)
+        pattern = self.MSG_PATTERN % epr.Record.__name__
+        self.assertRaisesRegex(TypeError, pattern, epr.Record)
 
     def test_direct_raster_instantiation(self):
-        self.assertRaises(TypeError, epr.Raster)
+        pattern = self.MSG_PATTERN % epr.Raster.__name__
+        self.assertRaisesRegex(TypeError, pattern, epr.Raster)
 
     def test_direct_band_instantiation(self):
-        self.assertRaises(TypeError, epr.Band)
+        pattern = self.MSG_PATTERN % epr.Band.__name__
+        self.assertRaisesRegex(TypeError, pattern, epr.Band)
 
     def test_direct_dataset_instantiation(self):
-        self.assertRaises(TypeError, epr.Dataset)
+        pattern = self.MSG_PATTERN % epr.Dataset.__name__
+        self.assertRaisesRegex(TypeError, pattern, epr.Dataset)
+
+    def test_direct_Product_instantiation(self):
+        self.assertRaises(ValueError, epr.Product, 'filename')
 
 
 if __name__ == '__main__':
