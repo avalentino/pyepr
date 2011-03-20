@@ -206,6 +206,36 @@ class TestProduct(unittest.TestCase):
     #    self.assertEqual(raster.get_raster_height(), height)
 
 
+class TestProductHighLevelAPI(unittest.TestCase):
+    PRODUCT_FILE = TEST_PRODUCT
+    DATASET_NAMES = [
+        'MDS1_SQ_ADS',
+        'MAIN_PROCESSING_PARAMS_ADS',
+        'DOP_CENTROID_COEFFS_ADS',
+        'SR_GR_ADS',
+        'CHIRP_PARAMS_ADS',
+        'GEOLOCATION_GRID_ADS',
+        'MDS1'
+    ]
+
+    BAND_NAMES = [
+        'slant_range_time',
+        'incident_angle',
+        'latitude',
+        'longitude',
+        'proc_data',
+    ]
+
+    def setUp(self):
+        self.product = epr.Product(self.PRODUCT_FILE)
+
+    def test_get_dataset_names(self):
+        self.assertEqual(self.product.get_dataset_names(), self.DATASET_NAMES)
+
+    def test_get_band_names(self):
+        self.assertEqual(self.product.get_band_names(), self.BAND_NAMES)
+
+
 class TestDataset(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
     DATASET_NAME = 'MDS1'
@@ -733,6 +763,60 @@ class TestRecord(unittest.TestCase):
         index = self.record.get_num_fields() + 10
         self.assertRaises(ValueError, self.record.get_field_at, index)
 
+
+class TestRecordHighLevelAPI(unittest.TestCase):
+    PRODUCT_FILE = TEST_PRODUCT
+    DATASET_NAME = 'MAIN_PROCESSING_PARAMS_ADS'
+    FIELD_NAMES = [
+        'first_zero_doppler_time',
+        'attach_flag',
+        'last_zero_doppler_time',
+        'work_order_id',
+        'time_diff',
+        'swath_id',
+        'range_spacing',
+        'azimuth_spacing',
+        'line_time_interval',
+        'num_output_lines',
+        'num_samples_per_line',
+        'data_type',
+    ]
+
+    def setUp(self):
+        product = epr.Product(self.PRODUCT_FILE)
+        dataset = product.get_dataset(self.DATASET_NAME)
+        self.record = dataset.read_record(0)
+
+    def test_get_field_names_number(self):
+        self.assertEqual(len(self.record.get_field_names()),
+                         self.record.get_num_fields())
+
+    def test_get_field_names(self):
+        self.assertEqual(self.record.get_field_names()[:len(self.FIELD_NAMES)],
+                         self.FIELD_NAMES)
+
+
+class TestMphRecordHighLevelAPI(TestRecordHighLevelAPI):
+    PRODUCT_FILE = TEST_PRODUCT
+    DATASET_NAME = 'MPH'
+    FIELD_NAMES = [
+        'PRODUCT',
+        'PROC_STAGE',
+        'REF_DOC',
+        'ACQUISITION_STATION',
+        'PROC_CENTER',
+        'PROC_TIME',
+        'SOFTWARE_VER',
+        'SENSING_START',
+        'SENSING_STOP',
+        'PHASE',
+        'CYCLE',
+        'REL_ORBIT',
+    ]
+
+    def setUp(self):
+        product = epr.Product(self.PRODUCT_FILE)
+        self.record = product.get_mph()
 
 class TestField(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT

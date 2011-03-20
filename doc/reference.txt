@@ -28,6 +28,9 @@ in a product file.
 Classes
 -------
 
+Product
+~~~~~~~
+
 .. class:: Product
 
    ENVISAT product
@@ -155,6 +158,22 @@ Classes
 
       The :class:`Record` representing the specific product header (SPH)
 
+   .. method:: get_dataset_names
+   
+      Return the list of names of the datasets in the product
+        
+      .. note:: this method has no correspondent in the C API
+
+
+   .. method:: get_band_names
+   
+      Return the list of names of the bands in the product
+
+      .. note:: this method has no correspondent in the C API
+
+
+Dataset
+~~~~~~~
 
 .. class:: Dataset
 
@@ -237,6 +256,9 @@ Classes
             an exception (:class:`EPRValueError`) if an error occurred
 
 
+Record
+~~~~~~
+
 .. class:: Record
 
    Represents a record read from an ENVISAT dataset
@@ -309,6 +331,16 @@ Classes
       .. note:: the *ostream* parameter have to be a *real* file not
                 a generic stream object like :class:`StringIO` instances
 
+
+   .. method:: get_field_names
+   
+      Return the list of names of the fields in the product
+
+      .. note:: this method has no correspondent in the C API
+
+
+Field
+~~~~~
 
 .. class:: Field
 
@@ -385,6 +417,9 @@ Classes
                 a generic stream object like :class:`StringIO` instances
 
 
+DSD
+~~~
+
 .. class:: DSD
 
    Dataset descriptor
@@ -432,6 +467,9 @@ Classes
 
       The number of dataset records for the given dataset name
 
+
+Band
+~~~~
 
 .. class:: Band
 
@@ -682,6 +720,9 @@ Classes
                    :func:`create_raster` and :meth:`Band.read_band_raster`
 
 
+Raster
+~~~~~~
+
 .. class:: Raster
 
    Represents a raster in which data will be stored
@@ -755,6 +796,9 @@ Classes
 
       Gets the raster's width in pixels
 
+
+EPRTime
+~~~~~~~
 
 .. class:: EPRTime
 
@@ -869,6 +913,9 @@ Functions
 Exceptions
 ----------
 
+EPRError
+~~~~~~~~
+
 .. exception:: EPRError
 
    EPR API error
@@ -887,6 +934,9 @@ Exceptions
       :pram code:
             EPR error code
 
+
+EPRValueError
+~~~~~~~~~~~~~
 
 .. exception:: EPRValueError
 
@@ -923,7 +973,7 @@ Sample Models
 .. data:: E_SMOD_2TOF
 
 
-Scalin gMethods
+Scaling Methods
 ~~~~~~~~~~~~~~~
 
 .. data:: E_SMID_NON

@@ -10,6 +10,9 @@ PyEPR 0.2 (in development)
 * renamed some method and parameter in order to avoid redundancies and
   have a more *pythonic*  API
 * in case of null pointers a EPRValueError is raised
+* improved C library shutdown management
+* introduced some utility methods to :class:`epr.Product` and 
+  :class:`epr.Record` classes
 
 
 PyEPR 0.1 (09/03/2011)

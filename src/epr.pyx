@@ -976,6 +976,25 @@ cdef class Record(EprObject):
 
         return new_field(field_ptr, self)
 
+    # @NOTE: high evel interface
+    def get_field_names(self):
+        '''Return the list of names of the fields in the product
+
+        .. note:: this method has no correspondent in the C API
+
+        '''
+
+        cdef EPR_SField* field_ptr
+        cdef int idx
+        names = []
+        for idx in range(self.get_num_fields()):
+            field_ptr = epr_get_field_at(self._ptr, idx)
+            names.append(epr_get_field_name(field_ptr))
+
+        return names
+
+    # @TODO: __iter__ on fields
+
 
 cdef new_record(EPR_SRecord* ptr, object parent=None, bint dealloc=False):
     if ptr is NULL:
@@ -1694,6 +1713,8 @@ cdef class Dataset(EprObject):
 
         return record
 
+    # @TODO: __iter__ on records
+
 
 cdef new_dataset(EPR_SDatasetId* ptr, object parent=None):
     if ptr is NULL:
@@ -1849,6 +1870,23 @@ cdef class Product(EprObject):
 
         return new_dataset(dataset_id, self)
 
+    # @NOTE: high evel interface
+    def get_dataset_names(self):
+        '''Return the list of names of the datasets in the product
+
+        .. note:: this method has no correspondent in the C API
+
+        '''
+
+        cdef EPR_SDatasetId* dataset_ptr
+        cdef int idx
+        names = []
+        for idx in range(self.get_num_datasets()):
+            dataset_ptr = epr_get_dataset_id_at(self._ptr, idx)
+            names.append(epr_get_dataset_name(dataset_ptr))
+
+        return names
+
     def get_dsd_at(self, uint index):
         '''Gets the DSD at the specified position
 
@@ -1927,15 +1965,22 @@ cdef class Product(EprObject):
 
         return new_band(band_id, self)
 
-    # @TODO: add to high evel interface
-    #def get_band_ids(self):
-    #    cdef EPR_SBandId band_ptr
-    #    cder int idx
-    #    names = []
-    #    for idx in range(self.get_num_bands()):
-    #        band_ptr = epr_get_band_id(self._ptr, idx)
-    #        names.apped(epr_get_band_name(band_ptr))
-    #    return names
+    # @NOTE: high evel interface
+    def get_band_names(self):
+        '''Return the list of names of the bands in the product
+
+        .. note:: this method has no correspondent in the C API
+
+        '''
+
+        cdef EPR_SBandId* band_ptr
+        cdef int idx
+        names = []
+        for idx in range(self.get_num_bands()):
+            band_ptr = epr_get_band_id_at(self._ptr, idx)
+            names.append(epr_get_band_name(band_ptr))
+
+        return names
 
     # @TODO: complete and make it more pythonic
     #def read_bitmask_raster(self, bm_expr, int xoffset, int yoffset,
