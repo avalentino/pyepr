@@ -1415,7 +1415,7 @@ cdef class Band(EprObject):
         '''Creates a raster which is compatible with the data type of the band
 
         The created raster is used to read the data in it (see
-        :meth:`Band.read_band_raster`).
+        :meth:`Band.read_raster`).
 
         The raster is defined on the grid of the product, from which the
         data are read. Spatial subsets and under-sampling are possible)
@@ -1564,7 +1564,7 @@ cdef class Band(EprObject):
         sub-class if case of errors
 
         .. seealso:: :meth:`Band.create_compatible_raster`,
-                     :func:`create_raster` and :meth:`Band.read_band_raster`
+                     :func:`create_raster` and :meth:`Band.read_raster`
 
         '''
 

@@ -159,14 +159,14 @@ Product
       The :class:`Record` representing the specific product header (SPH)
 
    .. method:: get_dataset_names
-   
+
       Return the list of names of the datasets in the product
-        
+
       .. note:: this method has no correspondent in the C API
 
 
    .. method:: get_band_names
-   
+
       Return the list of names of the bands in the product
 
       .. note:: this method has no correspondent in the C API
@@ -333,7 +333,7 @@ Record
 
 
    .. method:: get_field_names
-   
+
       Return the list of names of the fields in the product
 
       .. note:: this method has no correspondent in the C API
@@ -600,7 +600,7 @@ Band
       Creates a raster which is compatible with the data type of the band
 
       The created raster is used to read the data in it (see
-      :meth:`Band.read_band_raster`).
+      :meth:`Band.read_raster`).
 
       The raster is defined on the grid of the product, from which the
       data are read. Spatial subsets and under-sampling are possible)
@@ -646,7 +646,7 @@ Band
             (:class:`EPRValueError`) if an error occurred
 
 
-   .. method:: read_band_raster([xoffset, yoffset, raster])
+   .. method:: read_raster([xoffset, yoffset, raster])
 
       Reads (geo-)physical values of the band of the specified
       source-region
@@ -716,8 +716,9 @@ Band
       This method raises an instance of the appropriate :class:`EPRError`
       sub-class if case of errors
 
+      .. note:: this method has no correspondent in the C API
       .. seealso:: :meth:`Band.create_compatible_raster`,
-                   :func:`create_raster` and :meth:`Band.read_band_raster`
+                   :func:`create_raster` and :meth:`Band.read_raster`
 
 
 Raster
@@ -764,6 +765,8 @@ Raster
       .. note:: this property shares the data buffer with the
                 :class:`Raster` object so any change in its contents
                 is also reflected to the :class:`Raster` object
+
+      .. note:: this property has no correspondent in the C API
 
 
    .. method:: get_pixel(x, y)
