@@ -42,7 +42,7 @@ in a product file.
 '''
 
 __revision__ = '$Id$'
-__version__  = '0.2'
+__version__  = '0.3a'
 
 
 cdef extern from 'Python.h':
