@@ -473,18 +473,37 @@ cdef int pyepr_null_ptr_error(msg='null pointer') except -1:
     return -1
 
 
-# library API initialization/finalization
-def _init_api():
-    cdef char* msg
-    #if epr_init_api(e_log_warning, epr_log_message, NULL):
-    if epr_init_api(e_log_warning, NULL, NULL):
-        msg = <char*>epr_get_last_err_message()
-        epr_clear_err()
-        raise ImportError('unable to inizialize EPR API library: %s' % msg)
+cdef class CLib:
+    '''Library object to handle C API initialization/finalization'''
 
-def _close_api():
-    epr_close_api()
-    pyepr_check_errors()
+    def __cinit__(self, *args, **kwargs):
+        cdef char* msg
+        #if epr_init_api(e_log_warning, epr_log_message, NULL):
+        if epr_init_api(e_log_warning, NULL, NULL):
+            msg = <char*>epr_get_last_err_message()
+            epr_clear_err()
+            raise ImportError('unable to inizialize EPR API library: %s' % msg)
+
+    def __dealloc__(self):
+        epr_close_api()
+
+
+# global CLib instance
+cdef CLib _EPR_C_LIB = None
+
+
+cdef class EprObject:
+    cdef object epr_c_lib
+    def __cinit__(self, *ars, **kargs):
+        self.epr_c_lib = _EPR_C_LIB
+
+    def __dealloc__(self):
+        self.epr_c_lib = None
+
+    def __init__(self):
+        raise TypeError('"%s" class cannot be instantiated from Python' %
+                                                    self.__class__.__name__)
+
 
 def get_data_type_size(EPR_EDataTypeId type_id):
     '''Gets the size in bytes for an element of the given data type'''
@@ -528,7 +547,7 @@ def get_sample_model_name(model):
         raise ValueError('invalid sample model: "%s"' % model)
 
 
-cdef class DSD:
+cdef class DSD(EprObject):
     '''Dataset descriptor
 
     The DSD class contains information about the properties of a
@@ -538,10 +557,6 @@ cdef class DSD:
 
     cdef EPR_SDSD* _ptr
     cdef object _parent
-
-    def __init__(self):
-        raise TypeError('"%s" class cannot be instantiated from Python' %
-                                                    self.__class__.__name__)
 
     property index:
         '''The index of this DSD (zero-based)'''
@@ -604,7 +619,7 @@ cdef new_dsd(EPR_SDSD* ptr, object parent=None):
     return instance
 
 
-cdef class Field:
+cdef class Field(EprObject):
     '''Represents a field within a record
 
     A field is composed of one or more data elements of one of the
@@ -616,10 +631,6 @@ cdef class Field:
 
     cdef EPR_SField* _ptr
     cdef object _parent
-
-    def __init__(self):
-        raise TypeError('"%s" class cannot be instantiated from Python' %
-                                                    self.__class__.__name__)
 
     def print_(self, ostream=None):
         '''Write the field to specified file (default: :data:`sys.stdout`)
@@ -826,7 +837,7 @@ cdef new_field(EPR_SField* ptr, object parent=None):
     return instance
 
 
-cdef class Record:
+cdef class Record(EprObject):
     '''Represents a record read from an ENVISAT dataset
 
     A record is composed of multiple fields.
@@ -846,10 +857,6 @@ cdef class Record:
         if self._ptr is not NULL:
             epr_free_record(self._ptr)
             pyepr_check_errors()
-
-    def __init__(self):
-        raise TypeError('"%s" class cannot be instantiated from Python' %
-                                                    self.__class__.__name__)
 
     def get_num_fields(self):
         '''Gets the number of fields contained in the record'''
@@ -983,7 +990,7 @@ cdef new_record(EPR_SRecord* ptr, object parent=None, bint dealloc=False):
     return instance
 
 
-cdef class Raster:
+cdef class Raster(EprObject):
     '''Represents a raster in which data will be stored
 
     All 'size' parameter are in PIXEL.
@@ -997,10 +1004,6 @@ cdef class Raster:
     def __dealloc__(self):
         if self._ptr is not NULL:
             epr_free_raster(self._ptr)
-
-    def __init__(self):
-        raise TypeError('"%s" class cannot be instantiated from Python' %
-                                                    self.__class__.__name__)
 
     property data_type:
         '''The data type of the band's pixels
@@ -1220,7 +1223,7 @@ def create_bitmask_raster(uint src_width, uint src_height,
     return new_raster(raster_ptr)
 
 
-cdef class Band:
+cdef class Band(EprObject):
     '''The band of an ENVISAT product
 
     The Band class contains information about a band within an ENVISAT
@@ -1233,10 +1236,6 @@ cdef class Band:
 
     cdef EPR_SBandId* _ptr
     cdef object _parent
-
-    def __init__(self):
-        raise TypeError('"%s" class cannot be instantiated from Python' %
-                                                    self.__class__.__name__)
 
     property product:
         '''The :class:`Product` instance to which this band belongs to'''
@@ -1582,7 +1581,7 @@ cdef new_band(EPR_SBandId* ptr, object parent=None):
     return instance
 
 
-cdef class Dataset:
+cdef class Dataset(EprObject):
     '''ENVISAT dataset
 
     The Dataset class contains information about a dataset within an
@@ -1596,10 +1595,6 @@ cdef class Dataset:
 
     cdef EPR_SDatasetId* _ptr
     cdef object _parent
-
-    def __init__(self):
-        raise TypeError('"%s" class cannot be instantiated from Python' %
-                                                    self.__class__.__name__)
 
     property product:
         '''The :class:`Product` instance to which this dataset belongs to'''
@@ -1712,7 +1707,7 @@ cdef new_dataset(EPR_SDatasetId* ptr, object parent=None):
     return instance
 
 
-cdef class Product:
+cdef class Product(EprObject):
     '''ENVISAT product
 
     The Product class provides methods and properties to get information
@@ -1725,7 +1720,6 @@ cdef class Product:
     cdef EPR_SProductId* _ptr
 
     def __cinit__(self, filename, *args, **kargs):
-
         Py_BEGIN_ALLOW_THREADS
         self._ptr = epr_open_product(filename)
         Py_END_ALLOW_THREADS
@@ -1737,6 +1731,12 @@ cdef class Product:
         if self._ptr is not NULL:
             epr_close_product(self._ptr)
             pyepr_check_errors()
+
+    def __init__(self, filename):
+        # @NOTE: this method suppresses the default behavior of EprObject
+        #        that is raising an exception when it is instantiated by
+        #        the user.
+        pass
 
     property file_path:
         '''The file's path including the file name'''
@@ -2005,9 +2005,14 @@ def open(filename):
 
     return Product(filename)
 
-# library initialization
-_init_api()
+# library initialization/finalization
+_EPR_C_LIB = CLib()
 
+# @TODO: check
 import atexit
-atexit.register(_close_api)
+
+@atexit.register
+def _close_api():
+    global _EPR_C_LIB
+    _EPR_C_LIB = None
 del atexit
