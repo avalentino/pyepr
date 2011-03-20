@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
+PYTHON = python
 TEST_DATSET_URL = "http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz"
 TEST_DATSET = test/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1
 
@@ -26,18 +27,18 @@ TEST_DATSET = test/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N
 default: epr.so
 
 sdist:
-	python setup.py build_ext --inplace
-	python setup.py clean
+	$(PYTHON) setup.py build_ext --inplace
+	$(PYTHON) setup.py clean
 	$(RM) epr.so
 	$(MAKE) -C doc html
 	$(RM) -r doc/_build
-	python setup.py sdist
+	$(PYTHON) setup.py sdist
 
 doc:
 	$(MAKE) -C doc html
 
 clean:
-	python setup.py clean
+	$(PYTHON) setup.py clean
 	$(RM) src/*.py[co] tests/*.py[co] README.html
 	$(MAKE) -C doc clean
 	$(RM) -r doc/_build
@@ -49,15 +50,15 @@ distclean: clean
 	$(RM) -r doc/html
 
 check: epr.so $(TEST_DATSET)
-	cd test && python test_all.py --verbose
+	cd test && $(PYTHON) test_all.py --verbose
 
 debug:
-	python setup.py build_ext --inplace --debug
+	$(PYTHON) setup.py build_ext --inplace --debug
 
 data: $(TEST_DATSET)
 
 epr.so: src/epr.pyx
-	python setup.py build_ext --inplace
+	$(PYTHON) setup.py build_ext --inplace
 
 $(TEST_DATSET):
 	wget -P test $(TEST_DATSET_URL)
