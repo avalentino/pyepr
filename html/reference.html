@@ -1,0 +1,1413 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API Reference &mdash; PyEPR v0.2a documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.2a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PyEPR v0.2a documentation" href="index.html" />
+    <link rel="next" title="Change history" href="NEWS.html" />
+    <link rel="prev" title="User Manual" href="usermanual.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="NEWS.html" title="Change history"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="usermanual.html" title="User Manual"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyEPR v0.2a documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-epr">
+<span id="api-reference"></span><h1>API Reference<a class="headerlink" href="#module-epr" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> provides <a class="reference external" href="http://www.python.org">Python</a> bindings for the ENVISAT Product Reader C API
+(<a class="reference external" href="https://github.com/bcdev/epr-api">EPR API</a>) for reading satellite data from <a class="reference external" href="http://envisat.esa.int">ENVISAT</a> <a class="reference external" href="http://earth.esa.int">ESA</a> (European
+Space Agency) mission.</p>
+<p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> is fully object oriented and, as well as the <a class="reference external" href="https://github.com/bcdev/epr-api">EPR API</a> for C,
+supports <a class="reference external" href="http://envisat.esa.int">ENVISAT</a> MERIS, AATSR Level 1B and Level 2 and also ASAR data
+products. It provides access to the data either on a geophysical
+(decoded, ready-to-use pixel samples) or on a raw data layer.
+The raw data access makes it possible to read any data field contained
+in a product file.</p>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="product">
+<h3>Product<a class="headerlink" href="#product" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="epr.Product">
+<em class="property">class </em><tt class="descclassname">epr.</tt><tt class="descname">Product</tt><a class="headerlink" href="#epr.Product" title="Permalink to this definition">¶</a></dt>
+<dd><p>ENVISAT product</p>
+<p>The Product class provides methods and properties to get information
+about an ENVISAT product file.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#epr.open" title="epr.open"><tt class="xref py py-func docutils literal"><span class="pre">open()</span></tt></a></p>
+</div>
+<dl class="attribute">
+<dt id="epr.Product.file_path">
+<tt class="descname">file_path</tt><a class="headerlink" href="#epr.Product.file_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>The file&#8217;s path including the file name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Product.id_string">
+<tt class="descname">id_string</tt><a class="headerlink" href="#epr.Product.id_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>The product identifier string obtained from the MPH parameter &#8216;PRODUCT&#8217;</p>
+<p>The first 10 characters of this string identify the product type,
+e.g. &#8220;MER_1P__FR&#8221; for a MERIS Level 1b full resolution product.
+The rest of the string decodes product instance properties.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Product.meris_iodd_version">
+<tt class="descname">meris_iodd_version</tt><a class="headerlink" href="#epr.Product.meris_iodd_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>For MERIS L1b and RR and FR to provide backward compatibility</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Product.tot_size">
+<tt class="descname">tot_size</tt><a class="headerlink" href="#epr.Product.tot_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total size in bytes of the product file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Product.get_band">
+<tt class="descname">get_band</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#epr.Product.get_band" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the band corresponding to the specified name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; the name of the band</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the requested <a class="reference internal" href="#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt></a> instance, or raises a
+<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a> if not found</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Product.get_band_at">
+<tt class="descname">get_band_at</tt><big>(</big><em>index</em><big>)</big><a class="headerlink" href="#epr.Product.get_band_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the band at the specified position within the product</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; the index identifying the position of the band, starting
+with 0, must not be negative</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the requested <a class="reference internal" href="#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt></a> instance, or raises a
+<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a> if not found</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Product.get_dataset">
+<tt class="descname">get_dataset</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#epr.Product.get_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the dataset corresponding to the specified dataset name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; the dataset name</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the requested <a class="reference internal" href="#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">Dataset</span></tt></a> instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Product.get_dataset_at">
+<tt class="descname">get_dataset_at</tt><big>(</big><em>index</em><big>)</big><a class="headerlink" href="#epr.Product.get_dataset_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the dataset at the specified position within the product</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; the index identifying the position of the dataset, starting
+with 0, must not be negative</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the requested <a class="reference internal" href="#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">Dataset</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Product.get_dsd_at">
+<tt class="descname">get_dsd_at</tt><big>(</big><em>index</em><big>)</big><a class="headerlink" href="#epr.Product.get_dsd_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the DSD at the specified position</p>
+<p>Gets the DSD (dataset descriptor) at the specified position
+within the product.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; the index identifying the position of the DSD, starting
+with 0, must not be negative</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the requested <a class="reference internal" href="#epr.DSD" title="epr.DSD"><tt class="xref py py-class docutils literal"><span class="pre">DSD</span></tt></a> instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Product.get_num_bands">
+<tt class="descname">get_num_bands</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.get_num_bands" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the number of all bands contained in a product</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Product.get_num_datasets">
+<tt class="descname">get_num_datasets</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.get_num_datasets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the number of all datasets contained in a product</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Product.get_num_dsds">
+<tt class="descname">get_num_dsds</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.get_num_dsds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the number of all DSDs (dataset descriptors) contained
+in the product</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Product.get_scene_height">
+<tt class="descname">get_scene_height</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.get_scene_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the product&#8217;s scene height in pixels</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Product.get_scene_width">
+<tt class="descname">get_scene_width</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.get_scene_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the product&#8217;s scene width in pixels</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Product.get_mph">
+<tt class="descname">get_mph</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.get_mph" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">Record</span></tt></a> representing the main product header (MPH)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Product.get_sph">
+<tt class="descname">get_sph</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.get_sph" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">Record</span></tt></a> representing the specific product header (SPH)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Product.get_dataset_names">
+<tt class="descname">get_dataset_names</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.get_dataset_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of names of the datasets in the product</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this method has no correspondent in the C API</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Product.get_band_names">
+<tt class="descname">get_band_names</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.get_band_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of names of the bands in the product</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this method has no correspondent in the C API</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="dataset">
+<h3>Dataset<a class="headerlink" href="#dataset" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="epr.Dataset">
+<em class="property">class </em><tt class="descclassname">epr.</tt><tt class="descname">Dataset</tt><a class="headerlink" href="#epr.Dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>ENVISAT dataset</p>
+<p>The Dataset class contains information about a dataset within an
+ENVISAT product file which has been opened with the <a class="reference internal" href="#epr.open" title="epr.open"><tt class="xref py py-func docutils literal"><span class="pre">open()</span></tt></a>
+function.</p>
+<p>A new Dataset instance can be obtained with the
+<a class="reference internal" href="#epr.Product.get_dataset" title="epr.Product.get_dataset"><tt class="xref py py-meth docutils literal"><span class="pre">Product.get_dataset()</span></tt></a> or <a class="reference internal" href="#epr.Product.get_dataset_at" title="epr.Product.get_dataset_at"><tt class="xref py py-meth docutils literal"><span class="pre">Product.get_dataset_at()</span></tt></a> methods.</p>
+<dl class="attribute">
+<dt id="epr.Dataset.description">
+<tt class="descname">description</tt><a class="headerlink" href="#epr.Dataset.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>A short description of the band&#8217;s contents</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Dataset.product">
+<tt class="descname">product</tt><a class="headerlink" href="#epr.Dataset.product" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt></a> instance to which this dataset belongs to</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Dataset.get_name">
+<tt class="descname">get_name</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Dataset.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the name of the dataset</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Dataset.get_dsd">
+<tt class="descname">get_dsd</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Dataset.get_dsd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the dataset descriptor (DSD)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Dataset.get_dsd_name">
+<tt class="descname">get_dsd_name</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Dataset.get_dsd_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the name of the DSD (dataset descriptor)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Dataset.get_num_records">
+<tt class="descname">get_num_records</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Dataset.get_num_records" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the number of records of the dataset</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Dataset.create_record">
+<tt class="descname">create_record</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Dataset.create_record" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new record</p>
+<p>Creates a new, empty record with a structure compatible with
+the dataset. Such a record is typically used in subsequent
+calls to <a class="reference internal" href="#epr.Dataset.read_record" title="epr.Dataset.read_record"><tt class="xref py py-meth docutils literal"><span class="pre">Dataset.read_record()</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the new record instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Dataset.read_record">
+<tt class="descname">read_record</tt><big>(</big><em>index</em><span class="optional">[</span>, <em>record</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.Dataset.read_record" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads specified record of the dataset</p>
+<p>The record is identified through the given zero-based record
+index. In order to reduce memory reallocation, a record
+(pre-)created by the method <a class="reference internal" href="#epr.Dataset.create_record" title="epr.Dataset.create_record"><tt class="xref py py-meth docutils literal"><span class="pre">Dataset.create_record()</span></tt></a> can
+be passed to this method.
+Data is then read into this given record.</p>
+<p>If no record (<tt class="xref docutils literal"><span class="pre">None</span></tt>) is given, the method initiates a new
+one.</p>
+<p>In both cases, the record in which the data is read into will
+be  returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>index</strong> &#8211; the zero-based record index</li>
+<li><strong>record</strong> &#8211; a pre-created record to reduce memory reallocation, can be
+<tt class="xref docutils literal"><span class="pre">None</span></tt> (default) to let the function allocate a new
+record</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the record in which the data has been read into or raises
+an exception (<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a>) if an error occurred</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="record">
+<h3>Record<a class="headerlink" href="#record" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="epr.Record">
+<em class="property">class </em><tt class="descclassname">epr.</tt><tt class="descname">Record</tt><a class="headerlink" href="#epr.Record" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a record read from an ENVISAT dataset</p>
+<p>A record is composed of multiple fields.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">Field</span></tt></a></p>
+</div>
+<dl class="method">
+<dt id="epr.Record.get_field">
+<tt class="descname">get_field</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#epr.Record.get_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a field specified by name</p>
+<p>The field is here identified through the given name.
+It contains the field info and all corresponding values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; the the name of required field</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the specified <a class="reference internal" href="#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">Field</span></tt></a> or raises an exception
+(<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a>) if an error occurred</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Record.get_field_at">
+<tt class="descname">get_field_at</tt><big>(</big><em>index</em><big>)</big><a class="headerlink" href="#epr.Record.get_field_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a field at the specified position within the record</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; the zero-based index (position within record) of the field</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the field or raises and exception (<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a>)
+if an error occurred</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Record.get_num_fields">
+<tt class="descname">get_num_fields</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Record.get_num_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the number of fields contained in the record</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Record.print_">
+<tt class="descname">print_</tt><big>(</big><span class="optional">[</span><em>ostream</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.Record.print_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the record to specified file (default: <tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt>)</p>
+<p>This method writes formatted contents of the record to
+specified <em>ostream</em> text file or (default) the ASCII output
+is be printed to standard output (<tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt>)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ostream</strong> &#8211; the (opened) output file object</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the <em>ostream</em> parameter have to be a <em>real</em> file not
+a generic stream object like <tt class="xref py py-class docutils literal"><span class="pre">StringIO</span></tt> instances</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Record.print_element">
+<tt class="descname">print_element</tt><big>(</big><em>field_index</em>, <em>element_index</em><span class="optional">[</span>, <em>ostream</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.Record.print_element" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the specified field element to file (default: <tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt>)</p>
+<p>This method writes formatted contents of the specified field
+element to the <em>ostream</em> text file or (default) the ASCII output
+will be printed to standard output (<tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt>)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>field_index</strong> &#8211; the index of field in the record</li>
+<li><strong>element_index</strong> &#8211; the index of element in the specified field</li>
+<li><strong>ostream</strong> &#8211; the (opened) output file object</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the <em>ostream</em> parameter have to be a <em>real</em> file not
+a generic stream object like <tt class="xref py py-class docutils literal"><span class="pre">StringIO</span></tt> instances</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Record.get_field_names">
+<tt class="descname">get_field_names</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Record.get_field_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of names of the fields in the product</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this method has no correspondent in the C API</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="field">
+<h3>Field<a class="headerlink" href="#field" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="epr.Field">
+<em class="property">class </em><tt class="descclassname">epr.</tt><tt class="descname">Field</tt><a class="headerlink" href="#epr.Field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a field within a record</p>
+<p>A field is composed of one or more data elements of one of the
+types defined in the internal <tt class="docutils literal"><span class="pre">field_info</span></tt> structure.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">Record</span></tt></a></p>
+</div>
+<dl class="method">
+<dt id="epr.Field.get_description">
+<tt class="descname">get_description</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Field.get_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the description of the field</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Field.get_name">
+<tt class="descname">get_name</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Field.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the name of the field</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Field.get_num_elems">
+<tt class="descname">get_num_elems</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Field.get_num_elems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the number of elements of the field</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Field.get_type">
+<tt class="descname">get_type</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Field.get_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the type of the field</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Field.get_unit">
+<tt class="descname">get_unit</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Field.get_unit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the unit of the field</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Field.get_elem">
+<tt class="descname">get_elem</tt><big>(</big><span class="optional">[</span><em>index</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.Field.get_elem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field single element access</p>
+<p>This function is for getting the elements of a field.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; the zero-based index of element to be returned, must not be
+negative. Default: 0.</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the typed value from given field</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Field.get_elems">
+<tt class="descname">get_elems</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Field.get_elems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field array element access</p>
+<p>This function is for getting an array of field elements of the
+field.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the data array (<tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt>) having the type of
+the field</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Field.print_">
+<tt class="descname">print_</tt><big>(</big><span class="optional">[</span><em>ostream</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.Field.print_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the field to specified file (default: <tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt>)</p>
+<p>This method writes formatted contents of the field to
+specified <em>ostream</em> text file or (default) the ASCII output
+is be printed to standard output (<tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt>)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ostream</strong> &#8211; the (opened) output file object</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the <em>ostream</em> parameter have to be a <em>real</em> file not
+a generic stream object like <tt class="xref py py-class docutils literal"><span class="pre">StringIO</span></tt> instances</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="dsd">
+<h3>DSD<a class="headerlink" href="#dsd" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="epr.DSD">
+<em class="property">class </em><tt class="descclassname">epr.</tt><tt class="descname">DSD</tt><a class="headerlink" href="#epr.DSD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dataset descriptor</p>
+<p>The DSD class contains information about the properties of a
+dataset and its location within an ENVISAT product file</p>
+<dl class="attribute">
+<dt id="epr.DSD.ds_name">
+<tt class="descname">ds_name</tt><a class="headerlink" href="#epr.DSD.ds_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dataset name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.DSD.ds_offset">
+<tt class="descname">ds_offset</tt><a class="headerlink" href="#epr.DSD.ds_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>The offset of dataset-information the product file</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.DSD.ds_size">
+<tt class="descname">ds_size</tt><a class="headerlink" href="#epr.DSD.ds_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of dataset-information in dataset product file</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.DSD.ds_type">
+<tt class="descname">ds_type</tt><a class="headerlink" href="#epr.DSD.ds_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dataset type descriptor</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.DSD.dsr_size">
+<tt class="descname">dsr_size</tt><a class="headerlink" href="#epr.DSD.dsr_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of dataset record for the given dataset name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.DSD.filename">
+<tt class="descname">filename</tt><a class="headerlink" href="#epr.DSD.filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>The filename in the DDDB with the description of this dataset</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.DSD.index">
+<tt class="descname">index</tt><a class="headerlink" href="#epr.DSD.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index of this DSD (zero-based)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.DSD.num_dsr">
+<tt class="descname">num_dsr</tt><a class="headerlink" href="#epr.DSD.num_dsr" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of dataset records for the given dataset name</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="band">
+<h3>Band<a class="headerlink" href="#band" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="epr.Band">
+<em class="property">class </em><tt class="descclassname">epr.</tt><tt class="descname">Band</tt><a class="headerlink" href="#epr.Band" title="Permalink to this definition">¶</a></dt>
+<dd><p>The band of an ENVISAT product</p>
+<p>The Band class contains information about a band within an ENVISAT
+product file which has been opened with the <a class="reference internal" href="#epr.open" title="epr.open"><tt class="xref py py-func docutils literal"><span class="pre">open()</span></tt></a> function.</p>
+<p>A new Band instance can be obtained with the <a class="reference internal" href="#epr.Product.get_band" title="epr.Product.get_band"><tt class="xref py py-meth docutils literal"><span class="pre">Product.get_band()</span></tt></a>
+method.</p>
+<dl class="attribute">
+<dt id="epr.Band.bm_expr">
+<tt class="descname">bm_expr</tt><a class="headerlink" href="#epr.Band.bm_expr" title="Permalink to this definition">¶</a></dt>
+<dd><p>A bit-mask expression used to filter valid pixels</p>
+<p>All others are set to zero</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Band.data_type">
+<tt class="descname">data_type</tt><a class="headerlink" href="#epr.Band.data_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The data type of the band&#8217;s pixels</p>
+<p>Possible values are:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">*</span></tt>         &#8211;&gt; the datatype remains unchanged.</li>
+<li><tt class="docutils literal"><span class="pre">uint8_t</span></tt>   &#8211;&gt; 8-bit unsigned integer</li>
+<li><tt class="docutils literal"><span class="pre">uint32_t</span></tt>  &#8211;&gt; 32-bit unsigned integer</li>
+<li><tt class="docutils literal"><span class="pre">Float</span></tt>     &#8211;&gt; 32-bit IEEE floating point</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Band.description">
+<tt class="descname">description</tt><a class="headerlink" href="#epr.Band.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>A short description of the band&#8217;s contents</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Band.lines_mirrored">
+<tt class="descname">lines_mirrored</tt><a class="headerlink" href="#epr.Band.lines_mirrored" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mirrored lines flag</p>
+<p>If true (=1) lines will be mirrored (flipped) after read into a
+raster in order to ensure a pixel ordering in raster X direction
+from WEST to EAST.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Band.product">
+<tt class="descname">product</tt><a class="headerlink" href="#epr.Band.product" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt></a> instance to which this band belongs to</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Band.sample_model">
+<tt class="descname">sample_model</tt><a class="headerlink" href="#epr.Band.sample_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sample model operation</p>
+<p>The sample model operation applied to the source dataset for
+getting the correct samples from the MDS (for example MERIS L2).</p>
+<p>Possible values are:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">*</span></tt>     &#8211;&gt; no operation (direct copy)</li>
+<li><tt class="docutils literal"><span class="pre">1OF2</span></tt>  &#8211;&gt; first byte of 2-byte interleaved MDS</li>
+<li><tt class="docutils literal"><span class="pre">2OF2</span></tt>  &#8211;&gt; second byte of 2-byte interleaved MDS</li>
+<li><tt class="docutils literal"><span class="pre">0123</span></tt>  &#8211;&gt; combine 3-bytes interleaved to 4-byte integer</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Band.scaling_factor">
+<tt class="descname">scaling_factor</tt><a class="headerlink" href="#epr.Band.scaling_factor" title="Permalink to this definition">¶</a></dt>
+<dd><p>The scaling factor</p>
+<p>Possible values are:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">*</span></tt> &#8211;&gt; no factor provided (implies scaling_method=*)</li>
+<li><tt class="docutils literal"><span class="pre">const</span></tt> &#8211;&gt; a floating point constant</li>
+<li><tt class="docutils literal"><span class="pre">GADS.field[.field2]</span></tt> &#8211;&gt; value is provided in global
+annotation dataset with name <cite>GADS</cite> in field <cite>field`</cite>.
+Optionally a second element index for multiple-element fields
+can be given too</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Band.scaling_method">
+<tt class="descname">scaling_method</tt><a class="headerlink" href="#epr.Band.scaling_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>The scaling method which must be applied to the raw source data
+in order to get the &#8216;real&#8217; pixel values in geo-physical units.</p>
+<p>Possible values are:</p>
+<ul>
+<li><p class="first"><tt class="docutils literal"><span class="pre">*</span></tt>            &#8211;&gt; no scaling applied</p>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">Linear_Scale</span></tt> &#8211;&gt; linear scaling applied:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">y</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">scale</span> <span class="o">*</span> <span class="n">x</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><tt class="docutils literal"><span class="pre">Log_Scale</span></tt>    &#8211;&gt; logarithmic scaling applied:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">y</span> <span class="o">=</span> <span class="n">log10</span><span class="p">(</span><span class="n">offset</span> <span class="o">+</span> <span class="n">scale</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Band.scaling_offset">
+<tt class="descname">scaling_offset</tt><a class="headerlink" href="#epr.Band.scaling_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Possible values are:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">*</span></tt> &#8211;&gt; no offset provided (implies scaling_method=*)</li>
+<li><tt class="docutils literal"><span class="pre">const</span></tt> &#8211;&gt; a floating point constant</li>
+<li><tt class="docutils literal"><span class="pre">GADS.field[.field2]`</span> <span class="pre">--&gt;</span> <span class="pre">value</span> <span class="pre">is</span> <span class="pre">provided</span> <span class="pre">in</span> <span class="pre">global</span>
+<span class="pre">annotation</span> <span class="pre">dataset</span> <span class="pre">with</span> <span class="pre">name</span> <span class="pre">``GADS</span></tt> in field <tt class="docutils literal"><span class="pre">field</span></tt>.
+Optionally a second element index for multiple-element fields
+can be given too</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Band.spectr_band_index">
+<tt class="descname">spectr_band_index</tt><a class="headerlink" href="#epr.Band.spectr_band_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>The (zero-based) spectral band index</p>
+<blockquote>
+<div>-1 if this is not a spectral band</div></blockquote>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Band.unit">
+<tt class="descname">unit</tt><a class="headerlink" href="#epr.Band.unit" title="Permalink to this definition">¶</a></dt>
+<dd><p>The geophysical unit for the band&#8217;s pixel values</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Band.get_name">
+<tt class="descname">get_name</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Band.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the name of the band</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Band.create_compatible_raster">
+<tt class="descname">create_compatible_raster</tt><big>(</big><em>src_width</em>, <em>src_height</em><span class="optional">[</span>, <em>xstep</em>, <em>ystep</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.Band.create_compatible_raster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a raster which is compatible with the data type of the band</p>
+<p>The created raster is used to read the data in it (see
+<a class="reference internal" href="#epr.Band.read_raster" title="epr.Band.read_raster"><tt class="xref py py-meth docutils literal"><span class="pre">Band.read_raster()</span></tt></a>).</p>
+<p>The raster is defined on the grid of the product, from which the
+data are read. Spatial subsets and under-sampling are possible)
+through the parameter of the method.</p>
+<p>A raster is an object that allows direct access to data of a
+certain portion of the ENVISAT product that are read into the it.
+Such a portion is called the source. The complete ENVISAT product
+can be much greater than the source. One can move the raster over
+the complete ENVISAT product and read in turn different parts
+(always of the size of the source) of it into the raster.
+The source is specified by the parameters <em>height</em> and <em>width</em>.</p>
+<p>A typical example is a processing in blocks. Lets say, a block
+has 64x32 pixel. Then, my source has a width of 64 pixel and a
+height of 32 pixel.</p>
+<p>Another example is a processing of complete image lines. Then,
+my source has a widths of the complete product (for example 1121
+for a MERIS RR product), and a height of 1). One can loop over
+all blocks read into the raster and process it.</p>
+<p>In addition, it is possible to defined a sub-sampling step for
+a raster. This means, that the source is not read 1:1 into the
+raster, but that only every 2nd or 3rd pixel is read. This step
+can be set differently for the across track (source_step_x) and
+along track (source_step_y) directions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>src_width</strong> &#8211; the width (across track dimension) of the source to be read
+into the raster</li>
+<li><strong>src_height</strong> &#8211; the height (along track dimension) of the source to be read
+into the raster</li>
+<li><strong>xstep</strong> &#8211; the sub-sampling step across track of the source when reading
+into the raster. Default 1.</li>
+<li><strong>ystep</strong> &#8211; the sub-sampling step along track of the source when reading
+into the raster. Default 1.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the new raster instance or raises an exception
+(<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a>) if an error occurred</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Band.read_raster">
+<tt class="descname">read_raster</tt><big>(</big><span class="optional">[</span><em>xoffset</em>, <em>yoffset</em>, <em>raster</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.Band.read_raster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads (geo-)physical values of the band of the specified
+source-region</p>
+<p>The source-region is a defined part of the whole ENVISAT product
+image, which shall be read into a raster.
+In this routine the co-ordinates are specified, where the
+source-region to be read starts.
+The dimension of the region and the sub-sampling are attributes
+of the raster into which the data are read.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>xoffset</strong> &#8211; across-track source co-ordinate in pixel co-ordinates
+(zero-based) of the upper right corner of the source-region.
+Default 0.</li>
+<li><strong>yoffset</strong> &#8211; along-track source co-ordinate in pixel co-ordinates
+(zero-based) of the upper right corner of the source-region.
+Default 0.</li>
+<li><strong>raster</strong> &#8211; <a class="reference internal" href="#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">Raster</span></tt></a> instance set with appropriate parameters to
+read into. If not provided a new <a class="reference internal" href="#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">Raster</span></tt></a> is instantiated</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the <a class="reference internal" href="#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">Raster</span></tt></a> instance in which data are read</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This method raises an instance of the appropriate <a class="reference internal" href="#epr.EPRError" title="epr.EPRError"><tt class="xref py py-class docutils literal"><span class="pre">EPRError</span></tt></a>
+sub-class if case of errors</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#epr.Band.create_compatible_raster" title="epr.Band.create_compatible_raster"><tt class="xref py py-meth docutils literal"><span class="pre">Band.create_compatible_raster()</span></tt></a> and
+<a class="reference internal" href="#epr.create_raster" title="epr.create_raster"><tt class="xref py py-func docutils literal"><span class="pre">create_raster()</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Band.read_as_array">
+<tt class="descname">read_as_array</tt><big>(</big><span class="optional">[</span><em>width</em>, <em>height</em>, <em>xoffset</em>, <em>yoffset</em>, <em>xstep</em>, <em>ystep</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.Band.read_as_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the specified source region as an <tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></p>
+<p>The source-region is a defined part of the whole ENVISAT product
+image, which shall be read into a raster.
+In this routine the co-ordinates are specified, where the
+source-region to be read starts.
+The dimension of the region and the sub-sampling are attributes
+of the raster into which the data are read.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>src_width</strong> &#8211; the width (across track dimension) of the source to be read
+into the raster. If not provided reads as much as possible</li>
+<li><strong>src_height</strong> &#8211; the height (along track dimension) of the source to be read
+into the raster, If not provided reads as much as possible</li>
+<li><strong>xoffset</strong> &#8211; across-track source co-ordinate in pixel co-ordinates
+(zero-based) of the upper right corner of the source-region.
+Default 0.</li>
+<li><strong>yoffset</strong> &#8211; along-track source co-ordinate in pixel co-ordinates
+(zero-based) of the upper right corner of the source-region.
+Default 0.</li>
+<li><strong>xstep</strong> &#8211; the sub-sampling step across track of the source when reading
+into the raster. Default 1</li>
+<li><strong>ystep</strong> &#8211; the sub-sampling step along track of the source when reading
+into the raster. Default 1</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the <tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt> instance in which data are read</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This method raises an instance of the appropriate <a class="reference internal" href="#epr.EPRError" title="epr.EPRError"><tt class="xref py py-class docutils literal"><span class="pre">EPRError</span></tt></a>
+sub-class if case of errors</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this method has no correspondent in the C API</p>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#epr.Band.create_compatible_raster" title="epr.Band.create_compatible_raster"><tt class="xref py py-meth docutils literal"><span class="pre">Band.create_compatible_raster()</span></tt></a>,
+<a class="reference internal" href="#epr.create_raster" title="epr.create_raster"><tt class="xref py py-func docutils literal"><span class="pre">create_raster()</span></tt></a> and <a class="reference internal" href="#epr.Band.read_raster" title="epr.Band.read_raster"><tt class="xref py py-meth docutils literal"><span class="pre">Band.read_raster()</span></tt></a></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="raster">
+<h3>Raster<a class="headerlink" href="#raster" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="epr.Raster">
+<em class="property">class </em><tt class="descclassname">epr.</tt><tt class="descname">Raster</tt><a class="headerlink" href="#epr.Raster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a raster in which data will be stored</p>
+<p>All &#8216;size&#8217; parameter are in PIXEL.</p>
+<dl class="attribute">
+<dt id="epr.Raster.data_type">
+<tt class="descname">data_type</tt><a class="headerlink" href="#epr.Raster.data_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The data type of the band&#8217;s pixels</p>
+<p>All <tt class="docutils literal"><span class="pre">E_TID_*</span></tt> types are possible</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Raster.source_height">
+<tt class="descname">source_height</tt><a class="headerlink" href="#epr.Raster.source_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>The height of the source</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Raster.source_width">
+<tt class="descname">source_width</tt><a class="headerlink" href="#epr.Raster.source_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>The width of the source</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Raster.source_step_x">
+<tt class="descname">source_step_x</tt><a class="headerlink" href="#epr.Raster.source_step_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sub-sampling for the across-track direction in pixel</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Raster.source_step_y">
+<tt class="descname">source_step_y</tt><a class="headerlink" href="#epr.Raster.source_step_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sub-sampling for the along-track direction in pixel</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="epr.Raster.data">
+<tt class="descname">data</tt><a class="headerlink" href="#epr.Raster.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raster data exposed as <tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt> object</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this property shares the data buffer with the
+<a class="reference internal" href="#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">Raster</span></tt></a> object so any change in its contents
+is also reflected to the <a class="reference internal" href="#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">Raster</span></tt></a> object</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this property has no correspondent in the C API</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Raster.get_pixel">
+<tt class="descname">get_pixel</tt><big>(</big><em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#epr.Raster.get_pixel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Single pixel access</p>
+<p>This function is for getting the values of the elements of a
+raster (i.e. pixel)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> &#8211; the (zero-based) X coordinate of the pixel</li>
+<li><strong>y</strong> &#8211; the (zero-based) Y coordinate of the pixel</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the typed value at the given co-ordinate</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Raster.get_elem_size">
+<tt class="descname">get_elem_size</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Raster.get_elem_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size in byte of a single element (sample) of this raster&#8217;s
+buffer</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Raster.get_height">
+<tt class="descname">get_height</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Raster.get_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the raster&#8217;s height in pixels</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Raster.get_width">
+<tt class="descname">get_width</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Raster.get_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the raster&#8217;s width in pixels</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="eprtime">
+<h3>EPRTime<a class="headerlink" href="#eprtime" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="epr.EPRTime">
+<em class="property">class </em><tt class="descclassname">epr.</tt><tt class="descname">EPRTime</tt><a class="headerlink" href="#epr.EPRTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience class for time data exchange.</p>
+<p>EPRTime is a <tt class="xref py py-class docutils literal"><span class="pre">collections.namedtuple</span></tt> with the following fields:</p>
+<dl class="attribute">
+<dt id="epr.EPRTime.days">
+<tt class="descname">days</tt><a class="headerlink" href="#epr.EPRTime.days" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="epr.EPRTime.seconds">
+<tt class="descname">seconds</tt><a class="headerlink" href="#epr.EPRTime.seconds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="epr.EPRTime.microseconds">
+<tt class="descname">microseconds</tt><a class="headerlink" href="#epr.EPRTime.microseconds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="epr.open">
+<tt class="descclassname">epr.</tt><tt class="descname">open</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#epr.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opens the ENVISAT product</p>
+<p>Opens the ENVISAT product file with the given file path, reads MPH,
+SPH and all DSDs, organized the table with parameter of line length
+and tie points number.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>product_file_path</strong> &#8211; the path to the ENVISAT product file</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the <a class="reference internal" href="#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt></a> instance representing the specified
+product. An exception (<tt class="xref py py-class docutils literal"><span class="pre">ValueError</span></tt>) is raised if the
+file could not be opened.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="epr.data_type_id_to_str">
+<tt class="descclassname">epr.</tt><tt class="descname">data_type_id_to_str</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.data_type_id_to_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the &#8216;C&#8217; data type string for the given data type</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="epr.get_data_type_size">
+<tt class="descclassname">epr.</tt><tt class="descname">get_data_type_size</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.get_data_type_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the size in bytes for an element of the given data type</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="epr.get_sample_model_name">
+<tt class="descclassname">epr.</tt><tt class="descname">get_sample_model_name</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.get_sample_model_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name of the specified sample model</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="epr.get_scaling_method_name">
+<tt class="descclassname">epr.</tt><tt class="descname">get_scaling_method_name</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.get_scaling_method_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name of the specified scaling method</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="epr.create_raster">
+<tt class="descclassname">epr.</tt><tt class="descname">create_raster</tt><big>(</big><em>data_type</em>, <em>src_width</em>, <em>src_height</em><span class="optional">[</span>, <em>xstep</em>, <em>ystep</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.create_raster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a raster of the specified data type</p>
+<p>This function can be used to create any type of raster, e.g. for
+later use as a bit-mask.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data_type</strong> &#8211; <p>the type of the data to stored in the raster, must be one of
+E_TID_*.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#data-type-identifiers">Data type Identifiers</a></p>
+</div>
+</li>
+<li><strong>src_width</strong> &#8211; the width (across track dimension) of the source to be read
+into the raster.
+See description of <a class="reference internal" href="#epr.Band.create_compatible_raster" title="epr.Band.create_compatible_raster"><tt class="xref py py-meth docutils literal"><span class="pre">Band.create_compatible_raster()</span></tt></a></li>
+<li><strong>src_height</strong> &#8211; the height (along track dimension) of the source to be read
+into the raster.
+See description of <a class="reference internal" href="#epr.Band.create_compatible_raster" title="epr.Band.create_compatible_raster"><tt class="xref py py-meth docutils literal"><span class="pre">Band.create_compatible_raster()</span></tt></a></li>
+<li><strong>xstep</strong> &#8211; the sub-sampling step across track of the source when reading
+into the raster. Default 1.</li>
+<li><strong>ystep</strong> &#8211; the sub-sampling step along track of the source when reading
+into the raster. Default 1.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the new <a class="reference internal" href="#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">Raster</span></tt></a> instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">description of <a class="reference internal" href="#epr.Band.create_compatible_raster" title="epr.Band.create_compatible_raster"><tt class="xref py py-meth docutils literal"><span class="pre">Band.create_compatible_raster()</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="epr.create_bitmask_raster">
+<tt class="descclassname">epr.</tt><tt class="descname">create_bitmask_raster</tt><big>(</big><em>src_width</em>, <em>src_height</em><span class="optional">[</span>, <em>xstep</em>, <em>ystep</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.create_bitmask_raster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a raster to be used for reading bitmasks</p>
+<p>The raster returned always is of type <tt class="docutils literal"><span class="pre">byte</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>src_width</strong> &#8211; the width (across track dimension) of the source to be read
+into the raster</li>
+<li><strong>src_height</strong> &#8211; the height (along track dimension) of the source to be read
+into the raster</li>
+<li><strong>xstep</strong> &#8211; the sub-sampling step across track of the source when reading
+into the raster. Default 1.</li>
+<li><strong>ystep</strong> &#8211; the sub-sampling step along track of the source when reading
+into the raster. Default 1.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the new raster instance or raises an exception
+(<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a>) if an error occurred</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">the description of <a class="reference internal" href="#epr.Band.create_compatible_raster" title="epr.Band.create_compatible_raster"><tt class="xref py py-meth docutils literal"><span class="pre">Band.create_compatible_raster()</span></tt></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="eprerror">
+<h3>EPRError<a class="headerlink" href="#eprerror" title="Permalink to this headline">¶</a></h3>
+<dl class="exception">
+<dt id="epr.EPRError">
+<em class="property">exception </em><tt class="descclassname">epr.</tt><tt class="descname">EPRError</tt><a class="headerlink" href="#epr.EPRError" title="Permalink to this definition">¶</a></dt>
+<dd><p>EPR API error</p>
+<dl class="attribute">
+<dt id="epr.EPRError.code">
+<tt class="descname">code</tt><a class="headerlink" href="#epr.EPRError.code" title="Permalink to this definition">¶</a></dt>
+<dd><p>EPR API error code</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.EPRError.__init__">
+<tt class="descname">__init__</tt><big>(</big><span class="optional">[</span><em>message</em><span class="optional">[</span>, <em>code</em>, <em>*args</em>, <em>**kwargs</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.EPRError.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message</strong> &#8211; error message</td>
+</tr>
+<tr class="field"><th class="field-name">Pram code:</th><td class="field-body">EPR error code</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="eprvalueerror">
+<h3>EPRValueError<a class="headerlink" href="#eprvalueerror" title="Permalink to this headline">¶</a></h3>
+<dl class="exception">
+<dt id="epr.EPRValueError">
+<em class="property">exception </em><tt class="descclassname">epr.</tt><tt class="descname">EPRValueError</tt><a class="headerlink" href="#epr.EPRValueError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inherits both <a class="reference internal" href="#epr.EPRError" title="epr.EPRError"><tt class="xref py py-class docutils literal"><span class="pre">EPRError</span></tt></a> and standard <tt class="xref py py-class docutils literal"><span class="pre">ValueError</span></tt></p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="data">
+<h2>Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="data-type-identifiers">
+<h3>Data type identifiers<a class="headerlink" href="#data-type-identifiers" title="Permalink to this headline">¶</a></h3>
+<dl class="data">
+<dt id="epr.E_TID_UNKNOWN">
+<tt class="descclassname">epr.</tt><tt class="descname">E_TID_UNKNOWN</tt><a class="headerlink" href="#epr.E_TID_UNKNOWN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="epr.E_TID_UCHAR">
+<tt class="descclassname">epr.</tt><tt class="descname">E_TID_UCHAR</tt><a class="headerlink" href="#epr.E_TID_UCHAR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="epr.E_TID_CHAR">
+<tt class="descclassname">epr.</tt><tt class="descname">E_TID_CHAR</tt><a class="headerlink" href="#epr.E_TID_CHAR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="epr.E_TID_USHORT">
+<tt class="descclassname">epr.</tt><tt class="descname">E_TID_USHORT</tt><a class="headerlink" href="#epr.E_TID_USHORT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="epr.E_TID_SHORT">
+<tt class="descclassname">epr.</tt><tt class="descname">E_TID_SHORT</tt><a class="headerlink" href="#epr.E_TID_SHORT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="epr.E_TID_UINT">
+<tt class="descclassname">epr.</tt><tt class="descname">E_TID_UINT</tt><a class="headerlink" href="#epr.E_TID_UINT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="epr.E_TID_INT">
+<tt class="descclassname">epr.</tt><tt class="descname">E_TID_INT</tt><a class="headerlink" href="#epr.E_TID_INT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="epr.E_TID_FLOAT">
+<tt class="descclassname">epr.</tt><tt class="descname">E_TID_FLOAT</tt><a class="headerlink" href="#epr.E_TID_FLOAT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="epr.E_TID_DOUBLE">
+<tt class="descclassname">epr.</tt><tt class="descname">E_TID_DOUBLE</tt><a class="headerlink" href="#epr.E_TID_DOUBLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="epr.E_TID_STRING">
+<tt class="descclassname">epr.</tt><tt class="descname">E_TID_STRING</tt><a class="headerlink" href="#epr.E_TID_STRING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="epr.E_TID_SPARE">
+<tt class="descclassname">epr.</tt><tt class="descname">E_TID_SPARE</tt><a class="headerlink" href="#epr.E_TID_SPARE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="epr.E_TID_TIME">
+<tt class="descclassname">epr.</tt><tt class="descname">E_TID_TIME</tt><a class="headerlink" href="#epr.E_TID_TIME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="sample-models">
+<h3>Sample Models<a class="headerlink" href="#sample-models" title="Permalink to this headline">¶</a></h3>
+<dl class="data">
+<dt id="epr.E_SMOD_1OF1">
+<tt class="descclassname">epr.</tt><tt class="descname">E_SMOD_1OF1</tt><a class="headerlink" href="#epr.E_SMOD_1OF1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="epr.E_SMOD_1OF2">
+<tt class="descclassname">epr.</tt><tt class="descname">E_SMOD_1OF2</tt><a class="headerlink" href="#epr.E_SMOD_1OF2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="epr.E_SMOD_2OF2">
+<tt class="descclassname">epr.</tt><tt class="descname">E_SMOD_2OF2</tt><a class="headerlink" href="#epr.E_SMOD_2OF2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="epr.E_SMOD_3TOI">
+<tt class="descclassname">epr.</tt><tt class="descname">E_SMOD_3TOI</tt><a class="headerlink" href="#epr.E_SMOD_3TOI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="epr.E_SMOD_2TOF">
+<tt class="descclassname">epr.</tt><tt class="descname">E_SMOD_2TOF</tt><a class="headerlink" href="#epr.E_SMOD_2TOF" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="scaling-methods">
+<h3>Scaling Methods<a class="headerlink" href="#scaling-methods" title="Permalink to this headline">¶</a></h3>
+<dl class="data">
+<dt id="epr.E_SMID_NON">
+<tt class="descclassname">epr.</tt><tt class="descname">E_SMID_NON</tt><a class="headerlink" href="#epr.E_SMID_NON" title="Permalink to this definition">¶</a></dt>
+<dd><p>No scaling</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="epr.E_SMID_LIN">
+<tt class="descclassname">epr.</tt><tt class="descname">E_SMID_LIN</tt><a class="headerlink" href="#epr.E_SMID_LIN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear pixel scaling</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="epr.E_SMID_LOG">
+<tt class="descclassname">epr.</tt><tt class="descname">E_SMID_LOG</tt><a class="headerlink" href="#epr.E_SMID_LOG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithmic pixel scaling</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">API Reference</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a><ul>
+<li><a class="reference internal" href="#product">Product</a></li>
+<li><a class="reference internal" href="#dataset">Dataset</a></li>
+<li><a class="reference internal" href="#record">Record</a></li>
+<li><a class="reference internal" href="#field">Field</a></li>
+<li><a class="reference internal" href="#dsd">DSD</a></li>
+<li><a class="reference internal" href="#band">Band</a></li>
+<li><a class="reference internal" href="#raster">Raster</a></li>
+<li><a class="reference internal" href="#eprtime">EPRTime</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a><ul>
+<li><a class="reference internal" href="#eprerror">EPRError</a></li>
+<li><a class="reference internal" href="#eprvalueerror">EPRValueError</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#data">Data</a><ul>
+<li><a class="reference internal" href="#data-type-identifiers">Data type identifiers</a></li>
+<li><a class="reference internal" href="#sample-models">Sample Models</a></li>
+<li><a class="reference internal" href="#scaling-methods">Scaling Methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="usermanual.html"
+                        title="previous chapter">User Manual</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="NEWS.html"
+                        title="next chapter">Change history</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/reference.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="NEWS.html" title="Change history"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="usermanual.html" title="User Manual"
+             >previous</a> |</li>
+        <li><a href="index.html">PyEPR v0.2a documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Antonio Valentino.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

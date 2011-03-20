@@ -1,0 +1,23 @@
+Change history
+==============
+
+
+PyEPR 0.2 (20/03/2011)
+----------------------
+
+* sphinx_ documentation added
+* added docstrings to all method and classes
+* renamed some method and parameter in order to avoid redundancies and
+  have a more *pythonic*  API
+* in case of null pointers a :class:`EPRValueError` is raised
+* improved C library shutdown management
+* introduced some utility methods to :class:`epr.Product` and
+  :class:`epr.Record` classes
+
+.. _sphinx: http://sphinx.pocoo.org
+
+
+PyEPR 0.1 (09/03/2011)
+----------------------
+
+Initial release

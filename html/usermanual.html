@@ -1,0 +1,369 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>User Manual &mdash; PyEPR v0.2a documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.2a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PyEPR v0.2a documentation" href="index.html" />
+    <link rel="next" title="API Reference" href="reference.html" />
+    <link rel="prev" title="ENVISAT Product Reader Python API" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="reference.html" title="API Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="ENVISAT Product Reader Python API"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyEPR v0.2a documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="user-manual">
+<h1>User Manual<a class="headerlink" href="#user-manual" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="quick-start">
+<h2>Quick start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> provides <a class="reference external" href="http://www.python.org">Python</a> bindings for the ENVISAT Product Reader C API
+(<a class="reference external" href="https://github.com/bcdev/epr-api">EPR API</a>) for reading satellite data from <a class="reference external" href="http://envisat.esa.int">ENVISAT</a> <a class="reference external" href="http://earth.esa.int">ESA</a> (European
+Space Agency) mission.</p>
+<p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a>, as well as the <a class="reference external" href="https://github.com/bcdev/epr-api">EPR API</a> for C, supports <a class="reference external" href="http://envisat.esa.int">ENVISAT</a> MERIS, AATSR
+Level 1B and Level 2 and also ASAR data products. It provides access to
+the data either on a geophysical (decoded, ready-to-use pixel samples)
+or on a raw data layer. The raw data access makes it possible to read
+any data field contained in a product file.</p>
+<p>Full access to the Python EPR API is provided by the <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><tt class="xref py py-mod docutils literal"><span class="pre">epr</span></tt></a> module that
+have to be imported by the client program e-g- as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">epr</span>
+</pre></div>
+</div>
+<p>The following snippet open an ASAR product and dumps the &#8220;Main Processing
+Parameters&#8221; record to the standard output:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">epr</span>
+
+<span class="n">product</span> <span class="o">=</span> <span class="n">epr</span><span class="o">.</span><span class="n">Product</span><span class="p">(</span>
+    <span class="s">&#39;ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1&#39;</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_dataset</span><span class="p">(</span><span class="s">&#39;MAIN_PROCESSING_PARAMS_ADS&#39;</span><span class="p">)</span>
+<span class="n">record</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">read_record</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">record</span><span class="o">.</span><span class="n">print_record</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>In order to use PyEPR it is needed that the following software are
+correctly installed and configured:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.python.org">Python</a> &gt;= 2.6</li>
+<li><a class="reference external" href="http://www.numpy.org">numpy</a> &gt;= 1.3.0</li>
+<li><a class="reference external" href="https://github.com/bcdev/epr-api">EPR API</a> &gt;= 2.2</li>
+<li>a reasonably updated C compiler <a class="footnote-reference" href="#id3" id="id1">[1]</a> (build only)</li>
+<li><a class="reference external" href="http://cython.org">Cython</a> &gt;= 0.12.1 <a class="footnote-reference" href="#id4" id="id2">[2]</a> (build only)</li>
+</ul>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> has been developed and tested with <a class="reference external" href="http://gcc.gnu.org">gcc</a> 4.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td><p class="first">The source tarball of official releases also includes the C extension
+code generated by <a class="reference external" href="http://cython.org">cython</a> so users don&#8217;s strictly need <a class="reference external" href="http://cython.org">cython</a> to
+install <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a>.</p>
+<p class="last">It is only needed to re-generate the C extension code (e.g. if one
+wants to build a development version of <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a>).</p>
+</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="download">
+<h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
+<p>Official source tarballs can be downloads form:</p>
+<blockquote>
+<div><a class="reference external" href="http://pypi.python.org/pypi/pyepr">http://pypi.python.org/pypi/pyepr</a></div></blockquote>
+<p>Source code of development versions is available at</p>
+<blockquote>
+<div><a class="reference external" href="https://github.com/avalentino/pyepr">https://github.com/avalentino/pyepr</a></div></blockquote>
+<p>To clone the <a class="reference external" href="http://git-scm.com">git</a> repository the following command can be used:</p>
+<div class="highlight-python"><pre>$ git clone https://github.com/avalentino/pyepr.git</pre>
+</div>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>The easier way to install <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> is using tools like <a class="reference external" href="http://pypi.python.org/pypi/setuptools#using-setuptools-and-easyinstall">easy_install</a>, <a class="reference external" href="http://pypi.python.org/pypi/pip">pip</a>:</p>
+<div class="highlight-python"><pre>$ easy_install pyepr</pre>
+</div>
+<p>or:</p>
+<div class="highlight-python"><pre>$ easy_install -U --prefix=&lt;TARGET DIRECTORY&gt;</pre>
+</div>
+<p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> uses the standard <a class="reference external" href="http://www.python.org">Python</a> <a class="reference external" href="http://docs.python.org/distutils">distutils</a> so it can be installed from
+sources using the following command:</p>
+<div class="highlight-python"><pre>$ python setup.py install</pre>
+</div>
+<p>For a user specific installation use:</p>
+<div class="highlight-python"><pre>$ python setup.py install --user</pre>
+</div>
+<p>To install <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> in a non-standard path:</p>
+<div class="highlight-python"><pre>$ python setup.py install --prefix=&lt;TARGET_PATH&gt;</pre>
+</div>
+<p>just make sure that <tt class="file docutils literal"><span class="pre">&lt;TARGET_PATH&gt;/lib/pythonX.Y/site-packages</span></tt> is in
+the <tt class="docutils literal"><span class="pre">PYTHONPATH</span></tt>.</p>
+</div>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> package comes with a complete test suite but in order to run it
+the ENVISAT sample product used for testing
+<a class="reference external" href="http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz">ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1</a>
+have to be downloaded from the <a class="reference external" href="http://earth.esa.int">ESA</a> website, saved in the <tt class="file docutils literal"><span class="pre">test</span></tt>
+directory and decompressed.</p>
+<p>On GNU Linux platforms the following shell commands can be used:</p>
+<div class="highlight-python"><pre>$ cd pyepr-0.X/test
+$ wget http://earth.esa.int/services/sample_products/asar/IMP/\
+  ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz
+$ gunzip ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1</pre>
+</div>
+<p>After installation the test suite can be run using the following command
+in the <tt class="file docutils literal"><span class="pre">test</span></tt> directory:</p>
+<div class="highlight-python"><pre>$ python test_all.py</pre>
+</div>
+</div>
+<div class="section" id="python-vs-c-api">
+<h2>Python vs C API<a class="headerlink" href="#python-vs-c-api" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="http://www.python.org">Python</a> EPR API is fully object oriented.
+The main structures of the C API have been implemented as objects while
+C function have been logically grouped and mapped onto object methods.</p>
+<p>The entire process of defining an object oriented API for <a class="reference external" href="http://www.python.org">Python</a> has
+been quite easy and straightforward thanks to the good design of the C
+API,</p>
+<p>Of course there are also some differences that are illustrated in the
+following sections.</p>
+</div>
+<div class="section" id="memory-management">
+<h2>Memory management<a class="headerlink" href="#memory-management" title="Permalink to this headline">¶</a></h2>
+<p>Being <a class="reference external" href="http://www.python.org">Python</a> a very high level language uses have never to worry about
+memory allocation/deallocation. They simply have to instantiate objects:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">product</span> <span class="o">=</span> <span class="n">epr</span><span class="o">.</span><span class="n">Product</span><span class="p">(</span><span class="s">&#39;filename.N1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and use them freely.</p>
+<p>Objects are automatically destroyed when there are no more references to
+them and memory is deallocated automatically.</p>
+<p>Even better, each object holds a reference to other objects it depends
+on so the user never have to worry about identifiers validity or about
+the correct order structures have to be feed.</p>
+<p>For example: the C <cite>EPR_DatasetId</cite> structure has a field (<cite>product_id</cite>)
+that points to the <em>product</em> descriptor <cite>EPR_productId</cite> to which it
+belongs to.</p>
+<p>The reference to the parent product is used, for example, when one wants
+to read a record using the <cite>epr_read_record</cite> function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">EPR_SRecord</span><span class="o">*</span> <span class="n">epr_read_record</span><span class="p">(</span><span class="n">EPR_SDatasetId</span><span class="o">*</span> <span class="n">dataset_id</span><span class="p">,</span> <span class="o">...</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The function takes a <cite>EPR_SDatasetId</cite> as a parameter and assumes all
+fields (including <tt class="docutils literal"><span class="pre">dataset-&gt;product_id</span></tt>) are valid.
+It is responsibility of the programmer tho keep all structures valid and
+free them at the right moment and in the correct order.</p>
+<p>This is the standard way to go in C but not in <a class="reference external" href="http://www.python.org">Python</a>.</p>
+<p>In <a class="reference external" href="http://www.python.org">Python</a> all is by far simpler, and the user can get a <em>dateset</em>
+object instance:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">dataset</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_dataset</span><span class="p">(</span><span class="s">&#39;MAIN_PROCESSING_PARAMS_ADS&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and then forget about the <em>product</em> instance it depends on.
+Even if the <em>product</em> variable goes out of scope and is no more directly
+accessible in the program the <em>dataset</em> object keeps staying valid since
+it holds an internal reference to the <em>product</em> instance it depends on.</p>
+<p>When <em>record</em> is destroyed automatically also the parent <tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt>
+object is destroyed (assumed there is no other reference to it).</p>
+<p>The entire machinery is completely automatic and transparent to the user.</p>
+</div>
+<div class="section" id="arrays">
+<h2>Arrays<a class="headerlink" href="#arrays" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> uses <a class="reference external" href="http://www.numpy.org">numpy</a> in order to manage efficiently the potentially large
+amount of data contained in <a class="reference external" href="http://envisat.esa.int">ENVISAT</a> products.</p>
+<ul>
+<li><p class="first"><a class="reference internal" href="reference.html#epr.Field.get_elems" title="epr.Field.get_elems"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Field.get_elems()</span></tt></a> return an 1D array containing elements of
+the field</p>
+</li>
+<li><p class="first">the <cite>Raster.data</cite> property is a 2D array exposes data contained in the
+<a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> object in form of <tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p><a class="reference internal" href="reference.html#epr.Raster.data" title="epr.Raster.data"><tt class="xref py py-attr docutils literal"><span class="pre">epr.Raster.data</span></tt></a> directly exposes <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a>
+data i.e. shares the same memory buffer with <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a>:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">raster</span><span class="o">.</span><span class="n">get_pixel</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+<span class="go">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">raster</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+<span class="go">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">raster</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">raster</span><span class="o">.</span><span class="n">get_pixel</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+</div>
+</li>
+<li><p class="first"><a class="reference internal" href="reference.html#epr.Band.read_as_array" title="epr.Band.read_as_array"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Band.read_as_array()</span></tt></a> is an additional method provided by
+the <a class="reference external" href="http://www.python.org">Python</a> EPR API (does not exist any correspondent function in the
+C API). It is mainly a facility method that allows users to get access
+to band data without creating an intermediate <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> object.
+It read a slice of data from the <a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">epr.Band</span></tt></a> and returns it as a
+2D <tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt>.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="enumerators">
+<h2>Enumerators<a class="headerlink" href="#enumerators" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://www.python.org">Python</a> does not have <em>enumerators</em> at language level.
+Enumerations are simply mapped as module constants that have the same
+name of the C enumerate but are spelled all in capital letters.</p>
+<p>For example:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">C</th>
+<th class="head">Pythn</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>e_tid_double</td>
+<td>E_TID_DOUBLE</td>
+</tr>
+<tr><td>e_smod_1OF1</td>
+<td>E_SMOD_1OF1</td>
+</tr>
+<tr><td>e_smid_log</td>
+<td>E_SMID_LOG</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="error-handling-and-logging">
+<h2>Error handling and logging<a class="headerlink" href="#error-handling-and-logging" title="Permalink to this headline">¶</a></h2>
+<p>Currently error handling and logging functions of the EPR C API are not
+exposed to python.</p>
+<p>Internal library logging is completely silenced and errors are converted
+to <a class="reference external" href="http://www.python.org">Python</a> exceptions.
+Where appropriate standard <a class="reference external" href="http://www.python.org">Python</a> exception types are use in other cases
+custom exception types (e.g. <a class="reference internal" href="reference.html#epr.EPRError" title="epr.EPRError"><tt class="xref py py-class docutils literal"><span class="pre">epr.EPRError</span></tt></a>,
+<a class="reference internal" href="reference.html#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">epr.EPRValueError</span></tt></a>) are used.</p>
+</div>
+<div class="section" id="library-initialization">
+<h2>Library initialization<a class="headerlink" href="#library-initialization" title="Permalink to this headline">¶</a></h2>
+<p>Differently from the C API library initialization is not needed: it is
+performed internally the first time the <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><tt class="xref py py-mod docutils literal"><span class="pre">epr</span></tt></a> module is imported
+in <a class="reference external" href="http://www.python.org">Python</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">User Manual</a><ul>
+<li><a class="reference internal" href="#quick-start">Quick start</a></li>
+<li><a class="reference internal" href="#requirements">Requirements</a></li>
+<li><a class="reference internal" href="#download">Download</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
+<li><a class="reference internal" href="#python-vs-c-api">Python vs C API</a></li>
+<li><a class="reference internal" href="#memory-management">Memory management</a></li>
+<li><a class="reference internal" href="#arrays">Arrays</a></li>
+<li><a class="reference internal" href="#enumerators">Enumerators</a></li>
+<li><a class="reference internal" href="#error-handling-and-logging">Error handling and logging</a></li>
+<li><a class="reference internal" href="#library-initialization">Library initialization</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">ENVISAT Product Reader Python API</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="reference.html"
+                        title="next chapter">API Reference</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/usermanual.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="reference.html" title="API Reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="ENVISAT Product Reader Python API"
+             >previous</a> |</li>
+        <li><a href="index.html">PyEPR v0.2a documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Antonio Valentino.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
