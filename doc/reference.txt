@@ -949,6 +949,11 @@ EPRValueError
 Data
 ----
 
+.. data:: EPR_C_API_VERSION
+
+   Version string of the wrapped `EPR API`_ C library
+
+
 Data type identifiers
 ~~~~~~~~~~~~~~~~~~~~~
 

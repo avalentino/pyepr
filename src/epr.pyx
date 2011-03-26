@@ -55,6 +55,8 @@ cdef extern from 'Python.h':
 
 
 cdef extern from 'epr_api.h':
+    char* EPR_PRODUCT_API_VERSION_STR
+
     ctypedef int            epr_boolean
     ctypedef unsigned char  uchar
     ctypedef unsigned short ushort
@@ -376,6 +378,8 @@ np.import_array()
 
 # utils
 EPRTime = collections.namedtuple('EPRTime', ('days', 'seconds', 'microseconds'))
+
+EPR_C_API_VERSION = EPR_PRODUCT_API_VERSION_STR
 
 # EPR_DataTypeId
 E_TID_UNKNOWN = e_tid_unknown

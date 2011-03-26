@@ -1067,5 +1067,10 @@ class TestDirectInstantiation(unittest.TestCase):
         self.assertRaises(ValueError, epr.Product, 'filename')
 
 
+class TestLibVersion(unittest.TestCase):
+    def test_c_api_version(self):
+        self.assertTrue(isinstance(epr.EPR_C_API_VERSION, basestring))
+
+
 if __name__ == '__main__':
     unittest.main()
