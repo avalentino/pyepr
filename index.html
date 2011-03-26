@@ -16,15 +16,18 @@
       margin: 0 auto;
       width: 700px;
     }
-    h1 { font-size: 3.8em; color: #0d0d0d; margin-bottom: 3px; }
+    h1 { font-size: 3.8em; color: #20435C; margin-bottom: 3px; }
     h1 .small { font-size: 0.4em; }
     h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #0d0d0d; }
-    h3 { text-align: center; color: #0d0d0d; }
-    a { color: #0d0d0d; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+    h2 { font-size: 1.5em; color: #20435C; }
+    h3 { text-align: center; color: #20435C; }
+    a { color: #C60F0F; }
+    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px;
+                   font-style: italic; color: #20435C; }
     .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
+    pre { background: #EEFFCC; color: #333333; padding: 12px;
+          border-style:solid none; border-width:1px medium;
+          border-color:#AACC99 -moz-use-text-color; }
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
   </style>
@@ -68,6 +71,7 @@
 
     <h2>Dependencies</h2>
     <p><ul>
+        <li><a HREF="https://github.com/bcdev/epr-api">epr-api</a></li>
         <li><a HREF="http://www.numpy.org">numpy</a></li>
         <li><a HREF="http://www.cython.org">Cython</a> (optional)</li>
     </ul></p>
