@@ -610,6 +610,10 @@ cdef class DSD(EprObject):
         def __get__(self):
             return self._ptr.dsr_size
 
+    # --- high level interface ------------------------------------------------
+    def __repr__(self):
+        return 'epr.DSD(%s)' % self.ds_name
+
 
 cdef new_dsd(EPR_SDSD* ptr, object parent=None):
     if ptr is NULL:
@@ -828,6 +832,15 @@ cdef class Field(EprObject):
 
         return out
 
+    # --- high level interface ------------------------------------------------
+    def __repr__(self):
+        return 'epr.Field(%s) (%d %s elems)' % (self.get_name(),
+                self.get_num_elems(), data_type_id_to_str(self.get_get_type()))
+
+    def __str__(self):
+        data = ', '.join(str, self.get_elems())
+        return '%s = {%s}' % (self.get_name(), data)
+
 
 cdef new_field(EPR_SField* ptr, object parent=None):
     if ptr is NULL:
@@ -931,16 +944,6 @@ cdef class Record(EprObject):
 
         pyepr_check_errors()
 
-    #def dump_record(self):
-    #    epr_dump_record(self._ptr)
-    #    pyepr_check_errors()
-
-    #def dump_element(self, uint field_index, uint element_index):
-    #    epr_dump_element(self._ptr, field_index, element_index)
-    #    pyepr_check_errors()
-
-    # @TODO: format_record, format_element --> str
-
     def get_field(self, name):
         '''Gets a field specified by name
 
@@ -997,7 +1000,27 @@ cdef class Record(EprObject):
 
         return names
 
-    # @TODO: __iter__ on fields
+    # @NOTE: generator and generator expressions are not yet implemented in
+    #        cython. As a workaround a list is used
+    def fields(self):
+        # @TODO: use __iter__ when generator expressions will be available
+        #return list(self)
+        cdef int idx
+        return [self.get_field_at(idx)
+                            for idx in range(epr_get_num_fields(self._ptr))]
+
+    def __iter__(self):
+        # @TODO: use generator expression when it will be available
+        #return (self.get_field_at(idx)
+        #                    for idx in range(epr_get_num_elems(self._ptr)))
+        return iter(self.fields())
+
+    def __str__(self):
+        return '\n'.join(map(str, self))
+
+    def __repr__(self):
+        return '%s %d fields' % (super(Record, self).__repr__(),
+                                 self.get_num_fields())
 
 
 cdef new_record(EPR_SRecord* ptr, object parent=None, bint dealloc=False):
@@ -1152,6 +1175,11 @@ cdef class Raster(EprObject):
             self._data = self.toarray()
 
             return self._data
+
+    def __repr__(self):
+        return '%s %s (%dL x %dP)' % (super(Raster, self).__repr__(),
+                                      data_type_id_to_str(self.data_type),
+                                      self.get_height(), self.get_width())
 
 
 cdef new_raster(EPR_SRaster* ptr, object parent=None):
@@ -1592,6 +1620,9 @@ cdef class Band(EprObject):
 
         return raster.data
 
+    def __repr__(self):
+        return 'epr.Band(%s) of %s' % (self.get_name(), self.product)
+
 
 cdef new_band(EPR_SBandId* ptr, object parent=None):
     if ptr is NULL:
@@ -1720,7 +1751,29 @@ cdef class Dataset(EprObject):
         return record
 
     # --- high level interface ------------------------------------------------
-    # @TODO: __iter__ on records
+    # @NOTE: generator and generator expressions are not yet implemented in
+    #        cython. As a workaround a list is used
+    def records(self):
+        # @TODO: use __iter__ when generator expressions will be available
+        #return list(self)
+        cdef int idx
+        return [self.get_record_at(idx)
+                            for idx in range(epr_get_num_records(self._ptr))]
+
+    def __iter__(self):
+        # @TODO: use generator expression when it will be available
+        #return (self.get_field_at(idx)
+        #                    for idx in range(epr_get_num_elems(self._ptr)))
+        return iter(self.records())
+
+    def __str__(self):
+        lines = [repr(self), '']
+        lines.extend(map(str, self))
+        return '\n'.join(map(repr, lines))
+
+    def __repr__(self):
+        return 'epr.Dataset(%s) %d records' % (self.get_name(),
+                                               self.get_num_records())
 
 
 cdef new_dataset(EPR_SDatasetId* ptr, object parent=None):
@@ -2034,6 +2087,33 @@ cdef class Product(EprObject):
             names.append(epr_get_band_name(band_ptr))
 
         return names
+
+    # @NOTE: generator and generator expressions are not yet implemented in
+    #        cython. As a workaround a list is used
+    def datasets(self):
+        cdef int idx
+        return [self.get_dataset_at(idx)
+                            for idx in range(epr_get_num_datasets(self._ptr))]
+
+    def bands(self):
+        return [self.get_band_at(idx)
+                            for idx in range(epr_get_num_bands(self._ptr))]
+
+    # @TODO: iter on both datasets and bands (??)
+    #def __iter__(self):
+    #    return itertools.chain((self.datasets(), self.bands()))
+
+    def __repr__(self):
+        return 'epr.Product(%s) %d datasets, %d bands' % (self.id_string,
+                                self.get_num_datasets(), self.get_num_bands())
+
+    def __str__(self):
+        lines = [repr(self), '']
+        lines.extend(map(str, self.datasets()))
+        lines.append('')
+        lines.extend(map(str, self.bands()))
+        return '\n'.join(map(repr, lines))
+
 
 def open(filename):
     '''Opens the ENVISAT product
