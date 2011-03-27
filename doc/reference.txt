@@ -1,6 +1,7 @@
 API Reference
 =============
 
+
 .. module:: epr
    :synopsis: Python bindings for ENVISAT Product Reader C API
 
@@ -172,6 +173,20 @@ Product
       .. note:: this method has no correspondent in the C API
 
 
+   .. method:: datasets
+
+      Return the list of dataset in the product
+
+      .. note:: this method has no correspondent in the C API
+
+
+   .. method:: bands
+
+      Return the list of bands in the product
+
+      .. note:: this method has no correspondent in the C API
+
+
 Dataset
 ~~~~~~~
 
@@ -256,6 +271,13 @@ Dataset
             an exception (:class:`EPRValueError`) if an error occurred
 
 
+   .. method:: records
+
+      Return the list of records contained in the dataset
+
+      .. note:: this method has no correspondent in the C API
+
+
 Record
 ~~~~~~
 
@@ -335,6 +357,13 @@ Record
    .. method:: get_field_names
 
       Return the list of names of the fields in the product
+
+      .. note:: this method has no correspondent in the C API
+
+
+   .. method:: fields
+
+      Return the list of fields contained in the record
 
       .. note:: this method has no correspondent in the C API
 

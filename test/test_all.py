@@ -22,6 +22,7 @@ import os
 import re
 import sys
 import unittest
+import tempfile
 import functools
 
 import numpy as np
@@ -235,6 +236,47 @@ class TestProductHighLevelAPI(unittest.TestCase):
     def test_get_band_names(self):
         self.assertEqual(self.product.get_band_names(), self.BAND_NAMES)
 
+    def test_datasets(self):
+        datasets = self.product.datasets()
+        self.assertTrue(datasets)
+        self.assertEqual(len(datasets), self.product.get_num_datasets())
+        for index, dataset in enumerate(datasets):
+            ref_dataset = self.product.get_dataset_at(index)
+            self.assertEqual(dataset.get_name(), ref_dataset.get_name())
+
+    def test_bands(self):
+        bands = self.product.bands()
+        self.assertTrue(bands)
+        self.assertEqual(len(bands), self.product.get_num_bands())
+        for index, band in enumerate(bands):
+            ref_band = self.product.get_band_at(index)
+            self.assertEqual(band.get_name(), ref_band.get_name())
+
+    # @TODO: complete
+    #def test_iter(self):
+    #    pass
+
+    def test_repr(self):
+        pattern = ('epr\.Product\((?P<name>\w+)\) '
+                   '(?P<n_datasets>\d+) datasets, '
+                   '(?P<n_bands>\d+) bands')
+
+        mobj = re.match(pattern, repr(self.product))
+        self.assertNotEqual(mobj, None)
+        self.assertEqual(mobj.group('name'), self.product.id_string)
+        self.assertEqual(mobj.group('n_datasets'),
+                         str(self.product.get_num_datasets()))
+        self.assertEqual(mobj.group('n_bands'),
+                         str(self.product.get_num_bands()))
+
+    def test_str(self):
+        lines = [repr(self.product), '']
+        lines.extend(map(repr, self.product.datasets()))
+        lines.append('')
+        lines.extend(map(str, self.product.bands()))
+        data = '\n'.join(map(repr, lines))
+        self.assertEqual(data, str(self.product))
+
 
 class TestDataset(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
@@ -276,6 +318,46 @@ class TestDataset(unittest.TestCase):
 
     def test_read_record_passed_invalid(self):
         self.assertRaises(TypeError, self.dataset.read_record, 0, 0)
+
+
+class TestDatasetHighLevelAPI(unittest.TestCase):
+    PRODUCT_FILE = TEST_PRODUCT
+    DATASET_NAME = 'MAIN_PROCESSING_PARAMS_ADS'
+
+    def setUp(self):
+        self.product = epr.Product(self.PRODUCT_FILE)
+        self.dataset = self.product.get_dataset(self.DATASET_NAME)
+
+    def test_records(self):
+        records = self.dataset.records()
+        self.assertTrue(records)
+        self.assertEqual(len(records), self.dataset.get_num_records())
+        for index, record in enumerate(records):
+            ref_record = self.dataset.read_record(index)
+            self.assertEqual(record.get_field_names(),
+                             ref_record.get_field_names())
+
+    def test_iter(self):
+        index = 0
+        for record in self.dataset:
+            ref_record = self.dataset.read_record(index)
+            self.assertEqual(record.get_field_names(),
+                             ref_record.get_field_names())
+            index += 1
+        self.assertEqual(index, self.dataset.get_num_records())
+
+    def test_repr(self):
+        pattern = 'epr\.Dataset\((?P<name>\w+)\) (?P<num>\d+) records'
+        mobj = re.match(pattern, repr(self.dataset))
+        self.assertNotEqual(mobj, None)
+        self.assertEqual(mobj.group('name'), self.dataset.get_name())
+        self.assertEqual(mobj.group('num'), str(self.dataset.get_num_records()))
+
+    def test_str(self):
+        lines = [repr(self.dataset), '']
+        lines.extend(map(str, self.dataset))
+        data = '\n'.join(map(repr, lines))
+        self.assertEqual(data, str(self.dataset))
 
 
 class TestBand(unittest.TestCase):
@@ -496,6 +578,22 @@ class TestBand(unittest.TestCase):
     # @TODO: more read_as_array testing
 
 
+class TestBandHighLevelAPI(unittest.TestCase):
+    PRODUCT_FILE = TEST_PRODUCT
+
+    def setUp(self):
+        self.product = epr.Product(self.PRODUCT_FILE)
+
+    def test_repr(self):
+        pattern = ('epr.Band\((?P<name>\w+)\) of '
+                   'epr.Product\((?P<product_id>\w+)\)')
+        for band in self.product.bands():
+            mobj = re.match(pattern, repr(band))
+            self.assertNotEqual(mobj, None)
+            self.assertEqual(mobj.group('name'), band.get_name())
+            self.assertEqual(mobj.group('product_id'), self.product.id_string)
+
+
 class TestCreateRaster(unittest.TestCase):
     RASTER_WIDTH = 400
     RASTER_HEIGHT = 300
@@ -692,6 +790,24 @@ class TestRasterRead(TestRaster):
         self.assertEqual(data1[0, 0], data2[0, 0])
         self.assertTrue(np.all(data1 == data2))
 
+class TestRasterHighLevelAPI(unittest.TestCase):
+    RASTER_WIDTH = 400
+    RASTER_HEIGHT = 300
+    RASTER_DATA_TYPE = epr.E_TID_FLOAT
+
+    def setUp(self):
+        self.raster = epr.create_raster(self.RASTER_DATA_TYPE,
+                                        self.RASTER_WIDTH, self.RASTER_HEIGHT)
+
+    def test_repr(self):
+        pattern = ('<epr.Raster object at 0x\w+> (?P<data_type>\w+) '
+                   '\((?P<lines>\d+)L x (?P<pixels>\d+)P\)')
+        mobj = re.match(pattern, repr(self.raster))
+        self.assertNotEqual(mobj, None)
+        self.assertEqual(mobj.group('data_type'),
+                         epr.data_type_id_to_str(self.raster.data_type))
+        self.assertEqual(mobj.group('lines'), str(self.raster.get_height()))
+        self.assertEqual(mobj.group('pixels'), str(self.raster.get_width()))
 
 
 class TestRecord(unittest.TestCase):
@@ -705,20 +821,6 @@ class TestRecord(unittest.TestCase):
 
     def test_get_num_fields(self):
         self.assertEqual(self.record.get_num_fields(), 220)
-
-    #if ALLOW_DUMP:
-    #    def test_dump_record(self):
-    #        self.record.dump_record()
-    #
-    #    def test_dump_element(self):
-    #        self.record.dump_element(0, 0)
-    #
-    #    def test_dump_element_field_out_of_range(self):
-    #        field = self.record.get_num_fields() + 10
-    #        self.assertRaises(ValueError, self.record.dump_element, field, 0)
-    #
-    #    def test_dump_element_element_out_of_range(self):
-    #        self.assertRaises(ValueError, self.record.dump_element, 0, 150)
 
     @quiet
     def test_print_(self):
@@ -784,8 +886,8 @@ class TestRecordHighLevelAPI(unittest.TestCase):
 
     def setUp(self):
         product = epr.Product(self.PRODUCT_FILE)
-        dataset = product.get_dataset(self.DATASET_NAME)
-        self.record = dataset.read_record(0)
+        self.dataset = product.get_dataset(self.DATASET_NAME)
+        self.record = self.dataset.read_record(0)
 
     def test_get_field_names_number(self):
         self.assertEqual(len(self.record.get_field_names()),
@@ -794,6 +896,48 @@ class TestRecordHighLevelAPI(unittest.TestCase):
     def test_get_field_names(self):
         self.assertEqual(self.record.get_field_names()[:len(self.FIELD_NAMES)],
                          self.FIELD_NAMES)
+
+    def test_fields(self):
+        fields = self.record.fields()
+        self.assertTrue(fields)
+        self.assertEqual(len(fields), self.record.get_num_fields())
+        names = [field.get_name() for field in fields]
+        self.assertEqual(self.record.get_field_names(), names)
+
+    def test_iter(self):
+        index = 0
+        for field in self.record:
+            ref_field = self.record.get_field_at(index)
+            self.assertEqual(field.get_name(), ref_field.get_name())
+            index += 1
+        self.assertEqual(index, self.record.get_num_fields())
+
+
+class TestMultipleRecordsHighLevelAPI(unittest.TestCase):
+    PRODUCT_FILE = TEST_PRODUCT
+    DATASET_NAME = 'MAIN_PROCESSING_PARAMS_ADS'
+
+    def setUp(self):
+        product = epr.Product(self.PRODUCT_FILE)
+        self.dataset = product.get_dataset(self.DATASET_NAME)
+
+    def test_repr(self):
+        pattern = '<epr\.Record object at 0x\w+> (?P<num>\d+) fields'
+        for record in self.dataset:
+            mobj = re.match(pattern, repr(record))
+            self.assertNotEqual(mobj, None)
+            self.assertEqual(mobj.group('num'), str(record.get_num_fields()))
+
+    def test_str_vs_print(self):
+        for record in self.dataset:
+            with tempfile.TemporaryFile() as fd:
+                record.print_(fd)
+                fd.flush()
+                fd.seek(0)
+                data = fd.read()
+                if data.endswith('\n'):
+                    data = data[:-1]
+                self.assertEqual(data, str(record))
 
 
 class TestMphRecordHighLevelAPI(TestRecordHighLevelAPI):
@@ -847,10 +991,6 @@ class TestField(unittest.TestCase):
     def test_print_fied_invalid_ostream(self):
         self.assertRaises(TypeError, self.field.print_, 'invalid')
 
-    #if ALLOW_DUMP:
-    #    def test_dump_field(self):
-    #        self.field.dump_field()
-
     def test_get_unit(self):
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
 
@@ -881,6 +1021,39 @@ class TestField(unittest.TestCase):
         self.assertEqual(vect.shape, (self.field.get_num_elems(),))
         self.assertEqual(vect.dtype, np.float32)
         self.assertTrue(np.allclose(vect, self.FIELD_VALUES))
+
+
+class TestFieldHighLevelAPI(unittest.TestCase):
+    PRODUCT_FILE = TEST_PRODUCT
+    DATASET_NAME = 'MAIN_PROCESSING_PARAMS_ADS'
+    FIELD_NAME = 'range_spacing'
+
+    def setUp(self):
+        product = epr.Product(self.PRODUCT_FILE)
+        dataset = product.get_dataset(self.DATASET_NAME)
+        self.record = dataset.read_record(0)
+
+    def test_repr(self):
+        pattern = ('epr\.Field\("(?P<name>.+)"\) (?P<num>\d+) '
+                   '(?P<type>\w+) elements')
+        for field in self.record:
+            mobj = re.match(pattern, repr(field))
+            self.assertNotEqual(mobj, None)
+            self.assertEqual(mobj.group('name'), field.get_name())
+            self.assertEqual(mobj.group('num'), str(field.get_num_elems()))
+            self.assertEqual(mobj.group('type'),
+                             epr.data_type_id_to_str(field.get_type()))
+
+    def test_str_vs_print(self):
+        for field in self.record:
+            with tempfile.TemporaryFile() as fd:
+                field.print_(fd)
+                fd.flush()
+                fd.seek(0)
+                data = fd.read()
+                if data.endswith('\n'):
+                    data = data[:-1]
+                self.assertEqual(data, str(field))
 
 
 class TestFieldWithMiltipleElems(TestField):
@@ -931,6 +1104,20 @@ class TestDSD(unittest.TestCase):
     def test_dsr_size(self):
         self.assertEqual(self.dsd.dsr_size, 170)
         self.assertTrue(isinstance(self.dsd.dsr_size, (int, long)))
+
+
+class TestDsdHighLevelAPI(unittest.TestCase):
+    PRODUCT_FILE = TEST_PRODUCT
+
+    def setUp(self):
+        product = epr.Product(self.PRODUCT_FILE)
+        self.dsd = product.get_dsd_at(0)
+
+    def test_repr(self):
+        pattern = 'epr\.DSD\("(?P<name>.+)"\)'
+        mobj = re.match(pattern, repr(self.dsd))
+        self.assertNotEqual(mobj, None)
+        self.assertEqual(mobj.group('name'), self.dsd.ds_name)
 
 
 class TestDataypeFunctions(unittest.TestCase):

@@ -71,7 +71,7 @@ cdef extern from 'epr_api.h':
         e_err_out_of_memory        =    4
         e_err_index_out_of_range   =    5
         e_err_illegal_conversion   =    6
-        e_err_illegal_data_type	   =    7
+        e_err_illegal_data_type    =    7
         e_err_file_not_found       =  101
         e_err_file_access_denied   =  102
         e_err_file_read_error      =  103
@@ -127,12 +127,10 @@ cdef extern from 'epr_api.h':
         e_smid_lin = 1
         e_smid_log = 2
 
-
     struct EPR_Time:
         int  days
         uint seconds
         uint microseconds
-
 
     struct EPR_FlagDef:
         #EPR_Magic magic
@@ -140,20 +138,17 @@ cdef extern from 'epr_api.h':
         uint bit_mask
         char* description
 
-
     struct EPR_Field:
         #EPR_Magic magic
         #EPR_FieldInfo* info
         #void* elems
         pass
 
-
     struct EPR_Record:
         #EPR_Magic magic
         #EPR_RecordInfo* info
         uint num_fields
         EPR_Field** fields
-
 
     struct EPR_DSD:
         #EPR_Magic magic
@@ -166,7 +161,6 @@ cdef extern from 'epr_api.h':
         uint num_dsr
         uint dsr_size
 
-
     struct EPR_Raster:
         #EPR_Magic magic
         EPR_DataTypeId data_type
@@ -178,7 +172,6 @@ cdef extern from 'epr_api.h':
         uint raster_width
         uint raster_height
         void* buffer
-
 
     struct EPR_ProductId:
         #EPR_Magic magic
@@ -197,7 +190,6 @@ cdef extern from 'epr_api.h':
         #EPR_PtrArray* band_ids
         int meris_iodd_version
 
-
     struct EPR_DatasetId:
         #EPR_Magic magic
         EPR_ProductId* product_id
@@ -208,12 +200,10 @@ cdef extern from 'epr_api.h':
         #EPR_SRecordInfo* record_info
         char* description
 
-
     struct EPR_DatasetRef:
         EPR_DatasetId* dataset_id
         int field_index             # -1 if not used
         int elem_index              # -1 if not used
-
 
     struct EPR_BandId:
         #EPR_Magic magic
@@ -232,7 +222,6 @@ cdef extern from 'epr_api.h':
         char* description
         epr_boolean lines_mirrored
 
-
     ctypedef EPR_ErrCode       EPR_EErrCode
     ctypedef EPR_LogLevel      EPR_ELogLevel
     ctypedef EPR_SampleModel   EPR_ESampleModel
@@ -246,7 +235,6 @@ cdef extern from 'epr_api.h':
     ctypedef EPR_Field         EPR_SField
     ctypedef EPR_DSD           EPR_SDSD
     ctypedef EPR_Time          EPR_STime
-
 
     # @TODO: improve logging and error management (--> custom handlers)
     # logging and error handling function pointers
@@ -453,7 +441,7 @@ cdef int pyepr_check_errors() except -1:
     code = epr_get_last_err_code()
     if code != e_err_none:
         msg = <char*>epr_get_last_err_message()
-        epr_clear_err()
+        # @TODO: if not msg: msg = EPR_ERR_MSG[code]
         if (e_err_invalid_product_id <= code <= e_err_invalid_keyword_name or
             code in (e_err_null_pointer,
                      e_err_illegal_arg,
@@ -461,6 +449,7 @@ cdef int pyepr_check_errors() except -1:
             raise EPRValueError(msg, code)
         else:
             raise EPRError(msg, code)
+        epr_clear_err()
         return -1
     return 0
 
@@ -612,7 +601,7 @@ cdef class DSD(EprObject):
 
     # --- high level interface ------------------------------------------------
     def __repr__(self):
-        return 'epr.DSD(%s)' % self.ds_name
+        return 'epr.DSD("%s")' % self.ds_name
 
 
 cdef new_dsd(EPR_SDSD* ptr, object parent=None):
@@ -716,9 +705,9 @@ cdef class Field(EprObject):
         etype = epr_get_field_type(self._ptr)
 
         if etype == e_tid_uchar:
-            val = epr_get_field_elem_as_char(self._ptr, index)
-        elif etype == e_tid_char:
             val = epr_get_field_elem_as_uchar(self._ptr, index)
+        elif etype == e_tid_char:
+            val = epr_get_field_elem_as_char(self._ptr, index)
         elif etype == e_tid_ushort:
             val = epr_get_field_elem_as_ushort(self._ptr, index)
         elif etype == e_tid_short:
@@ -834,12 +823,47 @@ cdef class Field(EprObject):
 
     # --- high level interface ------------------------------------------------
     def __repr__(self):
-        return 'epr.Field(%s) (%d %s elems)' % (self.get_name(),
-                self.get_num_elems(), data_type_id_to_str(self.get_get_type()))
+        return 'epr.Field("%s") %d %s elements' % (self.get_name(),
+                self.get_num_elems(), data_type_id_to_str(self.get_type()))
 
     def __str__(self):
-        data = ', '.join(str, self.get_elems())
-        return '%s = {%s}' % (self.get_name(), data)
+        cdef EPR_DataTypeId type_ = self.get_type()
+        if type_ == e_tid_string:
+            return '%s = "%s"' % (self.get_name(), self.get_elem())
+        elif type_ == e_tid_time:
+            days, seconds, microseconds = self.get_elem()
+            return '%s = {d=%d, j=%d, m=%d}' % (self.get_name(),
+                                                days, seconds, microseconds)
+        else:
+            if type_ == e_tid_uchar:
+                fmt = '%u'
+            elif type_ == e_tid_char:
+                fmt = '%d'
+            elif type_ == e_tid_ushort:
+                fmt = '%u'
+            elif type_ == e_tid_short:
+                fmt = '%d'
+            elif type_ == e_tid_uint:
+                fmt = '%u'
+            elif type_ == e_tid_int:
+                fmt = '%d'
+            elif type_ == e_tid_float:
+                fmt = '%f'
+            elif type_ == e_tid_double:
+                fmt = '%f'
+            else:
+                if self.get_num_elems() > 1:
+                    data = ['<<unknown data type>>'] * self.get_elems()
+                    data = ', '.join(data)
+                    return '%s = {%s}' % (self.get_name(), data)
+                else:
+                    return '%s = <<unknown data type>>' % (self.get_name())
+
+            if self.get_num_elems() > 1:
+                data = ', '.join([fmt % item for item in self.get_elems()])
+                return '%s = {%s}' % (self.get_name(), data)
+            else:
+                return '%s = %s' % (self.get_name(), fmt % self.get_elem())
 
 
 cdef new_field(EPR_SField* ptr, object parent=None):
@@ -1003,6 +1027,8 @@ cdef class Record(EprObject):
     # @NOTE: generator and generator expressions are not yet implemented in
     #        cython. As a workaround a list is used
     def fields(self):
+        '''Return the list of fields contained in the record'''
+
         # @TODO: use __iter__ when generator expressions will be available
         #return list(self)
         cdef int idx
@@ -1621,7 +1647,7 @@ cdef class Band(EprObject):
         return raster.data
 
     def __repr__(self):
-        return 'epr.Band(%s) of %s' % (self.get_name(), self.product)
+        return 'epr.Band(%s) of %s' % (self.get_name(), repr(self.product))
 
 
 cdef new_band(EPR_SBandId* ptr, object parent=None):
@@ -1754,10 +1780,12 @@ cdef class Dataset(EprObject):
     # @NOTE: generator and generator expressions are not yet implemented in
     #        cython. As a workaround a list is used
     def records(self):
+        '''Return the list of records contained in the dataset'''
+
         # @TODO: use __iter__ when generator expressions will be available
         #return list(self)
         cdef int idx
-        return [self.get_record_at(idx)
+        return [self.read_record(idx)
                             for idx in range(epr_get_num_records(self._ptr))]
 
     def __iter__(self):
@@ -2091,11 +2119,15 @@ cdef class Product(EprObject):
     # @NOTE: generator and generator expressions are not yet implemented in
     #        cython. As a workaround a list is used
     def datasets(self):
+        '''Return the list of dataset in the product'''
+
         cdef int idx
         return [self.get_dataset_at(idx)
                             for idx in range(epr_get_num_datasets(self._ptr))]
 
     def bands(self):
+        '''Return the list of bands in the product'''
+
         return [self.get_band_at(idx)
                             for idx in range(epr_get_num_bands(self._ptr))]
 
@@ -2109,9 +2141,9 @@ cdef class Product(EprObject):
 
     def __str__(self):
         lines = [repr(self), '']
-        lines.extend(map(str, self.datasets()))
+        lines.extend(map(repr, self.datasets()))
         lines.append('')
-        lines.extend(map(str, self.bands()))
+        lines.extend(map(repr, self.bands()))
         return '\n'.join(map(repr, lines))
 
 

@@ -4,8 +4,7 @@ PyEPR TODO
 * debug mode (error handlers and logging)
 * suppress compilation warnings
 * high level interface (package + .so)
-* __str__, __eq__, __ne__, __iter__, __contains__
-* better test of print methods (compare with __str__)
+* __eq__, __ne__, __contains__
 * read_bitmask_raster
 * split .pxi, .pxd
 * support for multiple version of EPR API (2.2 and 2.1)

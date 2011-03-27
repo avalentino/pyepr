@@ -5,8 +5,20 @@ Change history
 PyEPR 0.3 (in development)
 --------------------------
 
-* version string of the EPR C API is now exposed as module attribute 
+* version string of the EPR C API is now exposed as module attribute
   :data:`epr.EPR_C_API_VERSION`
+* implemented ``__repr__``, ``__str__``and ``__iter__`` special methods
+* added utility methods (not included in the C API) like:
+
+  - :meth:`epr.Record.get_field_names`
+  - :meth:`epr.Record.fields`
+  - :meth:`epr.Dataset.records`
+  - :meth:`epr.Product.get_dataset_names`
+  - :meth:`epr.Product.get_band_names`
+  - :meth:`epr.Product.datasets`
+  - :meth:`epr.Product.bands`
+
+* fixed a logic error that caused empty messages in custom EPR exceptions
 
 
 PyEPR 0.2 (20/03/2011)

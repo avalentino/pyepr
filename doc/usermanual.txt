@@ -29,7 +29,7 @@ Parameters" record to the standard output::
         'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1')
     dataset = product.get_dataset('MAIN_PROCESSING_PARAMS_ADS')
     record = dataset.read_record(0)
-    record.print_record()
+    print record
 
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _Python: http://www.python.org
@@ -268,3 +268,59 @@ Library initialization
 Differently from the C API library initialization is not needed: it is
 performed internally the first time the :mod:`epr` module is imported
 in Python_.
+
+
+High level API
+--------------
+
+@TBW
+* :meth:`epr.Record.fields`
+* :meth:`epr.Record.get_field_names`
+* :meth:`epr.Dataset.records`
+* :meth:`epr.Product.get_dataset_names`
+* :meth:`epr.Product.get_band_names`
+* :meth:`epr.Product.datasets`
+* :meth:`epr.Product.bands`
+
+
+Special methods
+---------------
+
+The Python_ EPR API also implements some `special method`_ in order to make
+EPR programming even handy and, in short, pythonic_.
+
+The ``__repr__`` methods have been overridden to provide a little more
+information with respect to the standard implementation.
+
+In some cases ``__str__`` method have been overridden to output a verbose
+string representation of the objects and their contents.
+
+If the EPR object has a ``print_`` method (like e.g. :meth:`epr.Record.print_`
+and :meth:`epr.Filed.print_`) then the string representation of the object
+will have in the same format used by the ``print_`` method.
+So writing::
+
+    fd.write(str(record))
+
+giver the same result of
+
+    record.print_(fd)
+
+Of course the :meth:`epr.Record.print_` method is more efficient for writing
+to file.
+
+Also :class:`dataset` and :class:`Record` classes implement the ``__iter__``
+`special method`_ for iterating over records and fields respectively.
+So it is possible to write code like the following::
+
+    for record in dataset:
+        for index, field in enumerate(record):
+            print index, field
+
+.. todo:: describe the ``__len__`` method (still not implemented)
+.. todo:: describe the ``__ep__`` and ``__ne__`` methods (still not implemented)
+.. todo:: describe the ``__contains__`` method (still not implemented)
+
+.. _`special method`: http://docs.python.org/reference/datamodel.html
+.. _pythonic: http://www.cafepy.com/article/be_pythonic/
+
