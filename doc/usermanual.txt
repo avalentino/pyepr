@@ -273,7 +273,8 @@ in Python_.
 High level API
 --------------
 
-@TBW
+PyEPR_ provides some utility method that has no correspondent in the C API:
+
 * :meth:`epr.Record.fields`
 * :meth:`epr.Record.get_field_names`
 * :meth:`epr.Dataset.records`
@@ -281,6 +282,19 @@ High level API
 * :meth:`epr.Product.get_band_names`
 * :meth:`epr.Product.datasets`
 * :meth:`epr.Product.bands`
+
+Example::
+
+    for dataset in product.datasets():
+        for record in dataset.records():
+            print record
+            print
+
+Another example::
+
+    if 'proc_data' in product.band_names():
+        band = product.get_band('proc_data')
+        print band
 
 
 Special methods
@@ -296,21 +310,22 @@ In some cases ``__str__`` method have been overridden to output a verbose
 string representation of the objects and their contents.
 
 If the EPR object has a ``print_`` method (like e.g. :meth:`epr.Record.print_`
-and :meth:`epr.Filed.print_`) then the string representation of the object
+and :meth:`epr.Field.print_`) then the string representation of the object
 will have in the same format used by the ``print_`` method.
 So writing::
 
     fd.write(str(record))
 
-giver the same result of
+giver the same result of::
 
     record.print_(fd)
 
 Of course the :meth:`epr.Record.print_` method is more efficient for writing
 to file.
 
-Also :class:`dataset` and :class:`Record` classes implement the ``__iter__``
-`special method`_ for iterating over records and fields respectively.
+Also :class:`epr.Dataset` and :class:`epr.Record` classes implement the
+``__iter__`` `special method`_ for iterating over records and fields
+respectively.
 So it is possible to write code like the following::
 
     for record in dataset:
