@@ -980,7 +980,7 @@ cdef class Record(EprObject):
 
         return new_field(field_ptr, self)
 
-    # @NOTE: high evel interface
+    # --- high level interface ------------------------------------------------
     def get_field_names(self):
         '''Return the list of names of the fields in the product
 
@@ -1115,6 +1115,7 @@ cdef class Raster(EprObject):
 
         return val
 
+    # --- high level interface ------------------------------------------------
     cdef np.ndarray toarray(self):
         cdef np.NPY_TYPES dtype = _epr_to_numpy_type_id(self._ptr.data_type)
         if dtype == np.NPY_NOTYPE:
@@ -1125,8 +1126,7 @@ cdef class Raster(EprObject):
         shape[1] = self._ptr.raster_width
 
         cdef np.ndarray result
-        result = np.PyArray_SimpleNewFromData(2, shape, dtype,
-                                              self._ptr.buffer)
+        result = np.PyArray_SimpleNewFromData(2, shape, dtype, self._ptr.buffer)
 
         # Make the ndarray keep a reference to this object
         np.set_array_base(result, self)
@@ -1531,6 +1531,7 @@ cdef class Band(EprObject):
 
         return raster
 
+    # --- high level interface ------------------------------------------------
     def read_as_array(self, width=None, height=None,
                       uint xoffset=0, uint yoffset=0,
                       uint xstep=1, uint ystep=1):
@@ -1674,6 +1675,7 @@ cdef class Dataset(EprObject):
 
         return new_record(epr_create_record(self._ptr), self, True)
 
+    # @TODO: default: index=0
     def read_record(self, uint index, Record record=None):
         '''Reads specified record of the dataset
 
@@ -1717,6 +1719,7 @@ cdef class Dataset(EprObject):
 
         return record
 
+    # --- high level interface ------------------------------------------------
     # @TODO: __iter__ on records
 
 
@@ -1874,23 +1877,6 @@ cdef class Product(EprObject):
 
         return new_dataset(dataset_id, self)
 
-    # @NOTE: high evel interface
-    def get_dataset_names(self):
-        '''Return the list of names of the datasets in the product
-
-        .. note:: this method has no correspondent in the C API
-
-        '''
-
-        cdef EPR_SDatasetId* dataset_ptr
-        cdef int idx
-        names = []
-        for idx in range(self.get_num_datasets()):
-            dataset_ptr = epr_get_dataset_id_at(self._ptr, idx)
-            names.append(epr_get_dataset_name(dataset_ptr))
-
-        return names
-
     def get_dsd_at(self, uint index):
         '''Gets the DSD at the specified position
 
@@ -1969,23 +1955,6 @@ cdef class Product(EprObject):
 
         return new_band(band_id, self)
 
-    # @NOTE: high evel interface
-    def get_band_names(self):
-        '''Return the list of names of the bands in the product
-
-        .. note:: this method has no correspondent in the C API
-
-        '''
-
-        cdef EPR_SBandId* band_ptr
-        cdef int idx
-        names = []
-        for idx in range(self.get_num_bands()):
-            band_ptr = epr_get_band_id_at(self._ptr, idx)
-            names.append(epr_get_band_name(band_ptr))
-
-        return names
-
     # @TODO: complete and make it more pythonic
     #def read_bitmask_raster(self, bm_expr, int xoffset, int yoffset,
     #                        Raster raster not Null):
@@ -2033,6 +2002,38 @@ cdef class Product(EprObject):
     #
     #    return raster
 
+    # --- high level interface ------------------------------------------------
+    def get_dataset_names(self):
+        '''Return the list of names of the datasets in the product
+
+        .. note:: this method has no correspondent in the C API
+
+        '''
+
+        cdef EPR_SDatasetId* dataset_ptr
+        cdef int idx
+        names = []
+        for idx in range(self.get_num_datasets()):
+            dataset_ptr = epr_get_dataset_id_at(self._ptr, idx)
+            names.append(epr_get_dataset_name(dataset_ptr))
+
+        return names
+
+    def get_band_names(self):
+        '''Return the list of names of the bands in the product
+
+        .. note:: this method has no correspondent in the C API
+
+        '''
+
+        cdef EPR_SBandId* band_ptr
+        cdef int idx
+        names = []
+        for idx in range(self.get_num_bands()):
+            band_ptr = epr_get_band_id_at(self._ptr, idx)
+            names.append(epr_get_band_name(band_ptr))
+
+        return names
 
 def open(filename):
     '''Opens the ENVISAT product
