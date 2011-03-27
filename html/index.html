@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ENVISAT Product Reader Python API &mdash; PyEPR v0.2a documentation</title>
+    <title>ENVISAT Product Reader Python API &mdash; PyEPR 0.3 documentation</title>
+    
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.2a',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PyEPR v0.2a documentation" href="#" />
+    <link rel="top" title="PyEPR 0.3 documentation" href="#" />
     <link rel="next" title="User Manual" href="usermanual.html" /> 
   </head>
   <body>
@@ -38,7 +41,7 @@
         <li class="right" >
           <a href="usermanual.html" title="User Manual"
              accesskey="N">next</a> |</li>
-        <li><a href="#">PyEPR v0.2a documentation</a> &raquo;</li> 
+        <li><a href="#">PyEPR 0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -53,17 +56,17 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">HomePage:</th><td class="field-body"><a class="reference external" href="https://github.com/avalentino/pyepr">https://github.com/avalentino/pyepr</a></td>
+<tr class="field-odd field"><th class="field-name">HomePage:</th><td class="field-body"><a class="reference external" href="https://github.com/avalentino/pyepr">https://github.com/avalentino/pyepr</a></td>
 </tr>
-<tr class="field"><th class="field-name">Author:</th><td class="field-body">Antonio Valentino</td>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Antonio Valentino</td>
 </tr>
-<tr class="field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:antonio&#46;valentino&#37;&#52;&#48;tiscali&#46;it">antonio<span>&#46;</span>valentino<span>&#64;</span>tiscali<span>&#46;</span>it</a></td>
+<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:antonio&#46;valentino&#37;&#52;&#48;tiscali&#46;it">antonio<span>&#46;</span>valentino<span>&#64;</span>tiscali<span>&#46;</span>it</a></td>
 </tr>
-<tr class="field"><th class="field-name">Date:</th><td class="field-body">20/03/2011</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">20/03/2011</td>
 </tr>
-<tr class="field"><th class="field-name">Copyright:</th><td class="field-body">2011, Antonio Valentino &lt;<a class="reference external" href="mailto:antonio&#46;valentino&#37;&#52;&#48;tiscali&#46;it">antonio<span>&#46;</span>valentino<span>&#64;</span>tiscali<span>&#46;</span>it</a>&gt;</td>
+<tr class="field-odd field"><th class="field-name">Copyright:</th><td class="field-body">2011, Antonio Valentino &lt;<a class="reference external" href="mailto:antonio&#46;valentino&#37;&#52;&#48;tiscali&#46;it">antonio<span>&#46;</span>valentino<span>&#64;</span>tiscali<span>&#46;</span>it</a>&gt;</td>
 </tr>
-<tr class="field"><th class="field-name">Version:</th><td class="field-body">0.2</td>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">0.3</td>
 </tr>
 </tbody>
 </table>
@@ -146,6 +149,8 @@ along with PyEPR.  If not, see &lt;<a class="reference external" href="http://ww
 <li class="toctree-l2"><a class="reference internal" href="usermanual.html#enumerators">Enumerators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="usermanual.html#error-handling-and-logging">Error handling and logging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="usermanual.html#library-initialization">Library initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usermanual.html#high-level-api">High level API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usermanual.html#special-methods">Special methods</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a><ul>
@@ -156,6 +161,7 @@ along with PyEPR.  If not, see &lt;<a class="reference external" href="http://ww
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="NEWS.html">Change history</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="NEWS.html#pyepr-0-3-in-development">PyEPR 0.3 (in development)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="NEWS.html#pyepr-0-2-20-03-2011">PyEPR 0.2 (20/03/2011)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="NEWS.html#pyepr-0-1-09-03-2011">PyEPR 0.1 (09/03/2011)</a></li>
 </ul>
@@ -232,12 +238,12 @@ along with PyEPR.  If not, see &lt;<a class="reference external" href="http://ww
         <li class="right" >
           <a href="usermanual.html" title="User Manual"
              >next</a> |</li>
-        <li><a href="#">PyEPR v0.2a documentation</a> &raquo;</li> 
+        <li><a href="#">PyEPR 0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Antonio Valentino.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre.
     </div>
   </body>
 </html>

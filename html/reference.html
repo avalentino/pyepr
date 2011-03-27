@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API Reference &mdash; PyEPR v0.2a documentation</title>
+    <title>API Reference &mdash; PyEPR 0.3 documentation</title>
+    
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.2a',
+        VERSION:     '0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PyEPR v0.2a documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.3 documentation" href="index.html" />
     <link rel="next" title="Change history" href="NEWS.html" />
     <link rel="prev" title="User Manual" href="usermanual.html" /> 
   </head>
@@ -42,7 +45,7 @@
         <li class="right" >
           <a href="usermanual.html" title="User Manual"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR v0.2a documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -111,9 +114,9 @@ The rest of the string decodes product instance properties.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; the name of the band</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; the name of the band</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the requested <a class="reference internal" href="#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt></a> instance, or raises a
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the requested <a class="reference internal" href="#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt></a> instance, or raises a
 <a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a> if not found</td>
 </tr>
 </tbody>
@@ -128,10 +131,10 @@ The rest of the string decodes product instance properties.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; the index identifying the position of the band, starting
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; the index identifying the position of the band, starting
 with 0, must not be negative</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the requested <a class="reference internal" href="#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt></a> instance, or raises a
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the requested <a class="reference internal" href="#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt></a> instance, or raises a
 <a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a> if not found</td>
 </tr>
 </tbody>
@@ -146,9 +149,9 @@ with 0, must not be negative</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; the dataset name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; the dataset name</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the requested <a class="reference internal" href="#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">Dataset</span></tt></a> instance</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the requested <a class="reference internal" href="#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">Dataset</span></tt></a> instance</td>
 </tr>
 </tbody>
 </table>
@@ -162,10 +165,10 @@ with 0, must not be negative</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; the index identifying the position of the dataset, starting
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; the index identifying the position of the dataset, starting
 with 0, must not be negative</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the requested <a class="reference internal" href="#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">Dataset</span></tt></a></td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the requested <a class="reference internal" href="#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">Dataset</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -181,10 +184,10 @@ within the product.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; the index identifying the position of the DSD, starting
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; the index identifying the position of the DSD, starting
 with 0, must not be negative</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the requested <a class="reference internal" href="#epr.DSD" title="epr.DSD"><tt class="xref py py-class docutils literal"><span class="pre">DSD</span></tt></a> instance</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the requested <a class="reference internal" href="#epr.DSD" title="epr.DSD"><tt class="xref py py-class docutils literal"><span class="pre">DSD</span></tt></a> instance</td>
 </tr>
 </tbody>
 </table>
@@ -253,6 +256,26 @@ in the product</p>
 </div>
 </dd></dl>
 
+<dl class="method">
+<dt id="epr.Product.datasets">
+<tt class="descname">datasets</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.datasets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of dataset in the product</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this method has no correspondent in the C API</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Product.bands">
+<tt class="descname">bands</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.bands" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of bands in the product</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this method has no correspondent in the C API</p>
+</div>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -314,7 +337,7 @@ calls to <a class="reference internal" href="#epr.Dataset.read_record" title="ep
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the new record instance</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the new record instance</td>
 </tr>
 </tbody>
 </table>
@@ -329,7 +352,7 @@ index. In order to reduce memory reallocation, a record
 (pre-)created by the method <a class="reference internal" href="#epr.Dataset.create_record" title="epr.Dataset.create_record"><tt class="xref py py-meth docutils literal"><span class="pre">Dataset.create_record()</span></tt></a> can
 be passed to this method.
 Data is then read into this given record.</p>
-<p>If no record (<tt class="xref docutils literal"><span class="pre">None</span></tt>) is given, the method initiates a new
+<p>If no record (<tt class="docutils literal"><span class="pre">None</span></tt>) is given, the method initiates a new
 one.</p>
 <p>In both cases, the record in which the data is read into will
 be  returned.</p>
@@ -337,20 +360,30 @@ be  returned.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>index</strong> &#8211; the zero-based record index</li>
 <li><strong>record</strong> &#8211; a pre-created record to reduce memory reallocation, can be
-<tt class="xref docutils literal"><span class="pre">None</span></tt> (default) to let the function allocate a new
+<tt class="docutils literal"><span class="pre">None</span></tt> (default) to let the function allocate a new
 record</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the record in which the data has been read into or raises
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the record in which the data has been read into or raises
 an exception (<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a>) if an error occurred</p>
 </td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Dataset.records">
+<tt class="descname">records</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Dataset.records" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of records contained in the dataset</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this method has no correspondent in the C API</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -377,9 +410,9 @@ It contains the field info and all corresponding values.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; the the name of required field</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; the the name of required field</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the specified <a class="reference internal" href="#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">Field</span></tt></a> or raises an exception
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the specified <a class="reference internal" href="#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">Field</span></tt></a> or raises an exception
 (<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a>) if an error occurred</td>
 </tr>
 </tbody>
@@ -394,9 +427,9 @@ It contains the field info and all corresponding values.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; the zero-based index (position within record) of the field</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; the zero-based index (position within record) of the field</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the field or raises and exception (<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a>)
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the field or raises and exception (<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a>)
 if an error occurred</td>
 </tr>
 </tbody>
@@ -420,7 +453,7 @@ is be printed to standard output (<tt class="xref py py-data docutils literal"><
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ostream</strong> &#8211; the (opened) output file object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ostream</strong> &#8211; the (opened) output file object</td>
 </tr>
 </tbody>
 </table>
@@ -442,7 +475,7 @@ will be printed to standard output (<tt class="xref py py-data docutils literal"
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>field_index</strong> &#8211; the index of field in the record</li>
 <li><strong>element_index</strong> &#8211; the index of element in the specified field</li>
 <li><strong>ostream</strong> &#8211; the (opened) output file object</li>
@@ -462,6 +495,16 @@ a generic stream object like <tt class="xref py py-class docutils literal"><span
 <dt id="epr.Record.get_field_names">
 <tt class="descname">get_field_names</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Record.get_field_names" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the list of names of the fields in the product</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this method has no correspondent in the C API</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Record.fields">
+<tt class="descname">fields</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Record.fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of fields contained in the record</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">this method has no correspondent in the C API</p>
@@ -522,10 +565,10 @@ types defined in the internal <tt class="docutils literal"><span class="pre">fie
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; the zero-based index of element to be returned, must not be
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; the zero-based index of element to be returned, must not be
 negative. Default: 0.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the typed value from given field</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the typed value from given field</td>
 </tr>
 </tbody>
 </table>
@@ -541,7 +584,7 @@ field.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the data array (<tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt>) having the type of
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the data array (<tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt>) having the type of
 the field</td>
 </tr>
 </tbody>
@@ -559,7 +602,7 @@ is be printed to standard output (<tt class="xref py py-data docutils literal"><
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ostream</strong> &#8211; the (opened) output file object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ostream</strong> &#8211; the (opened) output file object</td>
 </tr>
 </tbody>
 </table>
@@ -801,7 +844,7 @@ along track (source_step_y) directions.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>src_width</strong> &#8211; the width (across track dimension) of the source to be read
 into the raster</li>
 <li><strong>src_height</strong> &#8211; the height (along track dimension) of the source to be read
@@ -813,7 +856,7 @@ into the raster. Default 1.</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the new raster instance or raises an exception
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the new raster instance or raises an exception
 (<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a>) if an error occurred</p>
 </td>
 </tr>
@@ -836,7 +879,7 @@ of the raster into which the data are read.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>xoffset</strong> &#8211; across-track source co-ordinate in pixel co-ordinates
 (zero-based) of the upper right corner of the source-region.
 Default 0.</li>
@@ -848,7 +891,7 @@ read into. If not provided a new <a class="reference internal" href="#epr.Raster
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the <a class="reference internal" href="#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">Raster</span></tt></a> instance in which data are read</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the <a class="reference internal" href="#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">Raster</span></tt></a> instance in which data are read</p>
 </td>
 </tr>
 </tbody>
@@ -876,7 +919,7 @@ of the raster into which the data are read.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>src_width</strong> &#8211; the width (across track dimension) of the source to be read
 into the raster. If not provided reads as much as possible</li>
 <li><strong>src_height</strong> &#8211; the height (along track dimension) of the source to be read
@@ -894,7 +937,7 @@ into the raster. Default 1</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the <tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt> instance in which data are read</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the <tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt> instance in which data are read</p>
 </td>
 </tr>
 </tbody>
@@ -979,13 +1022,13 @@ raster (i.e. pixel)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>x</strong> &#8211; the (zero-based) X coordinate of the pixel</li>
 <li><strong>y</strong> &#8211; the (zero-based) Y coordinate of the pixel</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the typed value at the given co-ordinate</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the typed value at the given co-ordinate</p>
 </td>
 </tr>
 </tbody>
@@ -1053,9 +1096,9 @@ and tie points number.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>product_file_path</strong> &#8211; the path to the ENVISAT product file</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>product_file_path</strong> &#8211; the path to the ENVISAT product file</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the <a class="reference internal" href="#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt></a> instance representing the specified
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the <a class="reference internal" href="#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt></a> instance representing the specified
 product. An exception (<tt class="xref py py-class docutils literal"><span class="pre">ValueError</span></tt>) is raised if the
 file could not be opened.</td>
 </tr>
@@ -1097,7 +1140,7 @@ later use as a bit-mask.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>data_type</strong> &#8211; <p>the type of the data to stored in the raster, must be one of
 E_TID_*.</p>
 <div class="admonition-see-also admonition seealso">
@@ -1118,7 +1161,7 @@ into the raster. Default 1.</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the new <a class="reference internal" href="#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">Raster</span></tt></a> instance</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the new <a class="reference internal" href="#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">Raster</span></tt></a> instance</p>
 </td>
 </tr>
 </tbody>
@@ -1138,7 +1181,7 @@ into the raster. Default 1.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>src_width</strong> &#8211; the width (across track dimension) of the source to be read
 into the raster</li>
 <li><strong>src_height</strong> &#8211; the height (along track dimension) of the source to be read
@@ -1150,7 +1193,7 @@ into the raster. Default 1.</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the new raster instance or raises an exception
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the new raster instance or raises an exception
 (<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a>) if an error occurred</p>
 </td>
 </tr>
@@ -1185,9 +1228,9 @@ into the raster. Default 1.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message</strong> &#8211; error message</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message</strong> &#8211; error message</td>
 </tr>
-<tr class="field"><th class="field-name">Pram code:</th><td class="field-body">EPR error code</td>
+<tr class="field-even field"><th class="field-name">Pram code:</th><td class="field-body">EPR error code</td>
 </tr>
 </tbody>
 </table>
@@ -1208,6 +1251,12 @@ into the raster. Default 1.</li>
 </div>
 <div class="section" id="data">
 <h2>Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="epr.EPR_C_API_VERSION">
+<tt class="descclassname">epr.</tt><tt class="descname">EPR_C_API_VERSION</tt><a class="headerlink" href="#epr.EPR_C_API_VERSION" title="Permalink to this definition">¶</a></dt>
+<dd><p>Version string of the wrapped <a class="reference external" href="https://github.com/bcdev/epr-api">EPR API</a> C library</p>
+</dd></dl>
+
 <div class="section" id="data-type-identifiers">
 <h3>Data type identifiers<a class="headerlink" href="#data-type-identifiers" title="Permalink to this headline">¶</a></h3>
 <dl class="data">
@@ -1402,12 +1451,12 @@ into the raster. Default 1.</li>
         <li class="right" >
           <a href="usermanual.html" title="User Manual"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR v0.2a documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Antonio Valentino.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre.
     </div>
   </body>
 </html>
