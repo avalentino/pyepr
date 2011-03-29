@@ -351,9 +351,10 @@ returns the number of elements in the field::
         assert len(field) == len(field.get_elem())
 
 .. note:: differently from the :meth:`epr.Field.get_num_elems` method
-          ``len(field)`` return the number of elements if the field type is
-           not :data:`epr.E_TID_STRING`.
-           If the field contains a string then the string length is returned.
+          ``len(field)`` return the number of elements if the field
+          type is not :data:`epr.E_TID_STRING`.
+          If the field contains a string then the string length is
+          returned.
 
 
 .. todo:: support to buffer protocol: __getbuffer__ and __releasebuffer__ (??)
