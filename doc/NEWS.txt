@@ -7,7 +7,8 @@ PyEPR 0.3 (in development)
 
 * version string of the EPR C API is now exposed as module attribute
   :data:`epr.EPR_C_API_VERSION`
-* implemented ``__repr__``, ``__str__``and ``__iter__`` special methods
+* implemented ``__repr__``, ``__str__``, ``__eq__``, ``__ne__`` and
+  ``__iter__`` special methods
 * added utility methods (not included in the C API) like:
 
   - :meth:`epr.Record.get_field_names`

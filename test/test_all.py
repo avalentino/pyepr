@@ -1023,6 +1023,16 @@ class TestField(unittest.TestCase):
         self.assertTrue(np.allclose(vect, self.FIELD_VALUES))
 
 
+class TestFieldWithMiltipleElems(TestField):
+    FIELD_NAME = 'image_parameters.first_swst_value'
+    FIELD_DESCRIPTION = 'Sampling Window Start time of first processed line'
+    FIELD_TYPE = epr.E_TID_FLOAT
+    FIELD_TYPE_NAME = 'float'
+    FIELD_NUM_ELEMS = 5
+    FIELD_VALUES = (6.0600759752560407e-05, 0., 0., 0., 0.)
+    FIELD_UNIT = 's'
+
+
 class TestFieldHighLevelAPI(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
     DATASET_NAME = 'MAIN_PROCESSING_PARAMS_ADS'
@@ -1055,23 +1065,55 @@ class TestFieldHighLevelAPI(unittest.TestCase):
                     data = data[:-1]
                 self.assertEqual(data, str(field))
 
+    def test_eq_field1_field1(self):
+        field = self.record.get_field_at(0)
+        self.assertEqual(field, field)
 
-class TestFieldWithMiltipleElems(TestField):
-    FIELD_NAME = 'image_parameters.first_swst_value'
-    FIELD_DESCRIPTION = 'Sampling Window Start time of first processed line'
-    FIELD_TYPE = epr.E_TID_FLOAT
-    FIELD_TYPE_NAME = 'float'
-    FIELD_NUM_ELEMS = 5
-    FIELD_VALUES = (6.0600759752560407e-05, 0., 0., 0., 0.)
-    FIELD_UNIT = 's'
+    def test_eq_field1_field2(self):
+        field1 = self.record.get_field_at(1)
+        field2 = self.record.get_field_at(2)
+        self.assertFalse(field1 == field2)
+
+    def test_eq_field_record(self):
+        field = self.record.get_field_at(0)
+        self.assertFalse(field == self.record)
+
+    def test_ne_field1_field1(self):
+        field = self.record.get_field_at(0)
+        self.assertFalse(field != field)
+
+    def test_ne_field1_field2(self):
+        field1 = self.record.get_field_at(1)
+        field2 = self.record.get_field_at(2)
+        self.assertNotEqual(field1, field2)
+
+    def test_ne_field_record(self):
+        field = self.record.get_field_at(0)
+        self.assertNotEqual(field, self.record)
+
+    def test_len_1(self):
+        field = self.record.get_field('num_looks_range')
+        self.assertEqual(len(field), field.get_num_elems())
+
+    def test_len_5(self):
+        field = self.record.get_field('parameter_codes.pri_code')
+        self.assertEqual(len(field), field.get_num_elems())
+
+    def test_len_e_tid_unknown(self):
+        field = self.record.get_field('spare_1')
+        self.assertEqual(len(field), field.get_num_elems())
+
+    def test_len_e_tid_string(self):
+        field = self.record.get_field('filter_window')
+        self.assertEqual(len(field), len(field.get_elem()))
 
 
 class TestDSD(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
 
     def setUp(self):
-        product = epr.Product(self.PRODUCT_FILE)
-        self.dsd = product.get_dsd_at(0)
+        self.product = epr.Product(self.PRODUCT_FILE)
+        self.dsd = self.product.get_dsd_at(0)
 
     def test_index(self):
         self.assertEqual(self.dsd.index, 0)
@@ -1104,6 +1146,28 @@ class TestDSD(unittest.TestCase):
     def test_dsr_size(self):
         self.assertEqual(self.dsd.dsr_size, 170)
         self.assertTrue(isinstance(self.dsd.dsr_size, (int, long)))
+
+    def test_eq_dsd1_dsd1(self):
+        self.assertEqual(self.dsd, self.dsd)
+
+    def test_eq_dsd1_dsd2(self):
+        dsd1 = self.product.get_dsd_at(1)
+        dsd2 = self.product.get_dsd_at(2)
+        self.assertFalse(dsd1 == dsd2)
+
+    def test_eq_dsd_product(self):
+        self.assertFalse(self.dsd == self.product)
+
+    def test_ne_dsd1_dsd1(self):
+        self.assertFalse(self.dsd != self.dsd)
+
+    def test_ne_dsd1_dsd2(self):
+        dsd1 = self.product.get_dsd_at(1)
+        dsd2 = self.product.get_dsd_at(2)
+        self.assertNotEqual(dsd1, dsd2)
+
+    def test_ne_dsd_record(self):
+        self.assertTrue(self.dsd != self.product)
 
 
 class TestDsdHighLevelAPI(unittest.TestCase):

@@ -45,6 +45,11 @@ __revision__ = '$Id$'
 __version__  = '0.3a'
 
 
+cdef extern from 'string.h':
+    int memcmp(void*, void*, size_t)
+    int strcmp(char*, char*)
+    int strlen(char*)
+
 cdef extern from 'Python.h':
     ctypedef struct FILE
     FILE* PyFile_AsFile(object)
@@ -141,8 +146,7 @@ cdef extern from 'epr_api.h':
     struct EPR_Field:
         #EPR_Magic magic
         #EPR_FieldInfo* info
-        #void* elems
-        pass
+        void* elems
 
     struct EPR_Record:
         #EPR_Magic magic
@@ -603,6 +607,42 @@ cdef class DSD(EprObject):
     def __repr__(self):
         return 'epr.DSD("%s")' % self.ds_name
 
+    def __richcmp__(self, other, int op):
+        cdef EPR_SDSD* p1 = (<DSD>self)._ptr
+        cdef EPR_SDSD* p2 = (<DSD>other)._ptr
+
+        if isinstance(self, DSD) and isinstance(other, DSD):
+            if op == 2:         # eq
+                if p1 == p2:
+                    return True
+
+                return ((p1.index     == p2.index) and
+                        (p1.ds_offset == p2.ds_offset) and
+                        (p1.ds_size   == p2.ds_size) and
+                        (p1.num_dsr   == p2.num_dsr) and
+                        (p1.dsr_size  == p2.dsr_size)and
+                        (strcmp(p1.ds_name, p2.ds_name) == 0) and
+                        (strcmp(p1.ds_type, p2.ds_type) == 0) and
+                        (strcmp(p1.filename, p2.filename) == 0))
+
+            elif op == 3:       # ne
+                if p1 == p2:
+                    return False
+
+                return ((p1.index     != p2.index) or
+                        (p1.ds_offset != p2.ds_offset) or
+                        (p1.ds_size   != p2.ds_size) or
+                        (p1.num_dsr   != p2.num_dsr) or
+                        (p1.dsr_size  != p2.dsr_size) or
+                        (strcmp(p1.ds_name, p2.ds_name) != 0) or
+                        (strcmp(p1.ds_type, p2.ds_type) != 0) or
+                        (strcmp(p1.filename, p2.filename) != 0))
+
+            else:
+                raise TypeError # only == and !=
+        else:
+            return NotImplemented
+
 
 cdef new_dsd(EPR_SDSD* ptr, object parent=None):
     if ptr is NULL:
@@ -865,6 +905,83 @@ cdef class Field(EprObject):
             else:
                 return '%s = %s' % (self.get_name(), fmt % self.get_elem())
 
+    def __richcmp__(self, other, int op):
+        cdef size_t n
+        cdef EPR_SField* p1 = (<Field>self)._ptr
+        cdef EPR_SField* p2 = (<Field>other)._ptr
+
+        if isinstance(self, Field) and isinstance(other, Field):
+            if op == 2:         # eq
+                if p1 == p2:
+                    return True
+
+                if ((epr_get_field_num_elems(p1) !=
+                            epr_get_field_num_elems(p2)) or
+
+                    (epr_get_field_type(p1) != epr_get_field_type(p2)) or
+
+                    (strcmp(epr_get_field_unit(p1),
+                            epr_get_field_unit(p2)) != 0) or
+
+                    (strcmp(epr_get_field_description(p1),
+                            epr_get_field_description(p2)) != 0) or
+
+                    (strcmp(epr_get_field_name(p1),
+                            epr_get_field_name(p2)) != 0)):
+
+                    return False
+
+                n = epr_get_data_type_size(epr_get_field_type(p1))
+                if n != 0:
+                    n *= epr_get_field_num_elems(p1)
+                #pyepr_check_errors()
+                if n <= 0:
+                    # @TODO: check
+                    return True
+
+                return (memcmp(p1.elems, p2.elems, n) == 0)
+
+            elif op == 3:       # ne
+                if p1 == p2:
+                    return False
+
+                if ((epr_get_field_num_elems(p1) !=
+                            epr_get_field_num_elems(p2)) or
+
+                    (epr_get_field_type(p1) != epr_get_field_type(p2)) or
+
+                    (strcmp(epr_get_field_unit(p1),
+                            epr_get_field_unit(p2)) != 0) or
+
+                    (strcmp(epr_get_field_description(p1),
+                            epr_get_field_description(p2)) != 0) or
+
+                    (strcmp(epr_get_field_name(p1),
+                            epr_get_field_name(p2)) != 0)):
+
+                    return True
+
+                n = epr_get_data_type_size(epr_get_field_type(p1))
+                if n != 0:
+                    n *= epr_get_field_num_elems(p1)
+                #pyepr_check_errors()
+                if n <= 0:
+                    # @TODO: check
+                    return False
+
+                return (memcmp(p1.elems, p2.elems, n) != 0)
+
+            else:
+                raise TypeError # only == and !=
+        else:
+            return NotImplemented
+
+    def __len__(self):
+        if epr_get_field_type(self._ptr) == e_tid_string:
+            return strlen(epr_get_field_elem_as_str(self._ptr))
+        else:
+            return epr_get_field_num_elems(self._ptr)
+
 
 cdef new_field(EPR_SField* ptr, object parent=None):
     if ptr is NULL:
@@ -905,7 +1022,7 @@ cdef class Record(EprObject):
         return epr_get_num_fields(self._ptr)
 
     def print_(self, ostream=None):
-        '''Write the record to specified file (default: :data:`sys.stdout`)
+        '''Write the record to specified file
 
         This method writes formatted contents of the record to
         specified *ostream* text file or (default) the ASCII output
@@ -915,7 +1032,8 @@ cdef class Record(EprObject):
             the (opened) output file object
 
         .. note:: the *ostream* parameter have to be a *real* file not
-                  a generic stream object like :class:`StringIO` instances
+                  a generic stream object like :class:`StringIO`
+                  instances
 
         '''
 
@@ -935,7 +1053,7 @@ cdef class Record(EprObject):
         pyepr_check_errors()
 
     def print_element(self, uint field_index, uint element_index, ostream=None):
-        '''Write the specified field element to file (default: :data:`sys.stdout`)
+        '''Write the specified field element to file
 
         This method writes formatted contents of the specified field
         element to the *ostream* text file or (default) the ASCII output
@@ -949,7 +1067,8 @@ cdef class Record(EprObject):
             the (opened) output file object
 
         .. note:: the *ostream* parameter have to be a *real* file not
-                  a generic stream object like :class:`StringIO` instances
+                  a generic stream object like :class:`StringIO`
+                  instances
 
         '''
 

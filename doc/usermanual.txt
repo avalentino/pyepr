@@ -332,9 +332,31 @@ So it is possible to write code like the following::
         for index, field in enumerate(record):
             print index, field
 
-.. todo:: describe the ``__len__`` method (still not implemented)
-.. todo:: describe the ``__ep__`` and ``__ne__`` methods (still not implemented)
-.. todo:: describe the ``__contains__`` method (still not implemented)
+:class:`DSD` and :class:`Filed` classes implement the ``__eq__`` and ``__ne__``
+methods for objects comparison::
+
+    if filed1 == field2:
+        print 'field 1 and field2 are equal'
+        print field1
+    else:
+        print 'field1:', field1
+        print 'field2:', field2
+
+:class:`Field` objecta also implement the ``__len__`` special method that
+returns the number of elements in the field::
+
+    if field.get_type() != epr.E_TID_STRING:
+        assert field.get_num_elems() == len(field)
+    else:
+        assert len(field) == len(field.get_elem())
+
+.. note:: differently from the :meth:`epr.Field.get_num_elems` method
+          ``len(field)`` return the number of elements if the field type is
+           not :data:`epr.E_TID_STRING`.
+           If the field contains a string then the string length is returned.
+
+
+.. todo:: support to buffer protocol: __getbuffer__ and __releasebuffer__ (??)
 
 .. _`special method`: http://docs.python.org/reference/datamodel.html
 .. _pythonic: http://www.cafepy.com/article/be_pythonic/
