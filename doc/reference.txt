@@ -187,6 +187,12 @@ Product
       .. note:: this method has no correspondent in the C API
 
 
+   .. rubric:: Implemented special methods
+
+   * __repr__
+   * __str__
+
+
 Dataset
 ~~~~~~~
 
@@ -276,6 +282,13 @@ Dataset
       Return the list of records contained in the dataset
 
       .. note:: this method has no correspondent in the C API
+
+
+   .. rubric:: Implemented special methods
+
+   * __repr__
+   * __str__
+   * __iter__
 
 
 Record
@@ -368,6 +381,13 @@ Record
       .. note:: this method has no correspondent in the C API
 
 
+   .. rubric:: Implemented special methods
+
+   * __repr__
+   * __str__
+   * __iter__
+
+
 Field
 ~~~~~
 
@@ -446,6 +466,22 @@ Field
                 a generic stream object like :class:`StringIO` instances
 
 
+   .. rubric:: Implemented special methods
+
+   * __repr__
+   * __str__
+   * __eq__
+   * __ne__
+   * __len__ [#]_
+
+.. rubric:: Footnotes
+
+.. [#] if the field is a :data:`E_TID_STRING` field then the
+       :meth:`__len__` method returns the string length, otherwise the
+       number of elements of the field is returned (same as
+       :meth:`Field.get_num_elems`)
+
+
 DSD
 ~~~
 
@@ -495,6 +531,13 @@ DSD
    .. attribute:: num_dsr
 
       The number of dataset records for the given dataset name
+
+
+   .. rubric:: Implemented special methods
+
+   * __repr__
+   * __eq__
+   * __ne__
 
 
 Band
@@ -750,6 +793,11 @@ Band
                    :func:`create_raster` and :meth:`Band.read_raster`
 
 
+   .. rubric:: Implemented special methods
+
+   * __repr__
+
+
 Raster
 ~~~~~~
 
@@ -827,6 +875,11 @@ Raster
    .. method:: get_width
 
       Gets the raster's width in pixels
+
+
+   .. rubric:: Implemented special methods
+
+   * __repr__
 
 
 EPRTime
