@@ -1,11 +1,12 @@
 PyEPR TODO
 ==========
 
-* debug mode (error handlers and logging)
-* suppress compilation warnings
 * read_bitmask_raster
+* support to buffer protocol: __getbuffer__ and __releasebuffer__ (??)
+* suppress compilation warnings
 * split .pxi, .pxd (??)
 * support for multiple version of EPR API (2.2 and 2.1)
-* python 3
 * code examples
 * use a smaller test dataset
+* python 3
+* debug mode (error handlers and logging)
