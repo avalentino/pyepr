@@ -35,7 +35,7 @@ setup(
     version='0.3',
     author='Antonio Valentino',
     author_email='antonio.valentino@tiscali.it',
-    url='https://github.com/avalentino/pyepr',
+    url='http://avalentino.github.com/pyepr',
     description='Python ENVISAT Product Reader API',
     long_description='''PyEPR provides Python_ bindings for the ENVISAT
 Product Reader C API (`EPR API`_) for reading satellite data from ENVISAT_

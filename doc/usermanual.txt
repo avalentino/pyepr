@@ -66,11 +66,12 @@ correctly installed and configured:
 Download
 --------
 
-Official source tarballs can be downloads form:
+Official source tarballs can be downloaded form PyPi_:
 
     http://pypi.python.org/pypi/pyepr
 
-Source code of development versions is available at
+The source code of the development versions is available on the GitHub_
+project page
 
     https://github.com/avalentino/pyepr
 
@@ -78,6 +79,8 @@ To clone the git_ repository the following command can be used::
 
     $ git clone https://github.com/avalentino/pyepr.git
 
+.. _PyPi: http://pypi.python.org
+.. _GitHub: https://github.com
 .. _git: http://git-scm.com
 
 
