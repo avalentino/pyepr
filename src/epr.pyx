@@ -475,6 +475,12 @@ cdef class CLib:
 
     def __cinit__(self, *args, **kwargs):
         cdef char* msg
+
+        # @TODO:check
+        #if EPR_C_API_VERSION != '2.2':
+        #    raise ImportError('C library version not supported: "%s"' %
+        #                                                    EPR_C_API_VERSION)
+
         #if epr_init_api(e_log_warning, epr_log_message, NULL):
         if epr_init_api(e_log_warning, NULL, NULL):
             msg = <char*>epr_get_last_err_message()
