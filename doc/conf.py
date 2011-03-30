@@ -208,7 +208,7 @@ latex_font_size = '12pt'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('doc', 'pyepr.tex', u'PyEPR Documentation',
+  ('index', 'pyepr.tex', u'PyEPR Documentation',
    u'Antonio Valentino', 'manual'),
 ]
 
