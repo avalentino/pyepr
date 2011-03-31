@@ -359,9 +359,5 @@ returns the number of elements in the field::
           If the field contains a string then the string length is
           returned.
 
-
-.. todo:: support to buffer protocol: __getbuffer__ and __releasebuffer__ (??)
-
 .. _`special method`: http://docs.python.org/reference/datamodel.html
 .. _pythonic: http://www.cafepy.com/article/be_pythonic/
-
