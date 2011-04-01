@@ -276,6 +276,11 @@ in the product</p>
 </div>
 </dd></dl>
 
+<p class="rubric">Implemented special methods</p>
+<ul class="simple">
+<li>__repr__</li>
+<li>__str__</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -386,6 +391,12 @@ an exception (<a class="reference internal" href="#epr.EPRValueError" title="epr
 </div>
 </dd></dl>
 
+<p class="rubric">Implemented special methods</p>
+<ul class="simple">
+<li>__repr__</li>
+<li>__str__</li>
+<li>__iter__</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -511,6 +522,12 @@ a generic stream object like <tt class="xref py py-class docutils literal"><span
 </div>
 </dd></dl>
 
+<p class="rubric">Implemented special methods</p>
+<ul class="simple">
+<li>__repr__</li>
+<li>__str__</li>
+<li>__iter__</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -613,8 +630,26 @@ a generic stream object like <tt class="xref py py-class docutils literal"><span
 </div>
 </dd></dl>
 
+<p class="rubric">Implemented special methods</p>
+<ul class="simple">
+<li>__repr__</li>
+<li>__str__</li>
+<li>__eq__</li>
+<li>__ne__</li>
+<li>__len__ <a class="footnote-reference" href="#id2" id="id1">[1]</a></li>
+</ul>
 </dd></dl>
 
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>if the field is a <a class="reference internal" href="#epr.E_TID_STRING" title="epr.E_TID_STRING"><tt class="xref py py-data docutils literal"><span class="pre">E_TID_STRING</span></tt></a> field then the
+<tt class="xref py py-meth docutils literal"><span class="pre">__len__()</span></tt> method returns the string length, otherwise the
+number of elements of the field is returned (same as
+<a class="reference internal" href="#epr.Field.get_num_elems" title="epr.Field.get_num_elems"><tt class="xref py py-meth docutils literal"><span class="pre">Field.get_num_elems()</span></tt></a>)</td></tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="dsd">
 <h3>DSD<a class="headerlink" href="#dsd" title="Permalink to this headline">¶</a></h3>
@@ -672,6 +707,12 @@ dataset and its location within an ENVISAT product file</p>
 <dd><p>The number of dataset records for the given dataset name</p>
 </dd></dl>
 
+<p class="rubric">Implemented special methods</p>
+<ul class="simple">
+<li>__repr__</li>
+<li>__eq__</li>
+<li>__ne__</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -955,6 +996,10 @@ sub-class if case of errors</p>
 </div>
 </dd></dl>
 
+<p class="rubric">Implemented special methods</p>
+<ul class="simple">
+<li>__repr__</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -1054,6 +1099,10 @@ buffer</p>
 <dd><p>Gets the raster&#8217;s width in pixels</p>
 </dd></dl>
 
+<p class="rubric">Implemented special methods</p>
+<ul class="simple">
+<li>__repr__</li>
+</ul>
 </dd></dl>
 
 </div>

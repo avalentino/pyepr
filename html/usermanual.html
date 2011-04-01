@@ -114,10 +114,11 @@ wants to build a development version of <a class="reference external" href="http
 </div>
 <div class="section" id="download">
 <h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
-<p>Official source tarballs can be downloads form:</p>
+<p>Official source tarballs can be downloaded form <a class="reference external" href="http://pypi.python.org">PyPi</a>:</p>
 <blockquote>
 <div><a class="reference external" href="http://pypi.python.org/pypi/pyepr">http://pypi.python.org/pypi/pyepr</a></div></blockquote>
-<p>Source code of development versions is available at</p>
+<p>The source code of the development versions is available on the <a class="reference external" href="https://github.com">GitHub</a>
+project page</p>
 <blockquote>
 <div><a class="reference external" href="https://github.com/avalentino/pyepr">https://github.com/avalentino/pyepr</a></div></blockquote>
 <p>To clone the <a class="reference external" href="http://git-scm.com">git</a> repository the following command can be used:</p>
@@ -348,17 +349,31 @@ So it is possible to write code like the following:</p>
         <span class="k">print</span> <span class="n">index</span><span class="p">,</span> <span class="n">field</span>
 </pre></div>
 </div>
-<div class="admonition-todo admonition " id="index-0">
-<p class="first admonition-title">Todo</p>
-<p class="last">describe the <tt class="docutils literal"><span class="pre">__len__</span></tt> method (still not implemented)</p>
+<p><tt class="xref py py-class docutils literal"><span class="pre">DSD</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">Filed</span></tt> classes implement the <tt class="docutils literal"><span class="pre">__eq__</span></tt> and <tt class="docutils literal"><span class="pre">__ne__</span></tt>
+methods for objects comparison:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">filed1</span> <span class="o">==</span> <span class="n">field2</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;field 1 and field2 are equal&#39;</span>
+    <span class="k">print</span> <span class="n">field1</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;field1:&#39;</span><span class="p">,</span> <span class="n">field1</span>
+    <span class="k">print</span> <span class="s">&#39;field2:&#39;</span><span class="p">,</span> <span class="n">field2</span>
+</pre></div>
 </div>
-<div class="admonition-todo admonition " id="index-1">
-<p class="first admonition-title">Todo</p>
-<p class="last">describe the <tt class="docutils literal"><span class="pre">__ep__</span></tt> and <tt class="docutils literal"><span class="pre">__ne__</span></tt> methods (still not implemented)</p>
+<p><tt class="xref py py-class docutils literal"><span class="pre">Field</span></tt> objecta also implement the <tt class="docutils literal"><span class="pre">__len__</span></tt> special method that
+returns the number of elements in the field:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">get_type</span><span class="p">()</span> <span class="o">!=</span> <span class="n">epr</span><span class="o">.</span><span class="n">E_TID_STRING</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="n">field</span><span class="o">.</span><span class="n">get_num_elems</span><span class="p">()</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get_elem</span><span class="p">())</span>
+</pre></div>
 </div>
-<div class="admonition-todo admonition " id="index-2">
-<p class="first admonition-title">Todo</p>
-<p class="last">describe the <tt class="docutils literal"><span class="pre">__contains__</span></tt> method (still not implemented)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">differently from the <a class="reference internal" href="reference.html#epr.Field.get_num_elems" title="epr.Field.get_num_elems"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Field.get_num_elems()</span></tt></a> method
+<tt class="docutils literal"><span class="pre">len(field)</span></tt> return the number of elements if the field
+type is not <a class="reference internal" href="reference.html#epr.E_TID_STRING" title="epr.E_TID_STRING"><tt class="xref py py-data docutils literal"><span class="pre">epr.E_TID_STRING</span></tt></a>.
+If the field contains a string then the string length is
+returned.</p>
 </div>
 </div>
 </div>
