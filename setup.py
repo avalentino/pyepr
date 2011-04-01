@@ -54,7 +54,7 @@ any data field contained in a product file.
 ''',
     download_url='http://pypi.python.org/pypi/pyepr',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Environment :: Other Environment',
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',

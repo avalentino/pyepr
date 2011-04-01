@@ -2,8 +2,8 @@ Change history
 ==============
 
 
-PyEPR 0.3 (in development)
---------------------------
+PyEPR 0.3 (01/04/2011)
+----------------------
 
 * version string of the EPR C API is now exposed as module attribute
   :data:`epr.EPR_C_API_VERSION`
