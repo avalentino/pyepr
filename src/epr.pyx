@@ -2269,7 +2269,7 @@ cdef class Product(EprObject):
         lines.extend(map(repr, self.datasets()))
         lines.append('')
         lines.extend(map(repr, self.bands()))
-        return '\n'.join(map(repr, lines))
+        return '\n'.join(lines)
 
 
 def open(filename):

@@ -5,7 +5,7 @@ Change history
 PyEPR 0.4 (in development)
 --------------------------
 
-@TBW
+* fixed a bug in the :meth:`epr.Product.__str__` method (bad formatting)
 
 
 PyEPR 0.3 (01/04/2011)
