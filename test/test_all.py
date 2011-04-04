@@ -274,7 +274,7 @@ class TestProductHighLevelAPI(unittest.TestCase):
         lines.extend(map(repr, self.product.datasets()))
         lines.append('')
         lines.extend(map(str, self.product.bands()))
-        data = '\n'.join(map(repr, lines))
+        data = '\n'.join(lines)
         self.assertEqual(data, str(self.product))
 
 
