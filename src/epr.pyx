@@ -470,8 +470,12 @@ cdef int pyepr_null_ptr_error(msg='null pointer') except -1:
     return -1
 
 
-cdef class CLib:
-    '''Library object to handle C API initialization/finalization'''
+cdef class _CLib:
+    '''Library object to handle C API initialization/finalization
+
+    .. warning:: this is ment for internal use only. **Do not use it**.
+
+    '''
 
     def __cinit__(self, *args, **kwargs):
         cdef char* msg
@@ -490,9 +494,13 @@ cdef class CLib:
     def __dealloc__(self):
         epr_close_api()
 
+    def __init__(self):
+        raise TypeError('"%s" class cannot be instantiated from Python' %
+                                                    self.__class__.__name__)
 
-# global CLib instance
-cdef CLib _EPR_C_LIB = None
+
+# global _CLib instance
+cdef _CLib _EPR_C_LIB = None
 
 
 cdef class EprObject:
@@ -2293,7 +2301,7 @@ def open(filename):
     return Product(filename)
 
 # library initialization/finalization
-_EPR_C_LIB = CLib()
+_EPR_C_LIB = _CLib.__new__(_CLib)
 
 # @TODO: check
 import atexit
