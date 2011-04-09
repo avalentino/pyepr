@@ -5,13 +5,14 @@ Change history
 PyEPR 0.4 (in development)
 --------------------------
 
-* fixed a bug in the :meth:`epr.Product.__str__` and
-  :meth:'erp.Band.__repr__` methods (bad formatting)
-* fixed :meth:`Field.get_elems` method for char and uchar data types
+* fixed a bug in the :meth:`epr.Product.__str__`, :meth:`Dataset.__str__`
+  and :meth:`erp.Band.__repr__` methods (bad formatting)
+* fixed :meth:`epr.Field.get_elems` method for char and uchar data types
 * implemented :meth:`epr.Product.read_bitmask_raster`, now the
   :class:`epr.Product` API is complete
-* Fixed segfault in :meth:`Field.get_unit` method when the field has no
-  unit
+* fixed segfault in :meth:`epr.Field.get_unit` method when the field
+  has no unit
+* a smaller dataset is now used for unit tests
 
 
 PyEPR 0.3 (01/04/2011)
