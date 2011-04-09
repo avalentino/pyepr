@@ -465,8 +465,8 @@ cdef int pyepr_null_ptr_error(msg='null pointer') except -1:
     if not code:
         code = None
 
-    epr_clear_err()
     raise EPRValueError('%s: %s' % (msg, eprmsg), code=code)
+    epr_clear_err()
     return -1
 
 
@@ -813,60 +813,61 @@ cdef class Field(EprObject):
 
         num_elems = epr_get_field_num_elems(self._ptr)
         etype = epr_get_field_type(self._ptr)
+        msg = 'Filed("%s") elems pointer is null' % self.get_name()
 
         if etype == e_tid_uchar:
-            buf = <uchar*>epr_get_field_elems_char(self._ptr)
+            buf = <uchar*>epr_get_field_elems_uchar(self._ptr)
             if buf is NULL:
-                pyepr_null_ptr_error()
-            out = np.ndarray(num_elems, np.uchar)
+                pyepr_null_ptr_error(msg)
+            out = np.ndarray(num_elems, np.byte)
             for i in range(num_elems):
                 out[i] = (<uchar*>buf)[i]
         elif etype == e_tid_char:
-            buf = <char*>epr_get_field_elems_uchar(self._ptr)
+            buf = <char*>epr_get_field_elems_char(self._ptr)
             if buf is NULL:
-                pyepr_null_ptr_error()
-            out = np.ndarray(num_elems, np.char)
+                pyepr_null_ptr_error(msg)
+            out = np.ndarray(num_elems, np.byte)
             for i in range(num_elems):
                 out[i] = (<char*>buf)[i]
         elif etype == e_tid_ushort:
             buf = <ushort*>epr_get_field_elems_ushort(self._ptr)
             if buf is NULL:
-                pyepr_null_ptr_error()
+                pyepr_null_ptr_error(msg)
             out = np.ndarray(num_elems, np.ushort)
             for i in range(num_elems):
                 out[i] = (<ushort*>buf)[i]
         elif etype == e_tid_short:
             buf = <short*>epr_get_field_elems_short(self._ptr)
             if buf is NULL:
-                pyepr_null_ptr_error()
+                pyepr_null_ptr_error(msg)
             out = np.ndarray(num_elems, np.short)
             for i in range(num_elems):
                 out[i] = (<short*>buf)[i]
         elif etype == e_tid_uint:
             buf = <uint*>epr_get_field_elems_uint(self._ptr)
             if buf is NULL:
-                pyepr_null_ptr_error()
+                pyepr_null_ptr_error(msg)
             out = np.ndarray(num_elems, np.uint)
             for i in range(num_elems):
                 out[i] = (<uint*>buf)[i]
         elif etype == e_tid_int:
             buf = <int*>epr_get_field_elems_int(self._ptr)
             if buf is NULL:
-                pyepr_null_ptr_error()
+                pyepr_null_ptr_error(msg)
             out = np.ndarray(num_elems, np.int)
             for i in range(num_elems):
                 out[i] = (<int*>buf)[i]
         elif etype == e_tid_float:
             buf = <float*>epr_get_field_elems_float(self._ptr)
             if buf is NULL:
-                pyepr_null_ptr_error()
+                pyepr_null_ptr_error(msg)
             out = np.ndarray(num_elems, np.float32)
             for i in range(num_elems):
                 out[i] = (<float*>buf)[i]
         elif etype == e_tid_double:
             buf = <double*>epr_get_field_elems_double(self._ptr)
             if buf is NULL:
-                pyepr_null_ptr_error()
+                pyepr_null_ptr_error(msg)
             out = np.ndarray(num_elems, np.double)
             for i in range(num_elems):
                 out[i] = (<double*>buf)[i]
@@ -1931,7 +1932,7 @@ cdef class Dataset(EprObject):
     def __str__(self):
         lines = [repr(self), '']
         lines.extend(map(str, self))
-        return '\n'.join(map(repr, lines))
+        return '\n'.join(lines)
 
     def __repr__(self):
         return 'epr.Dataset(%s) %d records' % (self.get_name(),
