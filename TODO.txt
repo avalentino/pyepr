@@ -4,6 +4,5 @@ PyEPR TODO
 * suppress compilation warnings
 * support for multiple version of EPR API (2.2 and 2.1)
 * code examples
-* use a smaller test dataset
 * python 3
 * debug mode (error handlers and logging)

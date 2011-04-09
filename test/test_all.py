@@ -47,7 +47,7 @@ EPR_TO_NUMPY_TYPE = {
 }
 
 
-TEST_PRODUCT = 'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1'
+TEST_PRODUCT = 'MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1'
 
 def quiet(func):
     @functools.wraps(func)
@@ -102,19 +102,28 @@ class TestOpenProduct(unittest.TestCase):
 
 class TestProduct(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
+    ID_STRING = 'MER_LRC_2PTGMV20000620_104318_00000104X000_00000'
+    TOT_SIZE = 407461
+
     DATASET_NAMES = [
-        'MDS1_SQ_ADS',
-        'MAIN_PROCESSING_PARAMS_ADS',
-        'DOP_CENTROID_COEFFS_ADS',
-        'SR_GR_ADS',
-        'CHIRP_PARAMS_ADS',
-        'GEOLOCATION_GRID_ADS',
-        'MDS1'
+        'Quality_ADS',
+        'Scaling_Factor_GADS',
+        'Tie_points_ADS',
+        'Cloud_Type_OT',
+        'Cloud_Top_Pressure',
+        'Vapour_Content',
+        'Flags',
     ]
-    DATASET_WIDTH = 8439
-    DATASET_HEIGHT = 8192
+    DATASET_NAME = 'Vapour_Content'
+    DATASET_WIDTH = 281
+    DATASET_HEIGHT = 149
     DATASET_NDSDS = 18
-    DATASET_NBANDS = 5
+    DATASET_NBANDS = 19
+
+    BAND_NAME = 'water_vapour'
+    SPH_DESCRIPTOR = 'MER_LRC_2P SPECIFIC HEADER'
+    MERIS_IODD_VERSION = 7
+
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
@@ -123,14 +132,13 @@ class TestProduct(unittest.TestCase):
         self.assertEqual(self.product.file_path, TEST_PRODUCT)
 
     def test_tot_size_property(self):
-        self.assertEqual(self.product.tot_size, 138422957)
+        self.assertEqual(self.product.tot_size, self.TOT_SIZE)
 
     def test_id_string_property(self):
-        self.assertEqual(self.product.id_string,
-             'ASA_IMP_1PNUPA20060202_062233_000000152044_00435')
+        self.assertEqual(self.product.id_string, self.ID_STRING)
 
     def test_meris_iodd_version_property(self):
-        self.assertEqual(self.product.meris_iodd_version, 0)
+        self.assertEqual(self.product.meris_iodd_version, self.MERIS_IODD_VERSION)
 
     def test_get_scene_width(self):
         self.assertEqual(self.product.get_scene_width(), self.DATASET_WIDTH)
@@ -153,7 +161,7 @@ class TestProduct(unittest.TestCase):
         self.assertTrue(dataset)
 
     def test_get_dataset(self):
-        dataset = self.product.get_dataset('MDS1')
+        dataset = self.product.get_dataset(self.DATASET_NAME)
         self.assertTrue(dataset)
 
     def test_datasets(self):
@@ -175,10 +183,10 @@ class TestProduct(unittest.TestCase):
         record = self.product.get_sph()
         self.assertTrue(isinstance(record, epr.Record))
         self.assertEqual(record.get_field('SPH_DESCRIPTOR').get_elem(),
-                         "Image Mode Precision Image")
+                         self.SPH_DESCRIPTOR)
 
     def test_get_band_id(self):
-        self.assertTrue(isinstance(self.product.get_band('proc_data'),
+        self.assertTrue(isinstance(self.product.get_band(self.BAND_NAME),
                                    epr.Band))
 
     def test_get_band_id_invalid_name(self):
@@ -191,9 +199,23 @@ class TestProduct(unittest.TestCase):
         self.assertRaises(ValueError, self.product.get_band_at,
                             self.product.get_num_bands())
 
-    # @NOTE: needs a product withoud L2FLAGS
-    def test_read_bitmask_raster_failure(self):
-        bm_expr = 'l2_flags.LAND and !l2_flags.BRIGHT'
+    def test_read_bitmask_raster(self):
+        bm_expr = 'l2_flags.LAND AND !l2_flags.BRIGHT'
+
+        xoffset = self.DATASET_WIDTH / 2
+        yoffset = self.DATASET_HEIGHT / 2
+        width = self.DATASET_WIDTH / 2
+        height = self.DATASET_HEIGHT / 2
+
+        raster = epr.create_bitmask_raster(width, height)
+        raster = self.product.read_bitmask_raster(bm_expr, xoffset, yoffset,
+                                                  raster)
+        self.assertTrue(isinstance(raster, epr.Raster))
+        self.assertEqual(raster.get_width(), width)
+        self.assertEqual(raster.get_height(), height)
+
+    def test_read_bitmask_raster_with_invalid_bm_expr(self):
+        bm_expr = 'l5_flags.LAND AND !l2_flags.BRIGHT'
 
         xoffset = self.DATASET_WIDTH / 2
         yoffset = self.DATASET_HEIGHT / 2
@@ -208,8 +230,8 @@ class TestProduct(unittest.TestCase):
         except epr.EPRError as e:
             self.assertEqual(e.code, 301)
 
-    def test_read_bitmask_raster_data_type(self):
-        bm_expr = 'l2_flags.LAND and !l2_flags.BRIGHT'
+    def test_read_bitmask_raster_with_wrong_data_type(self):
+        bm_expr = 'l2_flags.LAND AND !l2_flags.BRIGHT'
 
         xoffset = self.DATASET_WIDTH / 2
         yoffset = self.DATASET_HEIGHT / 2
@@ -225,41 +247,29 @@ class TestProduct(unittest.TestCase):
             self.assertEqual(e.code, 7)
 
 
-#~ class TestReadBitmaskRaster(unittest.TestCase):
-    #~ def test_read_bitmask_raster(self):
-        #~ bm_expr = 'l2_flags.LAND and !l2_flags.BRIGHT'
-
-        #~ xoffset = self.DATASET_WIDTH / 2
-        #~ yoffset = self.DATASET_HEIGHT / 2
-        #~ width = self.DATASET_WIDTH / 2
-        #~ height = self.DATASET_HEIGHT / 2
-
-        #~ raster = epr.create_bitmask_raster(width, height)
-        #~ raster = self.product.read_bitmask_raster(bm_expr, xoffset, yoffset,
-                                                  #~ raster)
-        #~ self.assertTrue(isinstance(raster, epr.Raster))
-        #~ self.assertEqual(raster.get_raster_width(), width)
-        #~ self.assertEqual(raster.get_raster_height(), height)
-
-
 class TestProductHighLevelAPI(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
-    DATASET_NAMES = [
-        'MDS1_SQ_ADS',
-        'MAIN_PROCESSING_PARAMS_ADS',
-        'DOP_CENTROID_COEFFS_ADS',
-        'SR_GR_ADS',
-        'CHIRP_PARAMS_ADS',
-        'GEOLOCATION_GRID_ADS',
-        'MDS1'
-    ]
-
+    DATASET_NAMES = TestProduct.DATASET_NAMES
     BAND_NAMES = [
-        'slant_range_time',
-        'incident_angle',
         'latitude',
         'longitude',
-        'proc_data',
+        'dem_alt',
+        'dem_rough',
+        'lat_corr',
+        'lon_corr',
+        'sun_zenith',
+        'sun_azimuth',
+        'view_zenith',
+        'view_azimuth',
+        'zonal_wind',
+        'merid_wind',
+        'atm_press',
+        'ozone',
+        'rel_hum',
+        'water_vapour',
+        'cloud_opt_thick',
+        'cloud_top_press',
+        'l2_flags',
     ]
 
     def setUp(self):
@@ -315,7 +325,10 @@ class TestProductHighLevelAPI(unittest.TestCase):
 
 class TestDataset(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
-    DATASET_NAME = 'MDS1'
+    DATASET_NAME = 'Vapour_Content'
+    DATASET_DESCRIPTION = 'Level 2 MDS Total Water vapour'
+    NUM_RECORDS = 149
+    DSD_NAME = 'MDS Vapour Content'
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
@@ -325,16 +338,16 @@ class TestDataset(unittest.TestCase):
         self.assertTrue(equal_products(self.dataset.product, self.product))
 
     def test_description_property(self):
-        self.assertEqual(self.dataset.description, 'Measurement Data Set 1')
+        self.assertEqual(self.dataset.description, self.DATASET_DESCRIPTION)
 
     def test_get_name(self):
         self.assertEqual(self.dataset.get_name(), self.DATASET_NAME)
 
     def test_get_dsd_name(self):
-        self.assertEqual(self.dataset.get_dsd_name(), self.DATASET_NAME)
+        self.assertEqual(self.dataset.get_dsd_name(), self.DSD_NAME)
 
     def test_get_num_records(self):
-        self.assertEqual(self.dataset.get_num_records(), 8192)
+        self.assertEqual(self.dataset.get_num_records(), self.NUM_RECORDS)
 
     def test_get_dsd(self):
         self.assertTrue(isinstance(self.dataset.get_dsd(), epr.DSD))
@@ -357,7 +370,7 @@ class TestDataset(unittest.TestCase):
 
 class TestDatasetHighLevelAPI(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
-    DATASET_NAME = 'MAIN_PROCESSING_PARAMS_ADS'
+    DATASET_NAME = TestDataset.DATASET_NAME
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
@@ -391,38 +404,69 @@ class TestDatasetHighLevelAPI(unittest.TestCase):
     def test_str(self):
         lines = [repr(self.dataset), '']
         lines.extend(map(str, self.dataset))
-        data = '\n'.join(map(repr, lines))
+        data = '\n'.join(lines)
         self.assertEqual(data, str(self.dataset))
 
 
 class TestBand(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
     BAND_NAMES = (
-        'slant_range_time',
-        'incident_angle',
         'latitude',
         'longitude',
-        'proc_data',
+        'dem_alt',
+        'dem_rough',
+        'lat_corr',
+        'lon_corr',
+        'sun_zenith',
+        'sun_azimuth',
+        'view_zenith',
+        'view_azimuth',
+        'zonal_wind',
+        'merid_wind',
+        'atm_press',
+        'ozone',
+        'rel_hum',
+        'water_vapour',
+        'cloud_opt_thick',
+        'cloud_top_press',
+        'l2_flags',
     )
-    XOFFSET = 40
-    YOFFSET = 30
+    BAND_NAME = 'water_vapour'
+    BAND_DESCTIPTION = 'Water vapour content'
+    XOFFSET = 30
+    YOFFSET = 20
+    WIDTH = 200
+    HEIGHT = 100
+    SCALING_FACTOR = 0.10000000149011612
+    SCALING_OFFSET = -0.10000000149011612
+    UNIT = 'g/cm^2'
     DATA_TYPE = np.float32
     TEST_DATA = np.asarray([
-        [ 98.,  90.,  64.,  82.,  84.,  79.,  66.,  46.,  59.,  54.],
-        [ 73., 119., 101.,  90.,  89.,  76.,  44.,  52.,  91.,  72.],
-        [ 85., 106., 107.,  73.,  78.,  65.,  37.,  55., 103.,  82.],
-        [118.,  77.,  97.,  70.,  87.,  67.,  45.,  51.,  65.,  83.],
-        [122.,  66.,  63.,  60.,  81.,  91.,  61.,  40.,  44.,  46.],
-        [ 89.,  88.,  59.,  87.,  86., 101.,  68.,  29.,  67.,  54.],
-        [121., 131., 108.,  85.,  81.,  88.,  67.,  19.,  53.,  47.],
-        [153., 155., 141.,  81.,  64.,  73.,  64.,  47.,  44.,  69.],
-        [105., 102.,  87.,  69.,  76.,  80.,  63.,  75.,  67.,  84.],
-        [ 85.,  90.,  69.,  77.,  84.,  73.,  69.,  91.,  77.,  37.],
+        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
+         0.20000002, 0.20000002, 0.20000002, 0.10000000, 0.10000000],
+        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
+         0.20000002, 0.20000002, 0.20000002, 0.10000000, 0.10000000],
+        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
+         0.20000002, 0.20000002, 0.20000002, 0.10000000, 0.10000000],
+        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
+         0.20000002, 0.20000002, 0.20000002, 0.10000000, 0.10000000],
+        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
+         0.20000002, 0.20000002, 0.20000002, 0.10000000, 0.10000000],
+        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
+         0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.10000000],
+        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
+         0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.10000000],
+        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
+         0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.10000000],
+        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
+         0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.10000000],
+        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
+         0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.10000000],
     ])
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
-        self.band = self.product.get_band('proc_data')
+        self.band = self.product.get_band(self.BAND_NAME)
 
     def test_product_property(self):
         self.assertTrue(equal_products(self.band.product, self.product))
@@ -444,20 +488,20 @@ class TestBand(unittest.TestCase):
         self.assertEqual(self.band.scaling_method, epr.E_SMID_LIN)
 
     def test_scaling_offset_property(self):
-        self.assertEqual(self.band.scaling_offset, 0)
+        self.assertEqual(self.band.scaling_offset, self.SCALING_OFFSET)
 
     def test_scaling_factor_property(self):
-        self.assertEqual(self.band.scaling_factor, 1.0)
+        self.assertEqual(self.band.scaling_factor, self.SCALING_FACTOR)
         self.assertTrue(isinstance(self.band.scaling_factor, float))
 
     def test_bm_expr_property(self):
         self.assertEqual(self.band.bm_expr, None)
 
     def test_unit_property(self):
-        self.assertEqual(self.band.unit, None)
+        self.assertEqual(self.band.unit, self.UNIT)
 
     def test_description_property(self):
-        self.assertEqual(self.band.description, 'Image Mode Precision Image')
+        self.assertEqual(self.band.description, self.BAND_DESCTIPTION)
 
     def test_lines_mirrored_property(self):
         self.assertTrue(isinstance(self.band.lines_mirrored, bool))
@@ -535,15 +579,13 @@ class TestBand(unittest.TestCase):
         #                  width, height, width + 10, height + 10)
 
     def test_read_raster(self):
-        width = 400
-        height = 300
-        raster = self.band.create_compatible_raster(width, height)
+        raster = self.band.create_compatible_raster(self.WIDTH, self.HEIGHT)
 
         self.band.read_raster(self.XOFFSET, self.YOFFSET, raster)
 
         self.assertTrue(isinstance(raster, epr.Raster))
-        self.assertEqual(raster.get_width(), width)
-        self.assertEqual(raster.get_height(), height)
+        self.assertEqual(raster.get_width(), self.WIDTH)
+        self.assertEqual(raster.get_height(), self.HEIGHT)
         # @NOTE: data type on disk is epr.E_TID_USHORT
         self.assertEqual(raster.data_type, epr.E_TID_FLOAT)
 
@@ -564,9 +606,7 @@ class TestBand(unittest.TestCase):
         self.assertRaises(TypeError, self.band.read_raster, 0, 0, 0)
 
     def test_read_raster_with_invalid_offset(self):
-        width = 400
-        height = 300
-        raster = self.band.create_compatible_raster(width, height)
+        raster = self.band.create_compatible_raster(self.WIDTH, self.HEIGHT)
 
         # @TODO: check
         self.assertRaises(ValueError, self.band.read_raster, -1, 0, raster)
@@ -581,18 +621,15 @@ class TestBand(unittest.TestCase):
         #                  width + 10, height + 10, raster)
 
     def test_read_as_array(self):
-        width = 400
-        height = 300
-
-        data = self.band.read_as_array(width, height,
+        data = self.band.read_as_array(self.WIDTH, self.HEIGHT,
                                        self.XOFFSET, self.YOFFSET)
 
         self.assertTrue(isinstance(data, np.ndarray))
-        self.assertEqual(data.shape, (height, width))
+        self.assertEqual(data.shape, (self.HEIGHT, self.WIDTH))
         self.assertEqual(data.dtype, self.DATA_TYPE)
 
         h, w = self.TEST_DATA.shape
-        self.assertTrue(np.all(data[:h, :w] == self.TEST_DATA))
+        self.assertTrue(np.allclose(data[:h, :w], self.TEST_DATA))
 
     # @TODO: check, it seems to be an upstream bug or a metter of data mirroring
     #def test_read_as_array_with_step(self):
@@ -691,8 +728,8 @@ class TestCreateRaster(unittest.TestCase):
 
 
 class TestRaster(unittest.TestCase):
-    RASTER_WIDTH = 400
-    RASTER_HEIGHT = 300
+    RASTER_WIDTH = TestBand.WIDTH
+    RASTER_HEIGHT = TestBand.HEIGHT
     RASTER_DATA_TYPE = epr.E_TID_FLOAT
     RASTER_ELEM_SIZE = 4
     TEST_DATA = np.zeros((10, 10))
@@ -711,7 +748,7 @@ class TestRaster(unittest.TestCase):
         self.assertEqual(self.raster.get_elem_size(), self.RASTER_ELEM_SIZE)
 
     def test_get_pixel(self):
-        self.assertEqual(self.raster.get_pixel(0, 0), self.TEST_DATA[0, 0])
+        self.assertAlmostEqual(self.raster.get_pixel(0, 0), self.TEST_DATA[0, 0])
 
     def test_get_pixel_invalid_x(self):
         self.assertRaises(ValueError, self.raster.get_pixel, -1, 0)
@@ -760,7 +797,9 @@ class TestRaster(unittest.TestCase):
         self.assertEqual(data.ndim, 2)
         self.assertEqual(data.shape, (height, width))
         self.assertEqual(data.dtype, EPR_TO_NUMPY_TYPE[self.raster.data_type])
-        self.assertTrue(np.all(data[:10, :10] == self.TEST_DATA))
+
+        ny, nx = self.TEST_DATA.shape
+        self.assertTrue(np.allclose(data[:ny, :nx], self.TEST_DATA))
 
     def test_data_property_two_times(self):
         data1 = self.raster.data
@@ -786,26 +825,17 @@ class TestRaster(unittest.TestCase):
         self.assertTrue(isinstance(data, np.ndarray))
         self.raster = None
         self.assertTrue(isinstance(data, np.ndarray))
-        self.assertTrue(np.all(data[:10, :10] == self.TEST_DATA))
+
+        ny, nx = self.TEST_DATA.shape
+        self.assertTrue(np.allclose(data[:ny, :nx], self.TEST_DATA))
 
 
 class TestRasterRead(TestRaster):
     PRODUCT_FILE = TEST_PRODUCT
-    BAND_NAME = 'proc_data'
-    RASTER_XOFFSET = 40
-    RASTER_YOFFSET = 30
-    TEST_DATA = np.asarray([
-        [ 98.,  90.,  64.,  82.,  84.,  79.,  66.,  46.,  59.,  54.],
-        [ 73., 119., 101.,  90.,  89.,  76.,  44.,  52.,  91.,  72.],
-        [ 85., 106., 107.,  73.,  78.,  65.,  37.,  55., 103.,  82.],
-        [118.,  77.,  97.,  70.,  87.,  67.,  45.,  51.,  65.,  83.],
-        [122.,  66.,  63.,  60.,  81.,  91.,  61.,  40.,  44.,  46.],
-        [ 89.,  88.,  59.,  87.,  86., 101.,  68.,  29.,  67.,  54.],
-        [121., 131., 108.,  85.,  81.,  88.,  67.,  19.,  53.,  47.],
-        [153., 155., 141.,  81.,  64.,  73.,  64.,  47.,  44.,  69.],
-        [105., 102.,  87.,  69.,  76.,  80.,  63.,  75.,  67.,  84.],
-        [ 85.,  90.,  69.,  77.,  84.,  73.,  69.,  91.,  77.,  37.],
-    ])
+    BAND_NAME = TestBand.BAND_NAME
+    RASTER_XOFFSET = TestBand.XOFFSET
+    RASTER_YOFFSET = TestBand.YOFFSET
+    TEST_DATA = TestBand.TEST_DATA
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
@@ -847,7 +877,9 @@ class TestRasterHighLevelAPI(unittest.TestCase):
 
 class TestRecord(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
-    DATASET_NAME = 'MAIN_PROCESSING_PARAMS_ADS'
+    DATASET_NAME = 'Quality_ADS'
+    NUM_FIELD = 21
+    FIELD_NAME = 'perc_water_abs_aero'
 
     def setUp(self):
         product = epr.Product(self.PRODUCT_FILE)
@@ -855,7 +887,7 @@ class TestRecord(unittest.TestCase):
         self.record = dataset.read_record(0)
 
     def test_get_num_fields(self):
-        self.assertEqual(self.record.get_num_fields(), 220)
+        self.assertEqual(self.record.get_num_fields(), self.NUM_FIELD)
 
     @quiet
     def test_print_(self):
@@ -887,7 +919,7 @@ class TestRecord(unittest.TestCase):
         self.assertRaises(ValueError, self.record.print_element, 0, 150)
 
     def test_get_field(self):
-        field = self.record.get_field('range_spacing')
+        field = self.record.get_field(self.FIELD_NAME)
         self.assertTrue(isinstance(field, epr.Field))
 
     def test_get_field_invlid_name(self):
@@ -903,20 +935,29 @@ class TestRecord(unittest.TestCase):
 
 class TestRecordHighLevelAPI(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
-    DATASET_NAME = 'MAIN_PROCESSING_PARAMS_ADS'
+    DATASET_NAME = TestRecord.DATASET_NAME
     FIELD_NAMES = [
-        'first_zero_doppler_time',
+        'dsr_time',
         'attach_flag',
-        'last_zero_doppler_time',
-        'work_order_id',
-        'time_diff',
-        'swath_id',
-        'range_spacing',
-        'azimuth_spacing',
-        'line_time_interval',
-        'num_output_lines',
-        'num_samples_per_line',
-        'data_type',
+        'perc_water_abs_aero',
+        'perc_water',
+        'perc_ddv_land',
+        'perc_land',
+        'perc_cloud',
+        'perc_low_poly_press',
+        'perc_low_neural_press',
+        'perc_out_ran_inp_wvapour',
+        'per_out_ran_outp_wvapour',
+        'perc_out_range_inp_cl',
+        'perc_out_ran_outp_cl',
+        'perc_in_ran_inp_land',
+        'perc_out_ran_outp_land',
+        'perc_out_ran_inp_ocean',
+        'perc_out_ran_outp_ocean',
+        'perc_out_ran_inp_case1',
+        'perc_out_ran_outp_case1',
+        'perc_out_ran_inp_case2',
+        'perc_out_ran_outp_case2',
     ]
 
     def setUp(self):
@@ -950,7 +991,7 @@ class TestRecordHighLevelAPI(unittest.TestCase):
 
 class TestMultipleRecordsHighLevelAPI(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
-    DATASET_NAME = 'MAIN_PROCESSING_PARAMS_ADS'
+    DATASET_NAME = TestProduct.DATASET_NAME
 
     def setUp(self):
         product = epr.Product(self.PRODUCT_FILE)
@@ -999,15 +1040,15 @@ class TestMphRecordHighLevelAPI(TestRecordHighLevelAPI):
 
 class TestField(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
-    DATASET_NAME = 'MAIN_PROCESSING_PARAMS_ADS'
+    DATASET_NAME = 'Quality_ADS'
 
-    FIELD_NAME = 'range_spacing'
-    FIELD_DESCRIPTION = 'Range sample spacing'
-    FIELD_TYPE = epr.E_TID_FLOAT
-    FIELD_TYPE_NAME = 'float'
+    FIELD_NAME = 'perc_water_abs_aero'
+    FIELD_DESCRIPTION = '% of water pixels having absorbing aerosols'
+    FIELD_TYPE = epr.E_TID_UCHAR
+    FIELD_TYPE_NAME = 'byte'
     FIELD_NUM_ELEMS = 1
-    FIELD_VALUES = (12.5,)
-    FIELD_UNIT = 'm'
+    FIELD_VALUES = (81,)
+    FIELD_UNIT = '%'
 
     def setUp(self):
         product = epr.Product(self.PRODUCT_FILE)
@@ -1048,30 +1089,32 @@ class TestField(unittest.TestCase):
         self.assertEqual(self.field.get_elem(0), self.FIELD_VALUES[0])
 
     def test_get_elem_invalid_index(self):
-        self.assertRaises(ValueError, self.field.get_elem, 100)
+        self.assertRaises(ValueError, self.field.get_elem,
+                          self.FIELD_NUM_ELEMS + 10)
 
     def test_get_elems(self):
         vect = self.field.get_elems()
         self.assertTrue(isinstance(vect, np.ndarray))
         self.assertEqual(vect.shape, (self.field.get_num_elems(),))
-        self.assertEqual(vect.dtype, np.float32)
-        self.assertTrue(np.allclose(vect, self.FIELD_VALUES))
+        self.assertEqual(vect.dtype, np.int8)
+        self.assertTrue(np.allclose(vect[:len(self.FIELD_VALUES)],
+                                    self.FIELD_VALUES))
 
 
 class TestFieldWithMiltipleElems(TestField):
-    FIELD_NAME = 'image_parameters.first_swst_value'
-    FIELD_DESCRIPTION = 'Sampling Window Start time of first processed line'
-    FIELD_TYPE = epr.E_TID_FLOAT
+    DATASET_NAME = TestProduct.DATASET_NAME
+    FIELD_NAME = 'wvapour_cont_pix'
+    FIELD_DESCRIPTION = 'Water Vapour Content pixel #1- #281'
+    FIELD_TYPE = epr.E_TID_UCHAR
     FIELD_TYPE_NAME = 'float'
-    FIELD_NUM_ELEMS = 5
-    FIELD_VALUES = (6.0600759752560407e-05, 0., 0., 0., 0.)
-    FIELD_UNIT = 's'
+    FIELD_NUM_ELEMS = 281
+    FIELD_VALUES = (1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)
+    FIELD_UNIT = ''
 
 
 class TestFieldHighLevelAPI(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
-    DATASET_NAME = 'MAIN_PROCESSING_PARAMS_ADS'
-    FIELD_NAME = 'range_spacing'
+    DATASET_NAME = TestProduct.DATASET_NAME
 
     def setUp(self):
         product = epr.Product(self.PRODUCT_FILE)
@@ -1126,25 +1169,45 @@ class TestFieldHighLevelAPI(unittest.TestCase):
         field = self.record.get_field_at(0)
         self.assertNotEqual(field, self.record)
 
+
+class TestFieldHighLevelAPI2(unittest.TestCase):
+    PRODUCT_FILE = TEST_PRODUCT
+
+    def setUp(self):
+        self.product = epr.Product(self.PRODUCT_FILE)
+
     def test_len_1(self):
-        field = self.record.get_field('num_looks_range')
+        dataset = self.product.get_dataset_at(0)
+        record = dataset.read_record(0)
+        field = record.get_field('perc_water_abs_aero')
         self.assertEqual(len(field), field.get_num_elems())
 
-    def test_len_5(self):
-        field = self.record.get_field('parameter_codes.pri_code')
+    def test_len_x(self):
+        dataset = self.product.get_dataset_at(5)
+        record = dataset.read_record(0)
+        field = record.get_field('wvapour_cont_pix')
         self.assertEqual(len(field), field.get_num_elems())
 
     def test_len_e_tid_unknown(self):
-        field = self.record.get_field('spare_1')
+        dataset = self.product.get_dataset_at(1)
+        record = dataset.read_record(0)
+        field = record.get_field('spare_1')
         self.assertEqual(len(field), field.get_num_elems())
 
-    def test_len_e_tid_string(self):
-        field = self.record.get_field('filter_window')
-        self.assertEqual(len(field), len(field.get_elem()))
+    #def test_len_e_tid_string(self):
+    #    dataset = self.product.get_dataset_at(0)
+    #    record = dataset.read_record(0)
+    #    field = record.get_field('filter_window')
+    #    self.assertEqual(len(field), len(field.get_elem()))
 
 
 class TestDSD(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
+    DS_NAME = 'Quality ADS'
+    DS_OFFSET = 12869
+    DS_SIZE = 160
+    DSR_SIZE = 32
+    NUM_DSR = 5
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
@@ -1155,7 +1218,7 @@ class TestDSD(unittest.TestCase):
         self.assertTrue(isinstance(self.dsd.index, int))
 
     def test_ds_name(self):
-        self.assertEqual(self.dsd.ds_name, 'MDS1 SQ ADS')
+        self.assertEqual(self.dsd.ds_name, self.DS_NAME)
         self.assertTrue(isinstance(self.dsd.ds_name, basestring))
 
     def test_ds_type(self):
@@ -1167,19 +1230,19 @@ class TestDSD(unittest.TestCase):
         self.assertTrue(isinstance(self.dsd.filename, basestring))
 
     def test_ds_offset(self):
-        self.assertEqual(self.dsd.ds_offset, 7346)
+        self.assertEqual(self.dsd.ds_offset, self.DS_OFFSET)
         self.assertTrue(isinstance(self.dsd.ds_offset, (int, long)))
 
     def test_ds_size(self):
-        self.assertEqual(self.dsd.ds_size, 170)
+        self.assertEqual(self.dsd.ds_size, self.DS_SIZE)
         self.assertTrue(isinstance(self.dsd.ds_size, (int, long)))
 
     def test_num_dsr(self):
-        self.assertEqual(self.dsd.num_dsr, 1)
+        self.assertEqual(self.dsd.num_dsr, self.NUM_DSR)
         self.assertTrue(isinstance(self.dsd.num_dsr, (int, long)))
 
     def test_dsr_size(self):
-        self.assertEqual(self.dsd.dsr_size, 170)
+        self.assertEqual(self.dsd.dsr_size, self.DSR_SIZE)
         self.assertTrue(isinstance(self.dsd.dsr_size, (int, long)))
 
     def test_eq_dsd1_dsd1(self):

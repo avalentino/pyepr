@@ -19,8 +19,8 @@
 # along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
 PYTHON = python
-TEST_DATSET_URL = "http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz"
-TEST_DATSET = test/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1
+TEST_DATSET_URL = "http://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz"
+TEST_DATSET = test/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1
 
 .PHONY: default sdist doc clean distclean check debug data upload
 
