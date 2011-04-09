@@ -720,7 +720,12 @@ cdef class Field(EprObject):
     def get_unit(self):
         '''Gets the unit of the field'''
 
-        return epr_get_field_unit(self._ptr)
+        cdef char* unit = epr_get_field_unit(self._ptr)
+
+        if unit is NULL:
+            return ''
+        else:
+            return unit
 
     def get_description(self):
         '''Gets the description of the field'''
