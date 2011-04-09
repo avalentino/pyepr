@@ -1780,7 +1780,8 @@ cdef class Band(EprObject):
         return raster.data
 
     def __repr__(self):
-        return 'epr.Band(%s) of %s' % (self.get_name(), repr(self.product))
+        return 'epr.Band(%s) of epr.Product(%s)' % (self.get_name(),
+                                                    self.product.id_string)
 
 
 cdef new_band(EPR_SBandId* ptr, object parent=None):
