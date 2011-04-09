@@ -191,20 +191,55 @@ class TestProduct(unittest.TestCase):
         self.assertRaises(ValueError, self.product.get_band_at,
                             self.product.get_num_bands())
 
-    #def test_read_bitmask_raster(self):
-    #    bm_expr = 'l2_flags.LAND and !l2_flags.BRIGHT'
-    #
-    #    xoffset = self.DATASET_WIDTH / 2
-    #    yoffset = self.DATASET_HEIGHT / 2
-    #    width = self.DATASET_WIDTH / 2
-    #    height = self.DATASET_HEIGHT / 2
-    #
-    #    raster = epr.create_bitmask_raster(width, height)
-    #    raster = self.product.read_bitmask_raster(bm_expr, xoffset, yoffset,
-    #                                              raster)
-    #    self.assertTrue(isinstance(raster, epr.Raster))
-    #    self.assertEqual(raster.get_raster_width(), width)
-    #    self.assertEqual(raster.get_raster_height(), height)
+    # @NOTE: needs a product withoud L2FLAGS
+    def test_read_bitmask_raster_failure(self):
+        bm_expr = 'l2_flags.LAND and !l2_flags.BRIGHT'
+
+        xoffset = self.DATASET_WIDTH / 2
+        yoffset = self.DATASET_HEIGHT / 2
+        width = self.DATASET_WIDTH / 2
+        height = self.DATASET_HEIGHT / 2
+
+        raster = epr.create_bitmask_raster(width, height)
+        self.assertRaises(epr.EPRError, self.product.read_bitmask_raster,
+                          bm_expr, xoffset, yoffset, raster)
+        try:
+            self.product.read_bitmask_raster(bm_expr, xoffset, yoffset, raster)
+        except epr.EPRError as e:
+            self.assertEqual(e.code, 301)
+
+    def test_read_bitmask_raster_data_type(self):
+        bm_expr = 'l2_flags.LAND and !l2_flags.BRIGHT'
+
+        xoffset = self.DATASET_WIDTH / 2
+        yoffset = self.DATASET_HEIGHT / 2
+        width = self.DATASET_WIDTH / 2
+        height = self.DATASET_HEIGHT / 2
+
+        raster = epr.create_raster(epr.E_TID_DOUBLE, width, height)
+        self.assertRaises(epr.EPRError, self.product.read_bitmask_raster,
+                          bm_expr, xoffset, yoffset, raster)
+        try:
+            self.product.read_bitmask_raster(bm_expr, xoffset, yoffset, raster)
+        except epr.EPRError as e:
+            self.assertEqual(e.code, 7)
+
+
+#~ class TestReadBitmaskRaster(unittest.TestCase):
+    #~ def test_read_bitmask_raster(self):
+        #~ bm_expr = 'l2_flags.LAND and !l2_flags.BRIGHT'
+
+        #~ xoffset = self.DATASET_WIDTH / 2
+        #~ yoffset = self.DATASET_HEIGHT / 2
+        #~ width = self.DATASET_WIDTH / 2
+        #~ height = self.DATASET_HEIGHT / 2
+
+        #~ raster = epr.create_bitmask_raster(width, height)
+        #~ raster = self.product.read_bitmask_raster(bm_expr, xoffset, yoffset,
+                                                  #~ raster)
+        #~ self.assertTrue(isinstance(raster, epr.Raster))
+        #~ self.assertEqual(raster.get_raster_width(), width)
+        #~ self.assertEqual(raster.get_raster_height(), height)
 
 
 class TestProductHighLevelAPI(unittest.TestCase):

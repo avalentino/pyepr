@@ -6,6 +6,9 @@ PyEPR 0.4 (in development)
 --------------------------
 
 * fixed a bug in the :meth:`epr.Product.__str__` method (bad formatting)
+* improved :meth:'erp.Band.__repr__` method
+* implemented :meth:`epr.Product.read_bitmask_raster`, now the 
+  :class:`epr.Product` API is complete
 
 
 PyEPR 0.3 (01/04/2011)

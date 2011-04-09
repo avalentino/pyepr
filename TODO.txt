@@ -1,7 +1,6 @@
 PyEPR TODO
 ==========
 
-* read_bitmask_raster
 * suppress compilation warnings
 * support for multiple version of EPR API (2.2 and 2.1)
 * code examples

@@ -2170,52 +2170,51 @@ cdef class Product(EprObject):
 
         return new_band(band_id, self)
 
-    # @TODO: complete and make it more pythonic
-    #def read_bitmask_raster(self, bm_expr, int xoffset, int yoffset,
-    #                        Raster raster not Null):
-    #    '''Calculates a bit-mask raster
-    #
-    #    Calculates a bit-mask, composed of flags of the given product
-    #    and combined as described in the given bit-mask expression, for
-    #    the a certain dimension and sub-sampling as defined in the
-    #    given raster.
-    #
-    #    :param bm_expr:
-    #        a string holding the logical expression for the defintion
-    #        of the bit-mask. In a bit-mask expression, any number of
-    #        the flag-names (found in the DDDB) can be composed with
-    #        "(", ")", "NOT", "AND", "OR". Valid bit-mask expression are
-    #        for example::
-    #
-    #            flags.LAND OR flags.CLOUD
-    #
-    #       or::
-    #
-    #           NOT flags.WATER AND flags.TURBID_S
-    #
-    #   :param xoffset:
-    #       across-track co-ordinate in pixel co-ordinates (zero-based)
-    #       of the upper right corner of the source-region
-    #   :param yoffset:
-    #       along-track co-ordinate in pixel co-ordinates (zero-based)
-    #       of the upper right corner of the source-region
-    #   :param raster:
-    #       the raster for the bit-mask. The data type of the raster
-    #       must be either e_tid_uchar or e_tid_char
-    #   :returns:
-    #       zero for success, an error code otherwise
-    #
-    #   .. seealso: :func:`create_band_raster`
-    #
-    #   '''
-    #
-    #    cdef int ret = epr_read_bitmask_raster(self._ptr, bm_expr,
-    #                                           xoffset, yoffset,
-    #                                           (<Raster>raster)._ptr)
-    #    if ret != 0:
-    #        pyepr_check_errors()
-    #
-    #    return raster
+    def read_bitmask_raster(self, char* bm_expr, int xoffset, int yoffset,
+                            Raster raster not None):
+        '''Calculates a bit-mask raster
+
+        Calculates a bit-mask, composed of flags of the given product
+        and combined as described in the given bit-mask expression, for
+        the a certain dimension and sub-sampling as defined in the
+        given raster.
+
+        :param bm_expr:
+            a string holding the logical expression for the definition
+            of the bit-mask. In a bit-mask expression, any number of
+            the flag-names (found in the DDDB) can be composed with
+            "(", ")", "NOT", "AND", "OR". Valid bit-mask expression are
+            for example::
+
+                flags.LAND OR flags.CLOUD
+
+            or::
+
+               NOT flags.WATER AND flags.TURBID_S
+
+       :param xoffset:
+           across-track co-ordinate in pixel co-ordinates (zero-based)
+           of the upper right corner of the source-region
+       :param yoffset:
+           along-track co-ordinate in pixel co-ordinates (zero-based)
+           of the upper right corner of the source-region
+       :param raster:
+           the raster for the bit-mask. The data type of the raster
+           must be either e_tid_uchar or e_tid_char
+       :returns:
+           zero for success, an error code otherwise
+
+       .. seealso: :func:`create_bitmask_raster`
+
+       '''
+
+        cdef int ret = epr_read_bitmask_raster(self._ptr, bm_expr,
+                                               xoffset, yoffset,
+                                               (<Raster>raster)._ptr)
+        if ret != 0:
+            pyepr_check_errors()
+
+        return raster
 
     # --- high level interface ------------------------------------------------
     def get_dataset_names(self):
