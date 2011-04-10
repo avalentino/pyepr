@@ -2,8 +2,8 @@ Change history
 ==============
 
 
-PyEPR 0.4 (in development)
---------------------------
+PyEPR 0.4 10/04/2011
+--------------------
 
 * fixed a bug in the :meth:`epr.Product.__str__`, :meth:`Dataset.__str__`
   and :meth:`erp.Band.__repr__` methods (bad formatting)

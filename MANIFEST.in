@@ -1,5 +1,5 @@
 include MANIFEST.in
 include src/*.c
 
-include doc/*.txt doc/conf.py doc/Makefile doc/make.bat
+include doc/*.txt doc/conf.py doc/Makefile doc/make.bat doc/images/*.png
 recursive-include doc/html *
