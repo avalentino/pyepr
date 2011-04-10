@@ -2190,13 +2190,8 @@ cdef class Product(EprObject):
             of the bit-mask. In a bit-mask expression, any number of
             the flag-names (found in the DDDB) can be composed with
             "(", ")", "NOT", "AND", "OR". Valid bit-mask expression are
-            for example::
-
-                flags.LAND OR flags.CLOUD
-
-            or::
-
-               NOT flags.WATER AND flags.TURBID_S
+            for example ``flags.LAND OR flags.CLOUD`` or
+            ``NOT flags.WATER AND flags.TURBID_S``
 
        :param xoffset:
            across-track co-ordinate in pixel co-ordinates (zero-based)
