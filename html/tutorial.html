@@ -1,0 +1,417 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tutorial &mdash; PyEPR 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PyEPR 0.4 documentation" href="index.html" />
+    <link rel="next" title="API Reference" href="reference.html" />
+    <link rel="prev" title="User Manual" href="usermanual.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="reference.html" title="API Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="usermanual.html" title="User Manual"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyEPR 0.4 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="tutorial">
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="interactive-use-of-pyepr">
+<h2>Interactive use of <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a><a class="headerlink" href="#interactive-use-of-pyepr" title="Permalink to this headline">¶</a></h2>
+<p>In this tutorial it is showed an example of how to use <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> interactively
+to open, browse and display data of an <a class="reference external" href="http://envisat.esa.int">ENVISAT</a> <a class="reference external" href="http://envisat.esa.int/handbooks/asar">ASAR</a> product.</p>
+<p>For the interactive session it is used the <a class="reference external" href="http://ipython.scipy.org/moin">IPython</a> interactive shell an
+started with the <em class="xref std std-option">ipython -pylab</em> option to enable interactive
+plotting provided by the <a class="reference external" href="http://matplotlib.sourceforge.net">matplotlib</a> package.</p>
+<p>The <a class="reference external" href="http://envisat.esa.int/handbooks/asar">ASAR</a> product used in this example is a <a class="reference external" href="http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz">free sample</a> available at the
+<a class="reference external" href="http://earth.esa.int">ESA</a> web site.</p>
+<p>After starting the ipython shell with the following command:</p>
+<div class="highlight-python"><pre>$ ipython -pylab</pre>
+</div>
+<p>one can import the <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><tt class="xref py py-mod docutils literal"><span class="pre">epr</span></tt></a> module and start start taking confidence with
+available classes and functions:</p>
+<div class="highlight-python"><pre>Python 2.6.6 (r266:84292, Sep 15 2010, 16:22:56)
+Type "copyright", "credits" or "license" for more information.
+
+IPython 0.10 -- An enhanced Interactive Python.
+?         -&gt; Introduction and overview of IPython's features.
+%quickref -&gt; Quick reference.
+help      -&gt; Python's own help system.
+object?   -&gt; Details about 'object'. ?object also works, ?? prints more.
+
+  Welcome to pylab, a matplotlib-based Python environment.
+  For more information, type 'help(pylab)'.
+
+In [1]: import epr
+
+In [2]: epr?
+
+Base Class:       &lt;type 'module'&gt;
+String Form:   &lt;module 'epr' from 'epr.so'&gt;
+Namespace:        Interactive
+File:             /home/antonio/projects/pyepr/epr.so
+Docstring:
+    Python bindings for ENVISAT Product Reader C API
+
+    PyEPR_ provides Python_ bindings for the ENVISAT Product Reader C API
+    (`EPR API`_) for reading satellite data from ENVISAT_ ESA_ (European
+    Space Agency) mission.
+
+    PyEPR_ is fully object oriented and, as well as the `EPR API`_ for C,
+    supports ENVISAT_ MERIS, AATSR Level 1B and Level 2 and also ASAR data
+    products. It provides access to the data either on a geophysical
+    (decoded, ready-to-use pixel samples) or on a raw data layer.
+    The raw data access makes it possible to read any data field contained
+    in a product file.
+
+    .. _PyEPR: http://avalentino.github.com/pyepr
+    .. _Python: http://www.python.org
+    .. _`EPR API`: https://github.com/bcdev/epr-api
+    .. _ENVISAT: http://envisat.esa.int
+    .. _ESA: http://earth.esa.int
+
+In [3]: epr.__version__, epr.EPR_C_API_VERSION
+Out[3]: ('0.4', '2.2')</pre>
+</div>
+<p>Docstrings are available for almost all classes, methods and functions in
+the <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><tt class="xref py py-mod docutils literal"><span class="pre">epr</span></tt></a> and they can be displayed using the <tt class="xref py py-func docutils literal"><span class="pre">help()</span></tt> <a class="reference external" href="http://www.python.org">python</a>
+command or the <tt class="docutils literal"><span class="pre">?</span></tt> <a class="reference external" href="http://ipython.scipy.org/moin">IPython</a> shortcut as showed above.</p>
+<p>Also <a class="reference external" href="http://ipython.scipy.org/moin">IPython</a> provides a handy tab completion mechanism to automatically
+complete commands or to display available functions and classes:</p>
+<div class="highlight-python"><pre>In [4]: product = epr. [TAB]
+epr.Band                     epr.E_TID_TIME
+epr.__builtins__             epr.E_TID_UCHAR
+epr.__class__                epr.E_TID_UINT
+epr._CLib                    epr.E_TID_UNKNOWN
+epr._close_api               epr.E_TID_USHORT
+epr.collections              epr.Field
+epr.create_bitmask_raster    epr.__file__
+epr.create_raster            epr.__format__
+epr.Dataset                  epr.__getattribute__
+epr.data_type_id_to_str      epr.get_data_type_size
+epr.__delattr__              epr.get_sample_model_name
+epr.__dict__                 epr.get_scaling_method_name
+epr.__doc__                  epr.__hash__
+epr.DSD                      epr.__init__
+epr.EPR_C_API_VERSION        epr.__name__
+epr.EPRError                 epr.__new__
+epr.EprObject                epr.np
+epr.EPRTime                  epr.open
+epr.EPRValueError            epr.__package__
+epr.E_SMID_LIN               epr.Product
+epr.E_SMID_LOG               epr.Raster
+epr.E_SMID_NON               epr.Record
+epr.E_SMOD_1OF1              epr.__reduce__
+epr.E_SMOD_1OF2              epr.__reduce_ex__
+epr.E_SMOD_2OF2              epr.__repr__
+epr.E_SMOD_2TOF              epr.__revision__
+epr.E_SMOD_3TOI              epr.__setattr__
+epr.E_TID_CHAR               epr.__sizeof__
+epr.E_TID_DOUBLE             epr.so
+epr.E_TID_FLOAT              epr.__str__
+epr.E_TID_INT                epr.__subclasshook__
+epr.E_TID_SHORT              epr.sys
+epr.E_TID_SPARE              epr.__test__
+epr.E_TID_STRING             epr.__version__</pre>
+</div>
+<p>The first thing to do is to use the :func`epr.open&#8217; function to get an
+instance of the desired <a class="reference external" href="http://envisat.esa.int">ENVISAT</a> <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a>:</p>
+<div class="highlight-python"><pre>In [4]: product = epr.open(\
+'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1')
+
+In [4]: product.
+product.bands                product.get_num_dsds
+product.__class__            product.get_scene_height
+product.datasets             product.get_scene_width
+product.__delattr__          product.get_sph
+product.__doc__              product.__hash__
+product.file_path            product.id_string
+product.__format__           product.__init__
+product.__getattribute__     product.meris_iodd_version
+product.get_band             product.__new__
+product.get_band_at          product.read_bitmask_raster
+product.get_band_names       product.__reduce__
+product.get_dataset          product.__reduce_ex__
+product.get_dataset_at       product.__repr__
+product.get_dataset_names    product.__setattr__
+product.get_dsd_at           product.__sizeof__
+product.get_mph              product.__str__
+product.get_num_bands        product.__subclasshook__
+product.get_num_datasets     product.tot_size
+
+In [5]: product.tot_size / 1024.**2
+Out[5]: 132.01041889190674
+
+In [6]: print product
+epr.Product(ASA_IMP_1PNUPA20060202_ ...) 7 datasets, 5 bands
+
+epr.Dataset(MDS1_SQ_ADS) 1 records
+epr.Dataset(MAIN_PROCESSING_PARAMS_ADS) 1 records
+epr.Dataset(DOP_CENTROID_COEFFS_ADS) 1 records
+epr.Dataset(SR_GR_ADS) 1 records
+epr.Dataset(CHIRP_PARAMS_ADS) 1 records
+epr.Dataset(GEOLOCATION_GRID_ADS) 11 records
+epr.Dataset(MDS1) 8192 records
+
+epr.Band(slant_range_time) of epr.Product(ASA_IMP_1PNUPA20060202_ ...)
+epr.Band(incident_angle) of epr.Product(ASA_IMP_1PNUPA20060202_ ...)
+epr.Band(latitude) of epr.Product(ASA_IMP_1PNUPA20060202 ...)
+epr.Band(longitude) of epr.Product(ASA_IMP_1PNUPA20060202 ...)
+epr.Band(proc_data) of epr.Product(ASA_IMP_1PNUPA20060202 ...)</pre>
+</div>
+<p>A short summary of product contents can be displayed simply printing the
+<a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> object as showed above.
+Being able to display contents of each object it is easy to keep browsing and
+get all desired information from the product:</p>
+<div class="highlight-python"><pre>In [7]: dataset = product.get_dataset('MAIN_PROCESSING_PARAMS_ADS')
+
+In [8]: dataset
+Out[8]: epr.Dataset(MAIN_PROCESSING_PARAMS_ADS) 1 records
+
+In [9]: record = dataset.[TAB]
+dataset.__class__         dataset.get_name          dataset.__reduce__
+dataset.create_record     dataset.get_num_records   dataset.__reduce_ex__
+dataset.__delattr__       dataset.__hash__          dataset.__repr__
+dataset.description       dataset.__init__          dataset.__setattr__
+dataset.__doc__           dataset.__iter__          dataset.__sizeof__
+dataset.__format__        dataset.__new__           dataset.__str__
+dataset.__getattribute__  dataset.product           dataset.__subclasshook__
+dataset.get_dsd           dataset.read_record
+dataset.get_dsd_name      dataset.records
+
+In [9]: record = dataset.read_record(0)
+
+In [10]: record
+Out[10]: &lt;epr.Record object at 0x33570f0&gt; 220 fields
+
+In [11]: record.get_field_names()[:20]
+Out[11]:
+['first_zero_doppler_time',
+ 'attach_flag',
+ 'last_zero_doppler_time',
+ 'work_order_id',
+ 'time_diff',
+ 'swath_id',
+ 'range_spacing',
+ 'azimuth_spacing',
+ 'line_time_interval',
+ 'num_output_lines',
+ 'num_samples_per_line',
+ 'data_type',
+ 'spare_1',
+ 'data_analysis_flag',
+ 'ant_elev_corr_flag',
+ 'chirp_extract_flag',
+ 'srgr_flag',
+ 'dop_cen_flag',
+ 'dop_amb_flag',
+ 'range_spread_comp_flag']
+
+In [12]: field = record.get_field('range_spacing')
+
+In [13]: field.get [TAB]
+field.get_description  field.get_name         field.get_unit
+field.get_elem         field.get_num_elems
+field.get_elems        field.get_type
+
+In [13]: field.get_description()
+Out[13]: 'Range sample spacing'
+
+In [14]: epr.data_type_id_to_str(field.get_type())
+Out[14]: 'float'
+
+In [15]: field.get_num_elems()
+Out[15]: 1
+
+In [16]: field.get_unit()
+Out[16]: 'm'
+
+In [17]: print field
+range_spacing = 12.500000</pre>
+</div>
+<p><a class="reference internal" href="reference.html#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">epr.Record</span></tt></a> objects are also <em>iterable</em> so one can write code like
+the following:</p>
+<div class="highlight-python"><pre>In [18]: for field in record:
+             if field.get_num_elems() == 4:
+                 print '%s: %d elements' % (field.get_name(), len(field))
+
+        ....:
+nominal_chirp.1.nom_chirp_amp: 4 elements
+nominal_chirp.1.nom_chirp_phs: 4 elements
+nominal_chirp.2.nom_chirp_amp: 4 elements
+nominal_chirp.2.nom_chirp_phs: 4 elements
+nominal_chirp.3.nom_chirp_amp: 4 elements
+nominal_chirp.3.nom_chirp_phs: 4 elements
+nominal_chirp.4.nom_chirp_amp: 4 elements
+nominal_chirp.4.nom_chirp_phs: 4 elements
+nominal_chirp.5.nom_chirp_amp: 4 elements
+nominal_chirp.5.nom_chirp_phs: 4 elements
+beam_merge_sl_range: 4 elements
+beam_merge_alg_param: 4 elements</pre>
+</div>
+<p>Dealing with image data is simple as well:</p>
+<div class="highlight-python"><pre>In [19]: product.get_band_names()
+Out[19]: ['slant_range_time',
+          'incident_angle',
+          'latitude',
+          'longitude',
+          'proc_data']
+
+In [19]: band = product.get_band('proc_data')
+
+In [20]: data = band. [TAB]
+band.bm_expr                   band.read_as_array
+band.__class__                 band.read_raster
+band.create_compatible_raster  band.__reduce__
+band.data_type                 band.__reduce_ex__
+band.__delattr__               band.__repr__
+band.description               band.sample_model
+band.__doc__                   band.scaling_factor
+band.__format__                band.scaling_method
+band.__getattribute__          band.scaling_offset
+band.get_name                  band.__setattr__
+band.__hash__                  band.__sizeof__
+band.__init__                  band.spectr_band_index
+band.lines_mirrored            band.__str__
+band.__new__                   band.__subclasshook__
+band.product                   band.unit
+band.__pyx_vtable__
+
+In [20]: data = band.read_as_array(1000, 1000, xoffset=100, yoffset=6500, \
+xstep=2, ystep=2)
+
+In [21]: data
+Out[21]:
+array([[ 146.,  153.,  134., ...,   51.,   55.,   72.],
+       [ 198.,  163.,  146., ...,   26.,   54.,   57.],
+       [ 127.,  205.,  105., ...,   64.,   76.,   61.],
+       ...,
+       [  64.,   78.,   52., ...,   96.,  176.,  159.],
+       [  66.,   41.,   45., ...,  200.,  153.,  203.],
+       [  64.,   71.,   88., ...,  289.,  182.,  123.]], dtype=float32)
+
+In [22]: data.shape
+Out[22]: (500, 500)
+
+In [23]: imshow(data, cmap=cm.gray, vmin=0, vmax=1000)
+Out[23]: &lt;matplotlib.image.AxesImage object at 0x60dcf10&gt;
+
+In [24]: title(band.description)
+Out[24]: &lt;matplotlib.text.Text object at 0x67e9950&gt;
+
+In [25]: colorbar()
+Out[25]: &lt;matplotlib.colorbar.Colorbar instance at 0x6b18cb0&gt;</pre>
+</div>
+<div class="figure">
+<img alt="_images/ASA_IMP_crop.png" src="_images/ASA_IMP_crop.png" style="width: 100%;" />
+<p class="caption">Image data read from the &#8220;proc_data&#8221; band</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tutorial</a><ul>
+<li><a class="reference internal" href="#interactive-use-of-pyepr">Interactive use of PyEPR</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="usermanual.html"
+                        title="previous chapter">User Manual</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="reference.html"
+                        title="next chapter">API Reference</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tutorial.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="reference.html" title="API Reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="usermanual.html" title="User Manual"
+             >previous</a> |</li>
+        <li><a href="index.html">PyEPR 0.4 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Antonio Valentino.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre.
+    </div>
+  </body>
+</html>

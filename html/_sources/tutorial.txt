@@ -1,0 +1,339 @@
+Tutorial
+========
+
+.. .. highlight:: ipython pycon
+
+
+Interactive use of PyEPR_
+-------------------------
+
+In this tutorial it is showed an example of how to use PyEPR_ interactively
+to open, browse and display data of an ENVISAT_ ASAR_ product.
+
+For the interactive session it is used the IPython_ interactive shell an
+started with the :option:`ipython -pylab` option to enable interactive
+plotting provided by the matplotlib_ package.
+
+The ASAR_ product used in this example is a `free sample`_ available at the
+ESA_ web site.
+
+.. _PyEPR: https://github.com/avalentino/pyepr
+.. _ENVISAT: http://envisat.esa.int
+.. _ASAR: http://envisat.esa.int/handbooks/asar
+.. _IPython: http://ipython.scipy.org/moin
+.. _matplotlib: http://matplotlib.sourceforge.net
+.. _`free sample`: http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz
+.. _ESA: http://earth.esa.int
+
+After starting the ipython shell with the following command::
+
+    $ ipython -pylab
+
+one can import the :mod:`epr` module and start start taking confidence with
+available classes and functions::
+
+    Python 2.6.6 (r266:84292, Sep 15 2010, 16:22:56)
+    Type "copyright", "credits" or "license" for more information.
+
+    IPython 0.10 -- An enhanced Interactive Python.
+    ?         -> Introduction and overview of IPython's features.
+    %quickref -> Quick reference.
+    help      -> Python's own help system.
+    object?   -> Details about 'object'. ?object also works, ?? prints more.
+
+      Welcome to pylab, a matplotlib-based Python environment.
+      For more information, type 'help(pylab)'.
+
+    In [1]: import epr
+
+    In [2]: epr?
+
+    Base Class:       <type 'module'>
+    String Form:   <module 'epr' from 'epr.so'>
+    Namespace:        Interactive
+    File:             /home/antonio/projects/pyepr/epr.so
+    Docstring:
+        Python bindings for ENVISAT Product Reader C API
+
+        PyEPR_ provides Python_ bindings for the ENVISAT Product Reader C API
+        (`EPR API`_) for reading satellite data from ENVISAT_ ESA_ (European
+        Space Agency) mission.
+
+        PyEPR_ is fully object oriented and, as well as the `EPR API`_ for C,
+        supports ENVISAT_ MERIS, AATSR Level 1B and Level 2 and also ASAR data
+        products. It provides access to the data either on a geophysical
+        (decoded, ready-to-use pixel samples) or on a raw data layer.
+        The raw data access makes it possible to read any data field contained
+        in a product file.
+
+        .. _PyEPR: http://avalentino.github.com/pyepr
+        .. _Python: http://www.python.org
+        .. _`EPR API`: https://github.com/bcdev/epr-api
+        .. _ENVISAT: http://envisat.esa.int
+        .. _ESA: http://earth.esa.int
+
+    In [3]: epr.__version__, epr.EPR_C_API_VERSION
+    Out[3]: ('0.4', '2.2')
+
+Docstrings are available for almost all classes, methods and functions in
+the :mod:`epr` and they can be displayed using the :func:`help` python_
+command or the ``?`` IPython_ shortcut as showed above.
+
+.. _python: http://www.python.org
+
+Also IPython_ provides a handy tab completion mechanism to automatically
+complete commands or to display available functions and classes::
+
+    In [4]: product = epr. [TAB]
+    epr.Band                     epr.E_TID_TIME
+    epr.__builtins__             epr.E_TID_UCHAR
+    epr.__class__                epr.E_TID_UINT
+    epr._CLib                    epr.E_TID_UNKNOWN
+    epr._close_api               epr.E_TID_USHORT
+    epr.collections              epr.Field
+    epr.create_bitmask_raster    epr.__file__
+    epr.create_raster            epr.__format__
+    epr.Dataset                  epr.__getattribute__
+    epr.data_type_id_to_str      epr.get_data_type_size
+    epr.__delattr__              epr.get_sample_model_name
+    epr.__dict__                 epr.get_scaling_method_name
+    epr.__doc__                  epr.__hash__
+    epr.DSD                      epr.__init__
+    epr.EPR_C_API_VERSION        epr.__name__
+    epr.EPRError                 epr.__new__
+    epr.EprObject                epr.np
+    epr.EPRTime                  epr.open
+    epr.EPRValueError            epr.__package__
+    epr.E_SMID_LIN               epr.Product
+    epr.E_SMID_LOG               epr.Raster
+    epr.E_SMID_NON               epr.Record
+    epr.E_SMOD_1OF1              epr.__reduce__
+    epr.E_SMOD_1OF2              epr.__reduce_ex__
+    epr.E_SMOD_2OF2              epr.__repr__
+    epr.E_SMOD_2TOF              epr.__revision__
+    epr.E_SMOD_3TOI              epr.__setattr__
+    epr.E_TID_CHAR               epr.__sizeof__
+    epr.E_TID_DOUBLE             epr.so
+    epr.E_TID_FLOAT              epr.__str__
+    epr.E_TID_INT                epr.__subclasshook__
+    epr.E_TID_SHORT              epr.sys
+    epr.E_TID_SPARE              epr.__test__
+    epr.E_TID_STRING             epr.__version__
+
+The first thing to do is to use the :func`epr.open' function to get an
+instance of the desired ENVISAT_ :class:`epr.Product`::
+
+    In [4]: product = epr.open(\
+    'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1')
+
+    In [4]: product.
+    product.bands                product.get_num_dsds
+    product.__class__            product.get_scene_height
+    product.datasets             product.get_scene_width
+    product.__delattr__          product.get_sph
+    product.__doc__              product.__hash__
+    product.file_path            product.id_string
+    product.__format__           product.__init__
+    product.__getattribute__     product.meris_iodd_version
+    product.get_band             product.__new__
+    product.get_band_at          product.read_bitmask_raster
+    product.get_band_names       product.__reduce__
+    product.get_dataset          product.__reduce_ex__
+    product.get_dataset_at       product.__repr__
+    product.get_dataset_names    product.__setattr__
+    product.get_dsd_at           product.__sizeof__
+    product.get_mph              product.__str__
+    product.get_num_bands        product.__subclasshook__
+    product.get_num_datasets     product.tot_size
+
+    In [5]: product.tot_size / 1024.**2
+    Out[5]: 132.01041889190674
+
+    In [6]: print product
+    epr.Product(ASA_IMP_1PNUPA20060202_ ...) 7 datasets, 5 bands
+
+    epr.Dataset(MDS1_SQ_ADS) 1 records
+    epr.Dataset(MAIN_PROCESSING_PARAMS_ADS) 1 records
+    epr.Dataset(DOP_CENTROID_COEFFS_ADS) 1 records
+    epr.Dataset(SR_GR_ADS) 1 records
+    epr.Dataset(CHIRP_PARAMS_ADS) 1 records
+    epr.Dataset(GEOLOCATION_GRID_ADS) 11 records
+    epr.Dataset(MDS1) 8192 records
+
+    epr.Band(slant_range_time) of epr.Product(ASA_IMP_1PNUPA20060202_ ...)
+    epr.Band(incident_angle) of epr.Product(ASA_IMP_1PNUPA20060202_ ...)
+    epr.Band(latitude) of epr.Product(ASA_IMP_1PNUPA20060202 ...)
+    epr.Band(longitude) of epr.Product(ASA_IMP_1PNUPA20060202 ...)
+    epr.Band(proc_data) of epr.Product(ASA_IMP_1PNUPA20060202 ...)
+
+A short summary of product contents can be displayed simply printing the
+:class:`epr.Product` object as showed above.
+Being able to display contents of each object it is easy to keep browsing and
+get all desired information from the product::
+
+    In [7]: dataset = product.get_dataset('MAIN_PROCESSING_PARAMS_ADS')
+
+    In [8]: dataset
+    Out[8]: epr.Dataset(MAIN_PROCESSING_PARAMS_ADS) 1 records
+
+    In [9]: record = dataset.[TAB]
+    dataset.__class__         dataset.get_name          dataset.__reduce__
+    dataset.create_record     dataset.get_num_records   dataset.__reduce_ex__
+    dataset.__delattr__       dataset.__hash__          dataset.__repr__
+    dataset.description       dataset.__init__          dataset.__setattr__
+    dataset.__doc__           dataset.__iter__          dataset.__sizeof__
+    dataset.__format__        dataset.__new__           dataset.__str__
+    dataset.__getattribute__  dataset.product           dataset.__subclasshook__
+    dataset.get_dsd           dataset.read_record
+    dataset.get_dsd_name      dataset.records
+
+    In [9]: record = dataset.read_record(0)
+
+    In [10]: record
+    Out[10]: <epr.Record object at 0x33570f0> 220 fields
+
+    In [11]: record.get_field_names()[:20]
+    Out[11]:
+    ['first_zero_doppler_time',
+     'attach_flag',
+     'last_zero_doppler_time',
+     'work_order_id',
+     'time_diff',
+     'swath_id',
+     'range_spacing',
+     'azimuth_spacing',
+     'line_time_interval',
+     'num_output_lines',
+     'num_samples_per_line',
+     'data_type',
+     'spare_1',
+     'data_analysis_flag',
+     'ant_elev_corr_flag',
+     'chirp_extract_flag',
+     'srgr_flag',
+     'dop_cen_flag',
+     'dop_amb_flag',
+     'range_spread_comp_flag']
+
+    In [12]: field = record.get_field('range_spacing')
+
+    In [13]: field.get [TAB]
+    field.get_description  field.get_name         field.get_unit
+    field.get_elem         field.get_num_elems
+    field.get_elems        field.get_type
+
+    In [13]: field.get_description()
+    Out[13]: 'Range sample spacing'
+
+    In [14]: epr.data_type_id_to_str(field.get_type())
+    Out[14]: 'float'
+
+    In [15]: field.get_num_elems()
+    Out[15]: 1
+
+    In [16]: field.get_unit()
+    Out[16]: 'm'
+
+    In [17]: print field
+    range_spacing = 12.500000
+
+:class:`epr.Record` objects are also *iterable* so one can write code like
+the following::
+
+    In [18]: for field in record:
+                 if field.get_num_elems() == 4:
+                     print '%s: %d elements' % (field.get_name(), len(field))
+
+            ....:
+    nominal_chirp.1.nom_chirp_amp: 4 elements
+    nominal_chirp.1.nom_chirp_phs: 4 elements
+    nominal_chirp.2.nom_chirp_amp: 4 elements
+    nominal_chirp.2.nom_chirp_phs: 4 elements
+    nominal_chirp.3.nom_chirp_amp: 4 elements
+    nominal_chirp.3.nom_chirp_phs: 4 elements
+    nominal_chirp.4.nom_chirp_amp: 4 elements
+    nominal_chirp.4.nom_chirp_phs: 4 elements
+    nominal_chirp.5.nom_chirp_amp: 4 elements
+    nominal_chirp.5.nom_chirp_phs: 4 elements
+    beam_merge_sl_range: 4 elements
+    beam_merge_alg_param: 4 elements
+
+Dealing with image data is simple as well::
+
+    In [19]: product.get_band_names()
+    Out[19]: ['slant_range_time',
+              'incident_angle',
+              'latitude',
+              'longitude',
+              'proc_data']
+
+    In [19]: band = product.get_band('proc_data')
+
+    In [20]: data = band. [TAB]
+    band.bm_expr                   band.read_as_array
+    band.__class__                 band.read_raster
+    band.create_compatible_raster  band.__reduce__
+    band.data_type                 band.__reduce_ex__
+    band.__delattr__               band.__repr__
+    band.description               band.sample_model
+    band.__doc__                   band.scaling_factor
+    band.__format__                band.scaling_method
+    band.__getattribute__          band.scaling_offset
+    band.get_name                  band.__setattr__
+    band.__hash__                  band.__sizeof__
+    band.__init__                  band.spectr_band_index
+    band.lines_mirrored            band.__str__
+    band.__new__                   band.__subclasshook__
+    band.product                   band.unit
+    band.__pyx_vtable__
+
+    In [20]: data = band.read_as_array(1000, 1000, xoffset=100, yoffset=6500, \
+    xstep=2, ystep=2)
+
+    In [21]: data
+    Out[21]:
+    array([[ 146.,  153.,  134., ...,   51.,   55.,   72.],
+           [ 198.,  163.,  146., ...,   26.,   54.,   57.],
+           [ 127.,  205.,  105., ...,   64.,   76.,   61.],
+           ...,
+           [  64.,   78.,   52., ...,   96.,  176.,  159.],
+           [  66.,   41.,   45., ...,  200.,  153.,  203.],
+           [  64.,   71.,   88., ...,  289.,  182.,  123.]], dtype=float32)
+
+    In [22]: data.shape
+    Out[22]: (500, 500)
+
+    In [23]: imshow(data, cmap=cm.gray, vmin=0, vmax=1000)
+    Out[23]: <matplotlib.image.AxesImage object at 0x60dcf10>
+
+    In [24]: title(band.description)
+    Out[24]: <matplotlib.text.Text object at 0x67e9950>
+
+    In [25]: colorbar()
+    Out[25]: <matplotlib.colorbar.Colorbar instance at 0x6b18cb0>
+
+.. figure:: images/ASA_IMP_crop.*
+   :width: 100%
+
+   Image data read from the "proc_data" band
+
+
+.. comment
+
+    Write bands example
+    -------------------
+
+    @TBW
+
+
+    Write NDVI example
+    ------------------
+
+    @TBW
+
+
+    Write bitmask example
+    ---------------------
+
+    @TBW
+

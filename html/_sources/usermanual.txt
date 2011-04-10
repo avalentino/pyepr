@@ -121,18 +121,18 @@ Testing
 
 PyEPR_ package comes with a complete test suite but in order to run it
 the ENVISAT sample product used for testing
-ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1__
+MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1__
 have to be downloaded from the ESA_ website, saved in the :file:`test`
 directory and decompressed.
 
-__ http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz
+__ http://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz
 
 On GNU Linux platforms the following shell commands can be used::
 
     $ cd pyepr-0.X/test
-    $ wget http://earth.esa.int/services/sample_products/asar/IMP/\
-      ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz
-    $ gunzip ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1
+    $ wget http://earth.esa.int/services/sample_products/meris/LRC/L2/\
+      MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz
+    $ gunzip MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz
 
 After installation the test suite can be run using the following command
 in the :file:`test` directory::

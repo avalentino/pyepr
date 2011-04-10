@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API Reference &mdash; PyEPR 0.3 documentation</title>
+    <title>API Reference &mdash; PyEPR 0.4 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3',
+        VERSION:     '0.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,9 +25,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PyEPR 0.3 documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.4 documentation" href="index.html" />
     <link rel="next" title="Change history" href="NEWS.html" />
-    <link rel="prev" title="User Manual" href="usermanual.html" /> 
+    <link rel="prev" title="Tutorial" href="tutorial.html" /> 
   </head>
   <body>
     <div class="related">
@@ -43,9 +43,9 @@
           <a href="NEWS.html" title="Change history"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="usermanual.html" title="User Manual"
+          <a href="tutorial.html" title="Tutorial"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.3 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -243,6 +243,45 @@ in the product</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">this method has no correspondent in the C API</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="epr.Product.read_bitmask_raster">
+<tt class="descname">read_bitmask_raster</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.read_bitmask_raster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates a bit-mask raster</p>
+<p>Calculates a bit-mask, composed of flags of the given product
+and combined as described in the given bit-mask expression, for
+the a certain dimension and sub-sampling as defined in the
+given raster.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bm_expr</strong> &#8211; a string holding the logical expression for the definition
+of the bit-mask. In a bit-mask expression, any number of
+the flag-names (found in the DDDB) can be composed with
+&#8220;(&#8221;, &#8221;)&#8221;, &#8220;NOT&#8221;, &#8220;AND&#8221;, &#8220;OR&#8221;. Valid bit-mask expression are
+for example <tt class="docutils literal"><span class="pre">flags.LAND</span> <span class="pre">OR</span> <span class="pre">flags.CLOUD</span></tt> or
+<tt class="docutils literal"><span class="pre">NOT</span> <span class="pre">flags.WATER</span> <span class="pre">AND</span> <span class="pre">flags.TURBID_S</span></tt></li>
+<li><strong>xoffset</strong> &#8211; across-track co-ordinate in pixel co-ordinates (zero-based)
+of the upper right corner of the source-region</li>
+<li><strong>yoffset</strong> &#8211; along-track co-ordinate in pixel co-ordinates (zero-based)
+of the upper right corner of the source-region</li>
+<li><strong>raster</strong> &#8211; the raster for the bit-mask. The data type of the raster
+must be either <a class="reference internal" href="#epr.E_TID_UCHAR" title="epr.E_TID_UCHAR"><tt class="xref py py-data docutils literal"><span class="pre">E_TID_UCHAR</span></tt></a> or <a class="reference internal" href="#epr.E_TID_CHAR" title="epr.E_TID_CHAR"><tt class="xref py py-data docutils literal"><span class="pre">E_TID_CHAR</span></tt></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">zero for success, an error code otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#epr.create_bitmask_raster" title="epr.create_bitmask_raster"><tt class="xref py py-func docutils literal"><span class="pre">create_bitmask_raster()</span></tt></a></p>
 </div>
 </dd></dl>
 
@@ -1458,8 +1497,8 @@ into the raster. Default 1.</li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="usermanual.html"
-                        title="previous chapter">User Manual</a></p>
+  <p class="topless"><a href="tutorial.html"
+                        title="previous chapter">Tutorial</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="NEWS.html"
                         title="next chapter">Change history</a></p>
@@ -1498,9 +1537,9 @@ into the raster. Default 1.</li>
           <a href="NEWS.html" title="Change history"
              >next</a> |</li>
         <li class="right" >
-          <a href="usermanual.html" title="User Manual"
+          <a href="tutorial.html" title="Tutorial"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.3 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.4 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
