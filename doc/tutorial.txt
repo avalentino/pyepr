@@ -81,8 +81,8 @@ command or the ``?`` IPython_ shortcut as showed above.
 
 .. _python: http://www.python.org
 
-Also IPython_ provides a handy tab cmpletion mechanism to autamatically
-comlete commands or to display available functions and classes::
+Also IPython_ provides a handy tab completion mechanism to automatically
+complete commands or to display available functions and classes::
 
     In [4]: product = epr. [TAB]
     epr.Band                     epr.E_TID_TIME
@@ -237,8 +237,8 @@ get all desired information from the product::
     In [17]: print field
     range_spacing = 12.500000
 
-:class:`epr.Record` objects are also iterable so one can write code like the
-following::
+:class:`epr.Record` objects are also *iterable* so one can write code like
+the following::
 
     In [18]: for field in record:
                  if field.get_num_elems() == 4:
