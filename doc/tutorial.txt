@@ -7,7 +7,7 @@ Tutorial
 Interactive use of PyEPR_
 -------------------------
 
-In this tutorial it is showed an exapmle of how to use PyEPR_ interactively
+In this tutorial it is showed an example of how to use PyEPR_ interactively
 to open, browse and display data of an ENVISAT_ ASAR_ product.
 
 For the interactive session it is used the IPython_ interactive shell an
