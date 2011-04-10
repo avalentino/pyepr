@@ -42,7 +42,7 @@ in a product file.
 '''
 
 __revision__ = '$Id$'
-__version__  = '0.4'
+__version__  = '0.5a'
 
 
 cdef extern from 'string.h':
