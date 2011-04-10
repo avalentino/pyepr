@@ -473,7 +473,7 @@ cdef int pyepr_null_ptr_error(msg='null pointer') except -1:
 cdef class _CLib:
     '''Library object to handle C API initialization/finalization
 
-    .. warning:: this is ment for internal use only. **Do not use it**.
+    .. warning:: this is meant for internal use only. **Do not use it**.
 
     '''
 
