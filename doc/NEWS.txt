@@ -13,6 +13,7 @@ PyEPR 0.4 (in development)
 * fixed segfault in :meth:`epr.Field.get_unit` method when the field
   has no unit
 * a smaller dataset is now used for unit tests
+* a new tutorial section has been added to the user documentation
 
 
 PyEPR 0.3 (01/04/2011)
