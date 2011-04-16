@@ -55,7 +55,10 @@ def quiet(func):
         sysout = sys.stdout
         syserr = sys.stderr
         try:
-            with file(os.devnull) as fd:
+            # using '/dev/null' doesn't work in python 3 because the file
+            # object coannot be converted into a C FILE*
+            #with file(os.devnull) as fd:
+            with tempfile.TemporaryFile() as fd:
                 sys.stdout = fd
                 sys.stderr = fd
                 ret = func(*args, **kwds)

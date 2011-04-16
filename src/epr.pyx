@@ -50,10 +50,12 @@ cdef extern from 'string.h':
     int strcmp(char*, char*)
     int strlen(char*)
 
-cdef extern from 'Python.h':
+cdef extern from 'stdio.h':
     ctypedef struct FILE
-    FILE* PyFile_AsFile(object)
+    FILE* fdopen(int, char *mode)
+    int fflush(FILE*)
 
+cdef extern from 'Python.h':
     # To release global interpreter lock (GIL) for threading
     void Py_BEGIN_ALLOW_THREADS()
     void Py_END_ALLOW_THREADS()
@@ -363,6 +365,7 @@ cdef extern from 'epr_api.h':
 
 import sys
 import collections
+from python_object cimport PyObject_AsFileDescriptor
 import numpy as np
 cimport numpy as np
 np.import_array()
@@ -469,6 +472,29 @@ cdef int pyepr_null_ptr_error(msg='null pointer') except -1:
     epr_clear_err()
     return -1
 
+cdef FILE* pyepr_get_file_stream(object ostream) except NULL:
+    cdef FILE* fstream
+    cdef int fileno
+
+    if ostream is None:
+        ostream = sys.stdout
+
+    try:
+        ostream.flush()
+    except AttributeError, e:
+        raise TypeError(str(e))
+        return NULL
+
+    fileno = PyObject_AsFileDescriptor(ostream)
+    if fileno == -1:
+        raise TypeError('bad output stream')
+        return NULL
+
+    fstream = fdopen(fileno, 'w')
+    if fstream is NULL:
+        raise TypeError('invalid ostream')
+
+    return fstream
 
 cdef class _CLib:
     '''Library object to handle C API initialization/finalization
@@ -698,17 +724,11 @@ cdef class Field(EprObject):
 
         '''
 
-        cdef FILE* fd
-
-        if ostream is None:
-            ostream = sys.stdout
-
-        fd = PyFile_AsFile(ostream)
-        if fd is NULL:
-            raise TypeError('invalid ostream')
+        cdef FILE* fstream = pyepr_get_file_stream(ostream)
 
         Py_BEGIN_ALLOW_THREADS
-        epr_print_field(self._ptr, fd)
+        epr_print_field(self._ptr, fstream)
+        fflush(fstream)
         Py_END_ALLOW_THREADS
 
         pyepr_check_errors()
@@ -1057,17 +1077,11 @@ cdef class Record(EprObject):
 
         '''
 
-        cdef FILE* fd
-
-        if ostream is None:
-            ostream = sys.stdout
-
-        fd = PyFile_AsFile(ostream)
-        if fd is NULL:
-            raise TypeError('invalid ostream')
+        cdef FILE* fstream = pyepr_get_file_stream(ostream)
 
         Py_BEGIN_ALLOW_THREADS
-        epr_print_record(self._ptr, fd)
+        epr_print_record(self._ptr, fstream)
+        fflush(fstream)
         Py_END_ALLOW_THREADS
 
         pyepr_check_errors()
@@ -1092,17 +1106,11 @@ cdef class Record(EprObject):
 
         '''
 
-        cdef FILE* fd
-
-        if ostream is None:
-            ostream = sys.stdout
-
-        fd = PyFile_AsFile(ostream)
-        if fd is NULL:
-            raise TypeError('invalid ostream')
+        cdef FILE* fstream = pyepr_get_file_stream(ostream)
 
         Py_BEGIN_ALLOW_THREADS
-        epr_print_element(self._ptr, field_index, element_index, fd)
+        epr_print_element(self._ptr, field_index, element_index, fstream)
+        fflush(fstream)
         Py_END_ALLOW_THREADS
 
         pyepr_check_errors()
