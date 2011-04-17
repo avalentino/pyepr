@@ -720,7 +720,8 @@ cdef class Field(EprObject):
             the (opened) output file object
 
         .. note:: the *ostream* parameter have to be a *real* file not
-                  a generic stream object like :class:`StringIO` instances
+                  a generic stream object like :class:`StringIO.StringIO`
+                  instances
 
         '''
 
@@ -1072,7 +1073,7 @@ cdef class Record(EprObject):
             the (opened) output file object
 
         .. note:: the *ostream* parameter have to be a *real* file not
-                  a generic stream object like :class:`StringIO`
+                  a generic stream object like :class:`StringIO.StringIO`
                   instances
 
         '''
@@ -1101,7 +1102,7 @@ cdef class Record(EprObject):
             the (opened) output file object
 
         .. note:: the *ostream* parameter have to be a *real* file not
-                  a generic stream object like :class:`StringIO`
+                  a generic stream object like :class:`StringIO.StringIO`
                   instances
 
         '''
@@ -1125,7 +1126,7 @@ cdef class Record(EprObject):
             the the name of required field
         :returns:
             the specified :class:`Field` or raises an exception
-            (:class:`EPRValueError`) if an error occurred
+            (:exc:`EPRValueError`) if an error occurred
 
         '''
 
@@ -1142,7 +1143,7 @@ cdef class Record(EprObject):
         :param index:
             the zero-based index (position within record) of the field
         :returns:
-            the field or raises and exception (:class:`EPRValueError`)
+            the field or raises and exception (:exc:`EPRValueError`)
             if an error occurred
 
         '''
@@ -1430,7 +1431,7 @@ def create_bitmask_raster(uint src_width, uint src_height,
         into the raster
     :returns:
         the new raster instance or raises an exception
-        (:class:`EPRValueError`) if an error occurred
+        (:exc:`EPRValueError`) if an error occurred
 
     .. seealso:: the description of :meth:`Band.create_compatible_raster`
 
@@ -1663,7 +1664,7 @@ cdef class Band(EprObject):
             into the raster
         :returns:
             the new raster instance or raises an exception
-            (:class:`EPRValueError`) if an error occurred
+            (:exc:`EPRValueError`) if an error occurred
 
         '''
 
@@ -1689,8 +1690,8 @@ cdef class Band(EprObject):
         '''Reads (geo-)physical values of the band of the specified
         source-region
 
-        The source-region is a defined part of the whole ENVISAT product
-        image, which shall be read into a raster.
+        The source-region is a defined part of the whole ENVISAT
+        product image, which shall be read into a raster.
         In this routine the co-ordinates are specified, where the
         source-region to be read starts.
         The dimension of the region and the sub-sampling are attributes
@@ -1704,12 +1705,13 @@ cdef class Band(EprObject):
             (zero-based) of the upper right corner of the source-region
         :param raster:
             :class:`Raster` instance set with appropriate parameters to
-            read into. If not provided a new :class:`Raster` is instantiated
+            read into. If not provided a new :class:`Raster` is
+            instantiated
         :returns:
             the :class:`Raster` instance in which data are read
 
-        This method raises an instance of the appropriate :class:`EPRError`
-        sub-class if case of errors
+        This method raises an instance of the appropriate
+        :exc:`EPRError` sub-class if case of errors
 
         .. seealso:: :meth:`Band.create_compatible_raster` and
                      :func:`create_raster`
@@ -1738,8 +1740,8 @@ cdef class Band(EprObject):
                       uint xstep=1, uint ystep=1):
         '''Reads the specified source region as an :class:`numpy.ndarray`
 
-        The source-region is a defined part of the whole ENVISAT product
-        image, which shall be read into a raster.
+        The source-region is a defined part of the whole ENVISAT
+        product image, which shall be read into a raster.
         In this routine the co-ordinates are specified, where the
         source-region to be read starts.
         The dimension of the region and the sub-sampling are attributes
@@ -1758,16 +1760,16 @@ cdef class Band(EprObject):
             along-track source co-ordinate in pixel co-ordinates
             (zero-based) of the upper right corner of the source-region
         :param xstep:
-            the sub-sampling step across track of the source when reading
-            into the raster
+            the sub-sampling step across track of the source when
+            reading into the raster
         :param ystep:
-            the sub-sampling step along track of the source when reading
-            into the raster
+            the sub-sampling step along track of the source when
+            reading into the raster
         :returns:
             the :class:`numpy.ndarray` instance in which data are read
 
-        This method raises an instance of the appropriate :class:`EPRError`
-        sub-class if case of errors
+        This method raises an instance of the appropriate
+        :exc:`EPRError` sub-class if case of errors
 
         .. seealso:: :meth:`Band.create_compatible_raster`,
                      :func:`create_raster` and :meth:`Band.read_raster`
@@ -1904,7 +1906,7 @@ cdef class Dataset(EprObject):
             record
         :returns:
             the record in which the data has been read into or raises
-            an exception (:class:`EPRValueError`) if an error occurred
+            an exception (:exc:`EPRValueError`) if an error occurred
 
         '''
 
@@ -2061,8 +2063,12 @@ cdef class Product(EprObject):
         return epr_get_num_datasets(self._ptr)
 
     def get_num_dsds(self):
-        '''Gets the number of all DSDs (dataset descriptors) contained
-        in the product'''
+        '''Gets the number of all :class:`DSD`\ s
+
+        Gets the number of all :class:`DSD`\ s (dataset descriptors)
+        contained in the product
+
+        '''
 
         return epr_get_num_dsds(self._ptr)
 
@@ -2107,14 +2113,14 @@ cdef class Product(EprObject):
         return new_dataset(dataset_id, self)
 
     def get_dsd_at(self, uint index):
-        '''Gets the DSD at the specified position
+        '''Gets the :class:`DSD` at the specified position
 
-        Gets the DSD (dataset descriptor) at the specified position
-        within the product.
+        Gets the :class:`DSD` (dataset descriptor) at the specified
+        position within the product.
 
         :param index:
-            the index identifying the position of the DSD, starting
-            with 0, must not be negative
+            the index identifying the position of the :class:`DSD`,
+            starting with 0, must not be negative
         :returns:
             the requested :class:`DSD` instance
 
@@ -2154,7 +2160,7 @@ cdef class Product(EprObject):
             the name of the band
         :returns:
             the requested :class:`Band` instance, or raises a
-            :class:`EPRValueError` if not found
+            :exc:`EPRValueError` if not found
 
         '''
 
@@ -2173,7 +2179,7 @@ cdef class Product(EprObject):
             with 0, must not be negative
         :returns:
             the requested :class:`Band` instance, or raises a
-            :class:`EPRValueError` if not found
+            :exc:`EPRValueError` if not found
 
         '''
 
@@ -2300,8 +2306,8 @@ def open(filename):
         the path to the ENVISAT product file
     :returns:
         the :class:`Product` instance representing the specified
-        product. An exception (:class:`ValueError`) is raised if the
-        file could not be opened.
+        product. An exception (:exc:`exceptions.ValueError`) is raised
+        if the file could not be opened.
 
     .. seealso :class:`Product`
 

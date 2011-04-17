@@ -74,7 +74,7 @@ Product
             the name of the band
       :returns:
             the requested :class:`Band` instance, or raises a
-            :class:`EPRValueError` if not found
+            :exc:`EPRValueError` if not found
 
 
    .. method:: get_band_at(index)
@@ -86,7 +86,7 @@ Product
             with 0, must not be negative
       :returns:
             the requested :class:`Band` instance, or raises a
-            :class:`EPRValueError` if not found
+            :exc:`EPRValueError` if not found
 
 
    .. method:: get_dataset(name)
@@ -112,14 +112,14 @@ Product
 
    .. method:: get_dsd_at(index)
 
-      Gets the DSD at the specified position
+      Gets the :class:`DSD` at the specified position
 
-      Gets the DSD (dataset descriptor) at the specified position
-      within the product.
+      Gets the :class:`DSD` (dataset descriptor) at the specified
+      position within the product.
 
       :param index:
-            the index identifying the position of the DSD, starting
-            with 0, must not be negative
+            the index identifying the position of the :class:`DSD`,
+            starting with 0, must not be negative
       :returns:
             the requested :class:`DSD` instance
 
@@ -136,8 +136,8 @@ Product
 
    .. method:: get_num_dsds
 
-      Gets the number of all DSDs (dataset descriptors) contained
-      in the product
+      Gets the number of all :class:`DSD`\ s (dataset descriptors)
+      contained in the product
 
 
    .. method:: get_scene_height
@@ -306,7 +306,7 @@ Dataset
             record
       :returns:
             the record in which the data has been read into or raises
-            an exception (:class:`EPRValueError`) if an error occurred
+            an exception (:exc:`EPRValueError`) if an error occurred
 
 
    .. method:: records
@@ -346,7 +346,7 @@ Record
             the the name of required field
       :returns:
             the specified :class:`Field` or raises an exception
-            (:class:`EPRValueError`) if an error occurred
+            (:exc:`EPRValueError`) if an error occurred
 
 
    .. method:: get_field_at(index)
@@ -356,7 +356,7 @@ Record
       :param index:
             the zero-based index (position within record) of the field
       :returns:
-            the field or raises and exception (:class:`EPRValueError`)
+            the field or raises and exception (:exc:`EPRValueError`)
             if an error occurred
 
 
@@ -377,7 +377,8 @@ Record
             the (opened) output file object
 
       .. note:: the *ostream* parameter have to be a *real* file not
-                a generic stream object like :class:`StringIO` instances
+                a generic stream object like :class:`StringIO.StringIO`
+                instances
 
 
    .. method:: print_element(field_index, element_index[, ostream])
@@ -396,7 +397,8 @@ Record
             the (opened) output file object
 
       .. note:: the *ostream* parameter have to be a *real* file not
-                a generic stream object like :class:`StringIO` instances
+                a generic stream object like :class:`StringIO.StringIO`
+                instances
 
 
    .. method:: get_field_names
@@ -495,7 +497,8 @@ Field
             the (opened) output file object
 
       .. note:: the *ostream* parameter have to be a *real* file not
-                a generic stream object like :class:`StringIO` instances
+                a generic stream object like :class:`StringIO.StringIO`
+                instances
 
 
    .. rubric:: Implemented special methods
@@ -741,13 +744,13 @@ Band
             into the raster
       :param xstep:
             the sub-sampling step across track of the source when reading
-            into the raster. Default 1.
+            into the raster. Default: 1.
       :param ystep:
             the sub-sampling step along track of the source when reading
-            into the raster. Default 1.
+            into the raster. Default: 1.
       :returns:
             the new raster instance or raises an exception
-            (:class:`EPRValueError`) if an error occurred
+            (:exc:`EPRValueError`) if an error occurred
 
 
    .. method:: read_raster([xoffset, yoffset, raster])
@@ -755,8 +758,8 @@ Band
       Reads (geo-)physical values of the band of the specified
       source-region
 
-      The source-region is a defined part of the whole ENVISAT product
-      image, which shall be read into a raster.
+      The source-region is a defined part of the whole ENVISAT
+      product image, which shall be read into a raster.
       In this routine the co-ordinates are specified, where the
       source-region to be read starts.
       The dimension of the region and the sub-sampling are attributes
@@ -772,12 +775,13 @@ Band
             Default 0.
       :param raster:
             :class:`Raster` instance set with appropriate parameters to
-            read into. If not provided a new :class:`Raster` is instantiated
+            read into. If not provided a new :class:`Raster` is
+            instantiated
       :returns:
             the :class:`Raster` instance in which data are read
 
-      This method raises an instance of the appropriate :class:`EPRError`
-      sub-class if case of errors
+      This method raises an instance of the appropriate
+      :exc:`EPRError` sub-class if case of errors
 
       .. seealso:: :meth:`Band.create_compatible_raster` and
                    :func:`create_raster`
@@ -787,8 +791,8 @@ Band
 
       Reads the specified source region as an :class:`numpy.ndarray`
 
-      The source-region is a defined part of the whole ENVISAT product
-      image, which shall be read into a raster.
+      The source-region is a defined part of the whole ENVISAT
+      product image, which shall be read into a raster.
       In this routine the co-ordinates are specified, where the
       source-region to be read starts.
       The dimension of the region and the sub-sampling are attributes
@@ -809,16 +813,16 @@ Band
             (zero-based) of the upper right corner of the source-region.
             Default 0.
       :param xstep:
-            the sub-sampling step across track of the source when reading
-            into the raster. Default 1
+            the sub-sampling step across track of the source when
+            reading into the raster. Default: 1
       :param ystep:
-            the sub-sampling step along track of the source when reading
-            into the raster. Default 1
+            the sub-sampling step along track of the source when
+            reading into the raster. Default: 1
       :returns:
             the :class:`numpy.ndarray` instance in which data are read
 
-      This method raises an instance of the appropriate :class:`EPRError`
-      sub-class if case of errors
+      This method raises an instance of the appropriate
+      :exc:`EPRError` sub-class if case of errors
 
       .. note:: this method has no correspondent in the C API
       .. seealso:: :meth:`Band.create_compatible_raster`,
@@ -943,8 +947,8 @@ Functions
         the path to the ENVISAT product file
    :returns:
         the :class:`Product` instance representing the specified
-        product. An exception (:class:`ValueError`) is raised if the
-        file could not be opened.
+        product. An exception (:exc:`exceptions.ValueError`) is raised
+        if the file could not be opened.
 
    .. seealso :class:`Product`
 
@@ -992,10 +996,10 @@ Functions
         See description of :meth:`Band.create_compatible_raster`
    :param xstep:
         the sub-sampling step across track of the source when reading
-        into the raster. Default 1.
+        into the raster. Default: 1.
    :param ystep:
         the sub-sampling step along track of the source when reading
-        into the raster. Default 1.
+        into the raster. Default: 1.
    :returns:
         the new :class:`Raster` instance
 
@@ -1016,13 +1020,13 @@ Functions
         into the raster
    :param xstep:
         the sub-sampling step across track of the source when reading
-        into the raster. Default 1.
+        into the raster. Default: 1.
    :param ystep:
         the sub-sampling step along track of the source when reading
-        into the raster. Default 1.
+        into the raster. Default: 1.
    :returns:
         the new raster instance or raises an exception
-        (:class:`EPRValueError`) if an error occurred
+        (:exc:`EPRValueError`) if an error occurred
 
    .. seealso:: the description of :meth:`Band.create_compatible_raster`
 
@@ -1057,7 +1061,7 @@ EPRValueError
 
 .. exception:: EPRValueError
 
-   Inherits both :class:`EPRError` and standard :class:`ValueError`
+   Inherits both :exc:`EPRError` and standard :exc:`exceptions.ValueError`
 
 
 Data

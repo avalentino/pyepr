@@ -120,7 +120,7 @@ complete commands or to display available functions and classes::
     epr.E_TID_SPARE              epr.__test__
     epr.E_TID_STRING             epr.__version__
 
-The first thing to do is to use the :func`epr.open' function to get an
+The first thing to do is to use the :func:`epr.open` function to get an
 instance of the desired ENVISAT_ :class:`epr.Product`::
 
     In [4]: product = epr.open(\
@@ -237,7 +237,7 @@ get all desired information from the product::
     In [17]: print field
     range_spacing = 12.500000
 
-:class:`epr.Record` objects are also *iterable* so one can write code like
+:class:`epr.Record` objects are also iterable_ so one can write code like
 the following::
 
     In [18]: for field in record:
@@ -316,6 +316,9 @@ Dealing with image data is simple as well::
    :width: 100%
 
    Image data read from the "proc_data" band
+
+
+.. _iterable: http://docs.python.org/glossary.html#term-iterable
 
 
 .. comment

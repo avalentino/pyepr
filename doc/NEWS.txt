@@ -5,7 +5,8 @@ Change history
 PyEPR 0.4 (in deveopment)
 -------------------------
 
-@TBW
+* stop using :c:func:`PyFile_AsFile` that is no more available in
+  python 3
 
 
 PyEPR 0.4 (10/04/2011)
@@ -50,7 +51,7 @@ PyEPR 0.2 (20/03/2011)
 * added docstrings to all method and classes
 * renamed some method and parameter in order to avoid redundancies and
   have a more *pythonic*  API
-* in case of null pointers a :class:`EPRValueError` is raised
+* in case of null pointers a :exc:`epr.EPRValueError` is raised
 * improved C library shutdown management
 * introduced some utility methods to :class:`epr.Product` and
   :class:`epr.Record` classes

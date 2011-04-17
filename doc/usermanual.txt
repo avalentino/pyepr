@@ -198,7 +198,7 @@ Even if the *product* variable goes out of scope and is no more directly
 accessible in the program the *dataset* object keeps staying valid since
 it holds an internal reference to the *product* instance it depends on.
 
-When *record* is destroyed automatically also the parent :class:`Product`
+When *record* is destroyed automatically also the parent :class:`epr.Product`
 object is destroyed (assumed there is no other reference to it).
 
 The entire machinery is completely automatic and transparent to the user.
@@ -261,8 +261,8 @@ exposed to python.
 Internal library logging is completely silenced and errors are converted
 to Python_ exceptions.
 Where appropriate standard Python_ exception types are use in other cases
-custom exception types (e.g. :class:`epr.EPRError`,
-:class:`epr.EPRValueError`) are used.
+custom exception types (e.g. :exc:`epr.EPRError`,
+:exc:`epr.EPRValueError`) are used.
 
 
 Library initialization
@@ -335,8 +335,8 @@ So it is possible to write code like the following::
         for index, field in enumerate(record):
             print index, field
 
-:class:`DSD` and :class:`Filed` classes implement the ``__eq__`` and ``__ne__``
-methods for objects comparison::
+:class:`epr.DSD` and :class:`epr.Filed` classes implement the ``__eq__``
+and ``__ne__`` methods for objects comparison::
 
     if filed1 == field2:
         print 'field 1 and field2 are equal'
@@ -345,8 +345,8 @@ methods for objects comparison::
         print 'field1:', field1
         print 'field2:', field2
 
-:class:`Field` objecta also implement the ``__len__`` special method that
-returns the number of elements in the field::
+:class:`epr.Field` objecta also implement the ``__len__`` special method
+that returns the number of elements in the field::
 
     if field.get_type() != epr.E_TID_STRING:
         assert field.get_num_elems() == len(field)

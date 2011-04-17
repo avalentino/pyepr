@@ -29,7 +29,7 @@ extensions = [
     #'sphinx.ext.autodoc',
     #'sphinx.ext.autosummary',
     #'sphinx.ext.doctest',
-    #'sphinx.ext.intersphinx',
+    'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     #'sphinx.ext.coverage',
     'sphinx.ext.pngmath',
@@ -101,6 +101,7 @@ pygments_style = 'sphinx'
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
 
+
 # -- Extensions configuration --------------------------------------------------
 
 # Autodoc configuration
@@ -115,7 +116,16 @@ pygments_style = 'sphinx'
 todo_include_todos = True
 
 # External links configuration
-extlinks = {'issue': ('https://github.com/avalentino/pyepr/issues/%s', '#')}
+extlinks = {
+    'issue': ('https://github.com/avalentino/pyepr/issues/%s', '#'),
+}
+
+# Intersphinx
+intersphinx_mapping = {
+    'python': ('http://docs.python.org', None),
+    'numpy':  ('http://docs.scipy.org/doc/numpy', None),
+}
+
 
 # -- Options for HTML output ---------------------------------------------------
 
