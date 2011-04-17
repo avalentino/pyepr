@@ -136,7 +136,9 @@ html_theme = 'default'
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#html_theme_options = {}
+html_theme_options = {
+    'collapsiblesidebar': True,
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
@@ -171,14 +173,17 @@ html_static_path = ['_static']
 #html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-#html_sidebars = {}
+html_sidebars = {
+   'index': ['globaltoc.html', 'relations.html', 'sourcelink.html',
+             'searchbox.html'],
+}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
 #html_additional_pages = {}
 
 # If false, no module index is generated.
-#html_domain_indices = True
+html_domain_indices = False
 
 # If false, no index is generated.
 #html_use_index = True
@@ -234,7 +239,7 @@ latex_documents = [
 #latex_show_pagerefs = False
 
 # If true, show URL addresses after external links.
-#latex_show_urls = False
+latex_show_urls = 'footnote'
 
 # Additional stuff for the LaTeX preamble.
 #latex_preamble = ''
@@ -243,17 +248,17 @@ latex_documents = [
 #latex_appendices = []
 
 # If false, no module index is generated.
-#latex_domain_indices = True
+latex_domain_indices = False
 
 
 # -- Options for manual page output --------------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    ('index', 'pyepr', u'PyEPR Documentation',
-     [u'Antonio Valentino'], 1)
-]
+#man_pages = [
+#    ('index', 'pyepr', u'PyEPR Documentation',
+#     [u'Antonio Valentino'], 1)
+#]
 
 
 # -- Options for Epub output ---------------------------------------------------

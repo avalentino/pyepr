@@ -1,0 +1,28 @@
+Exporting bitmasks
+-------------------
+
+This tutorial shows how to generate bit masks from ENVISAT_ flags information
+as "raw" image using PyEPR_.
+
+The example code (:download:`examples/write_bitmask.py`) is a direct
+translation of the C sample program `write_bitmask.c`_ bundled with the
+EPR-API distribution.
+
+The program is invoked as follows::
+
+    $ python write_bitmask.py <envisat-product> <bitmask-expression> \
+    <output-file>
+
+.. _ENVISAT: http://envisat.esa.int
+.. _PyEPR: https://github.com/avalentino/pyepr
+.. _`write_bitmask.c`: https://github.com/bcdev/epr-api/blob/master/src/examples/write_bitmask.c
+
+
+.. raw:: latex
+
+    \fvset{fontsize=\footnotesize}
+
+
+.. literalinclude:: examples/write_bitmask.py
+   :linenos:
+

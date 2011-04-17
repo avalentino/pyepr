@@ -39,7 +39,7 @@ ENVISAT Product Reader Python API
    :maxdepth: 2
 
    usermanual
-   tutorial
+   tutorials
    reference
    NEWS
 

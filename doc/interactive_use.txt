@@ -1,9 +1,3 @@
-Tutorial
-========
-
-.. .. highlight:: ipython pycon
-
-
 Interactive use of PyEPR_
 -------------------------
 
@@ -24,6 +18,10 @@ ESA_ web site.
 .. _matplotlib: http://matplotlib.sourceforge.net
 .. _`free sample`: http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz
 .. _ESA: http://earth.esa.int
+
+
+:mod:`epr` module and classes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 After starting the ipython shell with the following command::
 
@@ -119,6 +117,10 @@ complete commands or to display available functions and classes::
     epr.E_TID_SHORT              epr.sys
     epr.E_TID_SPARE              epr.__test__
     epr.E_TID_STRING             epr.__version__
+
+
+:class:`epr.Product` navigation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The first thing to do is to use the :func:`epr.open` function to get an
 instance of the desired ENVISAT_ :class:`epr.Product`::
@@ -237,6 +239,10 @@ get all desired information from the product::
     In [17]: print field
     range_spacing = 12.500000
 
+
+Iterating over :mod:`epr` objects
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 :class:`epr.Record` objects are also iterable_ so one can write code like
 the following::
 
@@ -257,6 +263,10 @@ the following::
     nominal_chirp.5.nom_chirp_phs: 4 elements
     beam_merge_sl_range: 4 elements
     beam_merge_alg_param: 4 elements
+
+
+Image data
+~~~~~~~~~~
 
 Dealing with image data is simple as well::
 
@@ -320,23 +330,7 @@ Dealing with image data is simple as well::
 
 .. _iterable: http://docs.python.org/glossary.html#term-iterable
 
+.. raw:: latex
 
-.. comment
-
-    Write bands example
-    -------------------
-
-    @TBW
-
-
-    Write NDVI example
-    ------------------
-
-    @TBW
-
-
-    Write bitmask example
-    ---------------------
-
-    @TBW
+   \newpage
 

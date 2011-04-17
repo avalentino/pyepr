@@ -1,0 +1,28 @@
+NDVI computation
+----------------
+
+This tutorial shows how to use PyEPR_ to open a MERIS_ L1b product, compute
+the *Normalized Difference Vegetation Index* (NDVI) and store it into a flat
+binary file.
+
+The example code (:download:`examples/write_ndvi.py`) is a direct
+translation of the C sample program `write_ndvi.c`_ bundled with the
+EPR-API distribution.
+
+The program is invoked as follows::
+
+    $ python write_ndvi.py <envisat-oroduct> <output-file>
+
+.. _PyEPR: https://github.com/avalentino/pyepr
+.. _MERIS: http://envisat.esa.int/handbooks/meris
+.. _`write_ndvi.c`: https://github.com/bcdev/epr-api/blob/master/src/examples/write_ndvi.c
+
+
+.. raw:: latex
+
+    \fvset{fontsize=\footnotesize}
+
+
+.. literalinclude:: examples/write_ndvi.py
+   :linenos:
+
