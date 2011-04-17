@@ -2,11 +2,15 @@ Change history
 ==============
 
 
-PyEPR 0.4 (in deveopment)
+PyEPR 0.5 (in deveopment)
 -------------------------
 
 * stop using :c:func:`PyFile_AsFile` that is no more available in
-  python 3
+  `Python 3`_
+* now doc uses intersphinx_ capabilities
+
+.. _`Python 3`: http://docs.python.org/py3k
+.. _intersphinx: http://sphinx.pocoo.org/latest/ext/intersphinx.html
 
 
 PyEPR 0.4 (10/04/2011)
