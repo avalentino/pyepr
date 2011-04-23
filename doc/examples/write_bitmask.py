@@ -56,19 +56,13 @@ def main(*argv):
     source_step_x = 1
     source_step_y = 1
 
-    bm_raster = epr.create_raster(epr.E_TID_UCHAR,
-                                  source_width, source_height,
-                                  source_step_x, source_step_y)
+    bm_raster = epr.create_bitmask_raster(source_width, source_height,
+                                          source_step_x, source_step_y)
 
     product.read_bitmask_raster(bm_expr, offset_x, offset_y, bm_raster)
 
-    out_stream = open(image_file_path, 'wb')
-
-    for line in bm_raster.data:
-        out_stream.write(line.tostring())
-    # or better: bm_raster.data.tofile(out_stream)
-
-    out_stream.close()
+    with open(image_file_path, 'wb') as out_stream:
+        bm_raster.data.tofile(out_stream)
 
     print 'Raw image data successfully written to "%s".' % image_file_path
     print 'Data type is "byte", size is %d x %d pixels.' % (source_width,
