@@ -43,28 +43,17 @@ def main(*argv):
         print
         sys.exit(1)
 
-    # Open the product; the name of the product is in the first
-    # argument of the program call we do not check here if the product
-    # is a valid L1b product to keep the code simple
+    # Open the product
     product = epr.open(argv[1])
 
     # The NDVI shall be calculated using bands 6 and 8.
-    # The names of these bands are "radiance_6" and "radiance_10".
-    # This can be found in the BEAM documentation or using VISAT.
     band1_name = 'radiance_6'
     band2_name = 'radiance_10'
 
-    # Now we have to obtain band object for these bands.
-    # This is the object which we will use in the next step to read the
-    # calibrated radiances into the raster (i.e. the matrix with the
-    # radiance values).
     band1 = product.get_band(band1_name)
     band2 = product.get_band(band2_name)
 
-    # Before we can read the data into the raster, we have to allocate
-    # memory for the raster, i.e. we have to create the raster.
-    # We make it simple and define our raster of the same size as the
-    # whole product, and don't apply subsampling.
+    # Allocate memory for the rasters
     width = product.get_scene_width()
     height = product.get_scene_height()
     subsampling_x = 1
@@ -74,9 +63,7 @@ def main(*argv):
     raster2 = band2.create_compatible_raster(width, height,
                                              subsampling_x, subsampling_y)
 
-    # Now we read the radiance into the raster.
-    # Because our raster matches the whole product, we start reading
-    # at offset (0,0)
+    # Read the radiance into the raster.
     offset_x = 0
     offset_y = 0
 
@@ -86,15 +73,12 @@ def main(*argv):
     logging.info('read "%s" data' % band2_name)
     band2.read_raster(offset_x, offset_y, raster2)
 
-    # So, now we hold the two arrays totally in memory.
-    # I hope that enough memory is available.
-    # The rest is easy. We loop over all pixel and calculate the NDVI.
-    # We simply write each calculated pixel directly into the output
-    # image.
-    # Not elegant, but simple.
+    # Open the output file
     logging.info('write ndvi to "%s"' % argv[2])
     out_stream = open(argv[2], 'wb')
 
+    # Loop over all pixel and calculate the NDVI.
+    #
     # @NOTE: looping over data matrices is not the best soluton.
     #        It is done here just for demostrative purposes
     for j in range(height):
@@ -108,10 +92,6 @@ def main(*argv):
             out_stream.write(struct.pack('f', ndvi))
     logging.info('ndvi was written success')
 
-    # This was all.
-    # Now we have to close everything, release memory and say goodbye.
-    # If you want, you can open the written file an image processing
-    # program and look at the result.
     out_stream.close()
 
 
