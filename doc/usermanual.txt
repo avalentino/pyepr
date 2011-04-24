@@ -360,4 +360,4 @@ that returns the number of elements in the field::
           returned.
 
 .. _`special method`: http://docs.python.org/reference/datamodel.html
-.. _pythonic: http://www.cafepy.com/article/be_pythonic/
+.. _pythonic: http://www.cafepy.com/article/be_pythonic
