@@ -181,19 +181,6 @@ the powerful :class:`numpy.ndarray` interface.
         raster.data.tofile(out_stream)
 
 
-The full write_bands.py code
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Download: :download:`examples/write_bands.py`
-
-.. raw:: latex
-
-    \fvset{fontsize=\footnotesize}
-
-.. literalinclude:: examples/write_bands.py
-   :linenos:
-
-
 .. _Python: http://www.python.org
-.. _pythonic: http://www.cafepy.com/article/be_pythonic/
+.. _pythonic: http://www.cafepy.com/article/be_pythonic
 
