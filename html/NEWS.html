@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Change history &mdash; PyEPR 0.4 documentation</title>
+    <title>Change history &mdash; PyEPR 0.5 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.4',
+        VERSION:     '0.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PyEPR 0.4 documentation" href="index.html" />
+    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <link rel="top" title="PyEPR 0.5 documentation" href="index.html" />
     <link rel="prev" title="API Reference" href="reference.html" /> 
   </head>
   <body>
@@ -36,12 +37,9 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="reference.html" title="API Reference"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.4 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.5 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,6 +50,22 @@
             
   <div class="section" id="change-history">
 <h1>Change history<a class="headerlink" href="#change-history" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="pyepr-0-5-25-04-2011">
+<h2>PyEPR 0.5 (25/04/2011)<a class="headerlink" href="#pyepr-0-5-25-04-2011" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>stop using <tt class="xref c c-func docutils literal"><span class="pre">PyFile_AsFile()</span></tt> that is no more available in
+<a class="reference external" href="http://docs.python.org/py3k">Python 3</a></li>
+<li>now documentation uses <a class="reference external" href="http://sphinx.pocoo.org/latest/ext/intersphinx.html">intersphinx</a> capabilities</li>
+<li>code examples added to documentation</li>
+<li>tutorials added to documentation</li>
+<li>the LICENSE.txt file is now included in the source distribution</li>
+<li>the <a class="reference external" href="http://www.cython.org">cython</a> construct <tt class="docutils literal"><span class="pre">with</span> <span class="pre">nogil</span></tt> is now used instead of calling
+<tt class="xref c c-func docutils literal"><span class="pre">Py_BEGIN_ALLOW_THREADS()</span></tt> and <tt class="xref c c-func docutils literal"><span class="pre">Py_END_ALLOW_THREADS()</span></tt>
+directly</li>
+<li>dropped old versions of <a class="reference external" href="http://www.cython.org">cython</a>; now <a class="reference external" href="http://www.cython.org">cython</a> 0.14.1 or newer is required</li>
+<li>suppressed several constness related warnings</li>
+</ul>
+</div>
 <div class="section" id="pyepr-0-4-10-04-2011">
 <h2>PyEPR 0.4 (10/04/2011)<a class="headerlink" href="#pyepr-0-4-10-04-2011" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -94,7 +108,7 @@ exceptions</li>
 <li>added docstrings to all method and classes</li>
 <li>renamed some method and parameter in order to avoid redundancies and
 have a more <em>pythonic</em>  API</li>
-<li>in case of null pointers a <tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt> is raised</li>
+<li>in case of null pointers a <a class="reference internal" href="reference.html#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-exc docutils literal"><span class="pre">epr.EPRValueError</span></tt></a> is raised</li>
 <li>improved C library shutdown management</li>
 <li>introduced some utility methods to <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> and
 <a class="reference internal" href="reference.html#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">epr.Record</span></tt></a> classes</li>
@@ -115,7 +129,8 @@ have a more <em>pythonic</em>  API</li>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Change history</a><ul>
-<li><a class="reference internal" href="#pyepr-0-4-10-04-2011">PyEPR 0.4 10/04/2011</a></li>
+<li><a class="reference internal" href="#pyepr-0-5-25-04-2011">PyEPR 0.5 (25/04/2011)</a></li>
+<li><a class="reference internal" href="#pyepr-0-4-10-04-2011">PyEPR 0.4 (10/04/2011)</a></li>
 <li><a class="reference internal" href="#pyepr-0-3-01-04-2011">PyEPR 0.3 (01/04/2011)</a></li>
 <li><a class="reference internal" href="#pyepr-0-2-20-03-2011">PyEPR 0.2 (20/03/2011)</a></li>
 <li><a class="reference internal" href="#pyepr-0-1-09-03-2011">PyEPR 0.1 (09/03/2011)</a></li>
@@ -155,12 +170,9 @@ have a more <em>pythonic</em>  API</li>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="reference.html" title="API Reference"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.4 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.5 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API Reference &mdash; PyEPR 0.4 documentation</title>
+    <title>API Reference &mdash; PyEPR 0.5 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.4',
+        VERSION:     '0.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,9 +25,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PyEPR 0.4 documentation" href="index.html" />
+    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <link rel="top" title="PyEPR 0.5 documentation" href="index.html" />
     <link rel="next" title="Change history" href="NEWS.html" />
-    <link rel="prev" title="Tutorial" href="tutorial.html" /> 
+    <link rel="prev" title="NDVI computation" href="ndvi_example.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,15 +38,12 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="NEWS.html" title="Change history"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="tutorial.html" title="Tutorial"
+          <a href="ndvi_example.html" title="NDVI computation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.4 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.5 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -117,7 +115,7 @@ The rest of the string decodes product instance properties.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; the name of the band</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the requested <a class="reference internal" href="#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt></a> instance, or raises a
-<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a> if not found</td>
+<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-exc docutils literal"><span class="pre">EPRValueError</span></tt></a> if not found</td>
 </tr>
 </tbody>
 </table>
@@ -135,7 +133,7 @@ The rest of the string decodes product instance properties.</p>
 with 0, must not be negative</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the requested <a class="reference internal" href="#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt></a> instance, or raises a
-<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a> if not found</td>
+<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-exc docutils literal"><span class="pre">EPRValueError</span></tt></a> if not found</td>
 </tr>
 </tbody>
 </table>
@@ -177,15 +175,15 @@ with 0, must not be negative</td>
 <dl class="method">
 <dt id="epr.Product.get_dsd_at">
 <tt class="descname">get_dsd_at</tt><big>(</big><em>index</em><big>)</big><a class="headerlink" href="#epr.Product.get_dsd_at" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the DSD at the specified position</p>
-<p>Gets the DSD (dataset descriptor) at the specified position
-within the product.</p>
+<dd><p>Gets the <a class="reference internal" href="#epr.DSD" title="epr.DSD"><tt class="xref py py-class docutils literal"><span class="pre">DSD</span></tt></a> at the specified position</p>
+<p>Gets the <a class="reference internal" href="#epr.DSD" title="epr.DSD"><tt class="xref py py-class docutils literal"><span class="pre">DSD</span></tt></a> (dataset descriptor) at the specified
+position within the product.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; the index identifying the position of the DSD, starting
-with 0, must not be negative</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; the index identifying the position of the <a class="reference internal" href="#epr.DSD" title="epr.DSD"><tt class="xref py py-class docutils literal"><span class="pre">DSD</span></tt></a>,
+starting with 0, must not be negative</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the requested <a class="reference internal" href="#epr.DSD" title="epr.DSD"><tt class="xref py py-class docutils literal"><span class="pre">DSD</span></tt></a> instance</td>
 </tr>
@@ -208,8 +206,8 @@ with 0, must not be negative</td>
 <dl class="method">
 <dt id="epr.Product.get_num_dsds">
 <tt class="descname">get_num_dsds</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.get_num_dsds" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the number of all DSDs (dataset descriptors) contained
-in the product</p>
+<dd><p>Gets the number of all <a class="reference internal" href="#epr.DSD" title="epr.DSD"><tt class="xref py py-class docutils literal"><span class="pre">DSD</span></tt></a>s (dataset descriptors)
+contained in the product</p>
 </dd></dl>
 
 <dl class="method">
@@ -413,7 +411,7 @@ record</li>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the record in which the data has been read into or raises
-an exception (<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a>) if an error occurred</p>
+an exception (<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-exc docutils literal"><span class="pre">EPRValueError</span></tt></a>) if an error occurred</p>
 </td>
 </tr>
 </tbody>
@@ -463,7 +461,7 @@ It contains the field info and all corresponding values.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; the the name of required field</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the specified <a class="reference internal" href="#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">Field</span></tt></a> or raises an exception
-(<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a>) if an error occurred</td>
+(<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-exc docutils literal"><span class="pre">EPRValueError</span></tt></a>) if an error occurred</td>
 </tr>
 </tbody>
 </table>
@@ -479,7 +477,7 @@ It contains the field info and all corresponding values.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; the zero-based index (position within record) of the field</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the field or raises and exception (<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a>)
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the field or raises and exception (<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-exc docutils literal"><span class="pre">EPRValueError</span></tt></a>)
 if an error occurred</td>
 </tr>
 </tbody>
@@ -495,10 +493,10 @@ if an error occurred</td>
 <dl class="method">
 <dt id="epr.Record.print_">
 <tt class="descname">print_</tt><big>(</big><span class="optional">[</span><em>ostream</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.Record.print_" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write the record to specified file (default: <tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt>)</p>
+<dd><p>Write the record to specified file (default: <a class="reference external" href="http://docs.python.org/library/sys.html#sys.stdout" title="(in Python v2.7)"><tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt></a>)</p>
 <p>This method writes formatted contents of the record to
 specified <em>ostream</em> text file or (default) the ASCII output
-is be printed to standard output (<tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt>)</p>
+is be printed to standard output (<a class="reference external" href="http://docs.python.org/library/sys.html#sys.stdout" title="(in Python v2.7)"><tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt></a>)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -510,17 +508,18 @@ is be printed to standard output (<tt class="xref py py-data docutils literal"><
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">the <em>ostream</em> parameter have to be a <em>real</em> file not
-a generic stream object like <tt class="xref py py-class docutils literal"><span class="pre">StringIO</span></tt> instances</p>
+a generic stream object like <a class="reference external" href="http://docs.python.org/library/stringio.html#StringIO.StringIO" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">StringIO.StringIO</span></tt></a>
+instances</p>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="epr.Record.print_element">
 <tt class="descname">print_element</tt><big>(</big><em>field_index</em>, <em>element_index</em><span class="optional">[</span>, <em>ostream</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.Record.print_element" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write the specified field element to file (default: <tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt>)</p>
+<dd><p>Write the specified field element to file (default: <a class="reference external" href="http://docs.python.org/library/sys.html#sys.stdout" title="(in Python v2.7)"><tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt></a>)</p>
 <p>This method writes formatted contents of the specified field
 element to the <em>ostream</em> text file or (default) the ASCII output
-will be printed to standard output (<tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt>)</p>
+will be printed to standard output (<a class="reference external" href="http://docs.python.org/library/sys.html#sys.stdout" title="(in Python v2.7)"><tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt></a>)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -537,7 +536,8 @@ will be printed to standard output (<tt class="xref py py-data docutils literal"
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">the <em>ostream</em> parameter have to be a <em>real</em> file not
-a generic stream object like <tt class="xref py py-class docutils literal"><span class="pre">StringIO</span></tt> instances</p>
+a generic stream object like <a class="reference external" href="http://docs.python.org/library/stringio.html#StringIO.StringIO" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">StringIO.StringIO</span></tt></a>
+instances</p>
 </div>
 </dd></dl>
 
@@ -640,7 +640,7 @@ field.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the data array (<tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt>) having the type of
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the data array (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-9752349)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) having the type of
 the field</td>
 </tr>
 </tbody>
@@ -650,10 +650,10 @@ the field</td>
 <dl class="method">
 <dt id="epr.Field.print_">
 <tt class="descname">print_</tt><big>(</big><span class="optional">[</span><em>ostream</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.Field.print_" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write the field to specified file (default: <tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt>)</p>
+<dd><p>Write the field to specified file (default: <a class="reference external" href="http://docs.python.org/library/sys.html#sys.stdout" title="(in Python v2.7)"><tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt></a>)</p>
 <p>This method writes formatted contents of the field to
 specified <em>ostream</em> text file or (default) the ASCII output
-is be printed to standard output (<tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt>)</p>
+is be printed to standard output (<a class="reference external" href="http://docs.python.org/library/sys.html#sys.stdout" title="(in Python v2.7)"><tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt></a>)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -665,7 +665,8 @@ is be printed to standard output (<tt class="xref py py-data docutils literal"><
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">the <em>ostream</em> parameter have to be a <em>real</em> file not
-a generic stream object like <tt class="xref py py-class docutils literal"><span class="pre">StringIO</span></tt> instances</p>
+a generic stream object like <a class="reference external" href="http://docs.python.org/library/stringio.html#StringIO.StringIO" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">StringIO.StringIO</span></tt></a>
+instances</p>
 </div>
 </dd></dl>
 
@@ -930,14 +931,14 @@ into the raster</li>
 <li><strong>src_height</strong> &#8211; the height (along track dimension) of the source to be read
 into the raster</li>
 <li><strong>xstep</strong> &#8211; the sub-sampling step across track of the source when reading
-into the raster. Default 1.</li>
+into the raster. Default: 1.</li>
 <li><strong>ystep</strong> &#8211; the sub-sampling step along track of the source when reading
-into the raster. Default 1.</li>
+into the raster. Default: 1.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the new raster instance or raises an exception
-(<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a>) if an error occurred</p>
+(<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-exc docutils literal"><span class="pre">EPRValueError</span></tt></a>) if an error occurred</p>
 </td>
 </tr>
 </tbody>
@@ -949,8 +950,8 @@ into the raster. Default 1.</li>
 <tt class="descname">read_raster</tt><big>(</big><span class="optional">[</span><em>xoffset</em>, <em>yoffset</em>, <em>raster</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.Band.read_raster" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads (geo-)physical values of the band of the specified
 source-region</p>
-<p>The source-region is a defined part of the whole ENVISAT product
-image, which shall be read into a raster.
+<p>The source-region is a defined part of the whole ENVISAT
+product image, which shall be read into a raster.
 In this routine the co-ordinates are specified, where the
 source-region to be read starts.
 The dimension of the region and the sub-sampling are attributes
@@ -967,7 +968,8 @@ Default 0.</li>
 (zero-based) of the upper right corner of the source-region.
 Default 0.</li>
 <li><strong>raster</strong> &#8211; <a class="reference internal" href="#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">Raster</span></tt></a> instance set with appropriate parameters to
-read into. If not provided a new <a class="reference internal" href="#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">Raster</span></tt></a> is instantiated</li>
+read into. If not provided a new <a class="reference internal" href="#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">Raster</span></tt></a> is
+instantiated</li>
 </ul>
 </td>
 </tr>
@@ -976,8 +978,8 @@ read into. If not provided a new <a class="reference internal" href="#epr.Raster
 </tr>
 </tbody>
 </table>
-<p>This method raises an instance of the appropriate <a class="reference internal" href="#epr.EPRError" title="epr.EPRError"><tt class="xref py py-class docutils literal"><span class="pre">EPRError</span></tt></a>
-sub-class if case of errors</p>
+<p>This method raises an instance of the appropriate
+<a class="reference internal" href="#epr.EPRError" title="epr.EPRError"><tt class="xref py py-exc docutils literal"><span class="pre">EPRError</span></tt></a> sub-class if case of errors</p>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#epr.Band.create_compatible_raster" title="epr.Band.create_compatible_raster"><tt class="xref py py-meth docutils literal"><span class="pre">Band.create_compatible_raster()</span></tt></a> and
@@ -988,9 +990,9 @@ sub-class if case of errors</p>
 <dl class="method">
 <dt id="epr.Band.read_as_array">
 <tt class="descname">read_as_array</tt><big>(</big><span class="optional">[</span><em>width</em>, <em>height</em>, <em>xoffset</em>, <em>yoffset</em>, <em>xstep</em>, <em>ystep</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.Band.read_as_array" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads the specified source region as an <tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></p>
-<p>The source-region is a defined part of the whole ENVISAT product
-image, which shall be read into a raster.
+<dd><p>Reads the specified source region as an <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-9752349)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a></p>
+<p>The source-region is a defined part of the whole ENVISAT
+product image, which shall be read into a raster.
 In this routine the co-ordinates are specified, where the
 source-region to be read starts.
 The dimension of the region and the sub-sampling are attributes
@@ -1010,20 +1012,20 @@ Default 0.</li>
 <li><strong>yoffset</strong> &#8211; along-track source co-ordinate in pixel co-ordinates
 (zero-based) of the upper right corner of the source-region.
 Default 0.</li>
-<li><strong>xstep</strong> &#8211; the sub-sampling step across track of the source when reading
-into the raster. Default 1</li>
-<li><strong>ystep</strong> &#8211; the sub-sampling step along track of the source when reading
-into the raster. Default 1</li>
+<li><strong>xstep</strong> &#8211; the sub-sampling step across track of the source when
+reading into the raster. Default: 1</li>
+<li><strong>ystep</strong> &#8211; the sub-sampling step along track of the source when
+reading into the raster. Default: 1</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the <tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt> instance in which data are read</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-9752349)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> instance in which data are read</p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>This method raises an instance of the appropriate <a class="reference internal" href="#epr.EPRError" title="epr.EPRError"><tt class="xref py py-class docutils literal"><span class="pre">EPRError</span></tt></a>
-sub-class if case of errors</p>
+<p>This method raises an instance of the appropriate
+<a class="reference internal" href="#epr.EPRError" title="epr.EPRError"><tt class="xref py py-exc docutils literal"><span class="pre">EPRError</span></tt></a> sub-class if case of errors</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">this method has no correspondent in the C API</p>
@@ -1083,7 +1085,7 @@ sub-class if case of errors</p>
 <dl class="attribute">
 <dt id="epr.Raster.data">
 <tt class="descname">data</tt><a class="headerlink" href="#epr.Raster.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Raster data exposed as <tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt> object</p>
+<dd><p>Raster data exposed as <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-9752349)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> object</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">this property shares the data buffer with the
@@ -1187,8 +1189,8 @@ and tie points number.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>product_file_path</strong> &#8211; the path to the ENVISAT product file</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the <a class="reference internal" href="#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt></a> instance representing the specified
-product. An exception (<tt class="xref py py-class docutils literal"><span class="pre">ValueError</span></tt>) is raised if the
-file could not be opened.</td>
+product. An exception (<a class="reference external" href="http://docs.python.org/library/exceptions.html#exceptions.ValueError" title="(in Python v2.7)"><tt class="xref py py-exc docutils literal"><span class="pre">exceptions.ValueError</span></tt></a>) is raised
+if the file could not be opened.</td>
 </tr>
 </tbody>
 </table>
@@ -1243,9 +1245,9 @@ See description of <a class="reference internal" href="#epr.Band.create_compatib
 into the raster.
 See description of <a class="reference internal" href="#epr.Band.create_compatible_raster" title="epr.Band.create_compatible_raster"><tt class="xref py py-meth docutils literal"><span class="pre">Band.create_compatible_raster()</span></tt></a></li>
 <li><strong>xstep</strong> &#8211; the sub-sampling step across track of the source when reading
-into the raster. Default 1.</li>
+into the raster. Default: 1.</li>
 <li><strong>ystep</strong> &#8211; the sub-sampling step along track of the source when reading
-into the raster. Default 1.</li>
+into the raster. Default: 1.</li>
 </ul>
 </td>
 </tr>
@@ -1275,14 +1277,14 @@ into the raster</li>
 <li><strong>src_height</strong> &#8211; the height (along track dimension) of the source to be read
 into the raster</li>
 <li><strong>xstep</strong> &#8211; the sub-sampling step across track of the source when reading
-into the raster. Default 1.</li>
+into the raster. Default: 1.</li>
 <li><strong>ystep</strong> &#8211; the sub-sampling step along track of the source when reading
-into the raster. Default 1.</li>
+into the raster. Default: 1.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the new raster instance or raises an exception
-(<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-class docutils literal"><span class="pre">EPRValueError</span></tt></a>) if an error occurred</p>
+(<a class="reference internal" href="#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-exc docutils literal"><span class="pre">EPRValueError</span></tt></a>) if an error occurred</p>
 </td>
 </tr>
 </tbody>
@@ -1332,7 +1334,7 @@ into the raster. Default 1.</li>
 <dl class="exception">
 <dt id="epr.EPRValueError">
 <em class="property">exception </em><tt class="descclassname">epr.</tt><tt class="descname">EPRValueError</tt><a class="headerlink" href="#epr.EPRValueError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Inherits both <a class="reference internal" href="#epr.EPRError" title="epr.EPRError"><tt class="xref py py-class docutils literal"><span class="pre">EPRError</span></tt></a> and standard <tt class="xref py py-class docutils literal"><span class="pre">ValueError</span></tt></p>
+<dd><p>Inherits both <a class="reference internal" href="#epr.EPRError" title="epr.EPRError"><tt class="xref py py-exc docutils literal"><span class="pre">EPRError</span></tt></a> and standard <a class="reference external" href="http://docs.python.org/library/exceptions.html#exceptions.ValueError" title="(in Python v2.7)"><tt class="xref py py-exc docutils literal"><span class="pre">exceptions.ValueError</span></tt></a></p>
 </dd></dl>
 
 </div>
@@ -1497,8 +1499,8 @@ into the raster. Default 1.</li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="tutorial.html"
-                        title="previous chapter">Tutorial</a></p>
+  <p class="topless"><a href="ndvi_example.html"
+                        title="previous chapter">NDVI computation</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="NEWS.html"
                         title="next chapter">Change history</a></p>
@@ -1531,15 +1533,12 @@ into the raster. Default 1.</li>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="NEWS.html" title="Change history"
              >next</a> |</li>
         <li class="right" >
-          <a href="tutorial.html" title="Tutorial"
+          <a href="ndvi_example.html" title="NDVI computation"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.4 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.5 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
