@@ -6,7 +6,7 @@ as "raw" image using PyEPR_.
 
 The example code (:download:`examples/write_bitmask.py`) is a direct
 translation of the C sample program `write_bitmask.c`_ bundled with the
-EPR-API distribution.
+EPR API distribution.
 
 The program is invoked as follows::
 
@@ -65,7 +65,7 @@ to create a :class:`epr.Raster` instance.
 .. seealso:: :func:`epr.create_raster`
 
 Data are actually read using the :meth:`epr.Product.read_bitmask_raster` method
-of the :class:`epr.Product` class.
+of the :class:`epr.Product` class:
 
 .. raw:: latex
 

@@ -1,13 +1,13 @@
 NDVI computation
 ----------------
 
-This tutorial shows how to use PyEPR_ to open a MERIS_ L1b product, compute
+This tutorial shows how to use PyEPR_ to open a MERIS_ L1B product, compute
 the *Normalized Difference Vegetation Index* (NDVI) and store it into a flat
 binary file.
 
 The example code (:download:`examples/write_ndvi.py`) is a direct
 translation of the C sample program `write_ndvi.c`_ bundled with the
-EPR-API distribution.
+EPR API distribution.
 
 The program is invoked as follows::
 
@@ -53,16 +53,16 @@ method:
    :lines: 49-54
 
 *band1* and *band2* are used to read the calibrated radiances into the
-:class:`epr.Raster` objects that allow to access matrices with the radiance
-values.
+:class:`epr.Raster` objects that allow to access data matrices with the
+radiance values.
 
-Before reading the data into the :class:`epr.Raster` objects they have to be
+Before reading data into the :class:`epr.Raster` objects they have to be
 instantiated specifying their size and data type in order to allow the library
 to allocate the correct amount of memory.
 
-For sake simplicity :class:`epr.Raster` object are created with the same size
-of the whole product (with no sub-sampling) using the
-:meth:epr.Band.create_compatible_raster` method of the :class:`epr.Band` class
+For sake of simplicity :class:`epr.Raster` object are created with the same
+size of the whole product (with no sub-sampling) using the
+:meth:`epr.Band.create_compatible_raster` method of the :class:`epr.Band` class:
 
 .. raw:: latex
 
@@ -73,8 +73,9 @@ of the whole product (with no sub-sampling) using the
 
 Then data are actually loaded into memory using the :meth:`epr.Band.read_raster`
 method.
-Since :class:`epr.Raster` objects have been defined to matches the whole
-product, offset parameters for start reading are set to (0, 0)
+Since :class:`epr.Raster` objects have been defined to match the whole
+product, offset parameters are set to zero (data are read starting from
+specified offset):
 
 .. raw:: latex
 
@@ -95,7 +96,10 @@ After opening (in binary mode) the stream for the output
 .. literalinclude:: examples/write_ndvi.py
    :lines: 76-78
 
-the program simply loops over all pixel and calculate the NDVI:
+the program simply loops over all pixel and calculate the NDVI with the
+following formula:
+
+.. math:: NDVI = \frac{radiance_{10} - radiance_8}{radiance_{10} + radiance_8}
 
 .. raw:: latex
 
@@ -105,8 +109,7 @@ the program simply loops over all pixel and calculate the NDVI:
    :lines: 80-93
 
 This part of the code tries to mimic closely the original C code
-(`write_ndvi.c`_) and uses the :meth:`epr.Raster.get_pixel` method to access
-pixel values and perform computation.
+(`write_ndvi.c`_)
 
 .. code-block:: c
 
@@ -124,6 +127,9 @@ pixel values and perform computation.
         }
     }
     epr_log_message(e_log_info, "ndvi was written success");
+
+and uses the :meth:`epr.Raster.get_pixel` method to access pixel values and
+perform computation.
 
 The Python_ :func:`struct.pack` function together with :meth:`file.write` is
 used to write the NDVI of the pixel n the file in binary format.

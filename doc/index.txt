@@ -6,7 +6,7 @@ ENVISAT Product Reader Python API
 :Author:    Antonio Valentino
 :Contact:   antonio.valentino@tiscali.it
 :Date:      10/04/2011
-:Copyright: 2011, Antonio Valentino <antonio.valentino@tiscali.it>
+:Copyright: 2011, Antonio Valentino
 :Version:   0.5
 
 

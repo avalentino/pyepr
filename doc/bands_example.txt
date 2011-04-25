@@ -8,7 +8,7 @@ The program generates as many raster as the dataset specified in input.
 
 The example code (:download:`examples/write_bands.py`) is a direct
 translation of the C sample program `write_bands.c`_ bundled with the
-EPR-API distribution.
+EPR API distribution.
 
 The program is invoked as follows::
 
@@ -93,8 +93,8 @@ First the output file name is computed using the :mod:`os` module.
 .. literalinclude:: examples/write_bands.py
    :lines: 21-22
 
-Then the desired band is retrieved by and some of its parameters are loaded
-in to local variables:
+Then the desired band is retrieved using the :meth:`epr.Product.get_band`
+method and some of its parameters are loaded in to local variables:
 
 .. raw:: latex
 
@@ -127,7 +127,7 @@ Then data are read using the :meth:`epr.Band.read_raster` method:
 .. literalinclude:: examples/write_bands.py
    :lines: 33-34
 
-After that the output file object has been created (in binary mode of course)
+Then the output file object is created (in binary mode of course)
 
 .. raw:: latex
 
@@ -136,7 +136,7 @@ After that the output file object has been created (in binary mode of course)
 .. literalinclude:: examples/write_bands.py
    :lines: 36
 
-data are copied to the output file one line at time
+and data are copied to the output file one line at time
 
 .. raw:: latex
 
@@ -145,14 +145,14 @@ data are copied to the output file one line at time
 .. literalinclude:: examples/write_bands.py
    :lines: 38-39
 
-Please note that the it has been used :data:`epr.Raster.data` attribute of
-the :class:`epr.Raster` objects that exposes :class:`epr.Raster` data with
-the powerful :class:`numpy.ndarray` interface.
+Please note that it has been used :data:`epr.Raster.data` attribute of the
+:class:`epr.Raster` objects that exposes :class:`epr.Raster` data with the
+powerful :class:`numpy.ndarray` interface.
 
 
 .. note::
 
-    Copying line line at time is not the best way to perform the task
+    Copying one line at time is not the best way to perform the task
     in Python_. It has been done just to mimic the original C code:
 
     .. code-block:: c
