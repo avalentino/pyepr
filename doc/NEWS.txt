@@ -10,6 +10,7 @@ PyEPR 0.5 (25/04/2011)
 * now documentation uses intersphinx_ capabilities
 * code examples added to documentation
 * tutorials added to documentation
+* the LICENSE.txt file is now included in the source distribution
 
 .. _`Python 3`: http://docs.python.org/py3k
 .. _intersphinx: http://sphinx.pocoo.org/latest/ext/intersphinx.html
