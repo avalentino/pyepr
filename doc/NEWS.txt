@@ -11,13 +11,15 @@ PyEPR 0.5 (25/04/2011)
 * code examples added to documentation
 * tutorials added to documentation
 * the LICENSE.txt file is now included in the source distribution
-* the cython construct ``with nogil`` is now used instead of calling
+* the cython_ construct ``with nogil`` is now used instead of calling
   :c:func:`Py_BEGIN_ALLOW_THREADS` and :c:func:`Py_END_ALLOW_THREADS`
   directly
-* dropped old versions of cython; now cython 0.14.1 or newer is required
+* dropped old versions of cython_; now cython_ 0.14.1 or newer is required
+* suppressed several constness related warnings
 
 .. _`Python 3`: http://docs.python.org/py3k
 .. _intersphinx: http://sphinx.pocoo.org/latest/ext/intersphinx.html
+.. _cython: http://www.cython.org
 
 
 PyEPR 0.4 (10/04/2011)

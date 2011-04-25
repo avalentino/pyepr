@@ -44,6 +44,9 @@ in a product file.
 __revision__ = '$Id$'
 __version__  = '0.5'
 
+cdef extern from *:
+    ctypedef char const_char 'const char'
+    ctypedef void const_void 'const void'
 
 from libc cimport string as cstring
 from libc cimport stdio
@@ -397,28 +400,27 @@ E_SMID_LOG = e_smid_log
 
 
 cdef np.NPY_TYPES _epr_to_numpy_type_id(EPR_DataTypeId epr_type):
-    cdef np.NPY_TYPES result = np.NPY_NOTYPE
 
     if epr_type == E_TID_UCHAR:
-        result = np.NPY_UBYTE
+        return np.NPY_UBYTE
     if epr_type == E_TID_CHAR:
-        result = np.NPY_BYTE
+        return np.NPY_BYTE
     if epr_type == E_TID_USHORT:
-        result = np.NPY_USHORT
+        return np.NPY_USHORT
     if epr_type == E_TID_SHORT:
-        result = np.NPY_SHORT
+        return np.NPY_SHORT
     if epr_type == E_TID_UINT:
-        result = np.NPY_UINT
+        return np.NPY_UINT
     if epr_type == E_TID_INT:
-        result = np.NPY_INT
+        return np.NPY_INT
     if epr_type == E_TID_FLOAT:
-        result = np.NPY_FLOAT
+        return np.NPY_FLOAT
     if epr_type == E_TID_DOUBLE:
-        result = np.NPY_DOUBLE
+        return np.NPY_DOUBLE
     if epr_type == E_TID_STRING:
-        result = np.NPY_STRING
+        return np.NPY_STRING
 
-    return result
+    return np.NPY_NOTYPE
 
 
 class EPRError(Exception):
@@ -437,31 +439,30 @@ class EPRValueError(EPRError, ValueError):
 
 cdef int pyepr_check_errors() except -1:
     cdef int code
-    cdef char* msg
+    cdef const_char* msg
     code = epr_get_last_err_code()
     if code != e_err_none:
-        msg = <char*>epr_get_last_err_message()
+        msg = epr_get_last_err_message()
         # @TODO: if not msg: msg = EPR_ERR_MSG[code]
         if (e_err_invalid_product_id <= code <= e_err_invalid_keyword_name or
             code in (e_err_null_pointer,
                      e_err_illegal_arg,
                      e_err_index_out_of_range)):
-            raise EPRValueError(msg, code)
+            raise EPRValueError(<char*>msg, code)
         else:
-            raise EPRError(msg, code)
+            raise EPRError(<char*>msg, code)
         epr_clear_err()
         return -1
     return 0
 
 cdef int pyepr_null_ptr_error(msg='null pointer') except -1:
     cdef int code
-    cdef char* eprmsg = <char*>epr_get_last_err_message()
-
+    cdef const_char* eprmsg = epr_get_last_err_message()
     code = epr_get_last_err_code()
     if not code:
         code = None
 
-    raise EPRValueError('%s: %s' % (msg, eprmsg), code=code)
+    raise EPRValueError('%s: %s' % (msg, <char*>eprmsg), code=code)
     epr_clear_err()
     return -1
 
@@ -497,7 +498,7 @@ cdef class _CLib:
     '''
 
     def __cinit__(self, *args, **kwargs):
-        cdef char* msg
+        cdef const_char* msg
 
         # @TODO:check
         #if EPR_C_API_VERSION != '2.2':
@@ -506,9 +507,10 @@ cdef class _CLib:
 
         #if epr_init_api(e_log_warning, epr_log_message, NULL):
         if epr_init_api(e_log_warning, NULL, NULL):
-            msg = <char*>epr_get_last_err_message()
+            msg = epr_get_last_err_message()
             epr_clear_err()
-            raise ImportError('unable to inizialize EPR API library: %s' % msg)
+            raise ImportError('unable to inizialize EPR API library: %s' %
+                                                                    <char*>msg)
 
     def __dealloc__(self):
         epr_close_api()
@@ -733,12 +735,12 @@ cdef class Field(EprObject):
     def get_unit(self):
         '''Gets the unit of the field'''
 
-        cdef char* unit = epr_get_field_unit(self._ptr)
+        cdef const_char* unit = epr_get_field_unit(self._ptr)
 
         if unit is NULL:
             return ''
         else:
-            return unit
+            return <char*>unit
 
     def get_description(self):
         '''Gets the description of the field'''
@@ -824,7 +826,7 @@ cdef class Field(EprObject):
         '''
 
         # @NOTE: internal C const pointer is not shared with numpy
-        cdef void* buf
+        cdef const_void* buf
         cdef size_t num_elems
         cdef size_t i
         cdef np.ndarray out
@@ -1158,7 +1160,7 @@ cdef class Record(EprObject):
         cdef int idx
         names = []
         for idx in range(self.get_num_fields()):
-            field_ptr = epr_get_field_at(self._ptr, idx)
+            field_ptr = <EPR_SField*>epr_get_field_at(self._ptr, idx)
             names.append(epr_get_field_name(field_ptr))
 
         return names
@@ -1308,6 +1310,7 @@ cdef class Raster(EprObject):
         cdef np.NPY_TYPES dtype = _epr_to_numpy_type_id(self._ptr.data_type)
         if dtype == np.NPY_NOTYPE:
             raise TypeError('invalid data type')
+            return
 
         cdef np.npy_intp shape[2]
         shape[0] = self._ptr.raster_height
