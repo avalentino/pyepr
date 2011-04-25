@@ -7,7 +7,9 @@ PyEPR 0.5 (in deveopment)
 
 * stop using :c:func:`PyFile_AsFile` that is no more available in
   `Python 3`_
-* now doc uses intersphinx_ capabilities
+* now documentation uses intersphinx_ capabilities
+* code examples added to documentation
+* tutorials added to documentation
 
 .. _`Python 3`: http://docs.python.org/py3k
 .. _intersphinx: http://sphinx.pocoo.org/latest/ext/intersphinx.html
