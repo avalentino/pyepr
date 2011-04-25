@@ -2,8 +2,8 @@ Change history
 ==============
 
 
-PyEPR 0.5 (in deveopment)
--------------------------
+PyEPR 0.5 (25/04/2011)
+----------------------
 
 * stop using :c:func:`PyFile_AsFile` that is no more available in
   `Python 3`_
