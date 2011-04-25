@@ -14,6 +14,7 @@ PyEPR 0.5 (25/04/2011)
 * the cython construct ``with nogil`` is now used instead of calling
   :c:func:`Py_BEGIN_ALLOW_THREADS` and :c:func:`Py_END_ALLOW_THREADS`
   directly
+* dropped old versions of cython; now cython 0.14.1 or newer is required
 
 .. _`Python 3`: http://docs.python.org/py3k
 .. _intersphinx: http://sphinx.pocoo.org/latest/ext/intersphinx.html

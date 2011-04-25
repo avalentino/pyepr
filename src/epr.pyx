@@ -45,15 +45,13 @@ __revision__ = '$Id$'
 __version__  = '0.5'
 
 
-cdef extern from 'string.h' nogil:
-    int memcmp(void*, void*, size_t)
-    int strcmp(char*, char*)
-    int strlen(char*)
+from libc cimport string as cstring
+from libc cimport stdio
+from libc.stdio cimport FILE
+
 
 cdef extern from 'stdio.h' nogil:
-    ctypedef struct FILE
     FILE* fdopen(int, char *mode)
-    int fflush(FILE*)
 
 
 cdef extern from 'epr_api.h' nogil:
@@ -357,13 +355,13 @@ cdef extern from 'epr_api.h' nogil:
     EPR_SRaster* epr_create_raster(EPR_EDataTypeId, uint, uint, uint, uint)
     EPR_SRaster* epr_create_bitmask_raster(uint, uint, uint, uint)
 
+from cpython.object cimport PyObject_AsFileDescriptor
+cimport numpy as np
+np.import_array()
 
 import sys
 import collections
-from python_object cimport PyObject_AsFileDescriptor
 import numpy as np
-cimport numpy as np
-np.import_array()
 
 
 # utils
@@ -656,9 +654,9 @@ cdef class DSD(EprObject):
                         (p1.ds_size   == p2.ds_size) and
                         (p1.num_dsr   == p2.num_dsr) and
                         (p1.dsr_size  == p2.dsr_size)and
-                        (strcmp(p1.ds_name, p2.ds_name) == 0) and
-                        (strcmp(p1.ds_type, p2.ds_type) == 0) and
-                        (strcmp(p1.filename, p2.filename) == 0))
+                        (cstring.strcmp(p1.ds_name, p2.ds_name) == 0) and
+                        (cstring.strcmp(p1.ds_type, p2.ds_type) == 0) and
+                        (cstring.strcmp(p1.filename, p2.filename) == 0))
 
             elif op == 3:       # ne
                 if p1 == p2:
@@ -669,12 +667,12 @@ cdef class DSD(EprObject):
                         (p1.ds_size   != p2.ds_size) or
                         (p1.num_dsr   != p2.num_dsr) or
                         (p1.dsr_size  != p2.dsr_size) or
-                        (strcmp(p1.ds_name, p2.ds_name) != 0) or
-                        (strcmp(p1.ds_type, p2.ds_type) != 0) or
-                        (strcmp(p1.filename, p2.filename) != 0))
+                        (cstring.strcmp(p1.ds_name, p2.ds_name) != 0) or
+                        (cstring.strcmp(p1.ds_type, p2.ds_type) != 0) or
+                        (cstring.strcmp(p1.filename, p2.filename) != 0))
 
             else:
-                raise TypeError # only == and !=
+                raise TypeError('DSD only implements "==" and "!=" operators')
         else:
             return NotImplemented
 
@@ -724,7 +722,7 @@ cdef class Field(EprObject):
 
         with nogil:
             epr_print_field(self._ptr, fstream)
-            fflush(fstream)
+            stdio.fflush(fstream)
 
         pyepr_check_errors()
 
@@ -941,6 +939,7 @@ cdef class Field(EprObject):
                 return '%s = %s' % (self.get_name(), fmt % self.get_elem())
 
     def __richcmp__(self, other, int op):
+        cdef int ret
         cdef size_t n
         cdef EPR_SField* p1 = (<Field>self)._ptr
         cdef EPR_SField* p2 = (<Field>other)._ptr
@@ -955,14 +954,14 @@ cdef class Field(EprObject):
 
                     (epr_get_field_type(p1) != epr_get_field_type(p2)) or
 
-                    (strcmp(epr_get_field_unit(p1),
-                            epr_get_field_unit(p2)) != 0) or
+                    (cstring.strcmp(epr_get_field_unit(p1),
+                                    epr_get_field_unit(p2)) != 0) or
 
-                    (strcmp(epr_get_field_description(p1),
-                            epr_get_field_description(p2)) != 0) or
+                    (cstring.strcmp(epr_get_field_description(p1),
+                                    epr_get_field_description(p2)) != 0) or
 
-                    (strcmp(epr_get_field_name(p1),
-                            epr_get_field_name(p2)) != 0)):
+                    (cstring.strcmp(epr_get_field_name(p1),
+                                    epr_get_field_name(p2)) != 0)):
 
                     return False
 
@@ -974,7 +973,7 @@ cdef class Field(EprObject):
                     # @TODO: check
                     return True
 
-                return (memcmp(p1.elems, p2.elems, n) == 0)
+                return (cstring.memcmp(p1.elems, p2.elems, n) == 0)
 
             elif op == 3:       # ne
                 if p1 == p2:
@@ -985,14 +984,14 @@ cdef class Field(EprObject):
 
                     (epr_get_field_type(p1) != epr_get_field_type(p2)) or
 
-                    (strcmp(epr_get_field_unit(p1),
-                            epr_get_field_unit(p2)) != 0) or
+                    (cstring.strcmp(epr_get_field_unit(p1),
+                                    epr_get_field_unit(p2)) != 0) or
 
-                    (strcmp(epr_get_field_description(p1),
-                            epr_get_field_description(p2)) != 0) or
+                    (cstring.strcmp(epr_get_field_description(p1),
+                                    epr_get_field_description(p2)) != 0) or
 
-                    (strcmp(epr_get_field_name(p1),
-                            epr_get_field_name(p2)) != 0)):
+                    (cstring.strcmp(epr_get_field_name(p1),
+                                    epr_get_field_name(p2)) != 0)):
 
                     return True
 
@@ -1004,16 +1003,16 @@ cdef class Field(EprObject):
                     # @TODO: check
                     return False
 
-                return (memcmp(p1.elems, p2.elems, n) != 0)
+                return (cstring.memcmp(p1.elems, p2.elems, n) != 0)
 
             else:
-                raise TypeError # only == and !=
+                raise TypeError('Field only implements "==" and "!=" operators')
         else:
             return NotImplemented
 
     def __len__(self):
         if epr_get_field_type(self._ptr) == e_tid_string:
-            return strlen(epr_get_field_elem_as_str(self._ptr))
+            return cstring.strlen(epr_get_field_elem_as_str(self._ptr))
         else:
             return epr_get_field_num_elems(self._ptr)
 
@@ -1076,7 +1075,7 @@ cdef class Record(EprObject):
 
         with nogil:
             epr_print_record(self._ptr, fstream)
-            fflush(fstream)
+            stdio.fflush(fstream)
 
         pyepr_check_errors()
 
@@ -1104,7 +1103,7 @@ cdef class Record(EprObject):
 
         with nogil:
             epr_print_element(self._ptr, field_index, element_index, fstream)
-            fflush(fstream)
+            stdio.fflush(fstream)
 
         pyepr_check_errors()
 
