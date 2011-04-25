@@ -45,23 +45,18 @@ __revision__ = '$Id$'
 __version__  = '0.5'
 
 
-cdef extern from 'string.h':
+cdef extern from 'string.h' nogil:
     int memcmp(void*, void*, size_t)
     int strcmp(char*, char*)
     int strlen(char*)
 
-cdef extern from 'stdio.h':
+cdef extern from 'stdio.h' nogil:
     ctypedef struct FILE
     FILE* fdopen(int, char *mode)
     int fflush(FILE*)
 
-cdef extern from 'Python.h':
-    # To release global interpreter lock (GIL) for threading
-    void Py_BEGIN_ALLOW_THREADS()
-    void Py_END_ALLOW_THREADS()
 
-
-cdef extern from 'epr_api.h':
+cdef extern from 'epr_api.h' nogil:
     char* EPR_PRODUCT_API_VERSION_STR
 
     ctypedef int            epr_boolean
@@ -727,10 +722,9 @@ cdef class Field(EprObject):
 
         cdef FILE* fstream = pyepr_get_file_stream(ostream)
 
-        Py_BEGIN_ALLOW_THREADS
-        epr_print_field(self._ptr, fstream)
-        fflush(fstream)
-        Py_END_ALLOW_THREADS
+        with nogil:
+            epr_print_field(self._ptr, fstream)
+            fflush(fstream)
 
         pyepr_check_errors()
 
@@ -1080,10 +1074,9 @@ cdef class Record(EprObject):
 
         cdef FILE* fstream = pyepr_get_file_stream(ostream)
 
-        Py_BEGIN_ALLOW_THREADS
-        epr_print_record(self._ptr, fstream)
-        fflush(fstream)
-        Py_END_ALLOW_THREADS
+        with nogil:
+            epr_print_record(self._ptr, fstream)
+            fflush(fstream)
 
         pyepr_check_errors()
 
@@ -1109,10 +1102,9 @@ cdef class Record(EprObject):
 
         cdef FILE* fstream = pyepr_get_file_stream(ostream)
 
-        Py_BEGIN_ALLOW_THREADS
-        epr_print_element(self._ptr, field_index, element_index, fstream)
-        fflush(fstream)
-        Py_END_ALLOW_THREADS
+        with nogil:
+            epr_print_element(self._ptr, field_index, element_index, fstream)
+            fflush(fstream)
 
         pyepr_check_errors()
 
@@ -1723,9 +1715,9 @@ cdef class Band(EprObject):
         if raster is None:
             raster = self.create_compatible_raster()
 
-        Py_BEGIN_ALLOW_THREADS
-        ret = epr_read_band_raster(self._ptr, xoffset, yoffset, raster._ptr)
-        Py_END_ALLOW_THREADS
+        with nogil:
+            ret = epr_read_band_raster(self._ptr, xoffset, yoffset,
+                                       raster._ptr)
 
         if ret != 0:
             pyepr_check_errors()
@@ -1914,9 +1906,8 @@ cdef class Dataset(EprObject):
         if record:
             record_ptr = (<Record>record)._ptr
 
-        Py_BEGIN_ALLOW_THREADS
-        record_ptr = epr_read_record(self._ptr, index, record_ptr)
-        Py_END_ALLOW_THREADS
+        with nogil:
+            record_ptr = epr_read_record(self._ptr, index, record_ptr)
 
         if record_ptr is NULL:
             pyepr_null_ptr_error('unable to read record at index %d' % index)
@@ -1979,9 +1970,8 @@ cdef class Product(EprObject):
     cdef EPR_SProductId* _ptr
 
     def __cinit__(self, filename, *args, **kargs):
-        Py_BEGIN_ALLOW_THREADS
-        self._ptr = epr_open_product(filename)
-        Py_END_ALLOW_THREADS
+        with nogil:
+            self._ptr = epr_open_product(filename)
 
         if self._ptr is NULL:
             pyepr_null_ptr_error('unable to open %s' % filename)
