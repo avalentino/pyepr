@@ -62,7 +62,6 @@ any data field contained in a product file.
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX',
-        'Programming Language :: Python',
         'Programming Language :: Python :: 2',
         'Programming Language :: Cython',
         'Topic :: Software Development :: Libraries',
