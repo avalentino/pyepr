@@ -4,7 +4,7 @@ Change history
 PyEPR 0.6 (in development)
 --------------------------
 
-@TBW
+* depend from cython >= 0.13 instead of cython >= 0.14.1
 
 
 PyEPR 0.5 (25/04/2011)
