@@ -42,7 +42,7 @@ in a product file.
 '''
 
 __revision__ = '$Id$'
-__version__  = '0.6a'
+__version__  = '0.5.1a'
 
 cdef extern from *:
     ctypedef char const_char 'const char'

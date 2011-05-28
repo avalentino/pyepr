@@ -32,7 +32,7 @@ except ImportError:
 
 setup(
     name='pyepr',
-    version='0.6',
+    version='0.5.1',
     author='Antonio Valentino',
     author_email='antonio.valentino@tiscali.it',
     url='http://avalentino.github.com/pyepr',

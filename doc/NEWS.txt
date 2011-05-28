@@ -1,8 +1,8 @@
 Change history
 ==============
 
-PyEPR 0.6 (in development)
---------------------------
+PyEPR 0.5.1 (in development)
+----------------------------
 
 * depend from cython >= 0.13 instead of cython >= 0.14.1
 
