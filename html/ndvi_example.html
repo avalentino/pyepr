@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>NDVI computation &mdash; PyEPR 0.5 documentation</title>
+    <title>NDVI computation &mdash; PyEPR 0.5.1a documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.5',
+        VERSION:     '0.5.1a',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.5 documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.5.1a documentation" href="index.html" />
     <link rel="up" title="Tutorials" href="tutorials.html" />
     <link rel="next" title="API Reference" href="reference.html" />
     <link rel="prev" title="Exporting bitmasks" href="bitmask_example.html" /> 
@@ -44,7 +44,7 @@
         <li class="right" >
           <a href="bitmask_example.html" title="Exporting bitmasks"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.5 documentation</a> &raquo;</li>
+        <li><a href="index.html">PyEPR 0.5.1a documentation</a> &raquo;</li>
           <li><a href="tutorials.html" accesskey="U">Tutorials</a> &raquo;</li> 
       </ul>
     </div>  
@@ -380,7 +380,7 @@ used to write the NDVI of the pixel n the file in binary format.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>The entire solution is quite not <a class="reference external" href="http://www.cafepy.com/article/be_pythonic">pythonic</a>. As an alternative
-implementation it could be used the <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-9752349)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> interface of
+implementation it could be used the <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-3071eab)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> interface of
 <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> objects available via the <a class="reference internal" href="reference.html#epr.Raster.data" title="epr.Raster.data"><tt class="xref py py-data docutils literal"><span class="pre">epr.Raster.data</span></tt></a>
 property. The NDVI index is computed on all pixels altogether using
 vectorized expressions:</p>
@@ -397,7 +397,7 @@ vectorized expressions:</p>
 </pre></div>
 </div>
 <p>Finally data can be saved to file simply using the
-<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.tofile.html#numpy.ndarray.tofile" title="(in NumPy v2.0.dev-9752349)"><tt class="xref py py-meth docutils literal"><span class="pre">numpy.ndarray.tofile()</span></tt></a> method:</p>
+<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.tofile.html#numpy.ndarray.tofile" title="(in NumPy v2.0.dev-3071eab)"><tt class="xref py py-meth docutils literal"><span class="pre">numpy.ndarray.tofile()</span></tt></a> method:</p>
 <div class="last highlight-python"><div class="highlight"><pre><span class="n">ndvi</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">out_stream</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -450,7 +450,7 @@ vectorized expressions:</p>
         <li class="right" >
           <a href="bitmask_example.html" title="Exporting bitmasks"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.5 documentation</a> &raquo;</li>
+        <li><a href="index.html">PyEPR 0.5.1a documentation</a> &raquo;</li>
           <li><a href="tutorials.html" >Tutorials</a> &raquo;</li> 
       </ul>
     </div>

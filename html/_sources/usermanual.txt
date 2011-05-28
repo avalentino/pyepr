@@ -48,7 +48,7 @@ correctly installed and configured:
 * numpy_ >= 1.3.0
 * `EPR API`_ >= 2.2
 * a reasonably updated C compiler [#]_ (build only)
-* Cython_ >= 0.14.1 [#]_ (build only)
+* Cython_ >= 0.13 [#]_ (build only)
 
 .. [#] PyEPR_ has been developed and tested with gcc_ 4.
 .. [#] The source tarball of official releases also includes the C extension
