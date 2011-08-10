@@ -1,6 +1,8 @@
 Interactive use of PyEPR_
 -------------------------
 
+.. highlight:: ipython
+
 In this tutorial it is showed an example of how to use PyEPR_ interactively
 to open, browse and display data of an ENVISAT_ ASAR_ product.
 
@@ -23,7 +25,9 @@ ESA_ web site.
 :mod:`epr` module and classes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-After starting the ipython shell with the following command::
+After starting the ipython shell with the following command:
+
+.. code-block:: sh
 
     $ ipython -pylab
 
@@ -332,5 +336,4 @@ Dealing with image data is simple as well::
 
 .. raw:: latex
 
-   \newpage
-
+   \clearpage

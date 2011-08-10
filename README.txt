@@ -40,9 +40,11 @@ correctly installed and configured:
 * numpy_ >= 1.3.0
 * `EPR API`_ >= 2.2
 * a reasonably updated C compiler (build only)
+* Cython_ >= 0.13 (build only)
 
 .. _numpy: http://www.numpy.org
 .. _gcc: http://gcc.gnu.org
+.. _Cython: http://cython.org
 
 
 Download

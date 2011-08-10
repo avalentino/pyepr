@@ -47,7 +47,7 @@ doc:
 
 clean:
 	$(PYTHON) setup.py clean
-	$(RM) src/*.py[co] tests/*.py[co] README.html
+	$(RM) src/*.py[co] tests/*.py[co] doc/sphinxext/*.py[co] README.html
 	$(MAKE) -C doc clean
 	$(RM) -r doc/_build
 

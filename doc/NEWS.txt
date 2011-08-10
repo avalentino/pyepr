@@ -5,6 +5,7 @@ PyEPR 0.5.1 (in development)
 ----------------------------
 
 * depend from cython >= 0.13 instead of cython >= 0.14.1
+* improved code highligh in the documentation
 
 
 PyEPR 0.5 (25/04/2011)

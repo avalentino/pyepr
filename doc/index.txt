@@ -2,6 +2,13 @@
 ENVISAT Product Reader Python API
 =================================
 
+.. raw:: latex
+
+    \listoffigures
+    % \listoftables
+    \clearpage
+
+
 :HomePage:  http://avalentino.github.com/pyepr
 :Author:    Antonio Valentino
 :Contact:   antonio.valentino@tiscali.it
@@ -10,7 +17,7 @@ ENVISAT Product Reader Python API
 :Version:   0.5.1
 
 
-.. only:: html
+.. only:: not latex
 
     Overview
     ========

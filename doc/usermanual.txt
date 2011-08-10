@@ -66,6 +66,8 @@ correctly installed and configured:
 Download
 --------
 
+.. highlight:: sh
+
 Official source tarballs can be downloaded form PyPi_:
 
     http://pypi.python.org/pypi/pyepr
@@ -158,6 +160,8 @@ following sections.
 Memory management
 -----------------
 
+.. highlight:: python
+
 Being Python_ a very high level language uses have never to worry about
 memory allocation/deallocation. They simply have to instantiate objects::
 
@@ -177,7 +181,9 @@ that points to the *product* descriptor `EPR_productId` to which it
 belongs to.
 
 The reference to the parent product is used, for example, when one wants
-to read a record using the `epr_read_record` function::
+to read a record using the `epr_read_record` function:
+
+.. code-block:: c
 
     EPR_SRecord* epr_read_record(EPR_SDatasetId* dataset_id, ...);
 

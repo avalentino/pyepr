@@ -8,7 +8,9 @@ The example code (:download:`examples/write_bitmask.py`) is a direct
 translation of the C sample program `write_bitmask.c`_ bundled with the
 EPR API distribution.
 
-The program is invoked as follows::
+The program is invoked as follows:
+
+.. code-block:: sh
 
     $ python write_bitmask.py <envisat-product> <bitmask-expression> \
     <output-file>
@@ -48,7 +50,7 @@ that returns an :class:`epr.Product` instance.
    :lines: 49-50
 
 Scene size parameters are retrieved form the :class:`epr.Product` object
-using the :meth:`epr.Product.get_scene_width` and 
+using the :meth:`epr.Product.get_scene_width` and
 :meth:`epr.Product.get_scene_height` methods:
 
 .. raw:: latex
@@ -91,7 +93,7 @@ in the DDDB) can be composed with “(”, ”)”, “NOT”, “AND”, “OR�
 Valid bit-mask expression are for example::
 
     flags.LAND OR flags.CLOUD
-    
+
 or::
 
     NOT flags.WATER AND flags.TURBID_S
@@ -111,4 +113,3 @@ of the :class:`epr.Raster` objects that exposes data via the
 
 .. _Python: http://www.python.org
 .. _ENVISAT: http://envisat.esa.int
-
