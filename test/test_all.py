@@ -49,6 +49,7 @@ EPR_TO_NUMPY_TYPE = {
 
 TEST_PRODUCT = 'MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1'
 
+
 def quiet(func):
     @functools.wraps(func)
     def wrapper(*args, **kwds):
@@ -68,6 +69,7 @@ def quiet(func):
         return ret
 
     return wrapper
+
 
 def equal_products(product1, product2):
     if type(product1) != type(product2):
@@ -127,7 +129,6 @@ class TestProduct(unittest.TestCase):
     SPH_DESCRIPTOR = 'MER_LRC_2P SPECIFIC HEADER'
     MERIS_IODD_VERSION = 7
 
-
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
 
@@ -141,7 +142,8 @@ class TestProduct(unittest.TestCase):
         self.assertEqual(self.product.id_string, self.ID_STRING)
 
     def test_meris_iodd_version_property(self):
-        self.assertEqual(self.product.meris_iodd_version, self.MERIS_IODD_VERSION)
+        self.assertEqual(self.product.meris_iodd_version,
+                         self.MERIS_IODD_VERSION)
 
     def test_get_scene_width(self):
         self.assertEqual(self.product.get_scene_width(), self.DATASET_WIDTH)
@@ -402,7 +404,8 @@ class TestDatasetHighLevelAPI(unittest.TestCase):
         mobj = re.match(pattern, repr(self.dataset))
         self.assertNotEqual(mobj, None)
         self.assertEqual(mobj.group('name'), self.dataset.get_name())
-        self.assertEqual(mobj.group('num'), str(self.dataset.get_num_records()))
+        self.assertEqual(mobj.group('num'),
+                         str(self.dataset.get_num_records()))
 
     def test_str(self):
         lines = [repr(self.dataset), '']
@@ -602,8 +605,8 @@ class TestBand(unittest.TestCase):
         self.band.read_raster(raster=raster2)
 
         self.assertEqual(raster1.get_pixel(0, 0), raster2.get_pixel(0, 0))
-        self.assertEqual(raster1.get_pixel(width - 1, height -1),
-                          raster2.get_pixel(width - 1, height -1))
+        self.assertEqual(raster1.get_pixel(width - 1, height - 1),
+                          raster2.get_pixel(width - 1, height - 1))
 
     def test_read_raster_with_invalid_raster(self):
         self.assertRaises(TypeError, self.band.read_raster, 0, 0, 0)
@@ -634,7 +637,9 @@ class TestBand(unittest.TestCase):
         h, w = self.TEST_DATA.shape
         self.assertTrue(np.allclose(data[:h, :w], self.TEST_DATA))
 
-    # @TODO: check, it seems to be an upstream bug or a metter of data mirroring
+    # @TODO: check, it seems to be an upstream bug or a metter of data
+    #        mirroring
+    # @SEEALSO: https://www.brockmann-consult.de/beam-jira/browse/EPR-2
     #def test_read_as_array_with_step(self):
     #    width = 400
     #    height = 300
@@ -647,8 +652,10 @@ class TestBand(unittest.TestCase):
     #    self.assertEqual(data.dtype, self.DATA_TYPE)
     #
     #    h, w = self.TEST_DATA.shape
-    #    self.assertTrue(np.all(data[:h/2, :w/2] == self.TEST_DATA[::2, ::2]))
-    #    #self.assertTrue(np.all(data[:h/2, :w/2] == self.TEST_DATA[::2, 1::2]))
+    #    self.assertTrue(
+    #               np.all(data[:h / 2, :w / 2] == self.TEST_DATA[::2, ::2]))
+    #    #self.assertTrue(
+    #    #           np.all(data[:h / 2, :w / 2] == self.TEST_DATA[::2, 1::2]))
 
     # @TODO: more read_as_array testing
 
@@ -700,7 +707,7 @@ class TestCreateRaster(unittest.TestCase):
 
     def test_create_raster_with_invalid_size(self):
         self.assertRaises((ValueError, OverflowError), epr.create_raster,
-                          self.RASTER_DATA_TYPE,  -1, self.RASTER_HEIGHT)
+                          self.RASTER_DATA_TYPE, -1, self.RASTER_HEIGHT)
 
     def test_create_bitmask_raster(self):
         raster = epr.create_bitmask_raster(self.RASTER_WIDTH,
@@ -751,7 +758,8 @@ class TestRaster(unittest.TestCase):
         self.assertEqual(self.raster.get_elem_size(), self.RASTER_ELEM_SIZE)
 
     def test_get_pixel(self):
-        self.assertAlmostEqual(self.raster.get_pixel(0, 0), self.TEST_DATA[0, 0])
+        self.assertAlmostEqual(self.raster.get_pixel(0, 0),
+                               self.TEST_DATA[0, 0])
 
     def test_get_pixel_invalid_x(self):
         self.assertRaises(ValueError, self.raster.get_pixel, -1, 0)
@@ -858,6 +866,7 @@ class TestRasterRead(TestRaster):
         self.assertEqual(data1[0, 0], data2[0, 0])
         self.assertTrue(np.all(data1 == data2))
 
+
 class TestRasterHighLevelAPI(unittest.TestCase):
     RASTER_WIDTH = 400
     RASTER_HEIGHT = 300
@@ -912,7 +921,8 @@ class TestRecord(unittest.TestCase):
         self.record.print_element(0, 0, sys.stderr)
 
     def test_print_element_invalid_ostream(self):
-        self.assertRaises(TypeError, self.record.print_element, 0, 0, 'invalid')
+        self.assertRaises(TypeError, self.record.print_element, 0, 0,
+                          'invalid')
 
     def test_print_element_field_out_of_range(self):
         index = self.record.get_num_fields() + 10
@@ -1040,6 +1050,7 @@ class TestMphRecordHighLevelAPI(TestRecordHighLevelAPI):
     def setUp(self):
         product = epr.Product(self.PRODUCT_FILE)
         self.record = product.get_mph()
+
 
 class TestField(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
@@ -1366,13 +1377,14 @@ class TestSampleModelFunctions(unittest.TestCase):
 class TestDirectInstantiation(unittest.TestCase):
     MSG_PATTERN = '"%s" class cannot be instantiated from Python'
 
-    if sys.version_info[:2] > (3,2):
+    if sys.version_info[:2] > (3, 2):
         # @COMPATIBILITY: python >= 3.2
         pass
-    elif sys.version_info[:2] in ((2.7), (3,1)):
+    elif sys.version_info[:2] in ((2, 7), (3, 1)):
         # @COMPATIBILITY: unittest2, python2.7, python3.1
         assertRaiserRegex = assertRaiserRegexp
     else:
+
         # @COMPATIBILITY: python < 2.7
         def assertRaisesRegex(self, expected_exception, expected_regexp,
                               callable_obj=None, *args, **kwargs):

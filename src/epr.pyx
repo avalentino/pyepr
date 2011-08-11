@@ -42,11 +42,13 @@ in a product file.
 '''
 
 __revision__ = '$Id$'
-__version__  = '0.5.1a'
+__version__ = '0.5.1a'
+
 
 cdef extern from *:
     ctypedef char const_char 'const char'
     ctypedef void const_void 'const void'
+
 
 from libc cimport string as cstring
 from libc cimport stdio
@@ -67,56 +69,56 @@ cdef extern from 'epr_api.h' nogil:
     ctypedef unsigned long  ulong
 
     enum EPR_ErrCode:
-        e_err_none                 =    0
-        e_err_null_pointer         =    1
-        e_err_illegal_arg          =    2
-        e_err_illegal_state        =    3
-        e_err_out_of_memory        =    4
-        e_err_index_out_of_range   =    5
-        e_err_illegal_conversion   =    6
-        e_err_illegal_data_type    =    7
-        e_err_file_not_found       =  101
-        e_err_file_access_denied   =  102
-        e_err_file_read_error      =  103
-        e_err_file_write_error     =  104
-        e_err_file_open_failed     =  105
-        e_err_file_close_failed    =  106
-        e_err_api_not_initialized  =  201
-        e_err_invalid_product_id   =  203
-        e_err_invalid_record       =  204
-        e_err_invalid_band         =  205
-        e_err_invalid_raster       =  206
-        e_err_invalid_dataset_name =  207
-        e_err_invalid_field_name   =  208
-        e_err_invalid_record_name  =  209
-        e_err_invalid_product_name =  210
-        e_err_invalid_band_name    =  211
-        e_err_invalid_data_format  =  212
-        e_err_invalid_value        =  213
-        e_err_invalid_keyword_name =  214
-        e_err_unknown_endian_order =  216
-        e_err_flag_not_found       =  301
-        e_err_invalid_ddbb_format  =  402
+        e_err_none = 0
+        e_err_null_pointer = 1
+        e_err_illegal_arg = 2
+        e_err_illegal_state = 3
+        e_err_out_of_memory = 4
+        e_err_index_out_of_range = 5
+        e_err_illegal_conversion = 6
+        e_err_illegal_data_type = 7
+        e_err_file_not_found = 101
+        e_err_file_access_denied = 102
+        e_err_file_read_error = 103
+        e_err_file_write_error = 104
+        e_err_file_open_failed = 105
+        e_err_file_close_failed = 106
+        e_err_api_not_initialized = 201
+        e_err_invalid_product_id = 203
+        e_err_invalid_record = 204
+        e_err_invalid_band = 205
+        e_err_invalid_raster = 206
+        e_err_invalid_dataset_name = 207
+        e_err_invalid_field_name = 208
+        e_err_invalid_record_name = 209
+        e_err_invalid_product_name = 210
+        e_err_invalid_band_name = 211
+        e_err_invalid_data_format = 212
+        e_err_invalid_value = 213
+        e_err_invalid_keyword_name = 214
+        e_err_unknown_endian_order = 216
+        e_err_flag_not_found = 301
+        e_err_invalid_ddbb_format = 402
 
     enum EPR_DataTypeId:
         e_tid_unknown = 0
-        e_tid_uchar   = 1
-        e_tid_char    = 2
-        e_tid_ushort  = 3
-        e_tid_short   = 4
-        e_tid_uint    = 5
-        e_tid_int     = 6
-        e_tid_float   = 7
-        e_tid_double  = 8
-        e_tid_string  = 11
-        e_tid_spare   = 13
-        e_tid_time    = 21
+        e_tid_uchar = 1
+        e_tid_char = 2
+        e_tid_ushort = 3
+        e_tid_short = 4
+        e_tid_uint = 5
+        e_tid_int = 6
+        e_tid_float = 7
+        e_tid_double = 8
+        e_tid_string = 11
+        e_tid_spare = 13
+        e_tid_time = 21
 
     enum EPR_LogLevel:
-        e_log_debug   = -1
-        e_log_info    =  0
-        e_log_warning =  1
-        e_log_error   =  2
+        e_log_debug = -1
+        e_log_info = 0
+        e_log_warning = 1
+        e_log_error = 2
 
     enum EPR_SampleModel:
         e_smod_1OF1 = 0
@@ -337,7 +339,8 @@ cdef extern from 'epr_api.h' nogil:
 
     # BAND
     char* epr_get_band_name(EPR_SBandId*)
-    EPR_SRaster* epr_create_compatible_raster(EPR_SBandId*, uint, uint, uint, uint)
+    EPR_SRaster* epr_create_compatible_raster(EPR_SBandId*, uint, uint, uint,
+                                              uint)
     int epr_read_band_raster(EPR_SBandId*, int, int, EPR_SRaster*)
 
     # RASTER
@@ -358,33 +361,35 @@ cdef extern from 'epr_api.h' nogil:
     EPR_SRaster* epr_create_raster(EPR_EDataTypeId, uint, uint, uint, uint)
     EPR_SRaster* epr_create_bitmask_raster(uint, uint, uint, uint)
 
+
 from cpython.object cimport PyObject_AsFileDescriptor
 cimport numpy as np
 np.import_array()
 
 import sys
-import collections
+from collections import namedtuple
+
 import numpy as np
 
 
 # utils
-EPRTime = collections.namedtuple('EPRTime', ('days', 'seconds', 'microseconds'))
+EPRTime = namedtuple('EPRTime', ('days', 'seconds', 'microseconds'))
 
 EPR_C_API_VERSION = EPR_PRODUCT_API_VERSION_STR
 
 # EPR_DataTypeId
 E_TID_UNKNOWN = e_tid_unknown
-E_TID_UCHAR   = e_tid_uchar
-E_TID_CHAR    = e_tid_char
-E_TID_USHORT  = e_tid_ushort
-E_TID_SHORT   = e_tid_short
-E_TID_UINT    = e_tid_uint
-E_TID_INT     = e_tid_int
-E_TID_FLOAT   = e_tid_float
-E_TID_DOUBLE  = e_tid_double
-E_TID_STRING  = e_tid_string
-E_TID_SPARE   = e_tid_spare
-E_TID_TIME    = e_tid_time
+E_TID_UCHAR = e_tid_uchar
+E_TID_CHAR = e_tid_char
+E_TID_USHORT = e_tid_ushort
+E_TID_SHORT = e_tid_short
+E_TID_UINT = e_tid_uint
+E_TID_INT = e_tid_int
+E_TID_FLOAT = e_tid_float
+E_TID_DOUBLE = e_tid_double
+E_TID_STRING = e_tid_string
+E_TID_SPARE = e_tid_spare
+E_TID_TIME = e_tid_time
 
 # EPR_SampleModel
 E_SMOD_1OF1 = e_smod_1OF1
@@ -400,7 +405,6 @@ E_SMID_LOG = e_smid_log
 
 
 cdef np.NPY_TYPES _epr_to_numpy_type_id(EPR_DataTypeId epr_type):
-
     if epr_type == E_TID_UCHAR:
         return np.NPY_UBYTE
     if epr_type == E_TID_CHAR:
@@ -455,6 +459,7 @@ cdef int pyepr_check_errors() except -1:
         return -1
     return 0
 
+
 cdef int pyepr_null_ptr_error(msg='null pointer') except -1:
     cdef int code
     cdef const_char* eprmsg = epr_get_last_err_message()
@@ -465,6 +470,7 @@ cdef int pyepr_null_ptr_error(msg='null pointer') except -1:
     raise EPRValueError('%s: %s' % (msg, <char*>eprmsg), code=code)
     epr_clear_err()
     return -1
+
 
 cdef FILE* pyepr_get_file_stream(object ostream) except NULL:
     cdef FILE* fstream
@@ -489,6 +495,7 @@ cdef FILE* pyepr_get_file_stream(object ostream) except NULL:
         raise TypeError('invalid ostream')
 
     return fstream
+
 
 cdef class _CLib:
     '''Library object to handle C API initialization/finalization
@@ -526,6 +533,7 @@ cdef _CLib _EPR_C_LIB = None
 
 cdef class EprObject:
     cdef object epr_c_lib
+
     def __cinit__(self, *ars, **kargs):
         self.epr_c_lib = _EPR_C_LIB
 
@@ -542,10 +550,12 @@ def get_data_type_size(EPR_EDataTypeId type_id):
 
     return epr_get_data_type_size(type_id)
 
+
 def data_type_id_to_str(EPR_EDataTypeId type_id):
     '''Gets the 'C' data type string for the given data type'''
 
     return epr_data_type_id_to_str(type_id)
+
 
 def get_scaling_method_name(method):
     '''Return the name of the specified scaling method'''
@@ -651,11 +661,11 @@ cdef class DSD(EprObject):
                 if p1 == p2:
                     return True
 
-                return ((p1.index     == p2.index) and
+                return ((p1.index == p2.index) and
                         (p1.ds_offset == p2.ds_offset) and
-                        (p1.ds_size   == p2.ds_size) and
-                        (p1.num_dsr   == p2.num_dsr) and
-                        (p1.dsr_size  == p2.dsr_size)and
+                        (p1.ds_size == p2.ds_size) and
+                        (p1.num_dsr == p2.num_dsr) and
+                        (p1.dsr_size == p2.dsr_size)and
                         (cstring.strcmp(p1.ds_name, p2.ds_name) == 0) and
                         (cstring.strcmp(p1.ds_type, p2.ds_type) == 0) and
                         (cstring.strcmp(p1.filename, p2.filename) == 0))
@@ -664,11 +674,11 @@ cdef class DSD(EprObject):
                 if p1 == p2:
                     return False
 
-                return ((p1.index     != p2.index) or
+                return ((p1.index != p2.index) or
                         (p1.ds_offset != p2.ds_offset) or
-                        (p1.ds_size   != p2.ds_size) or
-                        (p1.num_dsr   != p2.num_dsr) or
-                        (p1.dsr_size  != p2.dsr_size) or
+                        (p1.ds_size != p2.ds_size) or
+                        (p1.num_dsr != p2.num_dsr) or
+                        (p1.dsr_size != p2.dsr_size) or
                         (cstring.strcmp(p1.ds_name, p2.ds_name) != 0) or
                         (cstring.strcmp(p1.ds_type, p2.ds_type) != 0) or
                         (cstring.strcmp(p1.filename, p2.filename) != 0))
@@ -715,8 +725,8 @@ cdef class Field(EprObject):
             the (opened) output file object
 
         .. note:: the *ostream* parameter have to be a *real* file not
-                  a generic stream object like :class:`StringIO.StringIO`
-                  instances
+                  a generic stream object like
+                  :class:`StringIO.StringIO` instances
 
         '''
 
@@ -1008,7 +1018,8 @@ cdef class Field(EprObject):
                 return (cstring.memcmp(p1.elems, p2.elems, n) != 0)
 
             else:
-                raise TypeError('Field only implements "==" and "!=" operators')
+                raise TypeError('Field only implements "==" and '
+                                '"!=" operators')
         else:
             return NotImplemented
 
@@ -1068,8 +1079,8 @@ cdef class Record(EprObject):
             the (opened) output file object
 
         .. note:: the *ostream* parameter have to be a *real* file not
-                  a generic stream object like :class:`StringIO.StringIO`
-                  instances
+                  a generic stream object like
+                  :class:`StringIO.StringIO` instances
 
         '''
 
@@ -1081,7 +1092,8 @@ cdef class Record(EprObject):
 
         pyepr_check_errors()
 
-    def print_element(self, uint field_index, uint element_index, ostream=None):
+    def print_element(self, uint field_index, uint element_index,
+                      ostream=None):
         '''Write the specified field element to file
 
         This method writes formatted contents of the specified field
@@ -1096,8 +1108,8 @@ cdef class Record(EprObject):
             the (opened) output file object
 
         .. note:: the *ostream* parameter have to be a *real* file not
-                  a generic stream object like :class:`StringIO.StringIO`
-                  instances
+                  a generic stream object like
+                  :class:`StringIO.StringIO` instances
 
         '''
 
@@ -1263,8 +1275,8 @@ cdef class Raster(EprObject):
         return epr_get_raster_height(self._ptr)
 
     def get_elem_size(self):
-        '''The size in byte of a single element (sample) of this raster's
-        buffer'''
+        '''The size in byte of a single element (sample) of this
+        raster's buffer'''
 
         return epr_get_raster_elem_size(self._ptr)
 
@@ -1317,7 +1329,8 @@ cdef class Raster(EprObject):
         shape[1] = self._ptr.raster_width
 
         cdef np.ndarray result
-        result = np.PyArray_SimpleNewFromData(2, shape, dtype, self._ptr.buffer)
+        result = np.PyArray_SimpleNewFromData(2, shape, dtype,
+                                              self._ptr.buffer)
 
         # Make the ndarray keep a reference to this object
         np.set_array_base(result, self)
@@ -1405,6 +1418,7 @@ def create_raster(EPR_EDataTypeId data_type, uint src_width, uint src_height,
 
     return new_raster(raster_ptr)
 
+
 def create_bitmask_raster(uint src_width, uint src_height,
                           uint xstep=1, uint ystep=1):
     '''Creates a raster to be used for reading bitmasks
@@ -1427,7 +1441,8 @@ def create_bitmask_raster(uint src_width, uint src_height,
         the new raster instance or raises an exception
         (:exc:`EPRValueError`) if an error occurred
 
-    .. seealso:: the description of :meth:`Band.create_compatible_raster`
+    .. seealso:: the description of
+                 :meth:`Band.create_compatible_raster`
 
     '''
 
@@ -1448,8 +1463,8 @@ cdef class Band(EprObject):
     The Band class contains information about a band within an ENVISAT
     product file which has been opened with the :func:`open` function.
 
-    A new Band instance can be obtained with the :meth:`Product.get_band`
-    method.
+    A new Band instance can be obtained with the
+    :meth:`Product.get_band` method.
 
     '''
 
@@ -1476,7 +1491,8 @@ cdef class Band(EprObject):
         '''The sample model operation
 
         The sample model operation applied to the source dataset for
-        getting the correct samples from the MDS (for example MERIS L2).
+        getting the correct samples from the MDS (for example MERIS
+        L2).
 
         Possible values are:
 
@@ -1596,8 +1612,8 @@ cdef class Band(EprObject):
         '''Mirrored lines flag
 
         If true (=1) lines will be mirrored (flipped) after read into a
-        raster in order to ensure a pixel ordering in raster X direction
-        from WEST to EAST.
+        raster in order to ensure a pixel ordering in raster X
+        direction from WEST to EAST.
 
         '''
 
@@ -1612,21 +1628,24 @@ cdef class Band(EprObject):
     # @TODO: default values for src_width and src_height
     def create_compatible_raster(self, uint src_width, uint src_height,
                                  uint xstep=1, uint ystep=1):
-        '''Creates a raster which is compatible with the data type of the band
+        '''Creates a raster which is compatible with the data type of
+        the band
 
         The created raster is used to read the data in it (see
         :meth:`Band.read_raster`).
 
-        The raster is defined on the grid of the product, from which the
-        data are read. Spatial subsets and under-sampling are possible)
-        through the parameter of the method.
+        The raster is defined on the grid of the product, from which
+        the data are read. Spatial subsets and under-sampling are
+        possible) through the parameter of the method.
 
         A raster is an object that allows direct access to data of a
-        certain portion of the ENVISAT product that are read into the it.
-        Such a portion is called the source. The complete ENVISAT product
-        can be much greater than the source. One can move the raster over
-        the complete ENVISAT product and read in turn different parts
-        (always of the size of the source) of it into the raster.
+        certain portion of the ENVISAT product that are read into the
+        it.
+        Such a portion is called the source. The complete ENVISAT
+        product can be much greater than the source.
+        One can move the raster over the complete ENVISAT product and
+        read in turn different parts (always of the size of the source)
+        of it into the raster.
         The source is specified by the parameters *height* and *width*.
 
         A typical example is a processing in blocks. Lets say, a block
@@ -1634,9 +1653,10 @@ cdef class Band(EprObject):
         height of 32 pixel.
 
         Another example is a processing of complete image lines. Then,
-        my source has a widths of the complete product (for example 1121
-        for a MERIS RR product), and a height of 1). One can loop over
-        all blocks read into the raster and process it.
+        my source has a widths of the complete product (for example
+        1121 for a MERIS RR product), and a height of 1).
+        One can loop over all blocks read into the raster and process
+        it.
 
         In addition, it is possible to defined a sub-sampling step for
         a raster. This means, that the source is not read 1:1 into the
@@ -1651,11 +1671,11 @@ cdef class Band(EprObject):
             the height (along track dimension) of the source to be read
             into the raster
         :param xstep:
-            the sub-sampling step across track of the source when reading
-            into the raster
+            the sub-sampling step across track of the source when
+            reading into the raster
         :param ystep:
-            the sub-sampling step along track of the source when reading
-            into the raster
+            the sub-sampling step along track of the source when
+            reading into the raster
         :returns:
             the new raster instance or raises an exception
             (:exc:`EPRValueError`) if an error occurred
@@ -1814,7 +1834,8 @@ cdef class Dataset(EprObject):
     function.
 
     A new Dataset instance can be obtained with the
-    :meth:`Product.get_dataset` or :meth:`Product.get_dataset_at` methods.
+    :meth:`Product.get_dataset` or :meth:`Product.get_dataset_at`
+    methods.
 
     '''
 
@@ -1962,8 +1983,8 @@ cdef new_dataset(EPR_SDatasetId* ptr, object parent=None):
 cdef class Product(EprObject):
     '''ENVISAT product
 
-    The Product class provides methods and properties to get information
-    about an ENVISAT product file.
+    The Product class provides methods and properties to get
+    information about an ENVISAT product file.
 
     .. seealso:: :func:`open`
 
@@ -2018,11 +2039,12 @@ cdef class Product(EprObject):
             return self._ptr.tot_size
 
     property id_string:
-        '''The product identifier string obtained from the MPH parameter
-        'PRODUCT'
+        '''The product identifier string obtained from the MPH
+        parameter 'PRODUCT'
 
-        The first 10 characters of this string identify the product type,
-        e.g. "MER_1P__FR" for a MERIS Level 1b full resolution product.
+        The first 10 characters of this string identify the product
+        type, e.g. "MER_1P__FR" for a MERIS Level 1b full resolution
+        product.
         The rest of the string decodes product instance properties.
 
         '''
@@ -2126,7 +2148,7 @@ cdef class Product(EprObject):
         return new_dsd(dsd_ptr, self)
 
     def get_mph(self):
-        '''The :class:`Record` representing the main product header (MPH)'''
+        '''The main product header (MPH) :class:`Record`'''
 
         cdef EPR_SRecord* record_ptr
         record_ptr = epr_get_mph(self._ptr)
@@ -2136,7 +2158,7 @@ cdef class Product(EprObject):
         return new_record(record_ptr, self, False)
 
     def get_sph(self):
-        '''The :class:`Record` representing the specific product header (SPH)'''
+        '''The specific product header (SPH) :class:`Record`'''
 
         cdef EPR_SRecord* record_ptr
         record_ptr = epr_get_sph(self._ptr)
@@ -2200,20 +2222,20 @@ cdef class Product(EprObject):
             ``NOT flags.WATER AND flags.TURBID_S``
 
        :param xoffset:
-           across-track co-ordinate in pixel co-ordinates (zero-based)
-           of the upper right corner of the source-region
+            across-track co-ordinate in pixel co-ordinates (zero-based)
+            of the upper right corner of the source-region
        :param yoffset:
-           along-track co-ordinate in pixel co-ordinates (zero-based)
-           of the upper right corner of the source-region
+            along-track co-ordinate in pixel co-ordinates (zero-based)
+            of the upper right corner of the source-region
        :param raster:
-           the raster for the bit-mask. The data type of the raster
-           must be either e_tid_uchar or e_tid_char
-       :returns:
-           zero for success, an error code otherwise
+            the raster for the bit-mask. The data type of the raster
+            must be either e_tid_uchar or e_tid_char
+        :returns:
+            zero for success, an error code otherwise
 
-       .. seealso: :func:`create_bitmask_raster`
+        .. seealso: :func:`create_bitmask_raster`
 
-       '''
+        '''
 
         cdef int ret = epr_read_bitmask_raster(self._ptr, bm_expr,
                                                xoffset, yoffset,
@@ -2307,11 +2329,14 @@ def open(filename):
 
     return Product(filename)
 
+
 # library initialization/finalization
 _EPR_C_LIB = _CLib.__new__(_CLib)
 
+
 # @TODO: check
 import atexit
+
 
 @atexit.register
 def _close_api():
