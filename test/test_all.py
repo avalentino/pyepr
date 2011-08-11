@@ -26,6 +26,7 @@ from __future__ import unicode_literals
 import os
 import re
 import sys
+import numbers
 import unittest
 import tempfile
 import functools
@@ -789,19 +790,22 @@ class TestRaster(unittest.TestCase):
 
     def test_source_width_property(self):
         self.assertEqual(self.raster.source_width, self.RASTER_WIDTH)
-        self.assertTrue(isinstance(self.raster.source_width, (int, long)))
+        self.assertTrue(isinstance(self.raster.source_width, numbers.Integral))
 
     def test_source_height_property(self):
         self.assertEqual(self.raster.source_height, self.RASTER_HEIGHT)
-        self.assertTrue(isinstance(self.raster.source_height, (int, long)))
+        self.assertTrue(isinstance(self.raster.source_height,
+                                   numbers.Integral))
 
     def test_source_step_x_property(self):
         self.assertEqual(self.raster.source_step_x, 1)
-        self.assertTrue(isinstance(self.raster.source_step_x, (int, long)))
+        self.assertTrue(isinstance(self.raster.source_step_x,
+                                   numbers.Integral))
 
     def test_source_step_y_property(self):
         self.assertEqual(self.raster.source_step_y, 1)
-        self.assertTrue(isinstance(self.raster.source_step_y, (int, long)))
+        self.assertTrue(isinstance(self.raster.source_step_y,
+                                   numbers.Integral))
 
     def test_data_property(self):
         height = self.raster.get_height()
@@ -1250,19 +1254,19 @@ class TestDSD(unittest.TestCase):
 
     def test_ds_offset(self):
         self.assertEqual(self.dsd.ds_offset, self.DS_OFFSET)
-        self.assertTrue(isinstance(self.dsd.ds_offset, (int, long)))
+        self.assertTrue(isinstance(self.dsd.ds_offset, numbers.Integral))
 
     def test_ds_size(self):
         self.assertEqual(self.dsd.ds_size, self.DS_SIZE)
-        self.assertTrue(isinstance(self.dsd.ds_size, (int, long)))
+        self.assertTrue(isinstance(self.dsd.ds_size, numbers.Integral))
 
     def test_num_dsr(self):
         self.assertEqual(self.dsd.num_dsr, self.NUM_DSR)
-        self.assertTrue(isinstance(self.dsd.num_dsr, (int, long)))
+        self.assertTrue(isinstance(self.dsd.num_dsr, numbers.Integral))
 
     def test_dsr_size(self):
         self.assertEqual(self.dsd.dsr_size, self.DSR_SIZE)
-        self.assertTrue(isinstance(self.dsd.dsr_size, (int, long)))
+        self.assertTrue(isinstance(self.dsd.dsr_size, numbers.Integral))
 
     def test_eq_dsd1_dsd1(self):
         self.assertEqual(self.dsd, self.dsd)
