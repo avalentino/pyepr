@@ -54,7 +54,7 @@ clean:
 distclean: clean
 	$(RM) -r build dist pyepr.egg-info
 	$(RM) MANIFEST src/*.c src/*.o *.so
-	#$(RM) tests/*.N1
+	$(RM) $(TEST_DATSET)
 	$(RM) -r doc/html
 
 check: epr.so $(TEST_DATSET)
