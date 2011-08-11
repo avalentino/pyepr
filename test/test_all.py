@@ -207,10 +207,10 @@ class TestProduct(unittest.TestCase):
     def test_read_bitmask_raster(self):
         bm_expr = 'l2_flags.LAND AND !l2_flags.BRIGHT'
 
-        xoffset = self.DATASET_WIDTH / 2
-        yoffset = self.DATASET_HEIGHT / 2
-        width = self.DATASET_WIDTH / 2
-        height = self.DATASET_HEIGHT / 2
+        xoffset = self.DATASET_WIDTH // 2
+        yoffset = self.DATASET_HEIGHT // 2
+        width = self.DATASET_WIDTH // 2
+        height = self.DATASET_HEIGHT // 2
 
         raster = epr.create_bitmask_raster(width, height)
         raster = self.product.read_bitmask_raster(bm_expr, xoffset, yoffset,
@@ -222,10 +222,10 @@ class TestProduct(unittest.TestCase):
     def test_read_bitmask_raster_with_invalid_bm_expr(self):
         bm_expr = 'l5_flags.LAND AND !l2_flags.BRIGHT'
 
-        xoffset = self.DATASET_WIDTH / 2
-        yoffset = self.DATASET_HEIGHT / 2
-        width = self.DATASET_WIDTH / 2
-        height = self.DATASET_HEIGHT / 2
+        xoffset = self.DATASET_WIDTH // 2
+        yoffset = self.DATASET_HEIGHT // 2
+        width = self.DATASET_WIDTH // 2
+        height = self.DATASET_HEIGHT // 2
 
         raster = epr.create_bitmask_raster(width, height)
         self.assertRaises(epr.EPRError, self.product.read_bitmask_raster,
@@ -238,10 +238,10 @@ class TestProduct(unittest.TestCase):
     def test_read_bitmask_raster_with_wrong_data_type(self):
         bm_expr = 'l2_flags.LAND AND !l2_flags.BRIGHT'
 
-        xoffset = self.DATASET_WIDTH / 2
-        yoffset = self.DATASET_HEIGHT / 2
-        width = self.DATASET_WIDTH / 2
-        height = self.DATASET_HEIGHT / 2
+        xoffset = self.DATASET_WIDTH // 2
+        yoffset = self.DATASET_HEIGHT // 2
+        width = self.DATASET_WIDTH // 2
+        height = self.DATASET_HEIGHT // 2
 
         raster = epr.create_raster(epr.E_TID_DOUBLE, width, height)
         self.assertRaises(epr.EPRError, self.product.read_bitmask_raster,
@@ -549,8 +549,8 @@ class TestBand(unittest.TestCase):
         src_height = self.product.get_scene_height()
         xstep = 2
         ystep = 3
-        width = (src_width - 1) / xstep + 1
-        height = (src_height - 1) / ystep + 1
+        width = (src_width - 1) // xstep + 1
+        height = (src_height - 1) // ystep + 1
         raster = self.band.create_compatible_raster(src_width, src_height,
                                                     xstep, ystep)
         self.assertTrue(isinstance(raster, epr.Raster))
@@ -1377,12 +1377,12 @@ class TestSampleModelFunctions(unittest.TestCase):
 class TestDirectInstantiation(unittest.TestCase):
     MSG_PATTERN = '"%s" class cannot be instantiated from Python'
 
-    if sys.version_info[:2] > (3, 2):
+    if sys.version_info[:2] >= (3, 2):
         # @COMPATIBILITY: python >= 3.2
         pass
     elif sys.version_info[:2] in ((2, 7), (3, 1)):
         # @COMPATIBILITY: unittest2, python2.7, python3.1
-        assertRaiserRegex = assertRaiserRegexp
+        assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
     else:
 
         # @COMPATIBILITY: python < 2.7
@@ -1390,7 +1390,7 @@ class TestDirectInstantiation(unittest.TestCase):
                               callable_obj=None, *args, **kwargs):
             try:
                 callable_obj(*args, **kwargs)
-            except expected_exception, exc_value:
+            except expected_exception as exc_value:
                 if isinstance(expected_regexp, basestring):
                     expected_regexp = re.compile(expected_regexp)
                 if not expected_regexp.search(str(exc_value)):
@@ -1401,7 +1401,7 @@ class TestDirectInstantiation(unittest.TestCase):
                     excName = expected_exception.__name__
                 else:
                     excName = str(expected_exception)
-                raise self.failureException, "%s not raised" % excName
+                raise self.failureException("%s not raised" % excName)
 
     def test_direct_dsd_instantiation(self):
         pattern = self.MSG_PATTERN % epr.DSD.__name__
