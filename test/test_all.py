@@ -66,7 +66,7 @@ def quiet(func):
             # using '/dev/null' doesn't work in python 3 because the file
             # object coannot be converted into a C FILE*
             #with file(os.devnull) as fd:
-            with tempfile.TemporaryFile() as fd:
+            with tempfile.TemporaryFile('w+') as fd:
                 sys.stdout = fd
                 sys.stderr = fd
                 ret = func(*args, **kwds)
@@ -188,14 +188,14 @@ class TestProduct(unittest.TestCase):
     def test_get_mph(self):
         record = self.product.get_mph()
         self.assertTrue(isinstance(record, epr.Record))
-        self.assertEqual(record.get_field('PRODUCT').get_elem(),
-                         self.PRODUCT_FILE)
+        product = record.get_field('PRODUCT').get_elem()
+        self.assertEqual(product.decode('ascii'), self.PRODUCT_FILE)
 
     def test_get_sph(self):
         record = self.product.get_sph()
         self.assertTrue(isinstance(record, epr.Record))
-        self.assertEqual(record.get_field('SPH_DESCRIPTOR').get_elem(),
-                         self.SPH_DESCRIPTOR)
+        sph_desct = record.get_field('SPH_DESCRIPTOR').get_elem()
+        self.assertEqual(sph_desct.decode('ascii'), self.SPH_DESCRIPTOR)
 
     def test_get_band_id(self):
         self.assertTrue(isinstance(self.product.get_band(self.BAND_NAME),
@@ -326,6 +326,9 @@ class TestProductHighLevelAPI(unittest.TestCase):
         self.assertEqual(mobj.group('n_bands'),
                          str(self.product.get_num_bands()))
 
+    def test_repr_type(self):
+        self.assertTrue(isinstance(repr(self.product), str))
+
     def test_str(self):
         lines = [repr(self.product), '']
         lines.extend(map(repr, self.product.datasets()))
@@ -333,6 +336,9 @@ class TestProductHighLevelAPI(unittest.TestCase):
         lines.extend(map(str, self.product.bands()))
         data = '\n'.join(lines)
         self.assertEqual(data, str(self.product))
+
+    def test_str_type(self):
+        self.assertTrue(isinstance(str(self.product), str))
 
 
 class TestDataset(unittest.TestCase):
@@ -414,11 +420,17 @@ class TestDatasetHighLevelAPI(unittest.TestCase):
         self.assertEqual(mobj.group('num'),
                          str(self.dataset.get_num_records()))
 
+    def test_repr_type(self):
+        self.assertTrue(isinstance(repr(self.dataset), str))
+
     def test_str(self):
         lines = [repr(self.dataset), '']
         lines.extend(map(str, self.dataset))
         data = '\n'.join(lines)
         self.assertEqual(data, str(self.dataset))
+
+    def test_str_type(self):
+        self.assertTrue(isinstance(str(self.dataset), str))
 
 
 class TestBand(unittest.TestCase):
@@ -682,6 +694,14 @@ class TestBandHighLevelAPI(unittest.TestCase):
             self.assertEqual(mobj.group('name'), band.get_name())
             self.assertEqual(mobj.group('product_id'), self.product.id_string)
 
+    def test_repr_type(self):
+        band = self.product.get_band_at(0)
+        self.assertTrue(isinstance(repr(band), str))
+
+    def test_str_type(self):
+        band = self.product.get_band_at(0)
+        self.assertTrue(isinstance(str(band), str))
+
 
 class TestCreateRaster(unittest.TestCase):
     RASTER_WIDTH = 400
@@ -896,6 +916,12 @@ class TestRasterHighLevelAPI(unittest.TestCase):
         self.assertEqual(mobj.group('lines'), str(self.raster.get_height()))
         self.assertEqual(mobj.group('pixels'), str(self.raster.get_width()))
 
+    def test_repr_type(self):
+        self.assertTrue(isinstance(repr(self.raster), str))
+
+    def test_str_type(self):
+        self.assertTrue(isinstance(str(self.raster), str))
+
 
 class TestRecord(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
@@ -1011,6 +1037,12 @@ class TestRecordHighLevelAPI(unittest.TestCase):
             index += 1
         self.assertEqual(index, self.record.get_num_fields())
 
+    def test_repr_type(self):
+        self.assertTrue(isinstance(repr(self.record), str))
+
+    def test_str_type(self):
+        self.assertTrue(isinstance(str(self.record), str))
+
 
 class TestMultipleRecordsHighLevelAPI(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
@@ -1029,7 +1061,7 @@ class TestMultipleRecordsHighLevelAPI(unittest.TestCase):
 
     def test_str_vs_print(self):
         for record in self.dataset:
-            with tempfile.TemporaryFile() as fd:
+            with tempfile.TemporaryFile('w+') as fd:
                 record.print_(fd)
                 fd.flush()
                 fd.seek(0)
@@ -1156,9 +1188,17 @@ class TestFieldHighLevelAPI(unittest.TestCase):
             self.assertEqual(mobj.group('type'),
                              epr.data_type_id_to_str(field.get_type()))
 
+    def test_repr_type(self):
+        field = self.record.get_field_at(0)
+        self.assertTrue(isinstance(repr(field), str))
+
+    def test_str_type(self):
+        field = self.record.get_field_at(0)
+        self.assertTrue(isinstance(str(field), str))
+
     def test_str_vs_print(self):
         for field in self.record:
-            with tempfile.TemporaryFile() as fd:
+            with tempfile.TemporaryFile('w+') as fd:
                 field.print_(fd)
                 fd.flush()
                 fd.seek(0)
@@ -1227,31 +1267,33 @@ class TestFieldHighLevelAPI2(unittest.TestCase):
 
 class TestDSD(unittest.TestCase):
     PRODUCT_FILE = TEST_PRODUCT
+    DSD_INDEX = 0
     DS_NAME = 'Quality ADS'
     DS_OFFSET = 12869
+    DS_TYPE = 'A'
     DS_SIZE = 160
     DSR_SIZE = 32
     NUM_DSR = 5
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
-        self.dsd = self.product.get_dsd_at(0)
+        self.dsd = self.product.get_dsd_at(self.DSD_INDEX)
 
     def test_index(self):
-        self.assertEqual(self.dsd.index, 0)
+        self.assertEqual(self.dsd.index, self.DSD_INDEX)
         self.assertTrue(isinstance(self.dsd.index, int))
 
     def test_ds_name(self):
         self.assertEqual(self.dsd.ds_name, self.DS_NAME)
-        self.assertTrue(isinstance(self.dsd.ds_name, basestring))
+        self.assertTrue(isinstance(self.dsd.ds_name, str))
 
     def test_ds_type(self):
-        self.assertEqual(self.dsd.ds_type, 'A')
-        self.assertTrue(isinstance(self.dsd.ds_type, basestring))
+        self.assertEqual(self.dsd.ds_type, self.DS_TYPE)
+        self.assertTrue(isinstance(self.dsd.ds_type, str))
 
     def test_filename(self):
         self.assertEqual(self.dsd.filename, '')
-        self.assertTrue(isinstance(self.dsd.filename, basestring))
+        self.assertTrue(isinstance(self.dsd.filename, str))
 
     def test_ds_offset(self):
         self.assertEqual(self.dsd.ds_offset, self.DS_OFFSET)
@@ -1304,6 +1346,12 @@ class TestDsdHighLevelAPI(unittest.TestCase):
         mobj = re.match(pattern, repr(self.dsd))
         self.assertNotEqual(mobj, None)
         self.assertEqual(mobj.group('name'), self.dsd.ds_name)
+
+    def test_repr_type(self):
+        self.assertTrue(isinstance(repr(self.dsd), str))
+
+    def test_str_type(self):
+        self.assertTrue(isinstance(str(self.dsd), str))
 
 
 class TestDataypeFunctions(unittest.TestCase):
@@ -1401,7 +1449,8 @@ class TestDirectInstantiation(unittest.TestCase):
             try:
                 callable_obj(*args, **kwargs)
             except expected_exception as exc_value:
-                if isinstance(expected_regexp, basestring):
+                import types
+                if isinstance(expected_regexp, types.StringTypes):
                     expected_regexp = re.compile(expected_regexp)
                 if not expected_regexp.search(str(exc_value)):
                     raise self.failureException('"%s" does not match "%s"' %
@@ -1443,7 +1492,7 @@ class TestDirectInstantiation(unittest.TestCase):
 
 class TestLibVersion(unittest.TestCase):
     def test_c_api_version(self):
-        self.assertTrue(isinstance(epr.EPR_C_API_VERSION, basestring))
+        self.assertTrue(isinstance(epr.EPR_C_API_VERSION, str))
 
 
 if __name__ == '__main__':

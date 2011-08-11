@@ -362,6 +362,7 @@ cdef extern from 'epr_api.h' nogil:
     EPR_SRaster* epr_create_bitmask_raster(uint, uint, uint, uint)
 
 
+from cpython.version cimport PY_MAJOR_VERSION
 from cpython.object cimport PyObject_AsFileDescriptor
 cimport numpy as np
 np.import_array()
@@ -372,10 +373,25 @@ from collections import namedtuple
 import numpy as np
 
 
+# internal utils
+_DEFAULT_FS_ENCODING = sys.getfilesystemencoding()
+
+
+cdef bytes _to_byte(s, encoding='UTF-8'):
+    if hasattr(s, 'encode'):
+        return s.encode(encoding)
+    else:
+        # assert isinstance(s, bytes)
+        return s
+
+
 # utils
 EPRTime = namedtuple('EPRTime', ('days', 'seconds', 'microseconds'))
 
-EPR_C_API_VERSION = EPR_PRODUCT_API_VERSION_STR
+if PY_MAJOR_VERSION >= 3:
+    EPR_C_API_VERSION = EPR_PRODUCT_API_VERSION_STR.decode('ascii')
+else:
+    EPR_C_API_VERSION = EPR_PRODUCT_API_VERSION_STR
 
 # EPR_DataTypeId
 E_TID_UNKNOWN = e_tid_unknown
@@ -554,7 +570,12 @@ def get_data_type_size(EPR_EDataTypeId type_id):
 def data_type_id_to_str(EPR_EDataTypeId type_id):
     '''Gets the 'C' data type string for the given data type'''
 
-    return epr_data_type_id_to_str(type_id)
+    cdef char* type_id_str = <char*>epr_data_type_id_to_str(type_id)
+
+    if PY_MAJOR_VERSION >= 3:
+        return type_id_str.decode('ascii')
+    else:
+        return type_id_str
 
 
 def get_scaling_method_name(method):
@@ -610,19 +631,28 @@ cdef class DSD(EprObject):
         '''The dataset name'''
 
         def __get__(self):
-            return self._ptr.ds_name
+            if PY_MAJOR_VERSION >= 3:
+                return self._ptr.ds_name.decode('ascii')
+            else:
+                return self._ptr.ds_name
 
     property ds_type:
         '''The dataset type descriptor'''
 
         def __get__(self):
-            return self._ptr.ds_type
+            if PY_MAJOR_VERSION >= 3:
+                return self._ptr.ds_type.decode('ascii')
+            else:
+                return self._ptr.ds_type
 
     property filename:
         '''The filename in the DDDB with the description of this dataset'''
 
         def __get__(self):
-            return self._ptr.filename
+            if PY_MAJOR_VERSION >= 3:
+                return self._ptr.filename.decode('ascii')
+            else:
+                return self._ptr.filename
 
     property ds_offset:
         '''The offset of dataset-information the product file'''
@@ -750,12 +780,20 @@ cdef class Field(EprObject):
         if unit is NULL:
             return ''
         else:
-            return <char*>unit
+            if PY_MAJOR_VERSION >= 3:
+                return (<char*>unit).decode('ascii')
+            else:
+                return <char*>unit
 
     def get_description(self):
         '''Gets the description of the field'''
 
-        return epr_get_field_description(self._ptr)
+        cdef char* description = <char*>epr_get_field_description(self._ptr)
+
+        if PY_MAJOR_VERSION >= 3:
+            return description.decode('ascii')
+        else:
+            return description
 
     def get_num_elems(self):
         '''Gets the number of elements of the field'''
@@ -765,7 +803,12 @@ cdef class Field(EprObject):
     def get_name(self):
         '''Gets the name of the field'''
 
-        return epr_get_field_name(self._ptr)
+        cdef char* name = <char*>epr_get_field_name(self._ptr)
+
+        if PY_MAJOR_VERSION >= 3:
+            return name.decode('ascii')
+        else:
+            return name
 
     def get_type(self):
         '''Gets the type of the field'''
@@ -909,7 +952,7 @@ cdef class Field(EprObject):
     # --- high level interface ------------------------------------------------
     def __repr__(self):
         return 'epr.Field("%s") %d %s elements' % (self.get_name(),
-                self.get_num_elems(), data_type_id_to_str(self.get_type()))
+                    self.get_num_elems(), data_type_id_to_str(self.get_type()))
 
     def __str__(self):
         cdef EPR_DataTypeId type_ = self.get_type()
@@ -1136,7 +1179,8 @@ cdef class Record(EprObject):
         '''
 
         cdef EPR_SField* field_ptr
-        field_ptr = <EPR_SField*>epr_get_field(self._ptr, name)
+        cname = _to_byte(name)
+        field_ptr = <EPR_SField*>epr_get_field(self._ptr, cname)
         if field_ptr is NULL:
             pyepr_null_ptr_error('unable to get field "%s"' % name)
 
@@ -1170,10 +1214,14 @@ cdef class Record(EprObject):
 
         cdef EPR_SField* field_ptr
         cdef int idx
+
         names = []
         for idx in range(self.get_num_fields()):
             field_ptr = <EPR_SField*>epr_get_field_at(self._ptr, idx)
             names.append(epr_get_field_name(field_ptr))
+
+        if PY_MAJOR_VERSION >= 3:
+            names = [name.decode('ascii') for name in names]
 
         return names
 
@@ -1588,7 +1636,10 @@ cdef class Band(EprObject):
             if self._ptr.bm_expr is NULL:
                 return None
             else:
-                return self._ptr.bm_expr
+                if PY_MAJOR_VERSION >= 3:
+                    return self._ptr.bm_expr.decode('ascii')
+                else:
+                    return self._ptr.bm_expr
 
     property unit:
         '''The geophysical unit for the band's pixel values'''
@@ -1597,7 +1648,10 @@ cdef class Band(EprObject):
             if self._ptr.unit is NULL:
                 return None
             else:
-                return self._ptr.unit
+                if PY_MAJOR_VERSION >= 3:
+                    return self._ptr.unit.decode('ascii')
+                else:
+                    return self._ptr.unit
 
     property description:
         '''A short description of the band's contents'''
@@ -1606,7 +1660,10 @@ cdef class Band(EprObject):
             if self._ptr.description is NULL:
                 return None
             else:
-                return self._ptr.description
+                if PY_MAJOR_VERSION >= 3:
+                    return self._ptr.description.decode('ascii')
+                else:
+                    return self._ptr.description
 
     property lines_mirrored:
         '''Mirrored lines flag
@@ -1623,7 +1680,12 @@ cdef class Band(EprObject):
     def get_name(self):
         '''Gets the name of the band'''
 
-        return epr_get_band_name(self._ptr)
+        cdef char* name = <char*>epr_get_band_name(self._ptr)
+
+        if PY_MAJOR_VERSION >= 3:
+            return name.decode('ascii')
+        else:
+            return name
 
     # @TODO: default values for src_width and src_height
     def create_compatible_raster(self, uint src_width, uint src_height,
@@ -1855,20 +1917,35 @@ cdef class Dataset(EprObject):
             if self._ptr.description is NULL:
                 return ''
             else:
-                return self._ptr.description
+                if PY_MAJOR_VERSION >= 3:
+                    return self._ptr.description.decode('ascii')
+                else:
+                    return self._ptr.description
 
     def get_name(self):
         '''Gets the name of the dataset'''
 
+        cdef char* name
+
         if self._ptr is not NULL:
-            return epr_get_dataset_name(self._ptr)
+            name = <char*>epr_get_dataset_name(self._ptr)
+            if PY_MAJOR_VERSION >= 3:
+                return name.decode('ascii')
+            else:
+                return name
         return ''
 
     def get_dsd_name(self):
         '''Gets the name of the DSD (dataset descriptor)'''
 
+        cdef char* name
+
         if self._ptr is not NULL:
-            return epr_get_dsd_name(self._ptr)
+            name = <char*>epr_get_dsd_name(self._ptr)
+            if PY_MAJOR_VERSION >= 3:
+                return name.decode('ascii')
+            else:
+                return name
         return ''
 
     def get_num_records(self):
@@ -1993,8 +2070,9 @@ cdef class Product(EprObject):
     cdef EPR_SProductId* _ptr
 
     def __cinit__(self, filename, *args, **kargs):
+        cfilename = _to_byte(filename, _DEFAULT_FS_ENCODING)
         with nogil:
-            self._ptr = epr_open_product(filename)
+            self._ptr = epr_open_product(cfilename)
 
         if self._ptr is NULL:
             pyepr_null_ptr_error('unable to open %s' % filename)
@@ -2017,7 +2095,10 @@ cdef class Product(EprObject):
             if self._ptr.file_path is NULL:
                 return None
             else:
-                return self._ptr.file_path
+                if PY_MAJOR_VERSION >= 3:
+                    return self._ptr.file_path.decode('ascii')
+                else:
+                    return self._ptr.file_path
 
     # @TODO: check
     #property istream:
@@ -2053,7 +2134,10 @@ cdef class Product(EprObject):
             if self._ptr.id_string is NULL:
                 return None
             else:
-                return self._ptr.id_string
+                if PY_MAJOR_VERSION >= 3:
+                    return self._ptr.id_string.decode('ascii')
+                else:
+                    return self._ptr.id_string
 
     property meris_iodd_version:
         '''For MERIS L1b and RR and FR to provide backward compatibility'''
@@ -2120,9 +2204,10 @@ cdef class Product(EprObject):
         '''
 
         cdef EPR_SDatasetId* dataset_id
-        dataset_id = epr_get_dataset_id(self._ptr, name)
+        cname = _to_byte(name)
+        dataset_id = epr_get_dataset_id(self._ptr, cname)
         if dataset_id is NULL:
-            pyepr_null_ptr_error('unable to get dataset "%s"' % name)
+            pyepr_null_ptr_error(r'unable to get dataset "%s"' % name)
 
         return new_dataset(dataset_id, self)
 
@@ -2179,7 +2264,8 @@ cdef class Product(EprObject):
         '''
 
         cdef EPR_SBandId* band_id
-        band_id = epr_get_band_id(self._ptr, name)
+        cname = _to_byte(name)
+        band_id = epr_get_band_id(self._ptr, cname)
         if band_id is NULL:
             pyepr_null_ptr_error('unable to get band "%s"' % name)
 
@@ -2204,7 +2290,7 @@ cdef class Product(EprObject):
 
         return new_band(band_id, self)
 
-    def read_bitmask_raster(self, char* bm_expr, int xoffset, int yoffset,
+    def read_bitmask_raster(self, bm_expr, int xoffset, int yoffset,
                             Raster raster not None):
         '''Calculates a bit-mask raster
 
@@ -2237,7 +2323,8 @@ cdef class Product(EprObject):
 
         '''
 
-        cdef int ret = epr_read_bitmask_raster(self._ptr, bm_expr,
+        c_bm_expr = _to_byte(bm_expr)
+        cdef int ret = epr_read_bitmask_raster(self._ptr, c_bm_expr,
                                                xoffset, yoffset,
                                                (<Raster>raster)._ptr)
         if ret != 0:
@@ -2255,10 +2342,14 @@ cdef class Product(EprObject):
 
         cdef EPR_SDatasetId* dataset_ptr
         cdef int idx
+
         names = []
         for idx in range(self.get_num_datasets()):
             dataset_ptr = epr_get_dataset_id_at(self._ptr, idx)
             names.append(epr_get_dataset_name(dataset_ptr))
+
+        if PY_MAJOR_VERSION >= 3:
+            names = [name.decode('ascii') for name in names]
 
         return names
 
@@ -2271,10 +2362,14 @@ cdef class Product(EprObject):
 
         cdef EPR_SBandId* band_ptr
         cdef int idx
+
         names = []
         for idx in range(self.get_num_bands()):
             band_ptr = epr_get_band_id_at(self._ptr, idx)
             names.append(epr_get_band_name(band_ptr))
+
+        if PY_MAJOR_VERSION >= 3:
+            names = [name.decode('ascii') for name in names]
 
         return names
 
