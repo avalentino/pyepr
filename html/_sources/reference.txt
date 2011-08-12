@@ -1,7 +1,6 @@
 API Reference
 =============
 
-
 .. module:: epr
    :synopsis: Python bindings for ENVISAT Product Reader C API
 
@@ -875,9 +874,9 @@ Raster
 
       Raster data exposed as :class:`numpy.ndarray` object
 
-      .. note:: this property shares the data buffer with the
-                :class:`Raster` object so any change in its contents
-                is also reflected to the :class:`Raster` object
+      .. note:: this property shares the data buffer with the :class:`Raster`
+                object so any change in its contents is also reflected to
+                the :class:`Raster` object
 
       .. note:: this property has no correspondent in the C API
 

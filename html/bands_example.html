@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Exporting band data &mdash; PyEPR 0.5.1a documentation</title>
+    <title>Exporting band data &mdash; PyEPR 0.6dev documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.5.1a',
+        VERSION:     '0.6dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.5.1a documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.6dev documentation" href="index.html" />
     <link rel="up" title="Tutorials" href="tutorials.html" />
     <link rel="next" title="Exporting bitmasks" href="bitmask_example.html" />
     <link rel="prev" title="Interactive use of PyEPR" href="interactive_use.html" /> 
@@ -44,7 +44,7 @@
         <li class="right" >
           <a href="interactive_use.html" title="Interactive use of PyEPR"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.5.1a documentation</a> &raquo;</li>
+        <li><a href="index.html">PyEPR 0.6dev documentation</a> &raquo;</li>
           <li><a href="tutorials.html" accesskey="U">Tutorials</a> &raquo;</li> 
       </ul>
     </div>  
@@ -63,9 +63,10 @@ and generate flat binary rasters using <a class="reference external" href="https
 translation of the C sample program <a class="reference external" href="https://github.com/bcdev/epr-api/blob/master/src/examples/write_bands.c">write_bands.c</a> bundled with the
 EPR API distribution.</p>
 <p>The program is invoked as follows:</p>
-<div class="highlight-python"><pre>$ python write_bands.py &lt;envisat-product&gt; \
-&lt;output directory for the raster file&gt; &lt;dataset name 1&gt; \
-[&lt;dataset name 2&gt; ... &lt;dataset name N&gt;]</pre>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python write_bands.py &lt;envisat-product&gt; <span class="se">\</span>
+&lt;output directory <span class="k">for </span>the raster file&gt; &lt;dataset name 1&gt; <span class="se">\</span>
+<span class="o">[</span>&lt;dataset name 2&gt; ... &lt;dataset name N&gt;<span class="o">]</span>
+</pre></div>
 </div>
 <div class="section" id="import-section">
 <h2>Import section<a class="headerlink" href="#import-section" title="Permalink to this headline">¶</a></h2>
@@ -238,7 +239,7 @@ with the band data:</p>
 </div>
 <p>Please note that it has been used <a class="reference internal" href="reference.html#epr.Raster.data" title="epr.Raster.data"><tt class="xref py py-data docutils literal"><span class="pre">epr.Raster.data</span></tt></a> attribute of the
 <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> objects that exposes <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> data with the
-powerful <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-3071eab)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> interface.</p>
+powerful <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-57b56bc)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> interface.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>Copying one line at time is not the best way to perform the task
@@ -327,13 +328,13 @@ in <a class="reference external" href="http://www.python.org">Python</a>. It has
         <li class="right" >
           <a href="interactive_use.html" title="Interactive use of PyEPR"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.5.1a documentation</a> &raquo;</li>
+        <li><a href="index.html">PyEPR 0.6dev documentation</a> &raquo;</li>
           <li><a href="tutorials.html" >Tutorials</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Antonio Valentino.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre/e4e197388bdd.
     </div>
   </body>
 </html>

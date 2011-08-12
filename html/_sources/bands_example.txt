@@ -10,7 +10,9 @@ The example code (:download:`examples/write_bands.py`) is a direct
 translation of the C sample program `write_bands.c`_ bundled with the
 EPR API distribution.
 
-The program is invoked as follows::
+The program is invoked as follows:
+
+.. code-block:: sh
 
     $ python write_bands.py <envisat-product> \
     <output directory for the raster file> <dataset name 1> \
@@ -183,4 +185,3 @@ powerful :class:`numpy.ndarray` interface.
 
 .. _Python: http://www.python.org
 .. _pythonic: http://www.cafepy.com/article/be_pythonic
-

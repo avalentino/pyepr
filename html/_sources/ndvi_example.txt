@@ -9,7 +9,9 @@ The example code (:download:`examples/write_ndvi.py`) is a direct
 translation of the C sample program `write_ndvi.c`_ bundled with the
 EPR API distribution.
 
-The program is invoked as follows::
+The program is invoked as follows:
+
+.. code-block:: sh
 
     $ python write_ndvi.py <envisat-oroduct> <output-file>
 
@@ -169,5 +171,4 @@ used to write the NDVI of the pixel n the file in binary format.
 .. _ENVISAT: http://envisat.esa.int
 .. _Python: http://www.python.org
 .. _pythonic: http://www.cafepy.com/article/be_pythonic
-
 

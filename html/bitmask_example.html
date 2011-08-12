@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Exporting bitmasks &mdash; PyEPR 0.5.1a documentation</title>
+    <title>Exporting bitmasks &mdash; PyEPR 0.6dev documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.5.1a',
+        VERSION:     '0.6dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.5.1a documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.6dev documentation" href="index.html" />
     <link rel="up" title="Tutorials" href="tutorials.html" />
     <link rel="next" title="NDVI computation" href="ndvi_example.html" />
     <link rel="prev" title="Exporting band data" href="bands_example.html" /> 
@@ -44,7 +44,7 @@
         <li class="right" >
           <a href="bands_example.html" title="Exporting band data"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.5.1a documentation</a> &raquo;</li>
+        <li><a href="index.html">PyEPR 0.6dev documentation</a> &raquo;</li>
           <li><a href="tutorials.html" accesskey="U">Tutorials</a> &raquo;</li> 
       </ul>
     </div>  
@@ -62,8 +62,9 @@ as &#8220;raw&#8221; image using <a class="reference external" href="https://git
 translation of the C sample program <a class="reference external" href="https://github.com/bcdev/epr-api/blob/master/src/examples/write_bitmask.c">write_bitmask.c</a> bundled with the
 EPR API distribution.</p>
 <p>The program is invoked as follows:</p>
-<div class="highlight-python"><pre>$ python write_bitmask.py &lt;envisat-product&gt; &lt;bitmask-expression&gt; \
-&lt;output-file&gt;</pre>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python write_bitmask.py &lt;envisat-product&gt; &lt;bitmask-expression&gt; <span class="se">\</span>
+&lt;output-file&gt;
+</pre></div>
 </div>
 <p>The <a class="reference download internal" href="_downloads/write_bitmask.py"><tt class="xref download docutils literal"><span class="pre">examples/write_bitmask.py</span></tt></a> code consists in a single function
 that also includes command line arguments handling:</p>
@@ -258,9 +259,9 @@ in the DDDB) can be composed with “(”, ”)”, “NOT”, “AND”, “OR�
 <div class="highlight-python"><pre>NOT flags.WATER AND flags.TURBID_S</pre>
 </div>
 <p>Finally data are written to disk as a flat binary file using the
-<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.tofile.html#numpy.ndarray.tofile" title="(in NumPy v2.0.dev-3071eab)"><tt class="xref py py-meth docutils literal"><span class="pre">numpy.ndarray.tofile()</span></tt></a> method of the <a class="reference internal" href="reference.html#epr.Raster.data" title="epr.Raster.data"><tt class="xref py py-data docutils literal"><span class="pre">epr.Raster.data</span></tt></a> attribute
+<tt class="xref py py-meth docutils literal"><span class="pre">numpy.ndarray.tofile()</span></tt> method of the <a class="reference internal" href="reference.html#epr.Raster.data" title="epr.Raster.data"><tt class="xref py py-data docutils literal"><span class="pre">epr.Raster.data</span></tt></a> attribute
 of the <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> objects that exposes data via the
-<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-3071eab)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> interface:</p>
+<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-57b56bc)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> interface:</p>
 <div class="highlight-python"><div class="highlight"><pre>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">image_file_path</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_stream</span><span class="p">:</span>
         <span class="n">bm_raster</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">out_stream</span><span class="p">)</span>
 </pre></div>
@@ -313,13 +314,13 @@ of the <a class="reference internal" href="reference.html#epr.Raster" title="epr
         <li class="right" >
           <a href="bands_example.html" title="Exporting band data"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.5.1a documentation</a> &raquo;</li>
+        <li><a href="index.html">PyEPR 0.6dev documentation</a> &raquo;</li>
           <li><a href="tutorials.html" >Tutorials</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Antonio Valentino.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre/e4e197388bdd.
     </div>
   </body>
 </html>
