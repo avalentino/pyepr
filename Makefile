@@ -22,14 +22,17 @@ PYTHON = python
 TEST_DATSET_URL = "http://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz"
 TEST_DATSET = test/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1
 
-.PHONY: default sdist doc clean distclean check debug data upload
+.PHONY: default ext sdist doc clean distclean check debug data upload
 
-default: epr.so
+default: ext
+
+ext: src/epr.pyx
+	$(PYTHON) setup.py build_ext --inplace
 
 sdist:
 	$(PYTHON) setup.py build_ext --inplace
 	$(PYTHON) setup.py clean
-	$(RM) epr.so
+	$(RM) *.so
 	$(MAKE) -C doc html
 	$(RM) -r doc/_build
 	$(PYTHON) setup.py sdist
@@ -37,7 +40,7 @@ sdist:
 upload:
 	$(PYTHON) setup.py build_ext --inplace
 	$(PYTHON) setup.py clean
-	$(RM) epr.so
+	$(RM) *.so
 	$(MAKE) -C doc html
 	$(RM) -r doc/_build
 	$(PYTHON) setup.py sdist upload -s -i 24B76CFE
@@ -57,16 +60,13 @@ distclean: clean
 	$(RM) $(TEST_DATSET)
 	$(RM) -r doc/html
 
-check: epr.so $(TEST_DATSET)
+check: ext $(TEST_DATSET)
 	$(PYTHON) test/test_all.py --verbose
 
 debug:
 	$(PYTHON) setup.py build_ext --inplace --debug
 
 data: $(TEST_DATSET)
-
-epr.so: src/epr.pyx
-	$(PYTHON) setup.py build_ext --inplace
 
 $(TEST_DATSET):
 	wget -P test $(TEST_DATSET_URL)
