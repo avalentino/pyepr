@@ -1,8 +1,8 @@
 Change history
 ==============
 
-PyEPR 0.6.0 (in development)
-----------------------------
+PyEPR 0.6 (in development)
+--------------------------
 
 * full support for `Python 3`_
 * improved code highligh in the documentation
