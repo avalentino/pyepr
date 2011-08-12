@@ -19,11 +19,6 @@
 # along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
-
 import os
 import re
 import sys
@@ -103,6 +98,21 @@ class TestOpenProduct(unittest.TestCase):
         product = epr.open(self.PRODUCT_FILE)
         self.assertTrue(isinstance(product, epr.Product))
 
+    if 'unicode' in dir(__builtins__):
+
+        def test_open_unicode(self):
+            filename = unicode(self.PRODUCT_FILE)
+            product = epr.open(filename)
+            self.assertTrue(isinstance(product, epr.Product))
+
+    else:
+
+        def test_open_bytes(self):
+            filename = self.PRODUCT_FILE.encode('UTF-8')
+            product = epr.open(filename)
+            self.assertTrue(isinstance(filename, bytes))
+            self.assertTrue(isinstance(product, epr.Product))
+
     def test_product_constructor(self):
         product = epr.Product(self.PRODUCT_FILE)
         self.assertTrue(isinstance(product, epr.Product))
@@ -178,6 +188,20 @@ class TestProduct(unittest.TestCase):
         dataset = self.product.get_dataset(self.DATASET_NAME)
         self.assertTrue(dataset)
 
+    if 'unicode' in dir(__builtins__):
+
+        def test_get_dataset_unicode(self):
+            dataset = self.product.get_dataset(unicode(self.DATASET_NAME))
+            self.assertTrue(dataset)
+
+    else:
+
+        def test_get_dataset_byrtes(self):
+            filename = self.DATASET_NAME.encode('UTF-8')
+            dataset = self.product.get_dataset(filename)
+            self.assertTrue(isinstance(filename, bytes))
+            self.assertTrue(dataset)
+
     def test_datasets(self):
         datasets = [self.product.get_dataset_at(idx)
                         for idx in range(self.product.get_num_datasets())]
@@ -204,6 +228,21 @@ class TestProduct(unittest.TestCase):
         self.assertTrue(isinstance(self.product.get_band(self.BAND_NAME),
                                    epr.Band))
 
+    if 'unicode' in dir(__builtins__):
+
+        def test_get_band_id_unicode(self):
+            band_name = unicode(self.BAND_NAME)
+            self.assertTrue(isinstance(self.product.get_band(band_name),
+                                       epr.Band))
+
+    else:
+
+        def test_get_band_id_bytes(self):
+            band_name = self.BAND_NAME.encode('UTF-8')
+            self.assertTrue(isinstance(band_name, bytes))
+            self.assertTrue(isinstance(self.product.get_band(self.BAND_NAME),
+                                       epr.Band))
+
     def test_get_band_id_invalid_name(self):
         self.assertRaises(ValueError, self.product.get_band, '')
 
@@ -228,6 +267,41 @@ class TestProduct(unittest.TestCase):
         self.assertTrue(isinstance(raster, epr.Raster))
         self.assertEqual(raster.get_width(), width)
         self.assertEqual(raster.get_height(), height)
+
+    if 'unicode' in dir(__builtins__):
+
+        def test_read_bitmask_raster_unicode(self):
+            bm_expr = unicode('l2_flags.LAND AND !l2_flags.BRIGHT')
+
+            xoffset = self.DATASET_WIDTH // 2
+            yoffset = self.DATASET_HEIGHT // 2
+            width = self.DATASET_WIDTH // 2
+            height = self.DATASET_HEIGHT // 2
+
+            raster = epr.create_bitmask_raster(width, height)
+            raster = self.product.read_bitmask_raster(bm_expr,
+                                                      xoffset, yoffset, raster)
+            self.assertTrue(isinstance(raster, epr.Raster))
+            self.assertEqual(raster.get_width(), width)
+            self.assertEqual(raster.get_height(), height)
+
+    else:
+
+        def test_read_bitmask_raster_bytes(self):
+            bm_expr = 'l2_flags.LAND AND !l2_flags.BRIGHT'.encode('UTF-8')
+            self.assertTrue(isinstance(bm_expr, bytes))
+
+            xoffset = self.DATASET_WIDTH // 2
+            yoffset = self.DATASET_HEIGHT // 2
+            width = self.DATASET_WIDTH // 2
+            height = self.DATASET_HEIGHT // 2
+
+            raster = epr.create_bitmask_raster(width, height)
+            raster = self.product.read_bitmask_raster(bm_expr,
+                                                      xoffset, yoffset, raster)
+            self.assertTrue(isinstance(raster, epr.Raster))
+            self.assertEqual(raster.get_width(), width)
+            self.assertEqual(raster.get_height(), height)
 
     def test_read_bitmask_raster_with_invalid_bm_expr(self):
         bm_expr = 'l5_flags.LAND AND !l2_flags.BRIGHT'
@@ -973,6 +1047,20 @@ class TestRecord(unittest.TestCase):
     def test_get_field(self):
         field = self.record.get_field(self.FIELD_NAME)
         self.assertTrue(isinstance(field, epr.Field))
+
+    if 'unicode' in dir(__builtins__):
+
+        def test_get_field_unicode(self):
+            field = self.record.get_field(unicode(self.FIELD_NAME))
+            self.assertTrue(isinstance(field, epr.Field))
+
+    else:
+
+        def test_get_field_bytes(self):
+            field_name = self.FIELD_NAME.encode('UTF-8')
+            field = self.record.get_field(self.FIELD_NAME)
+            self.assertTrue(isinstance(field_name, bytes))
+            self.assertTrue(isinstance(field, epr.Field))
 
     def test_get_field_invlid_name(self):
         self.assertRaises(ValueError, self.record.get_field, '')
