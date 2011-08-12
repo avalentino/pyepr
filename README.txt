@@ -36,7 +36,7 @@ Requirements
 In order to use PyEPR it is needed that the following software are
 correctly installed and configured:
 
-* Python2_ >= 2.6 and Python3_ >= 3.1
+* Python2_ >= 2.6 or Python3_ >= 3.1
 * numpy_ >= 1.3.0
 * `EPR API`_ >= 2.2
 * a reasonably updated C compiler (build only)
