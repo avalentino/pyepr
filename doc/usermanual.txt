@@ -226,16 +226,18 @@ amount of data contained in ENVISAT_ products.
 * the `Raster.data` property is a 2D array exposes data contained in the
   :class:`epr.Raster` object in form of :class:`numpy.ndarray`
 
-  .. note:: :attr:`epr.Raster.data` directly exposes :class:`epr.Raster`
-            data i.e. shares the same memory buffer with :class:`epr.Raster`::
+  .. note::
 
-                >>> raster.get_pixel(i, j)
-                5
-                >>> raster.data[i, j]
-                5
-                >>> raster.data[i, j] = 3
-                >>> raster.get_pixel(i, j)
-                3
+        :attr:`epr.Raster.data` directly exposes :class:`epr.Raster`
+        i.e. shares the same memory buffer with :class:`epr.Raster`::
+
+            >>> raster.get_pixel(i, j)
+            5
+            >>> raster.data[i, j]
+            5
+            >>> raster.data[i, j] = 3
+            >>> raster.get_pixel(i, j)
+            3
 
 * :meth:`epr.Band.read_as_array` is an additional method provided by
   the Python_ EPR API (does not exist any correspondent function in the
