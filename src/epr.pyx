@@ -2455,12 +2455,19 @@ def open(filename):
 _EPR_C_LIB = _CLib.__new__(_CLib)
 
 
-# @TODO: check
 import atexit
 
 
 @atexit.register
 def _close_api():
+    # ensure that all EprObject(s) are collected before removing the last
+    # reference to _EPR_C_LIB
+    import gc
+    gc.collect()
+
     global _EPR_C_LIB
     _EPR_C_LIB = None
-del atexit
+
+
+# clean namespace
+del atexit, namedtuple
