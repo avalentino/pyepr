@@ -34,7 +34,9 @@ import functools
 
 import numpy as np
 
-sys.path.insert(0, os.pardir)
+TESTDIR = os.path.abspath(os.path.dirname(__file__))
+sys.path.insert(0, os.path.join(TESTDIR, os.pardir))
+
 import epr
 
 
@@ -95,7 +97,7 @@ def equal_products(product1, product2):
 
 
 class TestOpenProduct(unittest.TestCase):
-    PRODUCT_FILE = TEST_PRODUCT
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
 
     def test_open(self):
         product = epr.open(self.PRODUCT_FILE)
@@ -113,7 +115,7 @@ class TestOpenProduct(unittest.TestCase):
 
 
 class TestProduct(unittest.TestCase):
-    PRODUCT_FILE = TEST_PRODUCT
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     ID_STRING = 'MER_LRC_2PTGMV20000620_104318_00000104X000_00000'
     TOT_SIZE = 407461
 
@@ -140,7 +142,7 @@ class TestProduct(unittest.TestCase):
         self.product = epr.Product(self.PRODUCT_FILE)
 
     def test_file_path_property(self):
-        self.assertEqual(self.product.file_path, TEST_PRODUCT)
+        self.assertEqual(self.product.file_path, self.PRODUCT_FILE)
 
     def test_tot_size_property(self):
         self.assertEqual(self.product.tot_size, self.TOT_SIZE)
@@ -189,7 +191,8 @@ class TestProduct(unittest.TestCase):
         record = self.product.get_mph()
         self.assertTrue(isinstance(record, epr.Record))
         product = record.get_field('PRODUCT').get_elem()
-        self.assertEqual(product.decode('ascii'), self.PRODUCT_FILE)
+        self.assertEqual(product.decode('ascii'),
+                        os.path.basename(self.PRODUCT_FILE))
 
     def test_get_sph(self):
         record = self.product.get_sph()
@@ -260,7 +263,7 @@ class TestProduct(unittest.TestCase):
 
 
 class TestProductHighLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = TEST_PRODUCT
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAMES = TestProduct.DATASET_NAMES
     BAND_NAMES = [
         'latitude',
@@ -342,7 +345,7 @@ class TestProductHighLevelAPI(unittest.TestCase):
 
 
 class TestDataset(unittest.TestCase):
-    PRODUCT_FILE = TEST_PRODUCT
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = 'Vapour_Content'
     DATASET_DESCRIPTION = 'Level 2 MDS Total Water vapour'
     NUM_RECORDS = 149
@@ -387,7 +390,7 @@ class TestDataset(unittest.TestCase):
 
 
 class TestDatasetHighLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = TEST_PRODUCT
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = TestDataset.DATASET_NAME
 
     def setUp(self):
@@ -434,7 +437,7 @@ class TestDatasetHighLevelAPI(unittest.TestCase):
 
 
 class TestBand(unittest.TestCase):
-    PRODUCT_FILE = TEST_PRODUCT
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     BAND_NAMES = (
         'latitude',
         'longitude',
@@ -680,7 +683,7 @@ class TestBand(unittest.TestCase):
 
 
 class TestBandHighLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = TEST_PRODUCT
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
@@ -872,7 +875,7 @@ class TestRaster(unittest.TestCase):
 
 
 class TestRasterRead(TestRaster):
-    PRODUCT_FILE = TEST_PRODUCT
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     BAND_NAME = TestBand.BAND_NAME
     RASTER_XOFFSET = TestBand.XOFFSET
     RASTER_YOFFSET = TestBand.YOFFSET
@@ -924,7 +927,7 @@ class TestRasterHighLevelAPI(unittest.TestCase):
 
 
 class TestRecord(unittest.TestCase):
-    PRODUCT_FILE = TEST_PRODUCT
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = 'Quality_ADS'
     NUM_FIELD = 21
     FIELD_NAME = 'perc_water_abs_aero'
@@ -983,7 +986,7 @@ class TestRecord(unittest.TestCase):
 
 
 class TestRecordHighLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = TEST_PRODUCT
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = TestRecord.DATASET_NAME
     FIELD_NAMES = [
         'dsr_time',
@@ -1045,7 +1048,7 @@ class TestRecordHighLevelAPI(unittest.TestCase):
 
 
 class TestMultipleRecordsHighLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = TEST_PRODUCT
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = TestProduct.DATASET_NAME
 
     def setUp(self):
@@ -1072,7 +1075,7 @@ class TestMultipleRecordsHighLevelAPI(unittest.TestCase):
 
 
 class TestMphRecordHighLevelAPI(TestRecordHighLevelAPI):
-    PRODUCT_FILE = TEST_PRODUCT
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = 'MPH'
     FIELD_NAMES = [
         'PRODUCT',
@@ -1095,7 +1098,7 @@ class TestMphRecordHighLevelAPI(TestRecordHighLevelAPI):
 
 
 class TestField(unittest.TestCase):
-    PRODUCT_FILE = TEST_PRODUCT
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = 'Quality_ADS'
 
     FIELD_NAME = 'perc_water_abs_aero'
@@ -1169,7 +1172,7 @@ class TestFieldWithMiltipleElems(TestField):
 
 
 class TestFieldHighLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = TEST_PRODUCT
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = TestProduct.DATASET_NAME
 
     def setUp(self):
@@ -1235,7 +1238,7 @@ class TestFieldHighLevelAPI(unittest.TestCase):
 
 
 class TestFieldHighLevelAPI2(unittest.TestCase):
-    PRODUCT_FILE = TEST_PRODUCT
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
@@ -1266,7 +1269,7 @@ class TestFieldHighLevelAPI2(unittest.TestCase):
 
 
 class TestDSD(unittest.TestCase):
-    PRODUCT_FILE = TEST_PRODUCT
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DSD_INDEX = 0
     DS_NAME = 'Quality ADS'
     DS_OFFSET = 12869
@@ -1335,7 +1338,7 @@ class TestDSD(unittest.TestCase):
 
 
 class TestDsdHighLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = TEST_PRODUCT
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
 
     def setUp(self):
         product = epr.Product(self.PRODUCT_FILE)

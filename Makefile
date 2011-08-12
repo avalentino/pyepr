@@ -58,7 +58,7 @@ distclean: clean
 	$(RM) -r doc/html
 
 check: epr.so $(TEST_DATSET)
-	cd test && $(PYTHON) test_all.py --verbose
+	$(PYTHON) test/test_all.py --verbose
 
 debug:
 	$(PYTHON) setup.py build_ext --inplace --debug
