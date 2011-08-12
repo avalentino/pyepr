@@ -32,7 +32,7 @@ except ImportError:
 
 setup(
     name='pyepr',
-    version='0.5.1',
+    version='0.6.0',
     author='Antonio Valentino',
     author_email='antonio.valentino@tiscali.it',
     url='http://avalentino.github.com/pyepr',
@@ -54,7 +54,7 @@ any data field contained in a product file.
 ''',
     download_url='http://pypi.python.org/pypi/pyepr',
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Other Environment',
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',
