@@ -1,12 +1,13 @@
 Change history
 ==============
 
-PyEPR 0.6 (in development)
---------------------------
+PyEPR 0.6 (12/08/2011)
+----------------------
 
 * full support for `Python 3`_
 * improved code highligh in the documentation
-* depend from cython >= 0.13 instead of cython >= 0.14.1
+* depend from cython >= 0.13 instead of cython >= 0.14.1.
+  Cythonizing :file:`epr.pyx` with `Python 3`_ requires cython >= 0.15
 
 
 PyEPR 0.5 (25/04/2011)
