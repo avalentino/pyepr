@@ -253,7 +253,7 @@ cdef extern from 'epr_api.h' nogil:
     # error handling
     void epr_set_err_handler(EPR_FErrHandler)
     EPR_EErrCode epr_get_last_err_code()
-    char* epr_get_last_err_message()
+    const_char* epr_get_last_err_message()
     void epr_clear_err()
 
     # API initialization/finalization
@@ -262,7 +262,7 @@ cdef extern from 'epr_api.h' nogil:
 
     # DATATYPE
     uint epr_get_data_type_size(EPR_EDataTypeId)
-    char* epr_data_type_id_to_str(EPR_EDataTypeId)
+    const_char* epr_data_type_id_to_str(EPR_EDataTypeId)
 
     # open products
     EPR_SProductId* epr_open_product(char*)
@@ -285,8 +285,8 @@ cdef extern from 'epr_api.h' nogil:
     int epr_read_bitmask_raster(EPR_SProductId*, char*, int, int, EPR_SRaster*)
 
     # DATASET
-    char* epr_get_dataset_name(EPR_SDatasetId*)
-    char* epr_get_dsd_name(EPR_SDatasetId*)
+    const_char* epr_get_dataset_name(EPR_SDatasetId*)
+    const_char* epr_get_dsd_name(EPR_SDatasetId*)
     uint epr_get_num_records(EPR_SDatasetId*)
     EPR_SDSD* epr_get_dsd(EPR_SDatasetId*)
     EPR_SRecord* epr_create_record(EPR_SDatasetId*)
@@ -306,10 +306,10 @@ cdef extern from 'epr_api.h' nogil:
     void epr_print_field(EPR_SField*, FILE*)
     void epr_dump_field(EPR_SField*)
 
-    char* epr_get_field_unit(EPR_SField*)
-    char* epr_get_field_description(EPR_SField*)
+    const_char* epr_get_field_unit(EPR_SField*)
+    const_char* epr_get_field_description(EPR_SField*)
     uint epr_get_field_num_elems(EPR_SField*)
-    char* epr_get_field_name(EPR_SField*)
+    const_char* epr_get_field_name(EPR_SField*)
     EPR_EDataTypeId epr_get_field_type(EPR_SField*)
 
     char epr_get_field_elem_as_char(EPR_SField*, uint)
@@ -320,10 +320,10 @@ cdef extern from 'epr_api.h' nogil:
     uint epr_get_field_elem_as_uint(EPR_SField*, uint)
     float epr_get_field_elem_as_float(EPR_SField*, uint)
     double epr_get_field_elem_as_double(EPR_SField*, uint)
-    char* epr_get_field_elem_as_str(EPR_SField*)
+    const_char* epr_get_field_elem_as_str(EPR_SField*)
     EPR_STime* epr_get_field_elem_as_mjd(EPR_SField*)
 
-    char* epr_get_field_elems_char(EPR_SField*)
+    const_char* epr_get_field_elems_char(EPR_SField*)
     uchar* epr_get_field_elems_uchar(EPR_SField*)
     short* epr_get_field_elems_short(EPR_SField*)
     ushort* epr_get_field_elems_ushort(EPR_SField*)
@@ -338,7 +338,7 @@ cdef extern from 'epr_api.h' nogil:
     uint epr_copy_field_elems_as_doubles(EPR_SField*, double*, uint)
 
     # BAND
-    char* epr_get_band_name(EPR_SBandId*)
+    const_char* epr_get_band_name(EPR_SBandId*)
     EPR_SRaster* epr_create_compatible_raster(EPR_SBandId*, uint, uint, uint,
                                               uint)
     int epr_read_band_raster(EPR_SBandId*, int, int, EPR_SRaster*)
@@ -850,7 +850,7 @@ cdef class Field(EprObject):
         elif etype == e_tid_string:
             if index != 0:
                 raise ValueError('invalid index: %d' % index)
-            val = epr_get_field_elem_as_str(self._ptr)
+            val = <char*>epr_get_field_elem_as_str(self._ptr)
         #elif etype == e_tid_spare:
         #    val = epr_get_field_elem_as_str(self._ptr)
         elif etype == e_tid_time:
@@ -1214,14 +1214,16 @@ cdef class Record(EprObject):
 
         cdef EPR_SField* field_ptr
         cdef int idx
+        cdef char* name
 
         names = []
         for idx in range(self.get_num_fields()):
             field_ptr = <EPR_SField*>epr_get_field_at(self._ptr, idx)
-            names.append(epr_get_field_name(field_ptr))
-
-        if PY_MAJOR_VERSION >= 3:
-            names = [name.decode('ascii') for name in names]
+            name = <char*>epr_get_field_name(field_ptr)
+            if PY_MAJOR_VERSION >= 3:
+                names.append(name.decode('ascii'))
+            else:
+                names.append(name)
 
         return names
 
@@ -1359,7 +1361,7 @@ cdef class Raster(EprObject):
             val = epr_get_pixel_as_double(self._ptr, x, y)
         else:
             raise ValueError('invalid data type: "%s"' %
-                                                epr_data_type_id_to_str(dtype))
+                                        <char*>epr_data_type_id_to_str(dtype))
 
         pyepr_check_errors()    # @TODO: check
 
@@ -2342,14 +2344,16 @@ cdef class Product(EprObject):
 
         cdef EPR_SDatasetId* dataset_ptr
         cdef int idx
+        cdef char* name
 
         names = []
         for idx in range(self.get_num_datasets()):
             dataset_ptr = epr_get_dataset_id_at(self._ptr, idx)
-            names.append(epr_get_dataset_name(dataset_ptr))
-
-        if PY_MAJOR_VERSION >= 3:
-            names = [name.decode('ascii') for name in names]
+            name = <char*>epr_get_dataset_name(dataset_ptr)
+            if PY_MAJOR_VERSION >= 3:
+                names.append(name.decode('ascii'))
+            else:
+                names.append(name)
 
         return names
 
@@ -2362,14 +2366,16 @@ cdef class Product(EprObject):
 
         cdef EPR_SBandId* band_ptr
         cdef int idx
+        cdef char* name
 
         names = []
         for idx in range(self.get_num_bands()):
             band_ptr = epr_get_band_id_at(self._ptr, idx)
-            names.append(epr_get_band_name(band_ptr))
-
-        if PY_MAJOR_VERSION >= 3:
-            names = [name.decode('ascii') for name in names]
+            name = <char*>epr_get_band_name(band_ptr)
+            if PY_MAJOR_VERSION >= 3:
+                names.append(name.decode('ascii'))
+            else:
+                names.append(name)
 
         return names
 
