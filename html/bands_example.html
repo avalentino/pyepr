@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Exporting band data &mdash; PyEPR 0.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <link rel="top" title="PyEPR 0.6 documentation" href="index.html" />
+    <link rel="up" title="Tutorials" href="tutorials.html" />
+    <link rel="next" title="Exporting bitmasks" href="bitmask_example.html" />
+    <link rel="prev" title="Interactive use of PyEPR" href="interactive_use.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="bitmask_example.html" title="Exporting bitmasks"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="interactive_use.html" title="Interactive use of PyEPR"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyEPR 0.6 documentation</a> &raquo;</li>
+          <li><a href="tutorials.html" accesskey="U">Tutorials</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="exporting-band-data">
+<h1>Exporting band data<a class="headerlink" href="#exporting-band-data" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial shows how to convert <a class="reference external" href="http://envisat.esa.int">ENVISAT</a> raster information from dataset
+and generate flat binary rasters using <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a>.</p>
+<p>The program generates as many raster as the dataset specified in input.</p>
+<p>The example code (<a class="reference download internal" href="_downloads/write_bands.py"><tt class="xref download docutils literal"><span class="pre">examples/write_bands.py</span></tt></a>) is a direct
+translation of the C sample program <a class="reference external" href="https://github.com/bcdev/epr-api/blob/master/src/examples/write_bands.c">write_bands.c</a> bundled with the
+EPR API distribution.</p>
+<p>The program is invoked as follows:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python write_bands.py &lt;envisat-product&gt; <span class="se">\</span>
+&lt;output directory <span class="k">for </span>the raster file&gt; &lt;dataset name 1&gt; <span class="se">\</span>
+<span class="o">[</span>&lt;dataset name 2&gt; ... &lt;dataset name N&gt;<span class="o">]</span>
+</pre></div>
+</div>
+<div class="section" id="import-section">
+<h2>Import section<a class="headerlink" href="#import-section" title="Permalink to this headline">¶</a></h2>
+<p>To use the <a class="reference external" href="http://www.python.org">Python</a> EPR API one have to import <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><tt class="xref py py-mod docutils literal"><span class="pre">epr</span></tt></a> module.</p>
+<p>At first import time the underlaying  C library is opportunely initialized.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+
+<span class="c"># This program is a direct translation of the sample program</span>
+<span class="c"># &quot;write_bands.c&quot; bundled with the EPR-API distribution.</span>
+<span class="c">#</span>
+<span class="c"># Source code of the C program is available at:</span>
+<span class="c"># https://github.com/bcdev/epr-api/blob/master/src/examples/write_bands.c</span>
+
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">epr</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-main-program">
+<h2>The main program<a class="headerlink" href="#the-main-program" title="Permalink to this headline">¶</a></h2>
+<p>The main program in quite simple (this is just an example).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="o">*</span><span class="n">argv</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;A program for converting producing ENVI raster information from</span>
+<span class="sd">    dataset.</span>
+
+<span class="sd">    It generates as many raster as there are dataset entrance parameters.</span>
+
+<span class="sd">    Call::</span>
+
+<span class="sd">        $ write_bands.py &lt;envisat-product&gt;</span>
+<span class="sd">                         &lt;output directory for the raster file&gt;</span>
+<span class="sd">                         &lt;dataset name 1&gt;</span>
+<span class="sd">                         [&lt;dataset name 2&gt; ... &lt;dataset name N&gt;]</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        $ write_bands.py \</span>
+<span class="sd">        MER_RR__1PNPDK20020415_103725_000002702005_00094_00649_1059.N1 \</span>
+<span class="sd">        . latitude</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">argv</span><span class="p">:</span>
+        <span class="n">argv</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;Usage: write_bands.py &lt;envisat-product&gt; &lt;output-dir&gt; &#39;</span>
+               <span class="s">&#39;&lt;dataset-name-1&gt;&#39;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;                      [&lt;dataset-name-2&gt; ... &lt;dataset-name-N&gt;]&#39;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;  where envisat-product is the input filename&#39;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;  and output-dir is the output directory&#39;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;  and dataset-name-1 is the name of the first band to be &#39;</span>
+              <span class="s">&#39;extracted (mandatory)&#39;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;  and dataset-name-2 ... dataset-name-N are the names of &#39;</span>
+              <span class="s">&#39;further bands to be extracted (optional)&#39;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;Example:&#39;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;  write_bands MER_RR__2P_TEST.N1 . latitude&#39;</span><span class="p">)</span>
+        <span class="k">print</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">product_file_path</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">output_dir_path</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="c"># Open the product; an argument is a path to product data file</span>
+    <span class="n">product</span> <span class="o">=</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">product_file_path</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">band_name</span> <span class="ow">in</span> <span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">:]:</span>
+        <span class="n">write_raw_image</span><span class="p">(</span><span class="n">output_dir_path</span><span class="p">,</span> <span class="n">product</span><span class="p">,</span> <span class="n">band_name</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>It performs some basic command line arguments handling and then open the
+input product.</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="c"># Open the product; an argument is a path to product data file</span>
+    <span class="n">product</span> <span class="o">=</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">product_file_path</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally the core function (<tt class="xref py py-func docutils literal"><span class="pre">write_raw_image()</span></tt>) is called on each band
+specified on the command:</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="k">for</span> <span class="n">band_name</span> <span class="ow">in</span> <span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">:]:</span>
+        <span class="n">write_raw_image</span><span class="p">(</span><span class="n">output_dir_path</span><span class="p">,</span> <span class="n">product</span><span class="p">,</span> <span class="n">band_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-write-raw-image-core-function">
+<h2>The <tt class="xref py py-func docutils literal"><span class="pre">write_raw_image()</span></tt> core function<a class="headerlink" href="#the-write-raw-image-core-function" title="Permalink to this headline">¶</a></h2>
+<p>The core function is <tt class="xref py py-func docutils literal"><span class="pre">write_raw_image()</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">write_raw_image</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">product</span><span class="p">,</span> <span class="n">band_name</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Generate the ENVI binary pattern image file for an actual DS.</span>
+
+<span class="sd">    The first parameter is the output directory path.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c"># Build ENVI file path, DS name specifically</span>
+    <span class="n">image_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">band_name</span> <span class="o">+</span> <span class="s">&#39;.raw&#39;</span><span class="p">)</span>
+
+    <span class="n">band</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="n">band_name</span><span class="p">)</span>
+    <span class="n">source_w</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_scene_width</span><span class="p">()</span>
+    <span class="n">source_h</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_scene_height</span><span class="p">()</span>
+    <span class="n">source_step_x</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">source_step_y</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">raster</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">create_compatible_raster</span><span class="p">(</span><span class="n">source_w</span><span class="p">,</span> <span class="n">source_h</span><span class="p">,</span>
+                                           <span class="n">source_step_x</span><span class="p">,</span> <span class="n">source_step_y</span><span class="p">)</span>
+
+    <span class="k">print</span> <span class="s">&#39;Reading band &quot;</span><span class="si">%s</span><span class="s">&quot;...&#39;</span> <span class="o">%</span> <span class="n">band_name</span>
+    <span class="n">raster</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">read_raster</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">raster</span><span class="p">)</span>
+
+    <span class="n">out_stream</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">image_file_path</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">raster</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+        <span class="n">out_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">tostring</span><span class="p">())</span>
+    <span class="c"># or better: raster.data.tofile(out_stream)</span>
+
+    <span class="n">out_stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">print</span> <span class="s">&#39;Raw image data successfully written to &quot;</span><span class="si">%s</span><span class="s">&quot;.&#39;</span> <span class="o">%</span> <span class="n">image_file_path</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;C data type is &quot;</span><span class="si">%s</span><span class="s">&quot;, element size </span><span class="si">%u</span><span class="s"> byte(s), &#39;</span>
+          <span class="s">&#39;raster size is </span><span class="si">%u</span><span class="s"> x </span><span class="si">%u</span><span class="s"> pixels.&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                                <span class="n">epr</span><span class="o">.</span><span class="n">data_type_id_to_str</span><span class="p">(</span><span class="n">raster</span><span class="o">.</span><span class="n">data_type</span><span class="p">),</span>
+                                <span class="n">raster</span><span class="o">.</span><span class="n">get_elem_size</span><span class="p">(),</span>
+                                <span class="n">raster</span><span class="o">.</span><span class="n">get_width</span><span class="p">(),</span>
+                                <span class="n">raster</span><span class="o">.</span><span class="n">get_height</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>It generates a flat binary file with data of a single band whose name is
+specified as input parameter.</p>
+<p>First the output file name is computed using the <a class="reference external" href="http://docs.python.org/library/os.html#module-os" title="(in Python v2.7)"><tt class="xref py py-mod docutils literal"><span class="pre">os</span></tt></a> module.</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="c"># Build ENVI file path, DS name specifically</span>
+    <span class="n">image_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">band_name</span> <span class="o">+</span> <span class="s">&#39;.raw&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then the desired band is retrieved using the <a class="reference internal" href="reference.html#epr.Product.get_band" title="epr.Product.get_band"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Product.get_band()</span></tt></a>
+method and some of its parameters are loaded in to local variables:</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="n">band</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="n">band_name</span><span class="p">)</span>
+    <span class="n">source_w</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_scene_width</span><span class="p">()</span>
+    <span class="n">source_h</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_scene_height</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Band data are accessed by means of a <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> object.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="reference.html#epr.Band.read_as_array" title="epr.Band.read_as_array"><tt class="xref py py-func docutils literal"><span class="pre">epr.Band.read_as_array()</span></tt></a></p>
+</div>
+<p>The <a class="reference internal" href="reference.html#epr.Band.create_compatible_raster" title="epr.Band.create_compatible_raster"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Band.create_compatible_raster()</span></tt></a> is a facility method that
+allows to instantiate a <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> object with a data type compatible
+with the band data:</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="n">raster</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">create_compatible_raster</span><span class="p">(</span><span class="n">source_w</span><span class="p">,</span> <span class="n">source_h</span><span class="p">,</span>
+                                           <span class="n">source_step_x</span><span class="p">,</span> <span class="n">source_step_y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then data are read using the <a class="reference internal" href="reference.html#epr.Band.read_raster" title="epr.Band.read_raster"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Band.read_raster()</span></tt></a> method:</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="k">print</span> <span class="s">&#39;Reading band &quot;</span><span class="si">%s</span><span class="s">&quot;...&#39;</span> <span class="o">%</span> <span class="n">band_name</span>
+    <span class="n">raster</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">read_raster</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">raster</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then the output file object is created (in binary mode of course)</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="n">out_stream</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">image_file_path</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and data are copied to the output file one line at time</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">raster</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+        <span class="n">out_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">tostring</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Please note that it has been used <a class="reference internal" href="reference.html#epr.Raster.data" title="epr.Raster.data"><tt class="xref py py-data docutils literal"><span class="pre">epr.Raster.data</span></tt></a> attribute of the
+<a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> objects that exposes <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> data with the
+powerful <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-57b56bc)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> interface.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Copying one line at time is not the best way to perform the task
+in <a class="reference external" href="http://www.python.org">Python</a>. It has been done just to mimic the original C code:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">out_stream</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">image_file_path</span><span class="p">,</span> <span class="s">&quot;wb&quot;</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">out_stream</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error: can&#39;t open &#39;%s&#39;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">image_file_path</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span><span class="n">raster</span><span class="o">-&gt;</span><span class="n">raster_height</span><span class="p">;</span> <span class="n">y</span> <span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">numwritten</span> <span class="o">=</span> <span class="n">fwrite</span><span class="p">(</span><span class="n">epr_get_raster_line_addr</span><span class="p">(</span><span class="n">raster</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span>
+                        <span class="n">raster</span><span class="o">-&gt;</span><span class="n">elem_size</span><span class="p">,</span>
+                        <span class="n">raster</span><span class="o">-&gt;</span><span class="n">raster_width</span><span class="p">,</span>
+                        <span class="n">out_stream</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">numwritten</span> <span class="o">!=</span> <span class="n">raster</span><span class="o">-&gt;</span><span class="n">raster_width</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error: can&#39;t write to %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">image_file_path</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">4</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">fclose</span><span class="p">(</span><span class="n">out_stream</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>A by far more <a class="reference external" href="http://www.cafepy.com/article/be_pythonic">pythonic</a> solution would be:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="n">raster</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">out_stream</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Exporting band data</a><ul>
+<li><a class="reference internal" href="#import-section">Import section</a></li>
+<li><a class="reference internal" href="#the-main-program">The main program</a></li>
+<li><a class="reference internal" href="#the-write-raw-image-core-function">The <tt class="docutils literal"><span class="pre">write_raw_image()</span></tt> core function</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="interactive_use.html"
+                        title="previous chapter">Interactive use of PyEPR</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="bitmask_example.html"
+                        title="next chapter">Exporting bitmasks</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/bands_example.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="bitmask_example.html" title="Exporting bitmasks"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="interactive_use.html" title="Interactive use of PyEPR"
+             >previous</a> |</li>
+        <li><a href="index.html">PyEPR 0.6 documentation</a> &raquo;</li>
+          <li><a href="tutorials.html" >Tutorials</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Antonio Valentino.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre/f554126df691.
+    </div>
+  </body>
+</html>

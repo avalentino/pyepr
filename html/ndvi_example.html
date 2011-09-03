@@ -1,0 +1,463 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>NDVI computation &mdash; PyEPR 0.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <link rel="top" title="PyEPR 0.6 documentation" href="index.html" />
+    <link rel="up" title="Tutorials" href="tutorials.html" />
+    <link rel="next" title="API Reference" href="reference.html" />
+    <link rel="prev" title="Exporting bitmasks" href="bitmask_example.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="reference.html" title="API Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bitmask_example.html" title="Exporting bitmasks"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyEPR 0.6 documentation</a> &raquo;</li>
+          <li><a href="tutorials.html" accesskey="U">Tutorials</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="ndvi-computation">
+<h1>NDVI computation<a class="headerlink" href="#ndvi-computation" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial shows how to use <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> to open a <a class="reference external" href="http://envisat.esa.int/handbooks/meris">MERIS</a> L1B product, compute
+the <em>Normalized Difference Vegetation Index</em> (NDVI) and store it into a flat
+binary file.</p>
+<p>The example code (<a class="reference download internal" href="_downloads/write_ndvi.py"><tt class="xref download docutils literal"><span class="pre">examples/write_ndvi.py</span></tt></a>) is a direct
+translation of the C sample program <a class="reference external" href="https://github.com/bcdev/epr-api/blob/master/src/examples/write_ndvi.c">write_ndvi.c</a> bundled with the
+EPR API distribution.</p>
+<p>The program is invoked as follows:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python write_ndvi.py &lt;envisat-oroduct&gt; &lt;output-file&gt;
+</pre></div>
+</div>
+<p>The code have been kept very simple and it consists in a single function
+(<tt class="xref py py-func docutils literal"><span class="pre">main()</span></tt>) that also performs a minimal command line arguments handling.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+
+<span class="c"># This program is a direct translation of the sample program</span>
+<span class="c"># &quot;write_ndvi.c&quot; bundled with the EPR-API distribution.</span>
+<span class="c">#</span>
+<span class="c"># Source code of the C program is available at:</span>
+<span class="c"># https://github.com/bcdev/epr-api/blob/master/src/examples/write_ndvi.c</span>
+
+
+<span class="sd">&#39;&#39;&#39;Example for using the epr-api</span>
+
+<span class="sd">Demonstrates how to open a MERIS L1b product and calculate the NDVI.</span>
+
+<span class="sd">This example does not demonstrate how to write good and safe code.</span>
+<span class="sd">It is reduced to the essentials for working with the epr-api.</span>
+
+<span class="sd">Calling sequence::</span>
+
+<span class="sd">    $ python write_ndvi.py &lt;envisat-product&gt; &lt;output-file&gt;</span>
+
+<span class="sd">for example::</span>
+
+<span class="sd">    $ python write_ndvi.py MER_RR__1P_test.N1 my_ndvi.raw</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">epr</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="o">*</span><span class="n">argv</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">argv</span><span class="p">:</span>
+        <span class="n">argv</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;Usage: write_ndvi &lt;envisat-product&gt; &lt;output-file&gt;&#39;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;  where envisat-product is the input filename&#39;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;  and output-file is the output filename.&#39;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;Example: MER_RR__1P_TEST.N1 my_ndvi.raw&#39;</span><span class="p">)</span>
+        <span class="k">print</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c"># Open the product</span>
+    <span class="n">product</span> <span class="o">=</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c"># The NDVI shall be calculated using bands 6 and 8.</span>
+    <span class="n">band1_name</span> <span class="o">=</span> <span class="s">&#39;radiance_6&#39;</span>
+    <span class="n">band2_name</span> <span class="o">=</span> <span class="s">&#39;radiance_10&#39;</span>
+
+    <span class="n">band1</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="n">band1_name</span><span class="p">)</span>
+    <span class="n">band2</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="n">band2_name</span><span class="p">)</span>
+
+    <span class="c"># Allocate memory for the rasters</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_scene_width</span><span class="p">()</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_scene_height</span><span class="p">()</span>
+    <span class="n">subsampling_x</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">subsampling_y</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">raster1</span> <span class="o">=</span> <span class="n">band1</span><span class="o">.</span><span class="n">create_compatible_raster</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span>
+                                             <span class="n">subsampling_x</span><span class="p">,</span> <span class="n">subsampling_y</span><span class="p">)</span>
+    <span class="n">raster2</span> <span class="o">=</span> <span class="n">band2</span><span class="o">.</span><span class="n">create_compatible_raster</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span>
+                                             <span class="n">subsampling_x</span><span class="p">,</span> <span class="n">subsampling_y</span><span class="p">)</span>
+
+    <span class="c"># Read the radiance into the raster.</span>
+    <span class="n">offset_x</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">offset_y</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;read &quot;</span><span class="si">%s</span><span class="s">&quot; data&#39;</span> <span class="o">%</span> <span class="n">band1_name</span><span class="p">)</span>
+    <span class="n">band1</span><span class="o">.</span><span class="n">read_raster</span><span class="p">(</span><span class="n">offset_x</span><span class="p">,</span> <span class="n">offset_y</span><span class="p">,</span> <span class="n">raster1</span><span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;read &quot;</span><span class="si">%s</span><span class="s">&quot; data&#39;</span> <span class="o">%</span> <span class="n">band2_name</span><span class="p">)</span>
+    <span class="n">band2</span><span class="o">.</span><span class="n">read_raster</span><span class="p">(</span><span class="n">offset_x</span><span class="p">,</span> <span class="n">offset_y</span><span class="p">,</span> <span class="n">raster2</span><span class="p">)</span>
+
+    <span class="c"># Open the output file</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;write ndvi to &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span> <span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">out_stream</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span>
+
+    <span class="c"># Loop over all pixel and calculate the NDVI.</span>
+    <span class="c">#</span>
+    <span class="c"># @NOTE: looping over data matrices is not the best soluton.</span>
+    <span class="c">#        It is done here just for demostrative purposes</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">):</span>
+            <span class="n">rad1</span> <span class="o">=</span> <span class="n">raster1</span><span class="o">.</span><span class="n">get_pixel</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+            <span class="n">rad2</span> <span class="o">=</span> <span class="n">raster2</span><span class="o">.</span><span class="n">get_pixel</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">rad1</span> <span class="o">+</span> <span class="n">rad2</span><span class="p">)</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">ndvi</span> <span class="o">=</span> <span class="p">(</span><span class="n">rad2</span> <span class="o">-</span> <span class="n">rad1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">rad2</span> <span class="o">+</span> <span class="n">rad1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ndvi</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+            <span class="n">out_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="n">ndvi</span><span class="p">))</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;ndvi was written success&#39;</span><span class="p">)</span>
+
+    <span class="n">out_stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<p>The <a class="reference external" href="http://envisat.esa.int">ENVISAT</a> <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> is opened using the <a class="reference internal" href="reference.html#epr.open" title="epr.open"><tt class="xref py py-func docutils literal"><span class="pre">epr.open()</span></tt></a> function.</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="n">product</span> <span class="o">=</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The name of the product is in the first argument of the program call.
+In order to keep the code simple no check is performed to ensure that the
+product is a valid L1B product.</p>
+<p>The NDVI is calculated using bands 6 and 8 (the names of these bands are
+&#8220;radiance_6&#8221; and &#8220;radiance_10&#8221;).
+<a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">epr.Band</span></tt></a> objects are retrieved using the <a class="reference internal" href="reference.html#epr.Product.get_band" title="epr.Product.get_band"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Product.get_band()</span></tt></a>
+method:</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="c"># The NDVI shall be calculated using bands 6 and 8.</span>
+    <span class="n">band1_name</span> <span class="o">=</span> <span class="s">&#39;radiance_6&#39;</span>
+    <span class="n">band2_name</span> <span class="o">=</span> <span class="s">&#39;radiance_10&#39;</span>
+
+    <span class="n">band1</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="n">band1_name</span><span class="p">)</span>
+    <span class="n">band2</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="n">band2_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><em>band1</em> and <em>band2</em> are used to read the calibrated radiances into the
+<a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> objects that allow to access data matrices with the
+radiance values.</p>
+<p>Before reading data into the <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> objects they have to be
+instantiated specifying their size and data type in order to allow the library
+to allocate the correct amount of memory.</p>
+<p>For sake of simplicity <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> object are created with the same
+size of the whole product (with no sub-sampling) using the
+<a class="reference internal" href="reference.html#epr.Band.create_compatible_raster" title="epr.Band.create_compatible_raster"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Band.create_compatible_raster()</span></tt></a> method of the <a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">epr.Band</span></tt></a> class:</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="c"># Allocate memory for the rasters</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_scene_width</span><span class="p">()</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_scene_height</span><span class="p">()</span>
+    <span class="n">subsampling_x</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">subsampling_y</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">raster1</span> <span class="o">=</span> <span class="n">band1</span><span class="o">.</span><span class="n">create_compatible_raster</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span>
+                                             <span class="n">subsampling_x</span><span class="p">,</span> <span class="n">subsampling_y</span><span class="p">)</span>
+    <span class="n">raster2</span> <span class="o">=</span> <span class="n">band2</span><span class="o">.</span><span class="n">create_compatible_raster</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span>
+                                             <span class="n">subsampling_x</span><span class="p">,</span> <span class="n">subsampling_y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then data are actually loaded into memory using the <a class="reference internal" href="reference.html#epr.Band.read_raster" title="epr.Band.read_raster"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Band.read_raster()</span></tt></a>
+method.
+Since <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> objects have been defined to match the whole
+product, offset parameters are set to zero (data are read starting from
+specified offset):</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="c"># Read the radiance into the raster.</span>
+    <span class="n">offset_x</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">offset_y</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;read &quot;</span><span class="si">%s</span><span class="s">&quot; data&#39;</span> <span class="o">%</span> <span class="n">band1_name</span><span class="p">)</span>
+    <span class="n">band1</span><span class="o">.</span><span class="n">read_raster</span><span class="p">(</span><span class="n">offset_x</span><span class="p">,</span> <span class="n">offset_y</span><span class="p">,</span> <span class="n">raster1</span><span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;read &quot;</span><span class="si">%s</span><span class="s">&quot; data&#39;</span> <span class="o">%</span> <span class="n">band2_name</span><span class="p">)</span>
+    <span class="n">band2</span><span class="o">.</span><span class="n">read_raster</span><span class="p">(</span><span class="n">offset_x</span><span class="p">,</span> <span class="n">offset_y</span><span class="p">,</span> <span class="n">raster2</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In this simplified example it is assumed that there is enough system
+memory to hold the two <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> objects.</p>
+</div>
+<p>After opening (in binary mode) the stream for the output</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="c"># Open the output file</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;write ndvi to &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span> <span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">out_stream</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>the program simply loops over all pixel and calculate the NDVI with the
+following formula:</p>
+<div class="math">
+<p><img src="_images/math/545f6ef658f789118f011675c044bf70b05941c2.png" alt="NDVI = \frac{radiance_{10} - radiance_8}{radiance_{10} + radiance_8}"/></p>
+</div><div class="highlight-python"><div class="highlight"><pre>    <span class="c"># Loop over all pixel and calculate the NDVI.</span>
+    <span class="c">#</span>
+    <span class="c"># @NOTE: looping over data matrices is not the best soluton.</span>
+    <span class="c">#        It is done here just for demostrative purposes</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">):</span>
+            <span class="n">rad1</span> <span class="o">=</span> <span class="n">raster1</span><span class="o">.</span><span class="n">get_pixel</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+            <span class="n">rad2</span> <span class="o">=</span> <span class="n">raster2</span><span class="o">.</span><span class="n">get_pixel</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">rad1</span> <span class="o">+</span> <span class="n">rad2</span><span class="p">)</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">ndvi</span> <span class="o">=</span> <span class="p">(</span><span class="n">rad2</span> <span class="o">-</span> <span class="n">rad1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">rad2</span> <span class="o">+</span> <span class="n">rad1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ndvi</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+            <span class="n">out_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="n">ndvi</span><span class="p">))</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;ndvi was written success&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This part of the code tries to mimic closely the original C code
+(<a class="reference external" href="https://github.com/bcdev/epr-api/blob/master/src/examples/write_ndvi.c">write_ndvi.c</a>)</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">out_stream</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s">&quot;wb&quot;</span><span class="p">);</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">height</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">rad1</span> <span class="o">=</span> <span class="n">epr_get_pixel_as_float</span><span class="p">(</span><span class="n">raster1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>
+        <span class="n">rad2</span> <span class="o">=</span> <span class="n">epr_get_pixel_as_float</span><span class="p">(</span><span class="n">raster2</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">rad1</span> <span class="o">+</span> <span class="n">rad2</span><span class="p">)</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ndvi</span> <span class="o">=</span> <span class="p">(</span><span class="n">rad2</span> <span class="o">-</span> <span class="n">rad1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">rad2</span> <span class="o">+</span> <span class="n">rad1</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">ndvi</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">fwrite</span><span class="p">(</span> <span class="o">&amp;</span> <span class="n">ndvi</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">out_stream</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">epr_log_message</span><span class="p">(</span><span class="n">e_log_info</span><span class="p">,</span> <span class="s">&quot;ndvi was written success&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>and uses the <a class="reference internal" href="reference.html#epr.Raster.get_pixel" title="epr.Raster.get_pixel"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Raster.get_pixel()</span></tt></a> method to access pixel values and
+perform computation.</p>
+<p>The <a class="reference external" href="http://www.python.org">Python</a> <a class="reference external" href="http://docs.python.org/library/struct.html#struct.pack" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">struct.pack()</span></tt></a> function together with <a class="reference external" href="http://docs.python.org/library/stdtypes.html#file.write" title="(in Python v2.7)"><tt class="xref py py-meth docutils literal"><span class="pre">file.write()</span></tt></a> is
+used to write the NDVI of the pixel n the file in binary format.</p>
+<div class="highlight-python"><div class="highlight"><pre>            <span class="n">out_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="n">ndvi</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The entire solution is quite not <a class="reference external" href="http://www.cafepy.com/article/be_pythonic">pythonic</a>. As an alternative
+implementation it could be used the <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0.dev-57b56bc)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> interface of
+<a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> objects available via the <a class="reference internal" href="reference.html#epr.Raster.data" title="epr.Raster.data"><tt class="xref py py-data docutils literal"><span class="pre">epr.Raster.data</span></tt></a>
+property. The NDVI index is computed on all pixels altogether using
+vectorized expressions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Initialize the entire matrix to -1</span>
+<span class="n">ndvi</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">),</span> <span class="s">&#39;float32&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+<span class="n">aux</span> <span class="o">=</span> <span class="n">raster2</span><span class="o">.</span><span class="n">data</span> <span class="o">+</span> <span class="n">raster1</span><span class="o">.</span><span class="n">data</span>
+
+<span class="c"># indexes of pixel with non null denominator</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">aux</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c"># actual NDVI computation</span>
+<span class="n">ndvi</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">raster2</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">+</span> <span class="n">raster1</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">/</span> <span class="n">aux</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Finally data can be saved to file simply using the
+<tt class="xref py py-meth docutils literal"><span class="pre">numpy.ndarray.tofile()</span></tt> method:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="n">ndvi</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">out_stream</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="bitmask_example.html"
+                        title="previous chapter">Exporting bitmasks</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="reference.html"
+                        title="next chapter">API Reference</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/ndvi_example.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="reference.html" title="API Reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bitmask_example.html" title="Exporting bitmasks"
+             >previous</a> |</li>
+        <li><a href="index.html">PyEPR 0.6 documentation</a> &raquo;</li>
+          <li><a href="tutorials.html" >Tutorials</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Antonio Valentino.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre/f554126df691.
+    </div>
+  </body>
+</html>

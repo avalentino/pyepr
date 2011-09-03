@@ -1,0 +1,200 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ENVISAT Product Reader Python API &mdash; PyEPR 0.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <link rel="top" title="PyEPR 0.6 documentation" href="#" />
+    <link rel="next" title="User Manual" href="usermanual.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="usermanual.html" title="User Manual"
+             accesskey="N">next</a> |</li>
+        <li><a href="#">PyEPR 0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="envisat-product-reader-python-api">
+<h1>ENVISAT Product Reader Python API<a class="headerlink" href="#envisat-product-reader-python-api" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">HomePage:</th><td class="field-body"><a class="reference external" href="http://avalentino.github.com/pyepr">http://avalentino.github.com/pyepr</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Antonio Valentino</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:antonio&#46;valentino&#37;&#52;&#48;tiscali&#46;it">antonio<span>&#46;</span>valentino<span>&#64;</span>tiscali<span>&#46;</span>it</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">12/08/2011</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Copyright:</th><td class="field-body">2011, Antonio Valentino</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Version:</th><td class="field-body">0.6</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> provides <a class="reference external" href="http://www.python.org">Python</a> bindings for the ENVISAT Product Reader C API
+(<a class="reference external" href="https://github.com/bcdev/epr-api">EPR API</a>) for reading satellite data from <a class="reference external" href="http://envisat.esa.int">ENVISAT</a> <a class="reference external" href="http://earth.esa.int">ESA</a> (European
+Space Agency) mission.</p>
+<p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a>, as well as the <a class="reference external" href="https://github.com/bcdev/epr-api">EPR API</a> for C, supports <a class="reference external" href="http://envisat.esa.int">ENVISAT</a> MERIS, AATSR
+Level 1B and Level 2 and also ASAR data products. It provides access to
+the data either on a geophysical (decoded, ready-to-use pixel samples)
+or on a raw data layer. The raw data access makes it possible to read
+any data field contained in a product file.</p>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="usermanual.html">User Manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usermanual.html#quick-start">Quick start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usermanual.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usermanual.html#download">Download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usermanual.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usermanual.html#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usermanual.html#python-vs-c-api">Python vs C API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usermanual.html#memory-management">Memory management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usermanual.html#arrays">Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usermanual.html#enumerators">Enumerators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usermanual.html#error-handling-and-logging">Error handling and logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usermanual.html#library-initialization">Library initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usermanual.html#high-level-api">High level API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usermanual.html#special-methods">Special methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="interactive_use.html">Interactive use of PyEPR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bands_example.html">Exporting band data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bitmask_example.html">Exporting bitmasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ndvi_example.html">NDVI computation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#exceptions">Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#data">Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="NEWS.html">Change history</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="NEWS.html#pyepr-0-6-12-08-2011">PyEPR 0.6 (12/08/2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NEWS.html#pyepr-0-5-25-04-2011">PyEPR 0.5 (25/04/2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NEWS.html#pyepr-0-4-10-04-2011">PyEPR 0.4 (10/04/2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NEWS.html#pyepr-0-3-01-04-2011">PyEPR 0.3 (01/04/2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NEWS.html#pyepr-0-2-20-03-2011">PyEPR 0.2 (20/03/2011)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NEWS.html#pyepr-0-1-09-03-2011">PyEPR 0.1 (09/03/2011)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>Copyright (C) 2011 Antonio Valentino &lt;<a class="reference external" href="mailto:antonio&#46;valentino&#37;&#52;&#48;tiscali&#46;it">antonio<span>&#46;</span>valentino<span>&#64;</span>tiscali<span>&#46;</span>it</a>&gt;</p>
+<p>PyEPR is free software: you can redistribute it and/or modify
+it under the terms of the <a class="reference external" href="http://www.gnu.org/licenses/gpl-3.0.html">GNU General Public License</a> as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>PyEPR is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with PyEPR.  If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="#">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="usermanual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NEWS.html">Change history</a></li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="usermanual.html"
+                        title="next chapter">User Manual</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="usermanual.html" title="User Manual"
+             >next</a> |</li>
+        <li><a href="#">PyEPR 0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Antonio Valentino.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre/f554126df691.
+    </div>
+  </body>
+</html>

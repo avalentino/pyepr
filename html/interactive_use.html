@@ -1,0 +1,434 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Interactive use of PyEPR &mdash; PyEPR 0.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <link rel="top" title="PyEPR 0.6 documentation" href="index.html" />
+    <link rel="up" title="Tutorials" href="tutorials.html" />
+    <link rel="next" title="Exporting band data" href="bands_example.html" />
+    <link rel="prev" title="Tutorials" href="tutorials.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="bands_example.html" title="Exporting band data"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorials.html" title="Tutorials"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyEPR 0.6 documentation</a> &raquo;</li>
+          <li><a href="tutorials.html" accesskey="U">Tutorials</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="interactive-use-of-pyepr">
+<h1>Interactive use of <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a><a class="headerlink" href="#interactive-use-of-pyepr" title="Permalink to this headline">¶</a></h1>
+<p>In this tutorial it is showed an example of how to use <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> interactively
+to open, browse and display data of an <a class="reference external" href="http://envisat.esa.int">ENVISAT</a> <a class="reference external" href="http://envisat.esa.int/handbooks/asar">ASAR</a> product.</p>
+<p>For the interactive session it is used the <a class="reference external" href="http://ipython.scipy.org/moin">IPython</a> interactive shell an
+started with the <em class="xref std std-option">ipython -pylab</em> option to enable interactive
+plotting provided by the <a class="reference external" href="http://matplotlib.sourceforge.net">matplotlib</a> package.</p>
+<p>The <a class="reference external" href="http://envisat.esa.int/handbooks/asar">ASAR</a> product used in this example is a <a class="reference external" href="http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz">free sample</a> available at the
+<a class="reference external" href="http://earth.esa.int">ESA</a> web site.</p>
+<div class="section" id="epr-module-and-classes">
+<h2><a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><tt class="xref py py-mod docutils literal"><span class="pre">epr</span></tt></a> module and classes<a class="headerlink" href="#epr-module-and-classes" title="Permalink to this headline">¶</a></h2>
+<p>After starting the ipython shell with the following command:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>ipython -pylab
+</pre></div>
+</div>
+<p>one can import the <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><tt class="xref py py-mod docutils literal"><span class="pre">epr</span></tt></a> module and start start taking confidence with
+available classes and functions:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="go">Python 2.6.6 (r266:84292, Sep 15 2010, 16:22:56)</span>
+<span class="go">Type &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span>
+
+<span class="go">IPython 0.10 -- An enhanced Interactive Python.</span>
+<span class="go">?         -&gt; Introduction and overview of IPython&#39;s features.</span>
+<span class="go">%quickref -&gt; Quick reference.</span>
+<span class="go">help      -&gt; Python&#39;s own help system.</span>
+<span class="go">object?   -&gt; Details about &#39;object&#39;. ?object also works, ?? prints more.</span>
+
+<span class="go">  Welcome to pylab, a matplotlib-based Python environment.</span>
+<span class="go">  For more information, type &#39;help(pylab)&#39;.</span>
+
+<span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">epr</span>
+
+<span class="gp">In [2]: </span><span class="n">epr</span><span class="err">?</span>
+
+<span class="go">Base Class:       &lt;type &#39;module&#39;&gt;</span>
+<span class="go">String Form:   &lt;module &#39;epr&#39; from &#39;epr.so&#39;&gt;</span>
+<span class="go">Namespace:        Interactive</span>
+<span class="go">File:             /home/antonio/projects/pyepr/epr.so</span>
+<span class="go">Docstring:</span>
+<span class="go">    Python bindings for ENVISAT Product Reader C API</span>
+
+<span class="go">    PyEPR_ provides Python_ bindings for the ENVISAT Product Reader C API</span>
+<span class="go">    (`EPR API`_) for reading satellite data from ENVISAT_ ESA_ (European</span>
+<span class="go">    Space Agency) mission.</span>
+
+<span class="go">    PyEPR_ is fully object oriented and, as well as the `EPR API`_ for C,</span>
+<span class="go">    supports ENVISAT_ MERIS, AATSR Level 1B and Level 2 and also ASAR data</span>
+<span class="go">    products. It provides access to the data either on a geophysical</span>
+<span class="go">    (decoded, ready-to-use pixel samples) or on a raw data layer.</span>
+<span class="go">    The raw data access makes it possible to read any data field contained</span>
+<span class="go">    in a product file.</span>
+
+<span class="go">    .. _PyEPR: http://avalentino.github.com/pyepr</span>
+<span class="go">    .. _Python: http://www.python.org</span>
+<span class="go">    .. _`EPR API`: https://github.com/bcdev/epr-api</span>
+<span class="go">    .. _ENVISAT: http://envisat.esa.int</span>
+<span class="go">    .. _ESA: http://earth.esa.int</span>
+
+<span class="gp">In [3]: </span><span class="n">epr</span><span class="o">.</span><span class="n">__version__</span><span class="p">,</span> <span class="n">epr</span><span class="o">.</span><span class="n">EPR_C_API_VERSION</span>
+<span class="gr">Out[3]: </span><span class="p">(</span><span class="s">&#39;0.6&#39;</span><span class="p">,</span> <span class="s">&#39;2.2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Docstrings are available for almost all classes, methods and functions in
+the <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><tt class="xref py py-mod docutils literal"><span class="pre">epr</span></tt></a> and they can be displayed using the <a class="reference external" href="http://docs.python.org/library/functions.html#help" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">help()</span></tt></a> <a class="reference external" href="http://www.python.org">python</a>
+command or the <tt class="docutils literal"><span class="pre">?</span></tt> <a class="reference external" href="http://ipython.scipy.org/moin">IPython</a> shortcut as showed above.</p>
+<p>Also <a class="reference external" href="http://ipython.scipy.org/moin">IPython</a> provides a handy tab completion mechanism to automatically
+complete commands or to display available functions and classes:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [4]: </span><span class="n">product</span> <span class="o">=</span> <span class="n">epr</span><span class="o">.</span> <span class="p">[</span><span class="n">TAB</span><span class="p">]</span>
+<span class="go">epr.Band                     epr.E_TID_TIME</span>
+<span class="go">epr.__builtins__             epr.E_TID_UCHAR</span>
+<span class="go">epr.__class__                epr.E_TID_UINT</span>
+<span class="go">epr._CLib                    epr.E_TID_UNKNOWN</span>
+<span class="go">epr._close_api               epr.E_TID_USHORT</span>
+<span class="go">epr.collections              epr.Field</span>
+<span class="go">epr.create_bitmask_raster    epr.__file__</span>
+<span class="go">epr.create_raster            epr.__format__</span>
+<span class="go">epr.Dataset                  epr.__getattribute__</span>
+<span class="go">epr.data_type_id_to_str      epr.get_data_type_size</span>
+<span class="go">epr.__delattr__              epr.get_sample_model_name</span>
+<span class="go">epr.__dict__                 epr.get_scaling_method_name</span>
+<span class="go">epr.__doc__                  epr.__hash__</span>
+<span class="go">epr.DSD                      epr.__init__</span>
+<span class="go">epr.EPR_C_API_VERSION        epr.__name__</span>
+<span class="go">epr.EPRError                 epr.__new__</span>
+<span class="go">epr.EprObject                epr.np</span>
+<span class="go">epr.EPRTime                  epr.open</span>
+<span class="go">epr.EPRValueError            epr.__package__</span>
+<span class="go">epr.E_SMID_LIN               epr.Product</span>
+<span class="go">epr.E_SMID_LOG               epr.Raster</span>
+<span class="go">epr.E_SMID_NON               epr.Record</span>
+<span class="go">epr.E_SMOD_1OF1              epr.__reduce__</span>
+<span class="go">epr.E_SMOD_1OF2              epr.__reduce_ex__</span>
+<span class="go">epr.E_SMOD_2OF2              epr.__repr__</span>
+<span class="go">epr.E_SMOD_2TOF              epr.__revision__</span>
+<span class="go">epr.E_SMOD_3TOI              epr.__setattr__</span>
+<span class="go">epr.E_TID_CHAR               epr.__sizeof__</span>
+<span class="go">epr.E_TID_DOUBLE             epr.so</span>
+<span class="go">epr.E_TID_FLOAT              epr.__str__</span>
+<span class="go">epr.E_TID_INT                epr.__subclasshook__</span>
+<span class="go">epr.E_TID_SHORT              epr.sys</span>
+<span class="go">epr.E_TID_SPARE              epr.__test__</span>
+<span class="go">epr.E_TID_STRING             epr.__version__</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="epr-product-navigation">
+<h2><a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> navigation<a class="headerlink" href="#epr-product-navigation" title="Permalink to this headline">¶</a></h2>
+<p>The first thing to do is to use the <a class="reference internal" href="reference.html#epr.open" title="epr.open"><tt class="xref py py-func docutils literal"><span class="pre">epr.open()</span></tt></a> function to get an
+instance of the desired <a class="reference external" href="http://envisat.esa.int">ENVISAT</a> <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [4]: </span><span class="n">product</span> <span class="o">=</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>\
+<span class="go">&#39;ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1&#39;)</span>
+
+<span class="gp">In [4]: </span><span class="n">product</span><span class="o">.</span>
+<span class="go">product.bands                product.get_num_dsds</span>
+<span class="go">product.__class__            product.get_scene_height</span>
+<span class="go">product.datasets             product.get_scene_width</span>
+<span class="go">product.__delattr__          product.get_sph</span>
+<span class="go">product.__doc__              product.__hash__</span>
+<span class="go">product.file_path            product.id_string</span>
+<span class="go">product.__format__           product.__init__</span>
+<span class="go">product.__getattribute__     product.meris_iodd_version</span>
+<span class="go">product.get_band             product.__new__</span>
+<span class="go">product.get_band_at          product.read_bitmask_raster</span>
+<span class="go">product.get_band_names       product.__reduce__</span>
+<span class="go">product.get_dataset          product.__reduce_ex__</span>
+<span class="go">product.get_dataset_at       product.__repr__</span>
+<span class="go">product.get_dataset_names    product.__setattr__</span>
+<span class="go">product.get_dsd_at           product.__sizeof__</span>
+<span class="go">product.get_mph              product.__str__</span>
+<span class="go">product.get_num_bands        product.__subclasshook__</span>
+<span class="go">product.get_num_datasets     product.tot_size</span>
+
+<span class="gp">In [5]: </span><span class="n">product</span><span class="o">.</span><span class="n">tot_size</span> <span class="o">/</span> <span class="mf">1024.</span><span class="o">**</span><span class="mi">2</span>
+<span class="gr">Out[5]: </span><span class="mf">132.01041889190674</span>
+
+<span class="gp">In [6]: </span><span class="k">print</span> <span class="n">product</span>
+<span class="go">epr.Product(ASA_IMP_1PNUPA20060202_ ...) 7 datasets, 5 bands</span>
+
+<span class="go">epr.Dataset(MDS1_SQ_ADS) 1 records</span>
+<span class="go">epr.Dataset(MAIN_PROCESSING_PARAMS_ADS) 1 records</span>
+<span class="go">epr.Dataset(DOP_CENTROID_COEFFS_ADS) 1 records</span>
+<span class="go">epr.Dataset(SR_GR_ADS) 1 records</span>
+<span class="go">epr.Dataset(CHIRP_PARAMS_ADS) 1 records</span>
+<span class="go">epr.Dataset(GEOLOCATION_GRID_ADS) 11 records</span>
+<span class="go">epr.Dataset(MDS1) 8192 records</span>
+
+<span class="go">epr.Band(slant_range_time) of epr.Product(ASA_IMP_1PNUPA20060202_ ...)</span>
+<span class="go">epr.Band(incident_angle) of epr.Product(ASA_IMP_1PNUPA20060202_ ...)</span>
+<span class="go">epr.Band(latitude) of epr.Product(ASA_IMP_1PNUPA20060202 ...)</span>
+<span class="go">epr.Band(longitude) of epr.Product(ASA_IMP_1PNUPA20060202 ...)</span>
+<span class="go">epr.Band(proc_data) of epr.Product(ASA_IMP_1PNUPA20060202 ...)</span>
+</pre></div>
+</div>
+<p>A short summary of product contents can be displayed simply printing the
+<a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> object as showed above.
+Being able to display contents of each object it is easy to keep browsing and
+get all desired information from the product:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [7]: </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_dataset</span><span class="p">(</span><span class="s">&#39;MAIN_PROCESSING_PARAMS_ADS&#39;</span><span class="p">)</span>
+
+<span class="gp">In [8]: </span><span class="n">dataset</span>
+<span class="gr">Out[8]: </span><span class="n">epr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">MAIN_PROCESSING_PARAMS_ADS</span><span class="p">)</span> <span class="mi">1</span> <span class="n">records</span>
+
+<span class="gp">In [9]: </span><span class="n">record</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="p">[</span><span class="n">TAB</span><span class="p">]</span>
+<span class="go">dataset.__class__         dataset.get_name          dataset.__reduce__</span>
+<span class="go">dataset.create_record     dataset.get_num_records   dataset.__reduce_ex__</span>
+<span class="go">dataset.__delattr__       dataset.__hash__          dataset.__repr__</span>
+<span class="go">dataset.description       dataset.__init__          dataset.__setattr__</span>
+<span class="go">dataset.__doc__           dataset.__iter__          dataset.__sizeof__</span>
+<span class="go">dataset.__format__        dataset.__new__           dataset.__str__</span>
+<span class="go">dataset.__getattribute__  dataset.product           dataset.__subclasshook__</span>
+<span class="go">dataset.get_dsd           dataset.read_record</span>
+<span class="go">dataset.get_dsd_name      dataset.records</span>
+
+<span class="gp">In [9]: </span><span class="n">record</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">read_record</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="gp">In [10]: </span><span class="n">record</span>
+<span class="gr">Out[10]: </span><span class="o">&lt;</span><span class="n">epr</span><span class="o">.</span><span class="n">Record</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x33570f0</span><span class="o">&gt;</span> <span class="mi">220</span> <span class="n">fields</span>
+
+<span class="gp">In [11]: </span><span class="n">record</span><span class="o">.</span><span class="n">get_field_names</span><span class="p">()[:</span><span class="mi">20</span><span class="p">]</span>
+<span class="go">Out[11]:</span>
+<span class="go">[&#39;first_zero_doppler_time&#39;,</span>
+<span class="go"> &#39;attach_flag&#39;,</span>
+<span class="go"> &#39;last_zero_doppler_time&#39;,</span>
+<span class="go"> &#39;work_order_id&#39;,</span>
+<span class="go"> &#39;time_diff&#39;,</span>
+<span class="go"> &#39;swath_id&#39;,</span>
+<span class="go"> &#39;range_spacing&#39;,</span>
+<span class="go"> &#39;azimuth_spacing&#39;,</span>
+<span class="go"> &#39;line_time_interval&#39;,</span>
+<span class="go"> &#39;num_output_lines&#39;,</span>
+<span class="go"> &#39;num_samples_per_line&#39;,</span>
+<span class="go"> &#39;data_type&#39;,</span>
+<span class="go"> &#39;spare_1&#39;,</span>
+<span class="go"> &#39;data_analysis_flag&#39;,</span>
+<span class="go"> &#39;ant_elev_corr_flag&#39;,</span>
+<span class="go"> &#39;chirp_extract_flag&#39;,</span>
+<span class="go"> &#39;srgr_flag&#39;,</span>
+<span class="go"> &#39;dop_cen_flag&#39;,</span>
+<span class="go"> &#39;dop_amb_flag&#39;,</span>
+<span class="go"> &#39;range_spread_comp_flag&#39;]</span>
+
+<span class="gp">In [12]: </span><span class="n">field</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s">&#39;range_spacing&#39;</span><span class="p">)</span>
+
+<span class="gp">In [13]: </span><span class="n">field</span><span class="o">.</span><span class="n">get</span> <span class="p">[</span><span class="n">TAB</span><span class="p">]</span>
+<span class="go">field.get_description  field.get_name         field.get_unit</span>
+<span class="go">field.get_elem         field.get_num_elems</span>
+<span class="go">field.get_elems        field.get_type</span>
+
+<span class="gp">In [13]: </span><span class="n">field</span><span class="o">.</span><span class="n">get_description</span><span class="p">()</span>
+<span class="gr">Out[13]: </span><span class="s">&#39;Range sample spacing&#39;</span>
+
+<span class="gp">In [14]: </span><span class="n">epr</span><span class="o">.</span><span class="n">data_type_id_to_str</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get_type</span><span class="p">())</span>
+<span class="gr">Out[14]: </span><span class="s">&#39;float&#39;</span>
+
+<span class="gp">In [15]: </span><span class="n">field</span><span class="o">.</span><span class="n">get_num_elems</span><span class="p">()</span>
+<span class="gr">Out[15]: </span><span class="mi">1</span>
+
+<span class="gp">In [16]: </span><span class="n">field</span><span class="o">.</span><span class="n">get_unit</span><span class="p">()</span>
+<span class="gr">Out[16]: </span><span class="s">&#39;m&#39;</span>
+
+<span class="gp">In [17]: </span><span class="k">print</span> <span class="n">field</span>
+<span class="go">range_spacing = 12.500000</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="iterating-over-epr-objects">
+<h2>Iterating over <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><tt class="xref py py-mod docutils literal"><span class="pre">epr</span></tt></a> objects<a class="headerlink" href="#iterating-over-epr-objects" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="reference.html#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">epr.Record</span></tt></a> objects are also <a class="reference external" href="http://docs.python.org/glossary.html#term-iterable">iterable</a> so one can write code like
+the following:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [18]: </span><span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">record</span><span class="p">:</span>
+<span class="go">             if field.get_num_elems() == 4:</span>
+<span class="go">                 print &#39;%s: %d elements&#39; % (field.get_name(), len(field))</span>
+
+<span class="go">        ....:</span>
+<span class="go">nominal_chirp.1.nom_chirp_amp: 4 elements</span>
+<span class="go">nominal_chirp.1.nom_chirp_phs: 4 elements</span>
+<span class="go">nominal_chirp.2.nom_chirp_amp: 4 elements</span>
+<span class="go">nominal_chirp.2.nom_chirp_phs: 4 elements</span>
+<span class="go">nominal_chirp.3.nom_chirp_amp: 4 elements</span>
+<span class="go">nominal_chirp.3.nom_chirp_phs: 4 elements</span>
+<span class="go">nominal_chirp.4.nom_chirp_amp: 4 elements</span>
+<span class="go">nominal_chirp.4.nom_chirp_phs: 4 elements</span>
+<span class="go">nominal_chirp.5.nom_chirp_amp: 4 elements</span>
+<span class="go">nominal_chirp.5.nom_chirp_phs: 4 elements</span>
+<span class="go">beam_merge_sl_range: 4 elements</span>
+<span class="go">beam_merge_alg_param: 4 elements</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="image-data">
+<h2>Image data<a class="headerlink" href="#image-data" title="Permalink to this headline">¶</a></h2>
+<p>Dealing with image data is simple as well:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [19]: </span><span class="n">product</span><span class="o">.</span><span class="n">get_band_names</span><span class="p">()</span>
+<span class="gr">Out[19]: </span><span class="p">[</span><span class="s">&#39;slant_range_time&#39;</span><span class="p">,</span>
+<span class="go">          &#39;incident_angle&#39;,</span>
+<span class="go">          &#39;latitude&#39;,</span>
+<span class="go">          &#39;longitude&#39;,</span>
+<span class="go">          &#39;proc_data&#39;]</span>
+
+<span class="gp">In [19]: </span><span class="n">band</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="s">&#39;proc_data&#39;</span><span class="p">)</span>
+
+<span class="gp">In [20]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span> <span class="p">[</span><span class="n">TAB</span><span class="p">]</span>
+<span class="go">band.bm_expr                   band.read_as_array</span>
+<span class="go">band.__class__                 band.read_raster</span>
+<span class="go">band.create_compatible_raster  band.__reduce__</span>
+<span class="go">band.data_type                 band.__reduce_ex__</span>
+<span class="go">band.__delattr__               band.__repr__</span>
+<span class="go">band.description               band.sample_model</span>
+<span class="go">band.__doc__                   band.scaling_factor</span>
+<span class="go">band.__format__                band.scaling_method</span>
+<span class="go">band.__getattribute__          band.scaling_offset</span>
+<span class="go">band.get_name                  band.__setattr__</span>
+<span class="go">band.__hash__                  band.__sizeof__</span>
+<span class="go">band.__init__                  band.spectr_band_index</span>
+<span class="go">band.lines_mirrored            band.__str__</span>
+<span class="go">band.__new__                   band.__subclasshook__</span>
+<span class="go">band.product                   band.unit</span>
+<span class="go">band.__pyx_vtable__</span>
+
+<span class="gp">In [20]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">read_as_array</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">xoffset</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">yoffset</span><span class="o">=</span><span class="mi">6500</span><span class="p">,</span> \
+<span class="go">xstep=2, ystep=2)</span>
+
+<span class="gp">In [21]: </span><span class="n">data</span>
+<span class="go">Out[21]:</span>
+<span class="go">array([[ 146.,  153.,  134., ...,   51.,   55.,   72.],</span>
+<span class="go">       [ 198.,  163.,  146., ...,   26.,   54.,   57.],</span>
+<span class="go">       [ 127.,  205.,  105., ...,   64.,   76.,   61.],</span>
+<span class="go">       ...,</span>
+<span class="go">       [  64.,   78.,   52., ...,   96.,  176.,  159.],</span>
+<span class="go">       [  66.,   41.,   45., ...,  200.,  153.,  203.],</span>
+<span class="go">       [  64.,   71.,   88., ...,  289.,  182.,  123.]], dtype=float32)</span>
+
+<span class="gp">In [22]: </span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+<span class="gr">Out[22]: </span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+
+<span class="gp">In [23]: </span><span class="n">imshow</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">gray</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gr">Out[23]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">AxesImage</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x60dcf10</span><span class="o">&gt;</span>
+
+<span class="gp">In [24]: </span><span class="n">title</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+<span class="gr">Out[24]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">Text</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x67e9950</span><span class="o">&gt;</span>
+
+<span class="gp">In [25]: </span><span class="n">colorbar</span><span class="p">()</span>
+<span class="gr">Out[25]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">Colorbar</span> <span class="n">instance</span> <span class="n">at</span> <span class="mh">0x6b18cb0</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<div class="figure">
+<img alt="_images/ASA_IMP_crop.png" src="_images/ASA_IMP_crop.png" style="width: 100%;" />
+<p class="caption">Image data read from the &#8220;proc_data&#8221; band</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Interactive use of PyEPR</a><ul>
+<li><a class="reference internal" href="#epr-module-and-classes"><tt class="docutils literal"><span class="pre">epr</span></tt> module and classes</a></li>
+<li><a class="reference internal" href="#epr-product-navigation"><tt class="docutils literal"><span class="pre">epr.Product</span></tt> navigation</a></li>
+<li><a class="reference internal" href="#iterating-over-epr-objects">Iterating over <tt class="docutils literal"><span class="pre">epr</span></tt> objects</a></li>
+<li><a class="reference internal" href="#image-data">Image data</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorials.html"
+                        title="previous chapter">Tutorials</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="bands_example.html"
+                        title="next chapter">Exporting band data</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/interactive_use.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="bands_example.html" title="Exporting band data"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorials.html" title="Tutorials"
+             >previous</a> |</li>
+        <li><a href="index.html">PyEPR 0.6 documentation</a> &raquo;</li>
+          <li><a href="tutorials.html" >Tutorials</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Antonio Valentino.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre/f554126df691.
+    </div>
+  </body>
+</html>

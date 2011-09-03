@@ -1,0 +1,86 @@
+Change history
+==============
+
+PyEPR 0.6 (12/08/2011)
+----------------------
+
+* full support for `Python 3`_
+* improved code highligh in the documentation
+* depend from cython >= 0.13 instead of cython >= 0.14.1.
+  Cythonizing :file:`epr.pyx` with `Python 3`_ requires cython >= 0.15
+
+
+PyEPR 0.5 (25/04/2011)
+----------------------
+
+* stop using :c:func:`PyFile_AsFile` that is no more available in
+  `Python 3`_
+* now documentation uses intersphinx_ capabilities
+* code examples added to documentation
+* tutorials added to documentation
+* the LICENSE.txt file is now included in the source distribution
+* the cython_ construct ``with nogil`` is now used instead of calling
+  :c:func:`Py_BEGIN_ALLOW_THREADS` and :c:func:`Py_END_ALLOW_THREADS`
+  directly
+* dropped old versions of cython_; now cython_ 0.14.1 or newer is required
+* suppressed several constness related warnings
+
+.. _`Python 3`: http://docs.python.org/py3k
+.. _intersphinx: http://sphinx.pocoo.org/latest/ext/intersphinx.html
+.. _cython: http://www.cython.org
+
+
+PyEPR 0.4 (10/04/2011)
+----------------------
+
+* fixed a bug in the :meth:`epr.Product.__str__`, :meth:`Dataset.__str__`
+  and :meth:`erp.Band.__repr__` methods (bad formatting)
+* fixed :meth:`epr.Field.get_elems` method for char and uchar data types
+* implemented :meth:`epr.Product.read_bitmask_raster`, now the
+  :class:`epr.Product` API is complete
+* fixed segfault in :meth:`epr.Field.get_unit` method when the field
+  has no unit
+* a smaller dataset is now used for unit tests
+* a new tutorial section has been added to the user documentation
+
+
+PyEPR 0.3 (01/04/2011)
+----------------------
+
+* version string of the EPR C API is now exposed as module attribute
+  :data:`epr.EPR_C_API_VERSION`
+* implemented ``__repr__``, ``__str__``, ``__eq__``, ``__ne__`` and
+  ``__iter__`` special methods
+* added utility methods (not included in the C API) like:
+
+  - :meth:`epr.Record.get_field_names`
+  - :meth:`epr.Record.fields`
+  - :meth:`epr.Dataset.records`
+  - :meth:`epr.Product.get_dataset_names`
+  - :meth:`epr.Product.get_band_names`
+  - :meth:`epr.Product.datasets`
+  - :meth:`epr.Product.bands`
+
+* fixed a logic error that caused empty messages in custom EPR
+  exceptions
+
+
+PyEPR 0.2 (20/03/2011)
+----------------------
+
+* sphinx_ documentation added
+* added docstrings to all method and classes
+* renamed some method and parameter in order to avoid redundancies and
+  have a more *pythonic*  API
+* in case of null pointers a :exc:`epr.EPRValueError` is raised
+* improved C library shutdown management
+* introduced some utility methods to :class:`epr.Product` and
+  :class:`epr.Record` classes
+
+.. _sphinx: http://sphinx.pocoo.org
+
+
+PyEPR 0.1 (09/03/2011)
+----------------------
+
+Initial release

@@ -1,0 +1,193 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Change history &mdash; PyEPR 0.6 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <link rel="top" title="PyEPR 0.6 documentation" href="index.html" />
+    <link rel="prev" title="API Reference" href="reference.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="reference.html" title="API Reference"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyEPR 0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="change-history">
+<h1>Change history<a class="headerlink" href="#change-history" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="pyepr-0-6-12-08-2011">
+<h2>PyEPR 0.6 (12/08/2011)<a class="headerlink" href="#pyepr-0-6-12-08-2011" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>full support for <a class="reference external" href="http://docs.python.org/py3k">Python 3</a></li>
+<li>improved code highligh in the documentation</li>
+<li>depend from cython &gt;= 0.13 instead of cython &gt;= 0.14.1.
+Cythonizing <tt class="file docutils literal"><span class="pre">epr.pyx</span></tt> with <a class="reference external" href="http://docs.python.org/py3k">Python 3</a> requires cython &gt;= 0.15</li>
+</ul>
+</div>
+<div class="section" id="pyepr-0-5-25-04-2011">
+<h2>PyEPR 0.5 (25/04/2011)<a class="headerlink" href="#pyepr-0-5-25-04-2011" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>stop using <tt class="xref c c-func docutils literal"><span class="pre">PyFile_AsFile()</span></tt> that is no more available in
+<a class="reference external" href="http://docs.python.org/py3k">Python 3</a></li>
+<li>now documentation uses <a class="reference external" href="http://sphinx.pocoo.org/latest/ext/intersphinx.html">intersphinx</a> capabilities</li>
+<li>code examples added to documentation</li>
+<li>tutorials added to documentation</li>
+<li>the LICENSE.txt file is now included in the source distribution</li>
+<li>the <a class="reference external" href="http://www.cython.org">cython</a> construct <tt class="docutils literal"><span class="pre">with</span> <span class="pre">nogil</span></tt> is now used instead of calling
+<tt class="xref c c-func docutils literal"><span class="pre">Py_BEGIN_ALLOW_THREADS()</span></tt> and <tt class="xref c c-func docutils literal"><span class="pre">Py_END_ALLOW_THREADS()</span></tt>
+directly</li>
+<li>dropped old versions of <a class="reference external" href="http://www.cython.org">cython</a>; now <a class="reference external" href="http://www.cython.org">cython</a> 0.14.1 or newer is required</li>
+<li>suppressed several constness related warnings</li>
+</ul>
+</div>
+<div class="section" id="pyepr-0-4-10-04-2011">
+<h2>PyEPR 0.4 (10/04/2011)<a class="headerlink" href="#pyepr-0-4-10-04-2011" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>fixed a bug in the <tt class="xref py py-meth docutils literal"><span class="pre">epr.Product.__str__()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">Dataset.__str__()</span></tt>
+and <tt class="xref py py-meth docutils literal"><span class="pre">erp.Band.__repr__()</span></tt> methods (bad formatting)</li>
+<li>fixed <a class="reference internal" href="reference.html#epr.Field.get_elems" title="epr.Field.get_elems"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Field.get_elems()</span></tt></a> method for char and uchar data types</li>
+<li>implemented <a class="reference internal" href="reference.html#epr.Product.read_bitmask_raster" title="epr.Product.read_bitmask_raster"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Product.read_bitmask_raster()</span></tt></a>, now the
+<a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> API is complete</li>
+<li>fixed segfault in <a class="reference internal" href="reference.html#epr.Field.get_unit" title="epr.Field.get_unit"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Field.get_unit()</span></tt></a> method when the field
+has no unit</li>
+<li>a smaller dataset is now used for unit tests</li>
+<li>a new tutorial section has been added to the user documentation</li>
+</ul>
+</div>
+<div class="section" id="pyepr-0-3-01-04-2011">
+<h2>PyEPR 0.3 (01/04/2011)<a class="headerlink" href="#pyepr-0-3-01-04-2011" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>version string of the EPR C API is now exposed as module attribute
+<a class="reference internal" href="reference.html#epr.EPR_C_API_VERSION" title="epr.EPR_C_API_VERSION"><tt class="xref py py-data docutils literal"><span class="pre">epr.EPR_C_API_VERSION</span></tt></a></li>
+<li>implemented <tt class="docutils literal"><span class="pre">__repr__</span></tt>, <tt class="docutils literal"><span class="pre">__str__</span></tt>, <tt class="docutils literal"><span class="pre">__eq__</span></tt>, <tt class="docutils literal"><span class="pre">__ne__</span></tt> and
+<tt class="docutils literal"><span class="pre">__iter__</span></tt> special methods</li>
+<li>added utility methods (not included in the C API) like:<ul>
+<li><a class="reference internal" href="reference.html#epr.Record.get_field_names" title="epr.Record.get_field_names"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Record.get_field_names()</span></tt></a></li>
+<li><a class="reference internal" href="reference.html#epr.Record.fields" title="epr.Record.fields"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Record.fields()</span></tt></a></li>
+<li><a class="reference internal" href="reference.html#epr.Dataset.records" title="epr.Dataset.records"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Dataset.records()</span></tt></a></li>
+<li><a class="reference internal" href="reference.html#epr.Product.get_dataset_names" title="epr.Product.get_dataset_names"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Product.get_dataset_names()</span></tt></a></li>
+<li><a class="reference internal" href="reference.html#epr.Product.get_band_names" title="epr.Product.get_band_names"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Product.get_band_names()</span></tt></a></li>
+<li><a class="reference internal" href="reference.html#epr.Product.datasets" title="epr.Product.datasets"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Product.datasets()</span></tt></a></li>
+<li><a class="reference internal" href="reference.html#epr.Product.bands" title="epr.Product.bands"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Product.bands()</span></tt></a></li>
+</ul>
+</li>
+<li>fixed a logic error that caused empty messages in custom EPR
+exceptions</li>
+</ul>
+</div>
+<div class="section" id="pyepr-0-2-20-03-2011">
+<h2>PyEPR 0.2 (20/03/2011)<a class="headerlink" href="#pyepr-0-2-20-03-2011" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://sphinx.pocoo.org">sphinx</a> documentation added</li>
+<li>added docstrings to all method and classes</li>
+<li>renamed some method and parameter in order to avoid redundancies and
+have a more <em>pythonic</em>  API</li>
+<li>in case of null pointers a <a class="reference internal" href="reference.html#epr.EPRValueError" title="epr.EPRValueError"><tt class="xref py py-exc docutils literal"><span class="pre">epr.EPRValueError</span></tt></a> is raised</li>
+<li>improved C library shutdown management</li>
+<li>introduced some utility methods to <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> and
+<a class="reference internal" href="reference.html#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">epr.Record</span></tt></a> classes</li>
+</ul>
+</div>
+<div class="section" id="pyepr-0-1-09-03-2011">
+<h2>PyEPR 0.1 (09/03/2011)<a class="headerlink" href="#pyepr-0-1-09-03-2011" title="Permalink to this headline">¶</a></h2>
+<p>Initial release</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Change history</a><ul>
+<li><a class="reference internal" href="#pyepr-0-6-12-08-2011">PyEPR 0.6 (12/08/2011)</a></li>
+<li><a class="reference internal" href="#pyepr-0-5-25-04-2011">PyEPR 0.5 (25/04/2011)</a></li>
+<li><a class="reference internal" href="#pyepr-0-4-10-04-2011">PyEPR 0.4 (10/04/2011)</a></li>
+<li><a class="reference internal" href="#pyepr-0-3-01-04-2011">PyEPR 0.3 (01/04/2011)</a></li>
+<li><a class="reference internal" href="#pyepr-0-2-20-03-2011">PyEPR 0.2 (20/03/2011)</a></li>
+<li><a class="reference internal" href="#pyepr-0-1-09-03-2011">PyEPR 0.1 (09/03/2011)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="reference.html"
+                        title="previous chapter">API Reference</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/NEWS.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="reference.html" title="API Reference"
+             >previous</a> |</li>
+        <li><a href="index.html">PyEPR 0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Antonio Valentino.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1pre/f554126df691.
+    </div>
+  </body>
+</html>
