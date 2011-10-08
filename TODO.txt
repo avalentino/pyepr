@@ -1,5 +1,0 @@
-PyEPR TODO
-==========
-
-* support for multiple version of EPR API (2.2 and 2.1)
-* debug mode (error handlers and logging)
