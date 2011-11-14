@@ -120,8 +120,14 @@ class TestOpenProduct(unittest.TestCase):
     def test_open_failure(self):
         self.assertRaises(ValueError, epr.open, '')
 
+    def test_open_failure_invalid_product(self):
+        self.assertRaises(ValueError, epr.open, __file__)
+
     def test_product_constructor_failure(self):
         self.assertRaises(ValueError, epr.Product, '')
+
+    def test_product_constructor_failure_invalid_product(self):
+        self.assertRaises(ValueError, epr.Product, __file__)
 
 
 class TestProduct(unittest.TestCase):
@@ -1587,4 +1593,7 @@ class TestLibVersion(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    print('PyEPR: %s' % epr.__version__)
+    print('EPR API: %s' % epr.EPR_C_API_VERSION)
+    print('Python: %s' % sys.version)
     unittest.main()

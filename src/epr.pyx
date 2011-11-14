@@ -2097,7 +2097,7 @@ cdef class Product(EprObject):
             self._ptr = epr_open_product(cfilename)
 
         if self._ptr is NULL:
-            pyepr_null_ptr_error('unable to open %s' % filename)
+            raise ValueError('unable to open "%s"' % filename)
 
     def __dealloc__(self):
         if self._ptr is not NULL:
