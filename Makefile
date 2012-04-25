@@ -53,6 +53,7 @@ clean:
 	$(RM) src/*.py[co] tests/*.py[co] doc/sphinxext/*.py[co] README.html
 	$(MAKE) -C doc clean
 	$(RM) -r doc/_build
+	find . -name '*~' -delete
 
 distclean: clean
 	$(RM) -r build dist pyepr.egg-info
