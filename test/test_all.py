@@ -120,6 +120,9 @@ class TestOpenProduct(unittest.TestCase):
     def test_open_failure(self):
         self.assertRaises(ValueError, epr.open, '')
 
+    def test_filename_type(self):
+        self.assertRaises(TypeError, epr.open, 3)
+
     def test_open_failure_invalid_product(self):
         self.assertRaises(ValueError, epr.open, __file__)
 

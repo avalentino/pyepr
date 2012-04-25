@@ -2,10 +2,10 @@ Change history
 ==============
 
 
-PyEPR 0.7 (in development)
---------------------------
+PyEPR 0.6.1 (in development)
+----------------------------
 
-* TBW
+* fix compatibility with cython_ 0.16
 
 
 PyEPR 0.6 (12/08/2011)
