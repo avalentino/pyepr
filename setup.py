@@ -19,6 +19,8 @@
 # along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
+import glob
 
 from distutils.core import setup
 from distutils.extension import Extension
@@ -29,6 +31,15 @@ except ImportError:
     from distutils.command.build_ext import build_ext
     sources = [os.path.join('src', 'epr.c')]
 
+include_dirs = None
+
+# command line arguments management
+for arg in list(sys.argv):
+    if arg.startswith('--epr-api-src='):
+        srcdir = os.path.expanduser(arg.split('=')[1])
+        sources.extend(glob.glob(os.path.join(srcdir, 'epr_*.c')))
+        include_dirs = [srcdir]
+        sys.argv.remove(arg)
 
 setup(
     name='pyepr',
@@ -72,7 +83,12 @@ any data field contained in a product file.
     ],
     platforms=['any'],
     license='GPL3',
-    cmdclass = {'build_ext': build_ext},
-    ext_modules=[Extension('epr', sources=sources, libraries=['epr_api'])],
+    cmdclass={'build_ext': build_ext},
+    ext_modules=[
+        Extension('epr',
+                  sources=sources,
+                  include_dirs=include_dirs,
+                  libraries=['epr_api']),
+        ],
     requires=['numpy'],
 )

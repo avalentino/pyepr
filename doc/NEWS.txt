@@ -6,6 +6,8 @@ PyEPR 0.6.1 (in development)
 ----------------------------
 
 * fix compatibility with cython_ 0.16
+* added a new option to the setup script (:option:`--epr-api-src`) to build
+  PyEPR using the EPR-API C sources
 
 
 PyEPR 0.6 (12/08/2011)
