@@ -57,7 +57,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'PyEPR'
-copyright = u'2011, Antonio Valentino'
+copyright = u'2011-2012, Antonio Valentino'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -268,7 +268,7 @@ latex_domain_indices = False
 epub_title = u'PyEPR'
 epub_author = u'Antonio Valentino'
 epub_publisher = u'Antonio Valentino'
-epub_copyright = u'2011, Antonio Valentino'
+epub_copyright = u'2011-2012, Antonio Valentino'
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.
