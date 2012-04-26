@@ -50,7 +50,7 @@ correctly installed and configured:
 * a reasonably updated C compiler [#]_ (build only)
 * Cython_ >= 0.13 [#]_ (build only)
 
-.. note:: In order to build PyEPR_ it is required Cython_ >= 0.15
+.. note:: In order to build PyEPR_ for Python3_ it is required Cython_ >= 0.15
 
 
 .. [#] PyEPR_ has been developed and tested with gcc_ 4.
@@ -116,7 +116,15 @@ To install PyEPR_ in a non-standard path::
     $ python setup.py install --prefix=<TARGET_PATH>
 
 just make sure that :file:`<TARGET_PATH>/lib/pythonX.Y/site-packages` is in
-the ``PYTHONPATH``.
+the :envvar:`PYTHONPATH`.
+
+For all installation methods described above it is assumed that the `EPR API`_
+C library is properly installed in the system (see the Requirements_ section).
+
+It is also possible to use the `EPR API`_ C sources directly to build PyEPR by
+specifying the  :option:`--epr-api-src` option::
+
+    $ python setup.py install --epr-api-src=../epr-api/src
 
 .. _easy_install: http://pypi.python.org/pypi/setuptools#using-setuptools-and-easyinstall
 .. _pip: http://pypi.python.org/pypi/pip
@@ -194,7 +202,7 @@ to read a record using the `epr_read_record` function:
 
 The function takes a `EPR_SDatasetId` as a parameter and assumes all
 fields (including ``dataset->product_id``) are valid.
-It is responsibility of the programmer tho keep all structures valid and
+It is responsibility of the programmer to keep all structures valid and
 free them at the right moment and in the correct order.
 
 This is the standard way to go in C but not in Python_.
@@ -358,7 +366,7 @@ and ``__ne__`` methods for objects comparison::
         print 'field1:', field1
         print 'field2:', field2
 
-:class:`epr.Field` objecta also implement the ``__len__`` special method
+:class:`epr.Field` object also implement the ``__len__`` special method
 that returns the number of elements in the field::
 
     if field.get_type() != epr.E_TID_STRING:
