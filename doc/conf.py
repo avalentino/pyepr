@@ -215,11 +215,16 @@ htmlhelp_basename = 'PyEPRdoc'
 
 # -- Options for LaTeX output --------------------------------------------------
 
-# The paper size ('letter' or 'a4').
-latex_paper_size = 'a4'
+latex_elements = {
+# The paper size ('letterpaper' or 'a4paper').
+'papersize': 'a4paper',
 
 # The font size ('10pt', '11pt' or '12pt').
-latex_font_size = '12pt'
+'pointsize': '12pt',
+
+# Additional stuff for the LaTeX preamble.
+#'preamble': '',
+}
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
@@ -242,9 +247,6 @@ latex_documents = [
 # If true, show URL addresses after external links.
 latex_show_urls = 'footnote'
 
-# Additional stuff for the LaTeX preamble.
-#latex_preamble = ''
-
 # Documents to append as an appendix to all manuals.
 #latex_appendices = []
 
@@ -256,10 +258,34 @@ latex_domain_indices = False
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-#man_pages = [
-#    ('index', 'pyepr', u'PyEPR Documentation',
-#     [u'Antonio Valentino'], 1)
-#]
+man_pages = [
+    ('index', 'pyepr', u'PyEPR Documentation',
+     [u'Antonio Valentino'], 1)
+]
+
+# If true, show URL addresses after external links.
+#man_show_urls = False
+
+
+# -- Options for Texinfo output ------------------------------------------------
+
+# Grouping the document tree into Texinfo files. List of tuples
+# (source start file, target name, title, author,
+#  dir menu entry, description, category)
+texinfo_documents = [
+  ('index', 'PyEPR', u'PyEPR Documentation',
+   u'Antonio Valentino', 'PyEPR', 'One line description of project.',
+   'Miscellaneous'),
+]
+
+# Documents to append as an appendix to all manuals.
+#texinfo_appendices = []
+
+# If false, no module index is generated.
+#texinfo_domain_indices = True
+
+# How to display URL addresses: 'footnote', 'no', or 'inline'.
+#texinfo_show_urls = 'footnote'
 
 
 # -- Options for Epub output ---------------------------------------------------
@@ -283,6 +309,9 @@ epub_copyright = u'2011-2012, Antonio Valentino'
 
 # A unique identification for the text.
 #epub_uid = ''
+
+# A tuple containing the cover image and cover page html template filenames.
+#epub_cover = ()
 
 # HTML files that should be inserted before the pages created by sphinx.
 # The format is a list of tuples containing the path and title.
