@@ -377,7 +377,7 @@ import numpy as np
 _DEFAULT_FS_ENCODING = sys.getfilesystemencoding()
 
 
-cdef char* _to_csting(s, encoding='UTF-8') except NULL:
+cdef char* _to_cstring(s, encoding='UTF-8') except NULL:
     cdef char* p = NULL
 
     if hasattr(s, 'encode'):
@@ -1203,7 +1203,7 @@ cdef class Record(EprObject):
         '''
 
         cdef EPR_SField* field_ptr
-        cdef char* cname = _to_csting(name)
+        cdef char* cname = _to_cstring(name)
         field_ptr = <EPR_SField*>epr_get_field(self._ptr, cname)
         if field_ptr is NULL:
             pyepr_null_ptr_error('unable to get field "%s"' % name)
@@ -2096,7 +2096,7 @@ cdef class Product(EprObject):
     cdef EPR_SProductId* _ptr
 
     def __cinit__(self, filename, *args, **kargs):
-        cdef char* cfilename = _to_csting(filename, _DEFAULT_FS_ENCODING)
+        cdef char* cfilename = _to_cstring(filename, _DEFAULT_FS_ENCODING)
 
         with nogil:
             self._ptr = epr_open_product(cfilename)
@@ -2231,7 +2231,7 @@ cdef class Product(EprObject):
         '''
 
         cdef EPR_SDatasetId* dataset_id
-        cdef char* cname = _to_csting(name)
+        cdef char* cname = _to_cstring(name)
         dataset_id = epr_get_dataset_id(self._ptr, cname)
         if dataset_id is NULL:
             pyepr_null_ptr_error(r'unable to get dataset "%s"' % name)
@@ -2291,7 +2291,7 @@ cdef class Product(EprObject):
         '''
 
         cdef EPR_SBandId* band_id
-        cdef char* cname = _to_csting(name)
+        cdef char* cname = _to_cstring(name)
         band_id = epr_get_band_id(self._ptr, cname)
         if band_id is NULL:
             pyepr_null_ptr_error('unable to get band "%s"' % name)
@@ -2350,7 +2350,7 @@ cdef class Product(EprObject):
 
         '''
 
-        cdef char* c_bm_expr = _to_csting(bm_expr)
+        cdef char* c_bm_expr = _to_cstring(bm_expr)
         cdef int ret = epr_read_bitmask_raster(self._ptr, c_bm_expr,
                                                xoffset, yoffset,
                                                (<Raster>raster)._ptr)
