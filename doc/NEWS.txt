@@ -2,8 +2,8 @@ Change history
 ==============
 
 
-PyEPR 0.6.1 (in development)
-----------------------------
+PyEPR 0.6.1 (26/04/2012)
+------------------------
 
 * fix compatibility with cython_ 0.16
 * added a new option to the setup script (:option:`--epr-api-src`) to build
