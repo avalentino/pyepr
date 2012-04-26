@@ -2102,6 +2102,9 @@ cdef class Product(EprObject):
             self._ptr = epr_open_product(cfilename)
 
         if self._ptr is NULL:
+            # try to get error info from the lib
+            pyepr_check_errors()
+
             raise ValueError('unable to open "%s"' % filename)
 
     def __dealloc__(self):

@@ -5,7 +5,7 @@ Change history
 PyEPR 0.X.Y (in development)
 ----------------------------
 
-@TBW
+* more datailed error messages in case of open failures
 
 
 PyEPR 0.6.1 (26/04/2012)
