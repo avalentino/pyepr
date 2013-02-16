@@ -6,6 +6,10 @@ PyEPR 0.X.Y (in development)
 ----------------------------
 
 * more datailed error messages in case of open failures
+* new sphinx theme for the HTML documentation
+* `Travis-CI`_ has been setup for the project
+
+.. _`Travis-CI`: https://travis-ci.org/avalentino/pyepr
 
 
 PyEPR 0.6.1 (26/04/2012)
