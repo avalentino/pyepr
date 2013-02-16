@@ -118,7 +118,7 @@ class TestOpenProduct(unittest.TestCase):
         self.assertTrue(isinstance(product, epr.Product))
 
     def test_open_failure(self):
-        self.assertRaises(ValueError, epr.open, '')
+        self.assertRaises(epr.EPRError, epr.open, '')
 
     def test_filename_type(self):
         self.assertRaises(TypeError, epr.open, 3)
@@ -127,7 +127,7 @@ class TestOpenProduct(unittest.TestCase):
         self.assertRaises(ValueError, epr.open, __file__)
 
     def test_product_constructor_failure(self):
-        self.assertRaises(ValueError, epr.Product, '')
+        self.assertRaises(epr.EPRError, epr.Product, '')
 
     def test_product_constructor_failure_invalid_product(self):
         self.assertRaises(ValueError, epr.Product, __file__)
@@ -1587,7 +1587,7 @@ class TestDirectInstantiation(unittest.TestCase):
         self.assertRaisesRegex(TypeError, pattern, epr.Dataset)
 
     def test_direct_Product_instantiation(self):
-        self.assertRaises(ValueError, epr.Product, 'filename')
+        self.assertRaises(epr.EPRError, epr.Product, 'filename')
 
 
 class TestLibVersion(unittest.TestCase):
