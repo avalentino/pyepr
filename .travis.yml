@@ -13,9 +13,7 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq libepr-api2-dev
   - pip install -r requirements.txt --use-mirrors
-  - wget -P test http://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz
-  - gunzip MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz
 
-install: "python setup.py build_ext --inplace"
+install: python setup.py build_ext --inplace
 
-script: "PYTHONPATH=. python test/test_all.py"
+script: make check
