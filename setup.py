@@ -31,14 +31,17 @@ except ImportError:
     from distutils.command.build_ext import build_ext
     sources = [os.path.join('src', 'epr.c')]
 
-include_dirs = None
+
+from numpy.distutils.misc_util import get_numpy_include_dirs
+include_dirs = get_numpy_include_dirs()
+
 
 # command line arguments management
 for arg in list(sys.argv):
     if arg.startswith('--epr-api-src='):
         srcdir = os.path.expanduser(arg.split('=')[1])
         sources.extend(glob.glob(os.path.join(srcdir, 'epr_*.c')))
-        include_dirs = [srcdir]
+        include_dirs.append(srcdir)
         sys.argv.remove(arg)
 
 setup(
