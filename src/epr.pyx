@@ -2,7 +2,7 @@
 
 # PyEPR - Python bindings for ENVISAT Product Reader API
 #
-# Copyright (C) 2011-2012, Antonio Valentino <antonio.valentino@tiscali.it>
+# Copyright (C) 2011-2013, Antonio Valentino <antonio.valentino@tiscali.it>
 #
 # This file is part of PyEPR.
 #
