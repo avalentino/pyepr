@@ -2,12 +2,20 @@ Change history
 ==============
 
 
-PyEPR 0.X.Y (in development)
+PyEPR 0.6.2 (in development)
 ----------------------------
 
-* more datailed error messages in case of open failures
+* more detailed error messages in case of open failures
 * new sphinx theme for the HTML documentation
-* `Travis-CI`_ has been setup for the project
+* `Travis-CI`_ has been set-up for the project
+* now the source tar-ball also includes a copy of the EPR C API sources
+  so that no external C library is required to build PyEPR.
+
+  This features also makes it easier to install PyEPR using pip.
+
+  The user can still guild PyEPR against a system version of the ERP-API
+  library simply using the :option:`--epr-api-src` option of the
+  :file:`setup.py` script with "None"" as value.
 
 .. _`Travis-CI`: https://travis-ci.org/avalentino/pyepr
 

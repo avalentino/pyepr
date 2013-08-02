@@ -46,7 +46,8 @@ correctly installed and configured:
 
 * Python2_ >= 2.6 or Python3_ >= 3.1
 * numpy_ >= 1.3.0
-* `EPR API`_ >= 2.2
+* `EPR API`_ >= 2.2 (optional, since PyEPR 0.6.2 the source tar-ball comes
+   with a copy of the PER C API sources)
 * a reasonably updated C compiler [#]_ (build only)
 * Cython_ >= 0.13 [#]_ (build only)
 
@@ -73,7 +74,7 @@ Download
 
 .. highlight:: sh
 
-Official source tarballs can be downloaded form PyPi_:
+Official source tar-balls can be downloaded form PyPi_:
 
     http://pypi.python.org/pypi/pyepr
 
@@ -118,13 +119,27 @@ To install PyEPR_ in a non-standard path::
 just make sure that :file:`<TARGET_PATH>/lib/pythonX.Y/site-packages` is in
 the :envvar:`PYTHONPATH`.
 
-For all installation methods described above it is assumed that the `EPR API`_
-C library is properly installed in the system (see the Requirements_ section).
+The :file:`setup.py` script by default checks for the availability of the
+EPR C API source code in the :file:`<package-root>/epr-api-src` directory
+and tries to build PyEPR in *standalone mode*, i.e. without linking an
+external dynamic library of EPR-API.
 
-It is also possible to use the `EPR API`_ C sources directly to build PyEPR by
-specifying the  :option:`--epr-api-src` option::
+If no EPR C API sources are found then the :file:`setup.py` of PyEPR
+automatically tries to link the EPR-API dynamic library.
+This can happen, for example, if the user is using a copy of the PyEPR
+sources cloned from a git_ repository.
+In this case it is assumed that the `EPR API`_ C library is properly
+installed in the system (see the Requirements_ section).
+
+It is possible to control which `EPR API`_ C sources to use by means of the
+:option:`--epr-api-src` option of the :file:`setup.py` script::
 
     $ python setup.py install --epr-api-src=../epr-api/src
+
+Also it is possible to switch off the *standalone mode* and force the link
+with the system `EPR API`_ C library::
+
+    $ python setup.py install --epr-api-src=None
 
 .. _pip: http://pypi.python.org/pypi/pip
 .. _easy_install: http://pypi.python.org/pypi/setuptools#using-setuptools-and-easyinstall

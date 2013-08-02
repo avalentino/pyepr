@@ -3,6 +3,9 @@ include LICENSE.txt
 include requirements.txt
 include src/*.c
 
+recursive-include LICENSES *.txt
+recursive-include epr-api-src *.c *.h
+
 recursive-include doc *.txt *.py Makefile make.bat *.png
 recursive-include doc/_templates *.html
 recursive-include doc/pydoctheme *

@@ -18,12 +18,22 @@
 # You should have received a copy of the GNU General Public License
 # along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import print_function
+
 import os
+import re
 import sys
 import glob
 
 from distutils.core import setup
 from distutils.extension import Extension
+
+source = []
+libraries = []
+include_dirs = []
+eprsrcdir = None
+
+
 try:
     from Cython.Distutils import build_ext
     sources = [os.path.join('src', 'epr.pyx')]
@@ -33,20 +43,48 @@ except ImportError:
 
 
 from numpy.distutils.misc_util import get_numpy_include_dirs
-include_dirs = get_numpy_include_dirs()
+include_dirs.extend(get_numpy_include_dirs())
 
 
 # command line arguments management
 for arg in list(sys.argv):
     if arg.startswith('--epr-api-src='):
-        srcdir = os.path.expanduser(arg.split('=')[1])
-        sources.extend(glob.glob(os.path.join(srcdir, 'epr_*.c')))
-        include_dirs.append(srcdir)
+        eprsrcdir = os.path.expanduser(arg.split('=')[1])
+        if eprsrcdir.lower() == 'none':
+            eprsrcdir = False
         sys.argv.remove(arg)
+
+
+# check for local epr-api sources
+if eprsrcdir is None:
+    if os.path.isdir('epr-api-src'):
+        eprsrcdir = 'epr-api-src'
+
+
+if eprsrcdir:
+    include_dirs.append(eprsrcdir)
+    sources.extend(glob.glob(os.path.join(eprsrcdir, 'epr_*.c')))
+    #libraries.append('m')
+    print('using EPR C API sources ar "{}"'.format(eprsrcdir))
+else:
+    libraries.append('epr_api')
+    print('using pre-built dynamic libraray for EPR C API')
+
+
+def get_version():
+    filename = os.path.join('src', 'epr.pyx')
+    data = open(filename).read()
+
+    mobj = re.search(
+        r"^__version__\s*=\s*\'(?P<version>\d+(\.\d+)*(\+|\-dev)?)\'",
+        data, re.MULTILINE)
+
+    return mobj.group('version')
+
 
 setup(
     name='pyepr',
-    version='0.6.1+',
+    version=get_version(),
     author='Antonio Valentino',
     author_email='antonio.valentino@tiscali.it',
     url='http://avalentino.github.com/pyepr',
@@ -88,10 +126,13 @@ any data field contained in a product file.
     license='GPL3',
     cmdclass={'build_ext': build_ext},
     ext_modules=[
-        Extension('epr',
-                  sources=sources,
-                  include_dirs=include_dirs,
-                  libraries=['epr_api']),
-        ],
+        Extension(
+            'epr',
+            sources=sources,
+            include_dirs=include_dirs,
+            libraries=libraries,
+            #extra_compile_args=['-ansi'],
+        ),
+    ],
     requires=['numpy'],
 )
