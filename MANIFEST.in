@@ -1,7 +1,10 @@
 include MANIFEST.in
 include LICENSE.txt
+include requirements.txt
 include src/*.c
 
 recursive-include doc *.txt *.py Makefile make.bat *.png
+recursive-include doc/_templates *.html
+recursive-include doc/pydoctheme *
 recursive-include doc/html *
 recursive-exclude doc/_build *
