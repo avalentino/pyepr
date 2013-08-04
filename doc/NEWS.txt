@@ -17,6 +17,15 @@ PyEPR 0.6.2 (in development)
   library simply using the :option:`--epr-api-src` option of the
   :file:`setup.py` script with "None"" as value.
 
+  The ERP C API included in the source tar-ball is version *2.3dev-pyepr062*,
+  a development and patched version that allows the following enhancements.
+
+  - support for ERS products in ENVISAT format
+  - support for ASAR products generated with the new ASAR SW version 6.02
+    (ref. doc. PO-RS-MDA-GS-2009_4/C
+  - fix incorrect reading of "incident_angle" bands (closes :issue:`6`).
+    The issue is in the EPR C API.
+
 .. _`Travis-CI`: https://travis-ci.org/avalentino/pyepr
 
 
