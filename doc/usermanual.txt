@@ -46,8 +46,8 @@ correctly installed and configured:
 
 * Python2_ >= 2.6 or Python3_ >= 3.1
 * numpy_ >= 1.3.0
-* `EPR API`_ >= 2.2 (optional, since PyEPR 0.6.2 the source tar-ball comes
-   with a copy of the PER C API sources)
+* `EPR API`_ >= 2.2 (optional, since PyEPR 0.7 the source tar-ball comes
+  with a copy of the PER C API sources)
 * a reasonably updated C compiler [#]_ (build only)
 * Cython_ >= 0.13 [#]_ (build only)
 

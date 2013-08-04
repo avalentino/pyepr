@@ -2,8 +2,8 @@ Change history
 ==============
 
 
-PyEPR 0.6.2 (in development)
-----------------------------
+PyEPR 0.7 (04/08/2013)
+----------------------
 
 * more detailed error messages in case of open failures
 * new sphinx theme for the HTML documentation
