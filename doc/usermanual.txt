@@ -29,7 +29,7 @@ Parameters" record to the standard output::
         'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1')
     dataset = product.get_dataset('MAIN_PROCESSING_PARAMS_ADS')
     record = dataset.read_record(0)
-    print record
+    print(record)
 
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _Python: http://www.python.org
@@ -326,14 +326,14 @@ Example::
 
     for dataset in product.datasets():
         for record in dataset.records():
-            print record
-            print
+            print(record)
+            print()
 
 Another example::
 
     if 'proc_data' in product.band_names():
         band = product.get_band('proc_data')
-        print band
+        print(band)
 
 
 Special methods
@@ -369,17 +369,17 @@ So it is possible to write code like the following::
 
     for record in dataset:
         for index, field in enumerate(record):
-            print index, field
+            print(index, field)
 
 :class:`epr.DSD` and :class:`epr.Filed` classes implement the ``__eq__``
 and ``__ne__`` methods for objects comparison::
 
     if filed1 == field2:
-        print 'field 1 and field2 are equal'
-        print field1
+        print('field 1 and field2 are equal')
+        print(field1)
     else:
-        print 'field1:', field1
-        print 'field2:', field2
+        print('field1:', field1)
+        print('field2:', field2)
 
 :class:`epr.Field` object also implement the ``__len__`` special method
 that returns the number of elements in the field::

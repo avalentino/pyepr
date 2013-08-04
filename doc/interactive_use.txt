@@ -155,7 +155,7 @@ instance of the desired ENVISAT_ :class:`epr.Product`::
     In [5]: product.tot_size / 1024.**2
     Out[5]: 132.01041889190674
 
-    In [6]: print product
+    In [6]: print(product)
     epr.Product(ASA_IMP_1PNUPA20060202_ ...) 7 datasets, 5 bands
 
     epr.Dataset(MDS1_SQ_ADS) 1 records
@@ -240,7 +240,7 @@ get all desired information from the product::
     In [16]: field.get_unit()
     Out[16]: 'm'
 
-    In [17]: print field
+    In [17]: print(field)
     range_spacing = 12.500000
 
 
@@ -252,7 +252,7 @@ the following::
 
     In [18]: for field in record:
                  if field.get_num_elems() == 4:
-                     print '%s: %d elements' % (field.get_name(), len(field))
+                     print('%s: %d elements' % (field.get_name(), len(field)))
 
             ....:
     nominal_chirp.1.nom_chirp_amp: 4 elements
