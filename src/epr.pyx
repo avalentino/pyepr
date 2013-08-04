@@ -42,7 +42,7 @@ in a product file.
 '''
 
 __revision__ = '$Id$'
-__version__ = '0.7.0'
+__version__ = '0.7.1dev'
 
 
 cdef extern from *:
