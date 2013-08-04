@@ -38,7 +38,8 @@ correctly installed and configured:
 
 * Python2_ >= 2.6 or Python3_ >= 3.1
 * numpy_ >= 1.3.0
-* `EPR API`_ >= 2.2
+* `EPR API`_ >= 2.2 (optional, since PyEPR 0.7 the source tar-ball comes
+  with a copy of the PER C API sources)
 * a reasonably updated C compiler (build only)
 * Cython_ >= 0.13 (build only)
 
@@ -52,11 +53,12 @@ correctly installed and configured:
 Download
 ========
 
-Official source tarballs can be downloads form:
+Official source tarballs can be downloaded form PyPi_:
 
     http://pypi.python.org/pypi/pyepr
 
-Source code of development versions is available at
+The source code of the development versions is available on the GitHub_
+project page
 
     https://github.com/avalentino/pyepr
 
@@ -64,21 +66,24 @@ To clone the git_ repository the following command can be used::
 
     $ git clone https://github.com/avalentino/pyepr.git
 
+.. _PyPi: http://pypi.python.org
+.. _GitHub: https://github.com
 .. _git: http://git-scm.com
 
 
 Installation
 ============
 
-The easier way to install PyEPR_ is using tools like easy_install_, pip_::
+The easier way to install PyEPR_ is using tools like pip_ or easy_install_::
 
-    $ easy_install pyepr
+    $ pip install pyepr
 
 or::
 
-    $ easy_install -U --prefix=<TARGET DIRECTORY>
+    $ pip install -U --prefix=<TARGET DIRECTORY>
 
-PyEPR_ can be installer from the source tarball using the following command::
+PyEPR_ can be installed from the source tar.ball using the following
+command::
 
     $ python setup.py install
 
@@ -86,8 +91,8 @@ To install PyEPR_ in a non-standard path::
 
     $ python setup.py install --prefix=<TARGET_PATH>
 
-.. _easy_install: http://pypi.python.org/pypi/setuptools#using-setuptools-and-easyinstall
 .. _pip: http://pypi.python.org/pypi/pip
+.. _easy_install: http://pypi.python.org/pypi/setuptools#using-setuptools-and-easyinstall
 
 
 License
