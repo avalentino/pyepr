@@ -2,12 +2,29 @@ Change history
 ==============
 
 
-PyEPR 0.X.Y (in development)
-----------------------------
+PyEPR 0.7 (04/08/2013)
+----------------------
 
-* more datailed error messages in case of open failures
+* more detailed error messages in case of open failures
 * new sphinx theme for the HTML documentation
-* `Travis-CI`_ has been setup for the project
+* `Travis-CI`_ has been set-up for the project
+* now the source tar-ball also includes a copy of the EPR C API sources
+  so that no external C library is required to build PyEPR.
+
+  This features also makes it easier to install PyEPR using pip.
+
+  The user can still guild PyEPR against a system version of the ERP-API
+  library simply using the :option:`--epr-api-src` option of the
+  :file:`setup.py` script with "None"" as value.
+
+  The ERP C API included in the source tar-ball is version *2.3dev-pyepr062*,
+  a development and patched version that allows the following enhancements.
+
+  - support for ERS products in ENVISAT format
+  - support for ASAR products generated with the new ASAR SW version 6.02
+    (ref. doc. PO-RS-MDA-GS-2009_4/C
+  - fix incorrect reading of "incident_angle" bands (closes :issue:`6`).
+    The issue is in the EPR C API.
 
 .. _`Travis-CI`: https://travis-ci.org/avalentino/pyepr
 

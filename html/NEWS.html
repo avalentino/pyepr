@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Change history &mdash; PyEPR 0.6.1+dev documentation</title>
+    <title>Change history &mdash; PyEPR 0.7 documentation</title>
     
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.6.1+dev',
+        VERSION:     '0.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.6.1+dev documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.7 documentation" href="index.html" />
     <link rel="prev" title="API Reference" href="reference.html" /> 
   </head>
   <body>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="reference.html" title="API Reference"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.6.1+dev documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.7 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -50,12 +50,31 @@
             
   <div class="section" id="change-history">
 <h1>Change history<a class="headerlink" href="#change-history" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="pyepr-0-x-y-in-development">
-<h2>PyEPR 0.X.Y (in development)<a class="headerlink" href="#pyepr-0-x-y-in-development" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pyepr-0-7-04-08-2013">
+<h2>PyEPR 0.7 (04/08/2013)<a class="headerlink" href="#pyepr-0-7-04-08-2013" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">more detailed error messages in case of open failures</p>
+</li>
+<li><p class="first">new sphinx theme for the HTML documentation</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://travis-ci.org/avalentino/pyepr">Travis-CI</a> has been set-up for the project</p>
+</li>
+<li><p class="first">now the source tar-ball also includes a copy of the EPR C API sources
+so that no external C library is required to build PyEPR.</p>
+<p>This features also makes it easier to install PyEPR using pip.</p>
+<p>The user can still guild PyEPR against a system version of the ERP-API
+library simply using the <em class="xref std std-option">--epr-api-src</em> option of the
+<tt class="file docutils literal"><span class="pre">setup.py</span></tt> script with &#8220;None&#8221;&#8221; as value.</p>
+<p>The ERP C API included in the source tar-ball is version <em>2.3dev-pyepr062</em>,
+a development and patched version that allows the following enhancements.</p>
 <ul class="simple">
-<li>more datailed error messages in case of open failures</li>
-<li>new sphinx theme for the HTML documentation</li>
-<li><a class="reference external" href="https://travis-ci.org/avalentino/pyepr">Travis-CI</a> has been setup for the project</li>
+<li>support for ERS products in ENVISAT format</li>
+<li>support for ASAR products generated with the new ASAR SW version 6.02
+(ref. doc. PO-RS-MDA-GS-2009_4/C</li>
+<li>fix incorrect reading of &#8220;incident_angle&#8221; bands (closes <a class="reference external" href="https://github.com/avalentino/pyepr/issues/6">gh-6</a>).
+The issue is in the EPR C API.</li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="section" id="pyepr-0-6-1-26-04-2012">
@@ -154,7 +173,7 @@ have a more <em>pythonic</em>  API</li>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Change history</a><ul>
-<li><a class="reference internal" href="#pyepr-0-x-y-in-development">PyEPR 0.X.Y (in development)</a></li>
+<li><a class="reference internal" href="#pyepr-0-7-04-08-2013">PyEPR 0.7 (04/08/2013)</a></li>
 <li><a class="reference internal" href="#pyepr-0-6-1-26-04-2012">PyEPR 0.6.1 (26/04/2012)</a></li>
 <li><a class="reference internal" href="#pyepr-0-6-12-08-2011">PyEPR 0.6 (12/08/2011)</a></li>
 <li><a class="reference internal" href="#pyepr-0-5-25-04-2011">PyEPR 0.5 (25/04/2011)</a></li>
@@ -200,7 +219,7 @@ have a more <em>pythonic</em>  API</li>
         <li class="right" >
           <a href="reference.html" title="API Reference"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.6.1+dev documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.7 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
