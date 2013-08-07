@@ -99,10 +99,6 @@ The easier way to install PyEPR_ is using tools like pip_ or easy_install_::
 
     $ pip install pyepr
 
-or::
-
-    $ pip install -U --prefix=<TARGET DIRECTORY>
-
 PyEPR_ uses the standard Python_ distutils_ so it can be installed from
 sources using the following command::
 
