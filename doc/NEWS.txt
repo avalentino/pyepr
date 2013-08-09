@@ -5,7 +5,8 @@ Change history
 PyEPR 0.7.1 (in development)
 ----------------------------
 
-* TBW
+* small fix in de installation instruction: the pip tool does not have  a
+  "--prefix" parameter
 
 
 PyEPR 0.7 (04/08/2013)
