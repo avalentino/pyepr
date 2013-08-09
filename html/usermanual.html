@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>User Manual &mdash; PyEPR 0.7 documentation</title>
+    <title>User Manual &mdash; PyEPR 0.7.1dev documentation</title>
     
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.7',
+        VERSION:     '0.7.1dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.7 documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.7.1dev documentation" href="index.html" />
     <link rel="next" title="Tutorials" href="tutorials.html" />
     <link rel="prev" title="ENVISAT Product Reader Python API" href="index.html" /> 
   </head>
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="index.html" title="ENVISAT Product Reader Python API"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.7 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.7.1dev documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -77,7 +77,7 @@ Parameters&#8221; record to the standard output:</p>
     <span class="s">&#39;ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1&#39;</span><span class="p">)</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_dataset</span><span class="p">(</span><span class="s">&#39;MAIN_PROCESSING_PARAMS_ADS&#39;</span><span class="p">)</span>
 <span class="n">record</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">read_record</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">record</span>
+<span class="k">print</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -133,10 +133,6 @@ project page</p>
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <p>The easier way to install <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> is using tools like <a class="reference external" href="http://pypi.python.org/pypi/pip">pip</a> or <a class="reference external" href="http://pypi.python.org/pypi/setuptools#using-setuptools-and-easyinstall">easy_install</a>:</p>
 <div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>pip install pyepr
-</pre></div>
-</div>
-<p>or:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>pip install -U --prefix<span class="o">=</span>&lt;TARGET DIRECTORY&gt;
 </pre></div>
 </div>
 <p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> uses the standard <a class="reference external" href="http://www.python.org">Python</a> <a class="reference external" href="http://docs.python.org/distutils">distutils</a> so it can be installed from
@@ -339,14 +335,14 @@ in <a class="reference external" href="http://www.python.org">Python</a>.</p>
 <p>Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">product</span><span class="o">.</span><span class="n">datasets</span><span class="p">():</span>
     <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">records</span><span class="p">():</span>
-        <span class="k">print</span> <span class="n">record</span>
-        <span class="k">print</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Another example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="s">&#39;proc_data&#39;</span> <span class="ow">in</span> <span class="n">product</span><span class="o">.</span><span class="n">band_names</span><span class="p">():</span>
     <span class="n">band</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="s">&#39;proc_data&#39;</span><span class="p">)</span>
-    <span class="k">print</span> <span class="n">band</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">band</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -377,17 +373,17 @@ respectively.
 So it is possible to write code like the following:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">record</span><span class="p">):</span>
-        <span class="k">print</span> <span class="n">index</span><span class="p">,</span> <span class="n">field</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><a class="reference internal" href="reference.html#epr.DSD" title="epr.DSD"><tt class="xref py py-class docutils literal"><span class="pre">epr.DSD</span></tt></a> and <tt class="xref py py-class docutils literal"><span class="pre">epr.Filed</span></tt> classes implement the <tt class="docutils literal"><span class="pre">__eq__</span></tt>
 and <tt class="docutils literal"><span class="pre">__ne__</span></tt> methods for objects comparison:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">filed1</span> <span class="o">==</span> <span class="n">field2</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">&#39;field 1 and field2 are equal&#39;</span>
-    <span class="k">print</span> <span class="n">field1</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;field 1 and field2 are equal&#39;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">field1</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">&#39;field1:&#39;</span><span class="p">,</span> <span class="n">field1</span>
-    <span class="k">print</span> <span class="s">&#39;field2:&#39;</span><span class="p">,</span> <span class="n">field2</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;field1:&#39;</span><span class="p">,</span> <span class="n">field1</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;field2:&#39;</span><span class="p">,</span> <span class="n">field2</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><a class="reference internal" href="reference.html#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">epr.Field</span></tt></a> object also implement the <tt class="docutils literal"><span class="pre">__len__</span></tt> special method
@@ -475,7 +471,7 @@ returned.</p>
         <li class="right" >
           <a href="index.html" title="ENVISAT Product Reader Python API"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.7 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.7.1dev documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

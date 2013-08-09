@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Interactive use of PyEPR &mdash; PyEPR 0.7 documentation</title>
+    <title>Interactive use of PyEPR &mdash; PyEPR 0.7.1dev documentation</title>
     
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.7',
+        VERSION:     '0.7.1dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.7 documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.7.1dev documentation" href="index.html" />
     <link rel="up" title="Tutorials" href="tutorials.html" />
     <link rel="next" title="Exporting band data" href="bands_example.html" />
     <link rel="prev" title="Tutorials" href="tutorials.html" /> 
@@ -44,7 +44,7 @@
         <li class="right" >
           <a href="tutorials.html" title="Tutorials"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.7 documentation</a> &raquo;</li>
+        <li><a href="index.html">PyEPR 0.7.1dev documentation</a> &raquo;</li>
           <li><a href="tutorials.html" accesskey="U">Tutorials</a> &raquo;</li> 
       </ul>
     </div>  
@@ -112,7 +112,7 @@ available classes and functions:</p>
 <span class="go">    .. _ESA: http://earth.esa.int</span>
 
 <span class="gp">In [3]: </span><span class="n">epr</span><span class="o">.</span><span class="n">__version__</span><span class="p">,</span> <span class="n">epr</span><span class="o">.</span><span class="n">EPR_C_API_VERSION</span>
-<span class="gr">Out[3]: </span><span class="p">(</span><span class="s">&#39;0.7&#39;</span><span class="p">,</span> <span class="s">&#39;2.2&#39;</span><span class="p">)</span>
+<span class="gr">Out[3]: </span><span class="p">(</span><span class="s">&#39;0.7&#39;</span><span class="p">,</span> <span class="s">&#39;2.3dev_pyepr062&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Docstrings are available for almost all classes, methods and functions in
@@ -188,7 +188,7 @@ instance of the desired <a class="reference external" href="http://envisat.esa.i
 <span class="gp">In [5]: </span><span class="n">product</span><span class="o">.</span><span class="n">tot_size</span> <span class="o">/</span> <span class="mf">1024.</span><span class="o">**</span><span class="mi">2</span>
 <span class="gr">Out[5]: </span><span class="mf">132.01041889190674</span>
 
-<span class="gp">In [6]: </span><span class="k">print</span> <span class="n">product</span>
+<span class="gp">In [6]: </span><span class="k">print</span><span class="p">(</span><span class="n">product</span><span class="p">)</span>
 <span class="go">epr.Product(ASA_IMP_1PNUPA20060202_ ...) 7 datasets, 5 bands</span>
 
 <span class="go">epr.Dataset(MDS1_SQ_ADS) 1 records</span>
@@ -273,7 +273,7 @@ get all desired information from the product:</p>
 <span class="gp">In [16]: </span><span class="n">field</span><span class="o">.</span><span class="n">get_unit</span><span class="p">()</span>
 <span class="gr">Out[16]: </span><span class="s">&#39;m&#39;</span>
 
-<span class="gp">In [17]: </span><span class="k">print</span> <span class="n">field</span>
+<span class="gp">In [17]: </span><span class="k">print</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
 <span class="go">range_spacing = 12.500000</span>
 </pre></div>
 </div>
@@ -284,7 +284,7 @@ get all desired information from the product:</p>
 the following:</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [18]: </span><span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">record</span><span class="p">:</span>
 <span class="go">             if field.get_num_elems() == 4:</span>
-<span class="go">                 print &#39;%s: %d elements&#39; % (field.get_name(), len(field))</span>
+<span class="go">                 print(&#39;%s: %d elements&#39; % (field.get_name(), len(field)))</span>
 
 <span class="go">        ....:</span>
 <span class="go">nominal_chirp.1.nom_chirp_amp: 4 elements</span>
@@ -422,7 +422,7 @@ the following:</p>
         <li class="right" >
           <a href="tutorials.html" title="Tutorials"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.7 documentation</a> &raquo;</li>
+        <li><a href="index.html">PyEPR 0.7.1dev documentation</a> &raquo;</li>
           <li><a href="tutorials.html" >Tutorials</a> &raquo;</li> 
       </ul>
     </div>
