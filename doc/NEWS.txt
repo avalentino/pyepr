@@ -5,24 +5,25 @@ Change history
 PyEPR 0.7.1 (17/08/2013)
 ------------------------
 
-This release mainly included small improvements in the documentation:
-
-* updated the :file:`README.txt` file to mention EPR C API sourced inclusion
-  in the PyEPR 0.7 (and lates) source tar-ball
-* small fix in the installation instructions: the pip tool does not have  a
-  "--prefix" parameter
-* always use the python3 syntax for the *print* function in all examples in
-  the documentation
-* links to older (and dev) versions of the documentation have been added in
-  the man page of the HTML doc
-* removed *date* form the doc meta-data.  The documentation build date is
-  reported in the front page of the LaTeX (PDF) doc and, starting from this
-  release, in the footer of the HTML doc.
-* the Ohloh_ widget has been added in the sidebar of the HTML doc
-* improved the regexp for detecting the SW version in the :file`setup.py`
-  script
+* fixed potential issues with conversion from python strings to ``char*``
 * the new snapshot of the EPR C API sources (2.3dev) includes a small fix
   in the size of the record tables
+* several improvements to the documentation:
+
+  - updated the :file:`README.txt` file to mention EPR C API sourced inclusion
+    in the PyEPR 0.7 (and lates) source tar-ball
+  - small fix in the installation instructions: the pip tool does not have  a
+    "--prefix" parameter
+  - always use the python3 syntax for the *print* function in all examples in
+    the documentation
+  - links to older (and dev) versions of the documentation have been added in
+    the man page of the HTML doc
+  - removed *date* form the doc meta-data.  The documentation build date is
+    reported in the front page of the LaTeX (PDF) doc and, starting from this
+    release, in the footer of the HTML doc.
+  - the Ohloh_ widget has been added in the sidebar of the HTML doc
+  - improved the regexp for detecting the SW version in the :file`setup.py`
+    script
 
 .. _Ohloh: http://www.ohloh.net
 
