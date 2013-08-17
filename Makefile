@@ -62,13 +62,13 @@ doc:
 
 clean:
 	$(PYTHON) setup.py clean --all
+	$(RM) -r build dist pyepr.egg-info
+	$(RM) MANIFEST src/*.c src/*.o *.so
 	$(RM) tests/*.py[co] doc/sphinxext/*.py[co] README.html
 	$(MAKE) -C doc clean
 	find . -name '*~' -delete
 
 distclean: clean
-	$(RM) -r build dist pyepr.egg-info
-	$(RM) MANIFEST src/*.c src/*.o *.so
 	$(RM) $(TEST_DATSET)
 	$(RM) -r doc/html
 	$(RM) -r LICENSES epr-api-src
