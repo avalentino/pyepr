@@ -65,7 +65,7 @@ if eprsrcdir:
     include_dirs.append(eprsrcdir)
     sources.extend(glob.glob(os.path.join(eprsrcdir, 'epr_*.c')))
     #libraries.append('m')
-    print('using EPR C API sources ar "{}"'.format(eprsrcdir))
+    print('using EPR C API sources at "{}"'.format(eprsrcdir))
 else:
     libraries.append('epr_api')
     print('using pre-built dynamic libraray for EPR C API')
