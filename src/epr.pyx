@@ -381,24 +381,21 @@ _DEFAULT_FS_ENCODING = sys.getfilesystemencoding()
 cdef inline bytes _to_bytes(s, encoding='UTF-8'):
     if hasattr(s, 'encode'):
         return s.encode(encoding)
+    else:
+        return s
 
-    return s
 
-
-cdef inline str _to_string(s, encoding='UTF-8'):
-    if hasattr(s, 'decode'):
-        return s.decode(encoding)
-
-    return s
+cdef inline str _to_str(b, encoding='UTF-8'):
+    if PY3:
+        return b.decode(encoding)
+    else:
+        return b
 
 
 # utils
 EPRTime = namedtuple('EPRTime', ('days', 'seconds', 'microseconds'))
 
-if PY3:
-    EPR_C_API_VERSION = EPR_PRODUCT_API_VERSION_STR.decode('ascii')
-else:
-    EPR_C_API_VERSION = EPR_PRODUCT_API_VERSION_STR
+EPR_C_API_VERSION = _to_str(EPR_PRODUCT_API_VERSION_STR, 'ascii')
 
 # EPR_DataTypeId
 E_TID_UNKNOWN = e_tid_unknown
@@ -476,15 +473,9 @@ cdef int pyepr_check_errors() except -1:
             code in (e_err_null_pointer,
                      e_err_illegal_arg,
                      e_err_index_out_of_range)):
-            if PY3:
-                raise EPRValueError(msg.decode('ascii'), code)
-            else:
-                raise EPRValueError(msg, code)
+            raise EPRValueError(_to_str(msg, 'ascii'), code)
         else:
-            if PY3:
-                raise EPRError(msg.decode('ascii'), code)
-            else:
-                raise EPRError(msg, code)
+            raise EPRError(_to_str(msg, 'ascii'), code)
 
         epr_clear_err()
         return -1
@@ -500,11 +491,7 @@ cdef int pyepr_null_ptr_error(msg='null pointer') except -1:
     if not code:
         code = None
 
-    if PY3:
-        raise EPRValueError('%s: %s' % (msg, eprmsg.decode('ascii')),
-                            code=code)
-    else:
-        raise EPRValueError('%s: %s' % (msg, eprmsg), code=code)
+    raise EPRValueError('%s: %s' % (msg, _to_str(eprmsg, 'ascii')), code=code)
 
     epr_clear_err()
 
@@ -555,12 +542,8 @@ cdef class _CLib:
         if epr_init_api(e_log_warning, NULL, NULL):
             msg = <char*>epr_get_last_err_message()
             epr_clear_err()
-            if PY3:
-                raise ImportError('unable to inizialize EPR API library: '
-                                  '%s' % msg.decode('ascii'))
-            else:
-                raise ImportError('unable to inizialize EPR API library: '
-                                  '%s' % msg)
+            raise ImportError('unable to inizialize EPR API library: '
+                              '%s' % _to_str(msg, 'ascii'))
 
     def __dealloc__(self):
         epr_close_api()
@@ -599,10 +582,7 @@ def data_type_id_to_str(EPR_EDataTypeId type_id):
 
     cdef char* type_id_str = <char*>epr_data_type_id_to_str(type_id)
 
-    if PY3:
-        return type_id_str.decode('ascii')
-    else:
-        return type_id_str
+    return _to_str(type_id_str, 'ascii')
 
 
 def get_scaling_method_name(method):
@@ -658,28 +638,19 @@ cdef class DSD(EprObject):
         '''The dataset name'''
 
         def __get__(self):
-            if PY3:
-                return self._ptr.ds_name.decode('ascii')
-            else:
-                return self._ptr.ds_name
+            return _to_str(self._ptr.ds_name, 'ascii')
 
     property ds_type:
         '''The dataset type descriptor'''
 
         def __get__(self):
-            if PY3:
-                return self._ptr.ds_type.decode('ascii')
-            else:
-                return self._ptr.ds_type
+            return _to_str(self._ptr.ds_type, 'ascii')
 
     property filename:
         '''The filename in the DDDB with the description of this dataset'''
 
         def __get__(self):
-            if PY3:
-                return self._ptr.filename.decode('ascii')
-            else:
-                return self._ptr.filename
+            return _to_str(self._ptr.filename, 'ascii')
 
     property ds_offset:
         '''The offset of dataset-information the product file'''
@@ -807,20 +778,14 @@ cdef class Field(EprObject):
         if unit is NULL:
             return ''
         else:
-            if PY3:
-                return (<char*>unit).decode('ascii')
-            else:
-                return <char*>unit
+            return _to_str(<char*>unit, 'ascii')
 
     def get_description(self):
         '''Gets the description of the field'''
 
         cdef char* description = <char*>epr_get_field_description(self._ptr)
 
-        if PY3:
-            return description.decode('ascii')
-        else:
-            return description
+        return _to_str(description, 'ascii')
 
     def get_num_elems(self):
         '''Gets the number of elements of the field'''
@@ -832,10 +797,7 @@ cdef class Field(EprObject):
 
         cdef char* name = <char*>epr_get_field_name(self._ptr)
 
-        if PY3:
-            return name.decode('ascii')
-        else:
-            return name
+        return _to_str(name, 'ascii')
 
     def get_type(self):
         '''Gets the type of the field'''
@@ -1247,10 +1209,7 @@ cdef class Record(EprObject):
         for idx in range(self.get_num_fields()):
             field_ptr = <EPR_SField*>epr_get_field_at(self._ptr, idx)
             name = <char*>epr_get_field_name(field_ptr)
-            if PY3:
-                names.append(name.decode('ascii'))
-            else:
-                names.append(name)
+            names.append(_to_str(name, 'ascii'))
 
         return names
 
@@ -1665,10 +1624,7 @@ cdef class Band(EprObject):
             if self._ptr.bm_expr is NULL:
                 return None
             else:
-                if PY3:
-                    return self._ptr.bm_expr.decode('ascii')
-                else:
-                    return self._ptr.bm_expr
+                return _to_str(self._ptr.bm_expr, 'ascii')
 
     property unit:
         '''The geophysical unit for the band's pixel values'''
@@ -1677,10 +1633,7 @@ cdef class Band(EprObject):
             if self._ptr.unit is NULL:
                 return None
             else:
-                if PY3:
-                    return self._ptr.unit.decode('ascii')
-                else:
-                    return self._ptr.unit
+                return _to_str(self._ptr.unit, 'ascii')
 
     property description:
         '''A short description of the band's contents'''
@@ -1689,10 +1642,7 @@ cdef class Band(EprObject):
             if self._ptr.description is NULL:
                 return None
             else:
-                if PY3:
-                    return self._ptr.description.decode('ascii')
-                else:
-                    return self._ptr.description
+                return _to_str(self._ptr.description, 'ascii')
 
     property lines_mirrored:
         '''Mirrored lines flag
@@ -1711,10 +1661,7 @@ cdef class Band(EprObject):
 
         cdef char* name = <char*>epr_get_band_name(self._ptr)
 
-        if PY3:
-            return name.decode('ascii')
-        else:
-            return name
+        return _to_str(name, 'ascii')
 
     # @TODO: default values for src_width and src_height
     def create_compatible_raster(self, uint src_width, uint src_height,
@@ -1946,10 +1893,7 @@ cdef class Dataset(EprObject):
             if self._ptr.description is NULL:
                 return ''
             else:
-                if PY3:
-                    return self._ptr.description.decode('ascii')
-                else:
-                    return self._ptr.description
+                return _to_str(self._ptr.description, 'ascii')
 
     def get_name(self):
         '''Gets the name of the dataset'''
@@ -1958,10 +1902,7 @@ cdef class Dataset(EprObject):
 
         if self._ptr is not NULL:
             name = <char*>epr_get_dataset_name(self._ptr)
-            if PY3:
-                return name.decode('ascii')
-            else:
-                return name
+            return _to_str(name, 'ascii')
         return ''
 
     def get_dsd_name(self):
@@ -1971,10 +1912,7 @@ cdef class Dataset(EprObject):
 
         if self._ptr is not NULL:
             name = <char*>epr_get_dsd_name(self._ptr)
-            if PY3:
-                return name.decode('ascii')
-            else:
-                return name
+            return _to_str(name, 'ascii')
         return ''
 
     def get_num_records(self):
@@ -2129,10 +2067,7 @@ cdef class Product(EprObject):
             if self._ptr.file_path is NULL:
                 return None
             else:
-                if PY3:
-                    return self._ptr.file_path.decode('ascii')
-                else:
-                    return self._ptr.file_path
+                return _to_str(self._ptr.file_path, 'ascii')
 
     # @TODO: check
     #property istream:
@@ -2168,10 +2103,7 @@ cdef class Product(EprObject):
             if self._ptr.id_string is NULL:
                 return None
             else:
-                if PY3:
-                    return self._ptr.id_string.decode('ascii')
-                else:
-                    return self._ptr.id_string
+                return _to_str(self._ptr.id_string, 'ascii')
 
     property meris_iodd_version:
         '''For MERIS L1b and RR and FR to provide backward compatibility'''
@@ -2382,10 +2314,7 @@ cdef class Product(EprObject):
         for idx in range(self.get_num_datasets()):
             dataset_ptr = epr_get_dataset_id_at(self._ptr, idx)
             name = <char*>epr_get_dataset_name(dataset_ptr)
-            if PY3:
-                names.append(name.decode('ascii'))
-            else:
-                names.append(name)
+            names.append(_to_str(name, 'ascii'))
 
         return names
 
@@ -2404,10 +2333,7 @@ cdef class Product(EprObject):
         for idx in range(self.get_num_bands()):
             band_ptr = epr_get_band_id_at(self._ptr, idx)
             name = <char*>epr_get_band_name(band_ptr)
-            if PY3:
-                names.append(name.decode('ascii'))
-            else:
-                names.append(name)
+            names.append(_to_str(name, 'ascii'))
 
         return names
 
