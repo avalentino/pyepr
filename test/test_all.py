@@ -263,7 +263,7 @@ class TestProduct(unittest.TestCase):
                             self.product.get_num_bands())
 
     def test_read_bitmask_raster(self):
-        bm_expr = 'l2_flags.LAND AND !l2_flags.BRIGHT'
+        bm_expr = 'l2_flags.LAND AND !l2_flags.CLOUD'
 
         xoffset = self.DATASET_WIDTH // 2
         yoffset = self.DATASET_HEIGHT // 2
@@ -280,7 +280,7 @@ class TestProduct(unittest.TestCase):
     if 'unicode' in dir(__builtins__):
 
         def test_read_bitmask_raster_unicode(self):
-            bm_expr = unicode('l2_flags.LAND AND !l2_flags.BRIGHT')
+            bm_expr = unicode('l2_flags.LAND AND !l2_flags.CLOUD')
 
             xoffset = self.DATASET_WIDTH // 2
             yoffset = self.DATASET_HEIGHT // 2
@@ -297,7 +297,7 @@ class TestProduct(unittest.TestCase):
     else:
 
         def test_read_bitmask_raster_bytes(self):
-            bm_expr = 'l2_flags.LAND AND !l2_flags.BRIGHT'.encode('UTF-8')
+            bm_expr = 'l2_flags.LAND AND !l2_flags.CLOUD'.encode('UTF-8')
             self.assertTrue(isinstance(bm_expr, bytes))
 
             xoffset = self.DATASET_WIDTH // 2
@@ -313,7 +313,7 @@ class TestProduct(unittest.TestCase):
             self.assertEqual(raster.get_height(), height)
 
     def test_read_bitmask_raster_with_invalid_bm_expr(self):
-        bm_expr = 'l5_flags.LAND AND !l2_flags.BRIGHT'
+        bm_expr = 'l5_flags.LAND AND !l2_flags.CLOUD'
 
         xoffset = self.DATASET_WIDTH // 2
         yoffset = self.DATASET_HEIGHT // 2
@@ -329,7 +329,7 @@ class TestProduct(unittest.TestCase):
             self.assertEqual(e.code, 301)
 
     def test_read_bitmask_raster_with_wrong_data_type(self):
-        bm_expr = 'l2_flags.LAND AND !l2_flags.BRIGHT'
+        bm_expr = 'l2_flags.LAND AND !l2_flags.CLOUD'
 
         xoffset = self.DATASET_WIDTH // 2
         yoffset = self.DATASET_HEIGHT // 2

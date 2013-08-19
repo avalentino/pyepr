@@ -2,13 +2,14 @@ Change history
 ==============
 
 
-PyEPR 0.7.1 (17/08/2013)
+PyEPR 0.7.1 (19/08/2013)
 ------------------------
 
 * fixed potential issues with conversion from python strings to ``char*``
 * the new snapshot of the EPR C API sources (2.3dev) includes a small fix
   in the size of the record tables
 * better factorization of Python 3 specific code
+* use the *CLOUD* flag instead of *BRIGHT* in unit tests
 * added function/method signature to all doc-strings for better interactive
   help
 * several improvements to the documentation:
