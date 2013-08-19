@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API Reference &mdash; PyEPR 0.7.1dev documentation</title>
+    <title>API Reference &mdash; PyEPR 0.7.1 documentation</title>
     
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.7.1dev',
+        VERSION:     '0.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.7.1dev documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.7.1 documentation" href="index.html" />
     <link rel="next" title="Change history" href="NEWS.html" />
     <link rel="prev" title="NDVI computation" href="ndvi_example.html" /> 
   </head>
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="ndvi_example.html" title="NDVI computation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.7.1dev documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.7.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -77,6 +77,7 @@ about an ENVISAT product file.</p>
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#epr.open" title="epr.open"><tt class="xref py py-func docutils literal"><span class="pre">open()</span></tt></a></p>
 </div>
+<p class="rubric">Attributes</p>
 <dl class="attribute">
 <dt id="epr.Product.file_path">
 <tt class="descname">file_path</tt><a class="headerlink" href="#epr.Product.file_path" title="Permalink to this definition">¶</a></dt>
@@ -104,6 +105,7 @@ The rest of the string decodes product instance properties.</p>
 <dd><p>The total size in bytes of the product file</p>
 </dd></dl>
 
+<p class="rubric">Methods</p>
 <dl class="method">
 <dt id="epr.Product.get_band">
 <tt class="descname">get_band</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#epr.Product.get_band" title="Permalink to this definition">¶</a></dt>
@@ -235,18 +237,8 @@ contained in the product</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="epr.Product.get_dataset_names">
-<tt class="descname">get_dataset_names</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.get_dataset_names" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the list of names of the datasets in the product</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">this method has no correspondent in the C API</p>
-</div>
-</dd></dl>
-
-<dl class="method">
 <dt id="epr.Product.read_bitmask_raster">
-<tt class="descname">read_bitmask_raster</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.read_bitmask_raster" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">read_bitmask_raster</tt><big>(</big><em>bm_expr</em>, <em>xoffset</em>, <em>yoffset</em>, <em>raster</em><big>)</big><a class="headerlink" href="#epr.Product.read_bitmask_raster" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates a bit-mask raster</p>
 <p>Calculates a bit-mask, composed of flags of the given product
 and combined as described in the given bit-mask expression, for
@@ -283,37 +275,39 @@ must be either <a class="reference internal" href="#epr.E_TID_UCHAR" title="epr.
 </div>
 </dd></dl>
 
+<p class="rubric">High level interface methods</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the following methods are part of the <em>high level</em> Python API and
+do not have any correspondent function in the C API.</p>
+</div>
+<dl class="method">
+<dt id="epr.Product.get_dataset_names">
+<tt class="descname">get_dataset_names</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.get_dataset_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of names of the datasets in the product</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="epr.Product.get_band_names">
 <tt class="descname">get_band_names</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.get_band_names" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the list of names of the bands in the product</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">this method has no correspondent in the C API</p>
-</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="epr.Product.datasets">
 <tt class="descname">datasets</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.datasets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the list of dataset in the product</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">this method has no correspondent in the C API</p>
-</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="epr.Product.bands">
 <tt class="descname">bands</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.bands" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the list of bands in the product</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">this method has no correspondent in the C API</p>
-</div>
 </dd></dl>
 
-<p class="rubric">Implemented special methods</p>
+<p class="rubric">Special methods</p>
+<p>The <a class="reference internal" href="#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt></a> class provides a custom implementation of the
+following <em>special methods</em>:</p>
 <ul class="simple">
 <li>__repr__</li>
 <li>__str__</li>
@@ -332,6 +326,7 @@ ENVISAT product file which has been opened with the <a class="reference internal
 function.</p>
 <p>A new Dataset instance can be obtained with the
 <a class="reference internal" href="#epr.Product.get_dataset" title="epr.Product.get_dataset"><tt class="xref py py-meth docutils literal"><span class="pre">Product.get_dataset()</span></tt></a> or <a class="reference internal" href="#epr.Product.get_dataset_at" title="epr.Product.get_dataset_at"><tt class="xref py py-meth docutils literal"><span class="pre">Product.get_dataset_at()</span></tt></a> methods.</p>
+<p class="rubric">Attributes</p>
 <dl class="attribute">
 <dt id="epr.Dataset.description">
 <tt class="descname">description</tt><a class="headerlink" href="#epr.Dataset.description" title="Permalink to this definition">¶</a></dt>
@@ -344,6 +339,7 @@ function.</p>
 <dd><p>The <a class="reference internal" href="#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt></a> instance to which this dataset belongs to</p>
 </dd></dl>
 
+<p class="rubric">Methods</p>
 <dl class="method">
 <dt id="epr.Dataset.get_name">
 <tt class="descname">get_name</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Dataset.get_name" title="Permalink to this definition">¶</a></dt>
@@ -418,17 +414,21 @@ an exception (<a class="reference internal" href="#epr.EPRValueError" title="epr
 </table>
 </dd></dl>
 
+<p class="rubric">High level interface methods</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the following methods are part of the <em>high level</em> Python API and
+do not have any correspondent function in the C API.</p>
+</div>
 <dl class="method">
 <dt id="epr.Dataset.records">
 <tt class="descname">records</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Dataset.records" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the list of records contained in the dataset</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">this method has no correspondent in the C API</p>
-</div>
 </dd></dl>
 
-<p class="rubric">Implemented special methods</p>
+<p class="rubric">Special methods</p>
+<p>The <a class="reference internal" href="#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">Dataset</span></tt></a> class provides a custom implementation of the
+following <em>special methods</em>:</p>
 <ul class="simple">
 <li>__repr__</li>
 <li>__str__</li>
@@ -448,6 +448,7 @@ an exception (<a class="reference internal" href="#epr.EPRValueError" title="epr
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">Field</span></tt></a></p>
 </div>
+<p class="rubric">Methods</p>
 <dl class="method">
 <dt id="epr.Record.get_field">
 <tt class="descname">get_field</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#epr.Record.get_field" title="Permalink to this definition">¶</a></dt>
@@ -541,27 +542,27 @@ instances</p>
 </div>
 </dd></dl>
 
+<p class="rubric">High level interface methods</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the following methods are part of the <em>high level</em> Python API and
+do not have any correspondent function in the C API.</p>
+</div>
 <dl class="method">
 <dt id="epr.Record.get_field_names">
 <tt class="descname">get_field_names</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Record.get_field_names" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the list of names of the fields in the product</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">this method has no correspondent in the C API</p>
-</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="epr.Record.fields">
 <tt class="descname">fields</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Record.fields" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the list of fields contained in the record</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">this method has no correspondent in the C API</p>
-</div>
 </dd></dl>
 
-<p class="rubric">Implemented special methods</p>
+<p class="rubric">Special methods</p>
+<p>The <a class="reference internal" href="#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">Record</span></tt></a> class provides a custom implementation of the
+following <em>special methods</em>:</p>
 <ul class="simple">
 <li>__repr__</li>
 <li>__str__</li>
@@ -670,7 +671,9 @@ instances</p>
 </div>
 </dd></dl>
 
-<p class="rubric">Implemented special methods</p>
+<p class="rubric">Special methods</p>
+<p>The <a class="reference internal" href="#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">Field</span></tt></a> class provides a custom implementation of the
+following <em>special methods</em>:</p>
 <ul class="simple">
 <li>__repr__</li>
 <li>__str__</li>
@@ -699,6 +702,7 @@ number of elements of the field is returned (same as
 <dd><p>Dataset descriptor</p>
 <p>The DSD class contains information about the properties of a
 dataset and its location within an ENVISAT product file</p>
+<p class="rubric">Attributes</p>
 <dl class="attribute">
 <dt id="epr.DSD.ds_name">
 <tt class="descname">ds_name</tt><a class="headerlink" href="#epr.DSD.ds_name" title="Permalink to this definition">¶</a></dt>
@@ -747,7 +751,9 @@ dataset and its location within an ENVISAT product file</p>
 <dd><p>The number of dataset records for the given dataset name</p>
 </dd></dl>
 
-<p class="rubric">Implemented special methods</p>
+<p class="rubric">Special methods</p>
+<p>The <a class="reference internal" href="#epr.DSD" title="epr.DSD"><tt class="xref py py-class docutils literal"><span class="pre">DSD</span></tt></a> class provides a custom implementation of the
+following <em>special methods</em>:</p>
 <ul class="simple">
 <li>__repr__</li>
 <li>__eq__</li>
@@ -766,6 +772,7 @@ dataset and its location within an ENVISAT product file</p>
 product file which has been opened with the <a class="reference internal" href="#epr.open" title="epr.open"><tt class="xref py py-func docutils literal"><span class="pre">open()</span></tt></a> function.</p>
 <p>A new Band instance can be obtained with the <a class="reference internal" href="#epr.Product.get_band" title="epr.Product.get_band"><tt class="xref py py-meth docutils literal"><span class="pre">Product.get_band()</span></tt></a>
 method.</p>
+<p class="rubric">Attributes</p>
 <dl class="attribute">
 <dt id="epr.Band.bm_expr">
 <tt class="descname">bm_expr</tt><a class="headerlink" href="#epr.Band.bm_expr" title="Permalink to this definition">¶</a></dt>
@@ -887,6 +894,7 @@ can be given too</li>
 <dd><p>The geophysical unit for the band&#8217;s pixel values</p>
 </dd></dl>
 
+<p class="rubric">Methods</p>
 <dl class="method">
 <dt id="epr.Band.get_name">
 <tt class="descname">get_name</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Band.get_name" title="Permalink to this definition">¶</a></dt>
@@ -987,6 +995,12 @@ instantiated</li>
 </div>
 </dd></dl>
 
+<p class="rubric">High level interface methods</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the following methods are part of the <em>high level</em> Python API and
+do not have any correspondent function in the C API.</p>
+</div>
 <dl class="method">
 <dt id="epr.Band.read_as_array">
 <tt class="descname">read_as_array</tt><big>(</big><span class="optional">[</span><em>width</em>, <em>height</em>, <em>xoffset</em>, <em>yoffset</em>, <em>xstep</em>, <em>ystep</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.Band.read_as_array" title="Permalink to this definition">¶</a></dt>
@@ -1026,10 +1040,6 @@ reading into the raster. Default: 1</li>
 </table>
 <p>This method raises an instance of the appropriate
 <a class="reference internal" href="#epr.EPRError" title="epr.EPRError"><tt class="xref py py-exc docutils literal"><span class="pre">EPRError</span></tt></a> sub-class if case of errors</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">this method has no correspondent in the C API</p>
-</div>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#epr.Band.create_compatible_raster" title="epr.Band.create_compatible_raster"><tt class="xref py py-meth docutils literal"><span class="pre">Band.create_compatible_raster()</span></tt></a>,
@@ -1037,7 +1047,9 @@ reading into the raster. Default: 1</li>
 </div>
 </dd></dl>
 
-<p class="rubric">Implemented special methods</p>
+<p class="rubric">Special methods</p>
+<p>The <a class="reference internal" href="#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt></a> class provides a custom implementation of the
+following <em>special methods</em>:</p>
 <ul class="simple">
 <li>__repr__</li>
 </ul>
@@ -1051,6 +1063,7 @@ reading into the raster. Default: 1</li>
 <em class="property">class </em><tt class="descclassname">epr.</tt><tt class="descname">Raster</tt><a class="headerlink" href="#epr.Raster" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents a raster in which data will be stored</p>
 <p>All &#8216;size&#8217; parameter are in PIXEL.</p>
+<p class="rubric">Attributes</p>
 <dl class="attribute">
 <dt id="epr.Raster.data_type">
 <tt class="descname">data_type</tt><a class="headerlink" href="#epr.Raster.data_type" title="Permalink to this definition">¶</a></dt>
@@ -1082,6 +1095,12 @@ reading into the raster. Default: 1</li>
 <dd><p>The sub-sampling for the along-track direction in pixel</p>
 </dd></dl>
 
+<p class="rubric">High level interface attributes</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the following attributess are part of the <em>high level</em> Python API and
+do not have a counterpart in the C API.</p>
+</div>
 <dl class="attribute">
 <dt id="epr.Raster.data">
 <tt class="descname">data</tt><a class="headerlink" href="#epr.Raster.data" title="Permalink to this definition">¶</a></dt>
@@ -1094,10 +1113,14 @@ the <a class="reference internal" href="#epr.Raster" title="epr.Raster"><tt clas
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">this property has no correspondent in the C API</p>
+<p class="last">the <a class="reference internal" href="#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">Raster</span></tt></a> objects do not have a field named <em>data</em> in the
+corresponding C structure. The <em>EPR_SRaster</em> C structure have a
+field named <em>buffer</em> that is a raw pointer to the data buffer and
+it is not exposed as such in the Python API.</p>
 </div>
 </dd></dl>
 
+<p class="rubric">Methods</p>
 <dl class="method">
 <dt id="epr.Raster.get_pixel">
 <tt class="descname">get_pixel</tt><big>(</big><em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#epr.Raster.get_pixel" title="Permalink to this definition">¶</a></dt>
@@ -1140,7 +1163,9 @@ buffer</p>
 <dd><p>Gets the raster&#8217;s width in pixels</p>
 </dd></dl>
 
-<p class="rubric">Implemented special methods</p>
+<p class="rubric">Special methods</p>
+<p>The <a class="reference internal" href="#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">Raster</span></tt></a> class provides a custom implementation of the
+following <em>special methods</em>:</p>
 <ul class="simple">
 <li>__repr__</li>
 </ul>
@@ -1538,12 +1563,12 @@ into the raster. Default: 1.</li>
         <li class="right" >
           <a href="ndvi_example.html" title="NDVI computation"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.7.1dev documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.7.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011-2013, Antonio Valentino.
-      Last updated on Aug 09, 2013.
+      Last updated on Aug 19, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

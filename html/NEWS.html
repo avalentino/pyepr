@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Change history &mdash; PyEPR 0.7.1dev documentation</title>
+    <title>Change history &mdash; PyEPR 0.7.1 documentation</title>
     
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.7.1dev',
+        VERSION:     '0.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.7.1dev documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.7.1 documentation" href="index.html" />
     <link rel="prev" title="API Reference" href="reference.html" /> 
   </head>
   <body>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="reference.html" title="API Reference"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.7.1dev documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.7.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -50,11 +50,41 @@
             
   <div class="section" id="change-history">
 <h1>Change history<a class="headerlink" href="#change-history" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="pyepr-0-7-1-in-development">
-<h2>PyEPR 0.7.1 (in development)<a class="headerlink" href="#pyepr-0-7-1-in-development" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pyepr-0-7-1-19-08-2013">
+<h2>PyEPR 0.7.1 (19/08/2013)<a class="headerlink" href="#pyepr-0-7-1-19-08-2013" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>small fix in de installation instruction: the pip tool does not have  a
+<li>fixed potential issues with conversion from python strings to <tt class="docutils literal"><span class="pre">char*</span></tt></li>
+<li>new snapshot of the EPR C API sources (2.3dev):<ul>
+<li>the size of the record tables has been fixed</li>
+<li>the EPR_NUM_PRODUCT_TABLES has been fixed</li>
+<li>fixed a missing prototype</li>
+<li>several GCC warnings has been silenced</li>
+<li>additional checks on return codes</li>
+<li>now and error is raised when an invalid flag name is used</li>
+</ul>
+</li>
+<li>better factorization of Python 3 specific code</li>
+<li>use the <em>CLOUD</em> flag instead of <em>BRIGHT</em> in unit tests</li>
+<li>added function/method signature to all doc-strings for better interactive
+help</li>
+<li>several improvements to the documentation:<ul>
+<li>updated the <tt class="file docutils literal"><span class="pre">README.txt</span></tt> file to mention EPR C API sourced inclusion
+in the PyEPR 0.7 (and lates) source tar-ball</li>
+<li>small fix in the installation instructions: the pip tool does not have  a
 &#8220;&#8211;prefix&#8221; parameter</li>
+<li>always use the python3 syntax for the <em>print</em> function in all examples in
+the documentation</li>
+<li>links to older (and dev) versions of the documentation have been added in
+the man page of the HTML doc</li>
+<li>removed <em>date</em> form the doc meta-data.  The documentation build date is
+reported in the front page of the LaTeX (PDF) doc and, starting from this
+release, in the footer of the HTML doc.</li>
+<li>the <a class="reference external" href="http://www.ohloh.net">Ohloh</a> widget has been added in the sidebar of the HTML doc</li>
+<li>improved the regexp for detecting the SW version in the :file`setup.py`
+script</li>
+<li>formatting</li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="section" id="pyepr-0-7-04-08-2013">
@@ -180,7 +210,7 @@ have a more <em>pythonic</em>  API</li>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Change history</a><ul>
-<li><a class="reference internal" href="#pyepr-0-7-1-in-development">PyEPR 0.7.1 (in development)</a></li>
+<li><a class="reference internal" href="#pyepr-0-7-1-19-08-2013">PyEPR 0.7.1 (19/08/2013)</a></li>
 <li><a class="reference internal" href="#pyepr-0-7-04-08-2013">PyEPR 0.7 (04/08/2013)</a></li>
 <li><a class="reference internal" href="#pyepr-0-6-1-26-04-2012">PyEPR 0.6.1 (26/04/2012)</a></li>
 <li><a class="reference internal" href="#pyepr-0-6-12-08-2011">PyEPR 0.6 (12/08/2011)</a></li>
@@ -227,12 +257,12 @@ have a more <em>pythonic</em>  API</li>
         <li class="right" >
           <a href="reference.html" title="API Reference"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.7.1dev documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.7.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011-2013, Antonio Valentino.
-      Last updated on Aug 09, 2013.
+      Last updated on Aug 19, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

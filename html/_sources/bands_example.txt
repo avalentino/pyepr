@@ -154,7 +154,7 @@ powerful :class:`numpy.ndarray` interface.
 
 .. note::
 
-    Copying one line at time is not the best way to perform the task
+    copying one line at time is not the best way to perform the task
     in Python_. It has been done just to mimic the original C code:
 
     .. code-block:: c

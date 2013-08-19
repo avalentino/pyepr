@@ -51,7 +51,7 @@ correctly installed and configured:
 * a reasonably updated C compiler [#]_ (build only)
 * Cython_ >= 0.13 [#]_ (build only)
 
-.. note:: In order to build PyEPR_ for Python3_ it is required Cython_ >= 0.15
+.. note:: in order to build PyEPR_ for Python3_ it is required Cython_ >= 0.15
 
 
 .. [#] PyEPR_ has been developed and tested with gcc_ 4.
@@ -385,11 +385,13 @@ that returns the number of elements in the field::
     else:
         assert len(field) == len(field.get_elem())
 
-.. note:: differently from the :meth:`epr.Field.get_num_elems` method
-          ``len(field)`` return the number of elements if the field
-          type is not :data:`epr.E_TID_STRING`.
-          If the field contains a string then the string length is
-          returned.
+.. note::
+
+    differently from the :meth:`epr.Field.get_num_elems` method
+    ``len(field)`` return the number of elements if the field
+    type is not :data:`epr.E_TID_STRING`.
+    If the field contains a string then the string length is
+    returned.
 
 .. _`special method`: http://docs.python.org/reference/datamodel.html
 .. _pythonic: http://www.cafepy.com/article/be_pythonic
