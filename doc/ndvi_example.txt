@@ -86,8 +86,10 @@ specified offset):
 .. literalinclude:: examples/write_ndvi.py
    :lines: 66-74
 
-.. note:: In this simplified example it is assumed that there is enough system
-          memory to hold the two :class:`epr.Raster` objects.
+.. note::
+
+    in this simplified example it is assumed that there is enough system
+    memory to hold the two :class:`epr.Raster` objects.
 
 After opening (in binary mode) the stream for the output
 
@@ -145,7 +147,7 @@ used to write the NDVI of the pixel n the file in binary format.
 
 .. note::
 
-    The entire solution is quite not pythonic_. As an alternative
+    the entire solution is quite not pythonic_. As an alternative
     implementation it could be used the :class:`numpy.ndarray` interface of
     :class:`epr.Raster` objects available via the :data:`epr.Raster.data`
     property. The NDVI index is computed on all pixels altogether using

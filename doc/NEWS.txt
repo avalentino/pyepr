@@ -27,6 +27,7 @@ PyEPR 0.7.1 (17/08/2013)
   - the Ohloh_ widget has been added in the sidebar of the HTML doc
   - improved the regexp for detecting the SW version in the :file`setup.py`
     script
+  - formatting
 
 .. _Ohloh: http://www.ohloh.net
 

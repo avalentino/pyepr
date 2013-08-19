@@ -41,6 +41,8 @@ Product
    .. seealso:: :func:`open`
 
 
+   .. rubric:: Attributes
+
    .. attribute:: file_path
 
       The file's path including the file name
@@ -64,6 +66,8 @@ Product
 
       The total size in bytes of the product file
 
+
+   .. rubric:: Methods
 
    .. method:: get_band(name)
 
@@ -158,14 +162,8 @@ Product
 
       The :class:`Record` representing the specific product header (SPH)
 
-   .. method:: get_dataset_names
 
-      Return the list of names of the datasets in the product
-
-      .. note:: this method has no correspondent in the C API
-
-
-   .. method:: read_bitmask_raster
+   .. method:: read_bitmask_raster(bm_expr, xoffset, yoffset, raster)
 
       Calculates a bit-mask raster
 
@@ -197,28 +195,37 @@ Product
       .. seealso:: :func:`create_bitmask_raster`
 
 
+   .. rubric:: High level interface methods
+
+   .. note::
+
+      the following methods are part of the *high level* Python API and
+      do not have any correspondent function in the C API.
+
+   .. method:: get_dataset_names
+
+      Return the list of names of the datasets in the product
+
+
    .. method:: get_band_names
 
       Return the list of names of the bands in the product
-
-      .. note:: this method has no correspondent in the C API
 
 
    .. method:: datasets
 
       Return the list of dataset in the product
 
-      .. note:: this method has no correspondent in the C API
-
 
    .. method:: bands
 
       Return the list of bands in the product
 
-      .. note:: this method has no correspondent in the C API
 
+   .. rubric:: Special methods
 
-   .. rubric:: Implemented special methods
+   The :class:`Product` class provides a custom implementation of the
+   following *special methods*:
 
    * __repr__
    * __str__
@@ -239,6 +246,8 @@ Dataset
    :meth:`Product.get_dataset` or :meth:`Product.get_dataset_at` methods.
 
 
+   .. rubric:: Attributes
+
    .. attribute:: description
 
       A short description of the band's contents
@@ -248,6 +257,8 @@ Dataset
 
       The :class:`Product` instance to which this dataset belongs to
 
+
+   .. rubric:: Methods
 
    .. method:: get_name
 
@@ -308,14 +319,22 @@ Dataset
             an exception (:exc:`EPRValueError`) if an error occurred
 
 
+   .. rubric:: High level interface methods
+
+   .. note::
+
+      the following methods are part of the *high level* Python API and
+      do not have any correspondent function in the C API.
+
    .. method:: records
 
       Return the list of records contained in the dataset
 
-      .. note:: this method has no correspondent in the C API
 
+   .. rubric:: Special methods
 
-   .. rubric:: Implemented special methods
+   The :class:`Dataset` class provides a custom implementation of the
+   following *special methods*:
 
    * __repr__
    * __str__
@@ -333,6 +352,8 @@ Record
 
    .. seealso:: :class:`Field`
 
+
+   .. rubric:: Methods
 
    .. method:: get_field(name)
 
@@ -375,9 +396,11 @@ Record
       :param ostream:
             the (opened) output file object
 
-      .. note:: the *ostream* parameter have to be a *real* file not
-                a generic stream object like :class:`StringIO.StringIO`
-                instances
+      .. note::
+
+         the *ostream* parameter have to be a *real* file not
+         a generic stream object like :class:`StringIO.StringIO`
+         instances
 
 
    .. method:: print_element(field_index, element_index[, ostream])
@@ -395,26 +418,34 @@ Record
       :param ostream:
             the (opened) output file object
 
-      .. note:: the *ostream* parameter have to be a *real* file not
-                a generic stream object like :class:`StringIO.StringIO`
-                instances
+      .. note::
 
+         the *ostream* parameter have to be a *real* file not
+         a generic stream object like :class:`StringIO.StringIO`
+         instances
+
+
+   .. rubric:: High level interface methods
+
+   .. note::
+
+      the following methods are part of the *high level* Python API and
+      do not have any correspondent function in the C API.
 
    .. method:: get_field_names
 
       Return the list of names of the fields in the product
-
-      .. note:: this method has no correspondent in the C API
 
 
    .. method:: fields
 
       Return the list of fields contained in the record
 
-      .. note:: this method has no correspondent in the C API
 
+   .. rubric:: Special methods
 
-   .. rubric:: Implemented special methods
+   The :class:`Record` class provides a custom implementation of the
+   following *special methods*:
 
    * __repr__
    * __str__
@@ -495,12 +526,17 @@ Field
       :param ostream:
             the (opened) output file object
 
-      .. note:: the *ostream* parameter have to be a *real* file not
-                a generic stream object like :class:`StringIO.StringIO`
-                instances
+      .. note::
+
+         the *ostream* parameter have to be a *real* file not
+         a generic stream object like :class:`StringIO.StringIO`
+         instances
 
 
-   .. rubric:: Implemented special methods
+   .. rubric:: Special methods
+
+   The :class:`Field` class provides a custom implementation of the
+   following *special methods*:
 
    * __repr__
    * __str__
@@ -526,6 +562,8 @@ DSD
    The DSD class contains information about the properties of a
    dataset and its location within an ENVISAT product file
 
+
+   .. rubric:: Attributes
 
    .. attribute:: ds_name
 
@@ -567,7 +605,10 @@ DSD
       The number of dataset records for the given dataset name
 
 
-   .. rubric:: Implemented special methods
+   .. rubric:: Special methods
+
+   The :class:`DSD` class provides a custom implementation of the
+   following *special methods*:
 
    * __repr__
    * __eq__
@@ -587,6 +628,8 @@ Band
    A new Band instance can be obtained with the :meth:`Product.get_band`
    method.
 
+
+   .. rubric:: Attributes
 
    .. attribute:: bm_expr
 
@@ -696,6 +739,8 @@ Band
       The geophysical unit for the band's pixel values
 
 
+   .. rubric:: Methods
+
    .. method:: get_name
 
       Gets the name of the band
@@ -786,6 +831,13 @@ Band
                    :func:`create_raster`
 
 
+   .. rubric:: High level interface methods
+
+   .. note::
+
+      the following methods are part of the *high level* Python API and
+      do not have any correspondent function in the C API.
+
    .. method:: read_as_array([width, height, xoffset, yoffset, xstep, ystep])
 
       Reads the specified source region as an :class:`numpy.ndarray`
@@ -823,12 +875,14 @@ Band
       This method raises an instance of the appropriate
       :exc:`EPRError` sub-class if case of errors
 
-      .. note:: this method has no correspondent in the C API
       .. seealso:: :meth:`Band.create_compatible_raster`,
                    :func:`create_raster` and :meth:`Band.read_raster`
 
 
-   .. rubric:: Implemented special methods
+   .. rubric:: Special methods
+
+   The :class:`Band` class provides a custom implementation of the
+   following *special methods*:
 
    * __repr__
 
@@ -842,6 +896,8 @@ Raster
 
    All 'size' parameter are in PIXEL.
 
+
+   .. rubric:: Attributes
 
    .. attribute:: data_type
 
@@ -870,16 +926,32 @@ Raster
       The sub-sampling for the along-track direction in pixel
 
 
+   .. rubric:: High level interface attributes
+
+   .. note::
+
+      the following attributess are part of the *high level* Python API and
+      do not have a counterpart in the C API.
+
    .. attribute:: data
 
       Raster data exposed as :class:`numpy.ndarray` object
 
-      .. note:: this property shares the data buffer with the :class:`Raster`
-                object so any change in its contents is also reflected to
-                the :class:`Raster` object
+      .. note::
 
-      .. note:: this property has no correspondent in the C API
+         this property shares the data buffer with the :class:`Raster`
+         object so any change in its contents is also reflected to
+         the :class:`Raster` object
 
+      .. note::
+
+         the :class:`Raster` objects do not have a field named *data* in the
+         corresponding C structure. The *EPR_SRaster* C structure have a
+         field named *buffer* that is a raw pointer to the data buffer and
+         it is not exposed as such in the Python API.
+
+
+   .. rubric:: Methods
 
    .. method:: get_pixel(x, y)
 
@@ -912,7 +984,10 @@ Raster
       Gets the raster's width in pixels
 
 
-   .. rubric:: Implemented special methods
+   .. rubric:: Special methods
+
+   The :class:`Raster` class provides a custom implementation of the
+   following *special methods*:
 
    * __repr__
 
