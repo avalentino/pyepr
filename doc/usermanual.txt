@@ -49,7 +49,7 @@ correctly installed and configured:
 * `EPR API`_ >= 2.2 (optional, since PyEPR 0.7 the source tar-ball comes
   with a copy of the PER C API sources)
 * a reasonably updated C compiler [#]_ (build only)
-* Cython_ >= 0.13 [#]_ (build only)
+* Cython_ >= 0.13 [#]_ (optional and build only)
 
 .. note:: in order to build PyEPR_ for Python3_ it is required Cython_ >= 0.15
 
@@ -97,7 +97,16 @@ Installation
 
 The easier way to install PyEPR_ is using tools like pip_ or easy_install_::
 
-    $ pip install pyepr
+    $ pip install numpy pyepr
+
+.. note::
+
+    the :file:`setup.py` script does not use easy_install_ specific functions
+    so it is unable to handle dependencies automatically.
+    In the above example the required numpy_ package is explicitly included in
+    the list of packages to be installed.
+
+    .. seealse:: _Requirements
 
 PyEPR_ uses the standard Python_ distutils_ so it can be installed from
 sources using the following command::
