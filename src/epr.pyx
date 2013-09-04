@@ -2174,6 +2174,26 @@ cdef class Product(EprObject):
         #        the user.
         pass
 
+    def close(self):
+        '''Closes the ENVISAT :class:`epr.Product` product
+
+        Closes the :class:`epr.Product` product and free the underlying
+        file descriptor.
+
+        This method has no effect if the :class:`Product` is already
+        closed. Once the :class:`Product` is closed, any operation on
+        it will raise a ValueError.
+
+        As a convenience, it is allowed to call this method more than
+        once; only the first call, however, will have an effect.
+
+        '''
+
+        if self._ptr is not NULL:
+            epr_close_product(self._ptr)
+            pyepr_check_errors()
+            self._ptr is not NULL
+
     property file_path:
         '''The file's path including the file name'''
 

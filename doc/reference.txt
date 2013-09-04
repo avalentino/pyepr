@@ -195,6 +195,19 @@ Product
       .. seealso:: :func:`create_bitmask_raster`
 
 
+    .. method:: close
+
+       Closes the :class:`Product` product and free the underlying
+       file descriptor.
+
+       This method has no effect if the :class:`Product` is already
+       closed. Once the :class:`Product` is closed, any operation on
+       it will raise a ValueError.
+
+       As a convenience, it is allowed to call this method more than
+       once; only the first call, however, will have an effect.
+
+
    .. rubric:: High level interface methods
 
    .. note::

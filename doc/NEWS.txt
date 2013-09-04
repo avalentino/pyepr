@@ -5,6 +5,9 @@ Change history
 PyEPR 0.7.2 (in development)
 ----------------------------
 
+* now the :class:`epr.Product` objects have a :meth:`epr.Product.close`
+  method that can be used to explicitly close products without relying
+  on the garbage collector behaviour (closes :issue:`7`)
 * added entries for :data:`__version__` and :data:`__revision__` in the
   reference manual
 * the :data:`__revision__` module attribute is now deprecated
