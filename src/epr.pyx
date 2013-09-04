@@ -1585,7 +1585,10 @@ cdef class Band(EprObject):
     '''
 
     cdef EPR_SBandId* _ptr
-    cdef object _parent
+    cdef Product _parent
+
+    cdef inline check_closed_product(self):
+        self._parent.check_closed()
 
     property product:
         '''The :class:`Product` instance to which this band belongs to'''
@@ -1601,6 +1604,7 @@ cdef class Band(EprObject):
         '''
 
         def __get__(self):
+            self.check_closed_product()
             return self._ptr.spectr_band_index
 
     property sample_model:
@@ -1743,7 +1747,11 @@ cdef class Band(EprObject):
 
         '''
 
-        cdef char* name = <char*>epr_get_band_name(self._ptr)
+        cdef char* name = NULL
+
+        self.check_closed_product()
+
+        name = <char*>epr_get_band_name(self._ptr)
 
         return _to_str(name, 'ascii')
 
@@ -1814,6 +1822,9 @@ cdef class Band(EprObject):
         #    height = self._parent.get_scene_height()
 
         cdef EPR_SRaster* raster_ptr
+
+        self.check_closed_product()
+
         raster_ptr = epr_create_compatible_raster(self._ptr,
                                                   src_width, src_height,
                                                   xstep, ystep)
@@ -1859,6 +1870,8 @@ cdef class Band(EprObject):
         '''
 
         cdef int ret
+
+        self.check_closed_product()
 
         if raster is None:
             raster = self.create_compatible_raster()
@@ -1968,7 +1981,10 @@ cdef class Dataset(EprObject):
     '''
 
     cdef EPR_SDatasetId* _ptr
-    cdef object _parent
+    cdef Product _parent
+
+    cdef inline check_closed_product(self):
+        self._parent.check_closed()
 
     property product:
         '''The :class:`Product` instance to which this dataset belongs to'''
@@ -1995,6 +2011,7 @@ cdef class Dataset(EprObject):
         cdef char* name
 
         if self._ptr is not NULL:
+            self.check_closed_product()
             name = <char*>epr_get_dataset_name(self._ptr)
             return _to_str(name, 'ascii')
         return ''
@@ -2009,6 +2026,7 @@ cdef class Dataset(EprObject):
         cdef char* name
 
         if self._ptr is not NULL:
+            self.check_closed_product()
             name = <char*>epr_get_dsd_name(self._ptr)
             return _to_str(name, 'ascii')
         return ''
@@ -2021,6 +2039,7 @@ cdef class Dataset(EprObject):
         '''
 
         if self._ptr is not NULL:
+            self.check_closed_product()
             return epr_get_num_records(self._ptr)
         return 0
 
@@ -2030,6 +2049,8 @@ cdef class Dataset(EprObject):
         Gets the dataset descriptor (DSD)
 
         '''
+
+        self.check_closed_product()
 
         return new_dsd(<EPR_SDSD*>epr_get_dsd(self._ptr), self)
 
@@ -2046,6 +2067,8 @@ cdef class Dataset(EprObject):
             the new record instance
 
         '''
+
+        self.check_closed_product()
 
         return new_record(epr_create_record(self._ptr), self, True)
 
@@ -2080,6 +2103,9 @@ cdef class Dataset(EprObject):
         '''
 
         cdef EPR_SRecord* record_ptr = NULL
+
+        self.check_closed_product()
+
         if record:
             record_ptr = (<Record>record)._ptr
 
@@ -2107,6 +2133,9 @@ cdef class Dataset(EprObject):
         # @TODO: use __iter__ when generator expressions will be available
         #return list(self)
         cdef int idx
+
+        self.check_closed_product()
+
         return [self.read_record(idx)
                             for idx in range(epr_get_num_records(self._ptr))]
 
@@ -2167,6 +2196,11 @@ cdef class Product(EprObject):
         if self._ptr is not NULL:
             epr_close_product(self._ptr)
             pyepr_check_errors()
+            self._ptr = NULL
+
+    cdef inline check_closed(self):
+        if self._ptr is NULL:
+            raise ValueError('I/O operation on closed file')
 
     def __init__(self, filename):
         # @NOTE: this method suppresses the default behavior of EprObject
@@ -2175,7 +2209,9 @@ cdef class Product(EprObject):
         pass
 
     def close(self):
-        '''Closes the ENVISAT :class:`epr.Product` product
+        '''close(self)
+
+        Closes the ENVISAT :class:`epr.Product` product
 
         Closes the :class:`epr.Product` product and free the underlying
         file descriptor.
@@ -2192,12 +2228,13 @@ cdef class Product(EprObject):
         if self._ptr is not NULL:
             epr_close_product(self._ptr)
             pyepr_check_errors()
-            self._ptr is not NULL
+            self._ptr = NULL
 
     property file_path:
         '''The file's path including the file name'''
 
         def __get__(self):
+            self.check_closed()
             if self._ptr.file_path is NULL:
                 return None
             else:
@@ -2220,6 +2257,7 @@ cdef class Product(EprObject):
         '''The total size in bytes of the product file'''
 
         def __get__(self):
+            self.check_closed()
             return self._ptr.tot_size
 
     property id_string:
@@ -2234,6 +2272,7 @@ cdef class Product(EprObject):
         '''
 
         def __get__(self):
+            self.check_closed()
             if self._ptr.id_string is NULL:
                 return None
             else:
@@ -2243,6 +2282,7 @@ cdef class Product(EprObject):
         '''For MERIS L1b and RR and FR to provide backward compatibility'''
 
         def __get__(self):
+            self.check_closed()
             return self._ptr.meris_iodd_version
 
     def get_scene_width(self):
@@ -2252,6 +2292,7 @@ cdef class Product(EprObject):
 
         '''
 
+        self.check_closed()
         return epr_get_scene_width(self._ptr)
 
     def get_scene_height(self):
@@ -2261,6 +2302,7 @@ cdef class Product(EprObject):
 
         '''
 
+        self.check_closed()
         return epr_get_scene_height(self._ptr)
 
     def get_num_datasets(self):
@@ -2270,6 +2312,7 @@ cdef class Product(EprObject):
 
         '''
 
+        self.check_closed()
         return epr_get_num_datasets(self._ptr)
 
     def get_num_dsds(self):
@@ -2282,6 +2325,7 @@ cdef class Product(EprObject):
 
         '''
 
+        self.check_closed()
         return epr_get_num_dsds(self._ptr)
 
     def get_num_bands(self):
@@ -2291,6 +2335,7 @@ cdef class Product(EprObject):
 
         '''
 
+        self.check_closed()
         return epr_get_num_bands(self._ptr)
 
     def get_dataset_at(self, uint index):
@@ -2350,6 +2395,9 @@ cdef class Product(EprObject):
         '''
 
         cdef EPR_SDSD* dsd_ptr
+
+        self.check_closed()
+
         dsd_ptr = epr_get_dsd_at(self._ptr, index)
         if dsd_ptr is NULL:
             pyepr_null_ptr_error('unable to get DSD at index "%d"' % index)
@@ -2462,9 +2510,13 @@ cdef class Product(EprObject):
         '''
 
         cdef bytes c_bm_expr = _to_bytes(bm_expr)
-        cdef int ret = epr_read_bitmask_raster(self._ptr, c_bm_expr,
-                                               xoffset, yoffset,
-                                               (<Raster>raster)._ptr)
+        cdef int ret = 0
+
+        self.check_closed()
+
+        ret = epr_read_bitmask_raster(self._ptr, c_bm_expr,
+                                      xoffset, yoffset,
+                                      (<Raster>raster)._ptr)
         if ret != 0:
             pyepr_check_errors()
 

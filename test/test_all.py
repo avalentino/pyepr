@@ -160,6 +160,13 @@ class TestProduct(unittest.TestCase):
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
 
+    def test_close(self):
+        self.product.close()
+
+    def test_double_close(self):
+        self.product.close()
+        self.product.close()
+
     def test_file_path_property(self):
         self.assertEqual(self.product.file_path, self.PRODUCT_FILE)
 
@@ -205,7 +212,7 @@ class TestProduct(unittest.TestCase):
 
     else:
 
-        def test_get_dataset_byrtes(self):
+        def test_get_dataset_bytes(self):
             filename = self.DATASET_NAME.encode('UTF-8')
             dataset = self.product.get_dataset(filename)
             self.assertTrue(isinstance(filename, bytes))
@@ -427,6 +434,85 @@ class TestProductHighLevelAPI(unittest.TestCase):
         self.assertTrue(isinstance(str(self.product), str))
 
 
+class TestClosedProduct(unittest.TestCase):
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    DATASET_NAME = 'Vapour_Content'
+    BAND_NAME = 'water_vapour'
+
+    def setUp(self):
+        self.product = epr.open(self.PRODUCT_FILE)
+        self.product.close()
+
+    def test_properties(self):
+        for name in ('file_path', 'tot_size', 'id_string',
+                     'meris_iodd_version'):
+            self.assertRaises(ValueError, getattr, self.product, name)
+
+    def test_get_get_scene_width(self):
+        self.assertRaises(ValueError, self.product.get_scene_width)
+
+    def test_get_get_scene_height(self):
+        self.assertRaises(ValueError, self.product.get_scene_height)
+
+    def test_get_num_datasets(self):
+        self.assertRaises(ValueError, self.product.get_num_datasets)
+
+    def test_get_num_dsds(self):
+        self.assertRaises(ValueError, self.product.get_num_dsds)
+
+    def test_get_num_bands(self):
+        self.assertRaises(ValueError, self.product.get_num_bands)
+
+    def test_get_mph(self):
+        self.assertRaises(ValueError, self.product.get_mph)
+
+    def test_get_sph(self):
+        self.assertRaises(ValueError, self.product.get_sph)
+
+    def test_get_dataset_at(self):
+        self.assertRaises(ValueError, self.product.get_dataset_at, 0)
+
+    def test_get_dataset(self):
+        self.assertRaises(ValueError, self.product.get_dataset,
+                          self.DATASET_NAME)
+
+    def test_get_dsd_at(self):
+        self.assertRaises(ValueError, self.product.get_dsd_at, 0)
+
+    def test_get_band_id(self):
+        self.assertRaises(ValueError, self.product.get_band, self.BAND_NAME)
+
+    def test_get_band_id_at(self):
+        self.assertRaises(ValueError, self.product.get_band_at, 0)
+
+    def test_read_bitmask_raster(self):
+        bm_expr = 'l2_flags.LAND AND !l2_flags.CLOUD'
+        raster = epr.create_bitmask_raster(12, 10)
+        xoffset = 0
+        yoffset = 0
+
+        self.assertRaises(ValueError, self.product.read_bitmask_raster,
+                          bm_expr, xoffset, yoffset, raster)
+
+    def test_get_dataset_names(self):
+        self.assertRaises(ValueError, self.product.get_dataset_names)
+
+    def test_get_band_names(self):
+        self.assertRaises(ValueError, self.product.get_band_names)
+
+    def test_datasets(self):
+        self.assertRaises(ValueError, self.product.datasets)
+
+    def test_bands(self):
+        self.assertRaises(ValueError, self.product.bands)
+
+    def test_repr(self):
+        self.assertRaises(ValueError, repr, self.product)
+
+    def test_str(self):
+        self.assertRaises(ValueError, str, self.product)
+
+
 class TestDataset(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = 'Vapour_Content'
@@ -457,10 +543,12 @@ class TestDataset(unittest.TestCase):
         self.assertTrue(isinstance(self.dataset.get_dsd(), epr.DSD))
 
     def test_create_record(self):
-        self.assertTrue(isinstance(self.dataset.create_record(), epr.Record))
+        record = self.dataset.create_record()
+        self.assertTrue(isinstance(record, epr.Record))
 
     def test_read_record(self):
-        self.assertTrue(isinstance(self.dataset.create_record(), epr.Record))
+        record = self.dataset.read_record(0)
+        self.assertTrue(isinstance(record, epr.Record))
 
     def test_read_record_passed(self):
         created_record = self.dataset.create_record()
@@ -517,6 +605,57 @@ class TestDatasetHighLevelAPI(unittest.TestCase):
 
     def test_str_type(self):
         self.assertTrue(isinstance(str(self.dataset), str))
+
+
+class TestDatasetOnClosedProduct(unittest.TestCase):
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    DATASET_NAME = 'Vapour_Content'
+
+    def setUp(self):
+        self.product = epr.Product(self.PRODUCT_FILE)
+        self.dataset = self.product.get_dataset(self.DATASET_NAME)
+        self.record = self.dataset.create_record()
+        self.product.close()
+
+    def test_product_property(self):
+        self.assertTrue(isinstance(self.dataset.product, epr.Product))
+
+    def test_description_property(self):
+        # @TODO: check
+        self.assertEqual(self.dataset.description, '')
+
+    def test_get_name(self):
+        self.assertRaises(ValueError, self.dataset.get_name)
+
+    def test_get_dsd_name(self):
+        self.assertRaises(ValueError, self.dataset.get_dsd_name)
+
+    def test_get_num_records(self):
+        self.assertRaises(ValueError, self.dataset.get_num_records)
+
+    def test_get_dsd(self):
+        self.assertRaises(ValueError, self.dataset.get_dsd)
+
+    def test_create_record(self):
+        self.assertRaises(ValueError, self.dataset.create_record)
+
+    def test_read_record(self):
+        self.assertRaises(ValueError, self.dataset.read_record, 0)
+
+    def test_read_record_passed(self):
+        self.assertRaises(ValueError, self.dataset.read_record, 0, self.record)
+
+    def test_records(self):
+        self.assertRaises(ValueError, self.dataset.records)
+
+    def test_iter(self):
+        self.assertRaises(ValueError, iter, self.dataset)
+
+    def test_repr(self):
+        self.assertRaises(ValueError, repr, self.dataset)
+
+    def test_str(self):
+        self.assertRaises(ValueError, str, self.dataset)
 
 
 class TestBand(unittest.TestCase):
@@ -787,6 +926,80 @@ class TestBandHighLevelAPI(unittest.TestCase):
     def test_str_type(self):
         band = self.product.get_band_at(0)
         self.assertTrue(isinstance(str(band), str))
+
+
+class TestBandOnClosedProduct(unittest.TestCase):
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    WIDTH = 12
+    HEIGHT = 10
+
+    def setUp(self):
+        self.product = epr.Product(self.PRODUCT_FILE)
+        self.band = self.product.get_band_at(0)
+        self.raster = self.band.create_compatible_raster(self.WIDTH,
+                                                         self.HEIGHT)
+        self.product.close()
+
+    def test_product_property(self):
+        self.assertTrue(isinstance(self.band.product, epr.Product))
+
+    # @TODO: check
+    #def test_properties(self):
+    #    for name in ('spectr_band_index', 'sample_model', 'data_type',
+    #                 'scaling_method', 'scaling_offset', 'scaling_factor',
+    #                 'bm_expr', 'unit', 'description', 'lines_mirrored'):
+    #        self.assertRaises(ValueError, getattr, self.band, name)
+
+    def test_sample_model_property(self):
+        self.assertEqual(self.band.sample_model, 0)
+
+    def test_data_type_property(self):
+        self.assertEqual(self.band.data_type, 0)
+
+    def test_scaling_method_property(self):
+        self.assertEqual(self.band.scaling_method, epr.E_SMID_LIN)
+
+    def test_scaling_offset_property(self):
+        self.assertEqual(self.band.scaling_offset, 0)
+
+    def test_scaling_factor_property(self):
+        self.assertEqual(self.band.scaling_factor, 0)
+        self.assertTrue(isinstance(self.band.scaling_factor, float))
+
+    def test_bm_expr_property(self):
+        self.assertEqual(self.band.bm_expr, None)
+
+    def test_unit_property(self):
+        self.assertEqual(self.band.unit, None)
+
+    def test_description_property(self):
+        self.assertEqual(self.band.description, None)
+
+    def test_lines_mirrored_property(self):
+        self.assertTrue(isinstance(self.band.lines_mirrored, bool))
+        self.assertEqual(self.band.lines_mirrored, False)
+
+    # END: check
+
+    def test_get_name(self):
+        self.assertRaises(ValueError, self.product.get_band_at, 0)
+
+    def test_create_compatible_raster(self):
+        self.assertRaises(ValueError, self.band.create_compatible_raster,
+                          self.WIDTH, self.HEIGHT)
+
+    def test_read_raster(self):
+        self.assertRaises(ValueError, self.band.read_raster)
+
+    def test_read_as_array(self):
+        self.assertRaises(ValueError, self.band.read_as_array,
+                          self.WIDTH, self.HEIGHT)
+
+    def test_str(self):
+        self.assertRaises(ValueError, str, self.band)
+
+    def test_repr(self):
+        self.assertRaises(ValueError, repr, self.band)
 
 
 class TestCreateRaster(unittest.TestCase):
