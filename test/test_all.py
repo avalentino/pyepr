@@ -213,7 +213,7 @@ class TestProduct(unittest.TestCase):
 
     def test_datasets(self):
         datasets = [self.product.get_dataset_at(idx)
-                        for idx in range(self.product.get_num_datasets())]
+                    for idx in range(self.product.get_num_datasets())]
         dataset_names = [ds.get_name() for ds in datasets]
         self.assertEqual(dataset_names, self.DATASET_NAMES)
 
@@ -225,7 +225,7 @@ class TestProduct(unittest.TestCase):
         self.assertTrue(isinstance(record, epr.Record))
         product = record.get_field('PRODUCT').get_elem()
         self.assertEqual(product.decode('ascii'),
-                        os.path.basename(self.PRODUCT_FILE))
+                         os.path.basename(self.PRODUCT_FILE))
 
     def test_get_sph(self):
         record = self.product.get_sph()
@@ -260,7 +260,7 @@ class TestProduct(unittest.TestCase):
 
     def test_get_band_id_at_invalid_index(self):
         self.assertRaises(ValueError, self.product.get_band_at,
-                            self.product.get_num_bands())
+                          self.product.get_num_bands())
 
     def test_read_bitmask_raster(self):
         bm_expr = 'l2_flags.LAND AND !l2_flags.CLOUD'
@@ -711,7 +711,7 @@ class TestBand(unittest.TestCase):
 
         self.assertEqual(raster1.get_pixel(0, 0), raster2.get_pixel(0, 0))
         self.assertEqual(raster1.get_pixel(width - 1, height - 1),
-                          raster2.get_pixel(width - 1, height - 1))
+                         raster2.get_pixel(width - 1, height - 1))
 
     def test_read_raster_with_invalid_raster(self):
         self.assertRaises(TypeError, self.band.read_raster, 0, 0, 0)
@@ -1553,8 +1553,9 @@ class TestDirectInstantiation(unittest.TestCase):
                 if isinstance(expected_regexp, types.StringTypes):
                     expected_regexp = re.compile(expected_regexp)
                 if not expected_regexp.search(str(exc_value)):
-                    raise self.failureException('"%s" does not match "%s"' %
-                             (expected_regexp.pattern, str(exc_value)))
+                    raise self.failureException(
+                        '"%s" does not match "%s"' % (expected_regexp.pattern,
+                                                      str(exc_value)))
             else:
                 if hasattr(expected_exception, '__name__'):
                     excName = expected_exception.__name__
