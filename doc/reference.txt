@@ -1141,6 +1141,18 @@ EPRValueError
 Data
 ----
 
+.. data:: __version__
+
+   Version string of PyEPR
+
+
+.. data:: __revision__
+
+   PyEPR revision (currently it is the same as :data:`__version__`)
+
+   .. deprecated:: 7.2
+
+
 .. data:: EPR_C_API_VERSION
 
    Version string of the wrapped `EPR API`_ C library

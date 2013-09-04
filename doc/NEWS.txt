@@ -5,6 +5,8 @@ Change history
 PyEPR 0.7.2 (in development)
 ----------------------------
 
+* added entries for :data:`__version__` and :data:`__revision__` in the
+  reference manual
 * the :data:`__revision__` module attribute is now deprecated
 
 
