@@ -41,8 +41,8 @@ in a product file.
 
 '''
 
-__revision__ = '$Id$'
 __version__ = '0.7.2dev'
+__revision__ = __version__  # deprecated
 
 
 cdef extern from *:
