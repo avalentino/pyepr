@@ -1407,6 +1407,51 @@ class TestMphRecordHighLevelAPI(TestRecordHighLevelAPI):
         self.record = product.get_mph()
 
 
+class TestRecordOnClosedProduct(unittest.TestCase):
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    DATASET_NAME = 'Quality_ADS'
+    NUM_FIELD = 21
+    FIELD_NAME = 'perc_water_abs_aero'
+    FIELD_NAMES = TestRecordHighLevelAPI.FIELD_NAMES
+
+    def setUp(self):
+        product = epr.Product(self.PRODUCT_FILE)
+        dataset = product.get_dataset(self.DATASET_NAME)
+        self.record = dataset.read_record(0)
+        product.close()
+
+    # @TODO: check
+    #def test_get_num_fields(self):
+    #    self.assertEqual(self.record.get_num_fields(), self.NUM_FIELD)
+
+    def test_print_(self):
+        self.assertRaises(ValueError, self.record.print_)
+
+    def test_print_element(self):
+        self.assertRaises(ValueError, self.record.print_element, 3, 0)
+
+    def test_get_field(self):
+        self.assertRaises(ValueError, self.record.get_field, self.FIELD_NAME)
+
+    def test_get_field_at(self):
+        self.assertRaises(ValueError, self.record.get_field_at, 0)
+
+    def test_get_field_names(self):
+        self.assertRaises(ValueError, self.record.get_field_names)
+
+    def test_fields(self):
+        self.assertRaises(ValueError, self.record.fields)
+
+    def test_iter(self):
+        self.assertRaises(ValueError, iter, self.record)
+
+    def test_repr(self):
+        self.assertRaises(ValueError, repr, self.record)
+
+    def test_str(self):
+        self.assertRaises(ValueError, str, self.record)
+
+
 class TestField(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = 'Quality_ADS'

@@ -644,7 +644,7 @@ cdef class DSD(EprObject):
     '''
 
     cdef EPR_SDSD* _ptr
-    cdef object _parent
+    cdef object _parent     # Dataset or Product
 
     property index:
         '''The index of this DSD (zero-based)'''
@@ -742,7 +742,7 @@ cdef new_dsd(EPR_SDSD* ptr, object parent=None):
     cdef DSD instance = DSD.__new__(DSD)
 
     instance._ptr = ptr
-    instance._parent = parent
+    instance._parent = parent   # Dataset or Product
 
     return instance
 
@@ -758,7 +758,7 @@ cdef class Field(EprObject):
     '''
 
     cdef EPR_SField* _ptr
-    cdef object _parent
+    cdef Record _parent
 
     def print_(self, ostream=None):
         '''print_(self, ostream=None)
@@ -1106,7 +1106,7 @@ cdef class Field(EprObject):
             return epr_get_field_num_elems(self._ptr)
 
 
-cdef new_field(EPR_SField* ptr, object parent=None):
+cdef new_field(EPR_SField* ptr, Record parent=None):
     if ptr is NULL:
         pyepr_null_ptr_error()
 
@@ -1128,7 +1128,7 @@ cdef class Record(EprObject):
     '''
 
     cdef EPR_SRecord* _ptr
-    cdef object _parent
+    cdef object _parent     # Dataset or Product
     cdef bint _dealloc
 
     def __dealloc__(self):
@@ -1138,6 +1138,13 @@ cdef class Record(EprObject):
         if self._ptr is not NULL:
             epr_free_record(self._ptr)
             pyepr_check_errors()
+
+    cdef inline check_closed_product(self):
+        if isinstance(self._parent, Dataset):
+            (<Dataset>self._parent).check_closed_product()
+        else:
+            #elif isinstance(self._parent, Product):
+            (<Product>self._parent).check_closed_product()
 
     def get_num_fields(self):
         '''get_num_fields(self)
@@ -1167,6 +1174,8 @@ cdef class Record(EprObject):
         '''
 
         cdef FILE* fstream = pyepr_get_file_stream(ostream)
+
+        self.check_closed_product()
 
         with nogil:
             epr_print_record(self._ptr, fstream)
@@ -1199,6 +1208,8 @@ cdef class Record(EprObject):
 
         cdef FILE* fstream = pyepr_get_file_stream(ostream)
 
+        self.check_closed_product()
+
         with nogil:
             epr_print_element(self._ptr, field_index, element_index, fstream)
             stdio.fflush(fstream)
@@ -1223,6 +1234,9 @@ cdef class Record(EprObject):
 
         cdef EPR_SField* field_ptr
         cdef bytes cname = _to_bytes(name)
+
+        self.check_closed_product()
+
         field_ptr = <EPR_SField*>epr_get_field(self._ptr, cname)
         if field_ptr is NULL:
             pyepr_null_ptr_error('unable to get field "%s"' % name)
@@ -1243,6 +1257,9 @@ cdef class Record(EprObject):
         '''
 
         cdef EPR_SField* field_ptr
+
+        self.check_closed_product()
+
         field_ptr = <EPR_SField*>epr_get_field_at(self._ptr, index)
         if field_ptr is NULL:
             pyepr_null_ptr_error('unable to get field at index %d' % index)
@@ -1262,6 +1279,8 @@ cdef class Record(EprObject):
         cdef EPR_SField* field_ptr
         cdef int idx
         cdef char* name
+
+        self.check_closed_product()
 
         names = []
         for idx in range(self.get_num_fields()):
@@ -1283,6 +1302,7 @@ cdef class Record(EprObject):
         # @TODO: use __iter__ when generator expressions will be available
         #return list(self)
         cdef int idx
+        self.check_closed_product()
         return [self.get_field_at(idx)
                             for idx in range(epr_get_num_fields(self._ptr))]
 
@@ -1293,9 +1313,11 @@ cdef class Record(EprObject):
         return iter(self.fields())
 
     def __str__(self):
+        self.check_closed_product()
         return '\n'.join(map(str, self))
 
     def __repr__(self):
+        self.check_closed_product()
         return '%s %d fields' % (super(Record, self).__repr__(),
                                  self.get_num_fields())
 
@@ -1307,7 +1329,7 @@ cdef new_record(EPR_SRecord* ptr, object parent=None, bint dealloc=False):
     cdef Record instance = Record.__new__(Record)
 
     instance._ptr = ptr
-    instance._parent = parent
+    instance._parent = parent       # Dataset or Product
     instance._dealloc = dealloc
 
     return instance
@@ -1321,8 +1343,8 @@ cdef class Raster(EprObject):
     '''
 
     cdef EPR_SRaster* _ptr
-    cdef object _parent
-    cdef object _data
+    cdef Band _parent
+    cdef object _data       # @TODO: ndarray
 
     def __dealloc__(self):
         if self._ptr is not NULL:
@@ -1475,14 +1497,14 @@ cdef class Raster(EprObject):
                                       self.get_height(), self.get_width())
 
 
-cdef new_raster(EPR_SRaster* ptr, object parent=None):
+cdef new_raster(EPR_SRaster* ptr, Band parent=None):
     if ptr is NULL:
         pyepr_null_ptr_error()
 
     cdef Raster instance = Raster.__new__(Raster)
 
     instance._ptr = ptr
-    instance._parent = parent
+    instance._parent = parent       # Band or None
     instance._data = None
 
     return instance
@@ -1588,7 +1610,7 @@ cdef class Band(EprObject):
     cdef Product _parent
 
     cdef inline check_closed_product(self):
-        self._parent.check_closed()
+        self._parent.check_closed_product()
 
     property product:
         '''The :class:`Product` instance to which this band belongs to'''
@@ -1955,7 +1977,7 @@ cdef class Band(EprObject):
                                                     self.product.id_string)
 
 
-cdef new_band(EPR_SBandId* ptr, object parent=None):
+cdef new_band(EPR_SBandId* ptr, Product parent=None):
     if ptr is NULL:
         pyepr_null_ptr_error()
 
@@ -1984,7 +2006,7 @@ cdef class Dataset(EprObject):
     cdef Product _parent
 
     cdef inline check_closed_product(self):
-        self._parent.check_closed()
+        self._parent.check_closed_product()
 
     property product:
         '''The :class:`Product` instance to which this dataset belongs to'''
@@ -2155,7 +2177,7 @@ cdef class Dataset(EprObject):
                                                self.get_num_records())
 
 
-cdef new_dataset(EPR_SDatasetId* ptr, object parent=None):
+cdef new_dataset(EPR_SDatasetId* ptr, Product parent=None):
     if ptr is NULL:
         pyepr_null_ptr_error()
 
@@ -2198,7 +2220,7 @@ cdef class Product(EprObject):
             pyepr_check_errors()
             self._ptr = NULL
 
-    cdef inline check_closed(self):
+    cdef inline check_closed_product(self):
         if self._ptr is NULL:
             raise ValueError('I/O operation on closed file')
 
@@ -2234,7 +2256,7 @@ cdef class Product(EprObject):
         '''The file's path including the file name'''
 
         def __get__(self):
-            self.check_closed()
+            self.check_closed_product()
             if self._ptr.file_path is NULL:
                 return None
             else:
@@ -2257,7 +2279,7 @@ cdef class Product(EprObject):
         '''The total size in bytes of the product file'''
 
         def __get__(self):
-            self.check_closed()
+            self.check_closed_product()
             return self._ptr.tot_size
 
     property id_string:
@@ -2272,7 +2294,7 @@ cdef class Product(EprObject):
         '''
 
         def __get__(self):
-            self.check_closed()
+            self.check_closed_product()
             if self._ptr.id_string is NULL:
                 return None
             else:
@@ -2282,7 +2304,7 @@ cdef class Product(EprObject):
         '''For MERIS L1b and RR and FR to provide backward compatibility'''
 
         def __get__(self):
-            self.check_closed()
+            self.check_closed_product()
             return self._ptr.meris_iodd_version
 
     def get_scene_width(self):
@@ -2292,7 +2314,7 @@ cdef class Product(EprObject):
 
         '''
 
-        self.check_closed()
+        self.check_closed_product()
         return epr_get_scene_width(self._ptr)
 
     def get_scene_height(self):
@@ -2302,7 +2324,7 @@ cdef class Product(EprObject):
 
         '''
 
-        self.check_closed()
+        self.check_closed_product()
         return epr_get_scene_height(self._ptr)
 
     def get_num_datasets(self):
@@ -2312,7 +2334,7 @@ cdef class Product(EprObject):
 
         '''
 
-        self.check_closed()
+        self.check_closed_product()
         return epr_get_num_datasets(self._ptr)
 
     def get_num_dsds(self):
@@ -2325,7 +2347,7 @@ cdef class Product(EprObject):
 
         '''
 
-        self.check_closed()
+        self.check_closed_product()
         return epr_get_num_dsds(self._ptr)
 
     def get_num_bands(self):
@@ -2335,7 +2357,7 @@ cdef class Product(EprObject):
 
         '''
 
-        self.check_closed()
+        self.check_closed_product()
         return epr_get_num_bands(self._ptr)
 
     def get_dataset_at(self, uint index):
@@ -2396,7 +2418,7 @@ cdef class Product(EprObject):
 
         cdef EPR_SDSD* dsd_ptr
 
-        self.check_closed()
+        self.check_closed_product()
 
         dsd_ptr = epr_get_dsd_at(self._ptr, index)
         if dsd_ptr is NULL:
@@ -2512,7 +2534,7 @@ cdef class Product(EprObject):
         cdef bytes c_bm_expr = _to_bytes(bm_expr)
         cdef int ret = 0
 
-        self.check_closed()
+        self.check_closed_product()
 
         ret = epr_read_bitmask_raster(self._ptr, c_bm_expr,
                                       xoffset, yoffset,
