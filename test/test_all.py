@@ -381,6 +381,11 @@ class TestProductHighLevelAPI(unittest.TestCase):
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
 
+    def test_closed(self):
+        self.assertFalse(self.product.closed)
+        self.product.close()
+        self.assertTrue(self.product.closed)
+
     def test_get_dataset_names(self):
         self.assertEqual(self.product.get_dataset_names(), self.DATASET_NAMES)
 

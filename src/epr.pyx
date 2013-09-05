@@ -2596,6 +2596,12 @@ cdef class Product(EprObject):
         return raster
 
     # --- high level interface ------------------------------------------------
+    property closed:
+        '''True if the :class:`epr.Product` is closed.'''
+
+        def __get__(self):
+            return self._ptr is NULL
+
     def get_dataset_names(self):
         '''get_dataset_names(self)
 

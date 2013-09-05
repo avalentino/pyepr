@@ -215,6 +215,11 @@ Product
       the following methods are part of the *high level* Python API and
       do not have any correspondent function in the C API.
 
+   .. attribute:: closed
+
+      True if the :class:`Product` is closed.
+
+
    .. method:: get_dataset_names
 
       Return the list of names of the datasets in the product
