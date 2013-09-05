@@ -760,6 +760,9 @@ cdef class Field(EprObject):
     cdef EPR_SField* _ptr
     cdef Record _parent
 
+    cdef inline check_closed_product(self):
+        self._parent.check_closed_product()
+
     def print_(self, ostream=None):
         '''print_(self, ostream=None)
 
@@ -780,6 +783,8 @@ cdef class Field(EprObject):
 
         cdef FILE* fstream = pyepr_get_file_stream(ostream)
 
+        self.check_closed_product()
+
         with nogil:
             epr_print_field(self._ptr, fstream)
             stdio.fflush(fstream)
@@ -797,7 +802,11 @@ cdef class Field(EprObject):
 
         '''
 
-        cdef const_char* unit = epr_get_field_unit(self._ptr)
+        cdef const_char* unit = NULL
+
+        self.check_closed_product()
+
+        unit = epr_get_field_unit(self._ptr)
 
         if unit is NULL:
             return ''
@@ -811,7 +820,11 @@ cdef class Field(EprObject):
 
         '''
 
-        cdef char* description = <char*>epr_get_field_description(self._ptr)
+        cdef char* description = NULL
+
+        self.check_closed_product()
+
+        description = <char*>epr_get_field_description(self._ptr)
 
         return _to_str(description, 'ascii')
 
@@ -822,6 +835,8 @@ cdef class Field(EprObject):
 
         '''
 
+        self.check_closed_product()
+
         return epr_get_field_num_elems(self._ptr)
 
     def get_name(self):
@@ -831,7 +846,11 @@ cdef class Field(EprObject):
 
         '''
 
-        cdef char* name = <char*>epr_get_field_name(self._ptr)
+        cdef char* name = NULL
+
+        self.check_closed_product()
+
+        name = <char*>epr_get_field_name(self._ptr)
 
         return _to_str(name, 'ascii')
 
@@ -841,6 +860,8 @@ cdef class Field(EprObject):
         Gets the type of the field
 
         '''
+
+        self.check_closed_product()
 
         return epr_get_field_type(self._ptr)
 
@@ -860,6 +881,9 @@ cdef class Field(EprObject):
         '''
 
         cdef EPR_STime* eprtime
+
+        self.check_closed_product()
+
         etype = epr_get_field_type(self._ptr)
 
         if etype == e_tid_uchar:
@@ -916,6 +940,8 @@ cdef class Field(EprObject):
         cdef size_t num_elems
         cdef size_t i
         cdef np.ndarray out
+
+        self.check_closed_product()
 
         num_elems = epr_get_field_num_elems(self._ptr)
         etype = epr_get_field_type(self._ptr)
@@ -1037,6 +1063,8 @@ cdef class Field(EprObject):
                 if p1 == p2:
                     return True
 
+                (<Field>self).check_closed_product()
+
                 if ((epr_get_field_num_elems(p1) !=
                             epr_get_field_num_elems(p2)) or
 
@@ -1066,6 +1094,8 @@ cdef class Field(EprObject):
             elif op == 3:       # ne
                 if p1 == p2:
                     return False
+
+                (<Field>self).check_closed_product()
 
                 if ((epr_get_field_num_elems(p1) !=
                             epr_get_field_num_elems(p2)) or
@@ -1100,6 +1130,8 @@ cdef class Field(EprObject):
             return NotImplemented
 
     def __len__(self):
+        self.check_closed_product()
+
         if epr_get_field_type(self._ptr) == e_tid_string:
             return cstring.strlen(epr_get_field_elem_as_str(self._ptr))
         else:

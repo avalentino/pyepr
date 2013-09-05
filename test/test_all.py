@@ -23,6 +23,7 @@ import os
 import re
 import sys
 import numbers
+import operator
 import unittest
 import tempfile
 import functools
@@ -1621,6 +1622,59 @@ class TestFieldHighLevelAPI2(unittest.TestCase):
     #    record = dataset.read_record(0)
     #    field = record.get_field('filter_window')
     #    self.assertEqual(len(field), len(field.get_elem()))
+
+
+class TestFieldOnClosedProduct(unittest.TestCase):
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    DATASET_NAME = 'Quality_ADS'
+    FIELD_NAME = 'perc_water_abs_aero'
+
+    def setUp(self):
+        product = epr.Product(self.PRODUCT_FILE)
+        dataset = product.get_dataset(self.DATASET_NAME)
+        self.record = dataset.read_record(0)
+        self.field = self.record.get_field(self.FIELD_NAME)
+        self.field2 = self.record.get_field_at(4)
+        product.close()
+
+    def test_print_field(self):
+        self.assertRaises(ValueError, self.field.print_)
+
+    def test_get_unit(self):
+        self.assertRaises(ValueError, self.field.get_unit)
+
+    def test_get_description(self):
+        self.assertRaises(ValueError, self.field.get_description)
+
+    def test_get_num_elems(self):
+        self.assertRaises(ValueError, self.field.get_num_elems)
+
+    def test_get_name(self):
+        self.assertRaises(ValueError, self.field.get_name)
+
+    def test_get_type(self):
+        self.assertRaises(ValueError, self.field.get_type)
+
+    def test_get_elem(self):
+        self.assertRaises(ValueError, self.field.get_elem)
+
+    def test_get_elems(self):
+        self.assertRaises(ValueError, self.field.get_elems)
+
+    def test_repr(self):
+        self.assertRaises(ValueError, repr, self.field)
+
+    def test_str(self):
+        self.assertRaises(ValueError, str, self.field)
+
+    def test_eq(self):
+        self.assertRaises(ValueError, operator.eq, self.field, self.field2)
+
+    def test_ne(self):
+        self.assertRaises(ValueError, operator.ne, self.field, self.field2)
+
+    def test_len(self):
+        self.assertRaises(ValueError, len, self.field)
 
 
 class TestDSD(unittest.TestCase):
