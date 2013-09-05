@@ -1766,6 +1766,53 @@ class TestDsdHighLevelAPI(unittest.TestCase):
         self.assertTrue(isinstance(str(self.dsd), str))
 
 
+class TestDSDOnCloserProduct(unittest.TestCase):
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    DSD_INDEX = 0
+
+    def setUp(self):
+        self.product = epr.Product(self.PRODUCT_FILE)
+        self.dsd = self.product.get_dsd_at(self.DSD_INDEX)
+        self.dsd2 = self.product.get_dsd_at(self.DSD_INDEX + 1)
+        self.product.close()
+
+    def test_index(self):
+        self.assertRaises(ValueError, getattr, self.dsd, 'index')
+
+    def test_ds_name(self):
+        self.assertRaises(ValueError, getattr, self.dsd, 'ds_name')
+
+    def test_ds_type(self):
+        self.assertRaises(ValueError, getattr, self.dsd, 'ds_type')
+
+    def test_filename(self):
+        self.assertRaises(ValueError, getattr, self.dsd, 'filename')
+
+    def test_ds_offset(self):
+        self.assertRaises(ValueError, getattr, self.dsd, 'ds_offset')
+
+    def test_ds_size(self):
+        self.assertRaises(ValueError, getattr, self.dsd, 'ds_size')
+
+    def test_num_dsr(self):
+        self.assertRaises(ValueError, getattr, self.dsd, 'num_dsr')
+
+    def test_dsr_size(self):
+        self.assertRaises(ValueError, getattr, self.dsd, 'dsr_size')
+
+    def test_eq(self):
+        self.assertRaises(ValueError, operator.eq, self.dsd, self.dsd2)
+
+    def test_ne(self):
+        self.assertRaises(ValueError, operator.ne, self.dsd, self.dsd2)
+
+    def test_repr(self):
+        self.assertRaises(ValueError, repr, self.dsd)
+
+    def test_str(self):
+        self.assertRaises(ValueError, str, self.dsd)
+
+
 class TestDataypeFunctions(unittest.TestCase):
     TYPE_NAMES = {
         epr.E_TID_UNKNOWN: '',

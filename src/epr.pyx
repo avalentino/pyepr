@@ -646,52 +646,67 @@ cdef class DSD(EprObject):
     cdef EPR_SDSD* _ptr
     cdef object _parent     # Dataset or Product
 
+    cdef inline check_closed_product(self):
+        if isinstance(self, Dataset):
+            (<Dataset>self._parent).check_closed_product()
+        else:
+            #elif isinstance(self, Product):
+            (<Product>self._parent).check_closed_product()
+
     property index:
         '''The index of this DSD (zero-based)'''
 
         def __get__(self):
+            self.check_closed_product()
             return self._ptr.index
 
     property ds_name:
         '''The dataset name'''
 
         def __get__(self):
+            self.check_closed_product()
             return _to_str(self._ptr.ds_name, 'ascii')
 
     property ds_type:
         '''The dataset type descriptor'''
 
         def __get__(self):
+            self.check_closed_product()
             return _to_str(self._ptr.ds_type, 'ascii')
 
     property filename:
         '''The filename in the DDDB with the description of this dataset'''
 
         def __get__(self):
+            self.check_closed_product()
             return _to_str(self._ptr.filename, 'ascii')
 
     property ds_offset:
         '''The offset of dataset-information the product file'''
 
         def __get__(self):
+            self.check_closed_product()
             return self._ptr.ds_offset
 
     property ds_size:
         '''The size of dataset-information in dataset product file'''
 
         def __get__(self):
+            self.check_closed_product()
             return self._ptr.ds_size
 
     property num_dsr:
         '''The number of dataset records for the given dataset name'''
 
         def __get__(self):
+            self.check_closed_product()
             return self._ptr.num_dsr
 
     property dsr_size:
         '''The size of dataset record for the given dataset name'''
 
         def __get__(self):
+            self.check_closed_product()
             return self._ptr.dsr_size
 
     # --- high level interface ------------------------------------------------
@@ -707,6 +722,8 @@ cdef class DSD(EprObject):
                 if p1 == p2:
                     return True
 
+                (<DSD>self).check_closed_product()
+
                 return ((p1.index == p2.index) and
                         (p1.ds_offset == p2.ds_offset) and
                         (p1.ds_size == p2.ds_size) and
@@ -719,6 +736,8 @@ cdef class DSD(EprObject):
             elif op == 3:       # ne
                 if p1 == p2:
                     return False
+
+                (<DSD>self).check_closed_product()
 
                 return ((p1.index != p2.index) or
                         (p1.ds_offset != p2.ds_offset) or
