@@ -386,6 +386,11 @@ class TestProductHighLevelAPI(unittest.TestCase):
         self.product.close()
         self.assertTrue(self.product.closed)
 
+    def test_readonly_closed(self):
+        self.assertFalse(self.product.closed)
+        self.assertRaises(AttributeError,
+                          setattr, self.product, 'closed', True)
+
     def test_get_dataset_names(self):
         self.assertEqual(self.product.get_dataset_names(), self.DATASET_NAMES)
 
