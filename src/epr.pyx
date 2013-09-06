@@ -2682,6 +2682,12 @@ cdef class Product(EprObject):
         lines.extend(map(repr, self.bands()))
         return '\n'.join(lines)
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc_info):
+        self.close()
+
 
 def open(filename):
     '''open(filename)

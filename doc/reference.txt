@@ -247,6 +247,8 @@ Product
 
    * __repr__
    * __str__
+   * __enter__
+   * __exit__
 
 
 Dataset
@@ -1041,6 +1043,15 @@ Functions
         the :class:`Product` instance representing the specified
         product. An exception (:exc:`exceptions.ValueError`) is raised
         if the file could not be opened.
+
+   The :class:`Product` class supports context management so the recommended
+   way to ensure that a product is actually closed as soon as a task is
+   completed is to use the ``with`` statement::
+
+       with open('ASA_IMP_1PNUPA20060202_ ... _3110.N1') as product:
+           dataset = product.get_dataset('MAIN_PROCESSING_PARAMS_ADS')
+           record = dataset.read_record(0)
+           print(record)
 
    .. seealso :class:`Product`
 

@@ -10,6 +10,8 @@ PyEPR 0.7.2 (in development)
   on the garbage collector behaviour (closes :issue:`7`)
 * new :attr:`epr.Product.closed` (read-only) attribute that can be used to
   check if a :class:`epr.Product` has been closed
+* the :class:`Product` class now supports context management so they can be
+  used in ``with`` statements
 * added entries for :data:`epr.__version__` and :data:`epr.__revision__` in
   the reference manual
 * the :data:`epr.__revision__` module attribute is now deprecated

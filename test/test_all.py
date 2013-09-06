@@ -444,6 +444,14 @@ class TestProductHighLevelAPI(unittest.TestCase):
     def test_str_type(self):
         self.assertTrue(isinstance(str(self.product), str))
 
+    def test_contect_manager(self):
+        with epr.open(self.PRODUCT_FILE) as product:
+            self.assertTrue(isinstance(product, epr.Product))
+            self.assertFalse(product.closed)
+            self.assertTrue(str(product))
+
+        self.assertTrue(product.closed)
+
 
 class TestClosedProduct(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
