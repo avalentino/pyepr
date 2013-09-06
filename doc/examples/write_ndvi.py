@@ -24,6 +24,8 @@ for example::
 
 '''
 
+from __future__ import pront_function
+
 import sys
 import struct
 import logging
@@ -93,6 +95,7 @@ def main(*argv):
     logging.info('ndvi was written success')
 
     out_stream.close()
+    product.close()
 
 
 if __name__ == '__main__':

@@ -30,6 +30,7 @@ Parameters" record to the standard output::
     dataset = product.get_dataset('MAIN_PROCESSING_PARAMS_ADS')
     record = dataset.read_record(0)
     print(record)
+    product.close()
 
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _Python: http://www.python.org
@@ -207,7 +208,7 @@ them and memory is deallocated automatically.
 
 Even better, each object holds a reference to other objects it depends
 on so the user never have to worry about identifiers validity or about
-the correct order structures have to be feed.
+the correct order structures have to be freed.
 
 For example: the C `EPR_DatasetId` structure has a field (`product_id`)
 that points to the *product* descriptor `EPR_productId` to which it
@@ -233,7 +234,7 @@ object instance::
     dataset = product.get_dataset('MAIN_PROCESSING_PARAMS_ADS')
 
 and then forget about the *product* instance it depends on.
-Even if the *product* variable goes out of scope and is no more directly
+Even if the *product* variable goes out of scope and it is no more directly
 accessible in the program the *dataset* object keeps staying valid since
 it holds an internal reference to the *product* instance it depends on.
 
@@ -241,6 +242,12 @@ When *record* is destroyed automatically also the parent :class:`epr.Product`
 object is destroyed (assumed there is no other reference to it).
 
 The entire machinery is completely automatic and transparent to the user.
+
+.. note::
+
+    of course when a *product* object is explicitly closed using the
+    :meth:`epr.Product.close` any I/O operation on it and on other objects
+    (bands, datasets, etc) associated to it is no more possible.
 
 
 Arrays
@@ -278,7 +285,8 @@ amount of data contained in ENVISAT_ products.
 Enumerators
 -----------
 
-Python_ does not have *enumerators* at language level.
+Python_ does not have *enumerators* at language level (at least this is true
+for Python_ < 3.4).
 Enumerations are simply mapped as module constants that have the same
 name of the C enumerate but are spelled all in capital letters.
 
@@ -355,7 +363,7 @@ string representation of the objects and their contents.
 
 If the EPR object has a ``print_`` method (like e.g. :meth:`epr.Record.print_`
 and :meth:`epr.Field.print_`) then the string representation of the object
-will have in the same format used by the ``print_`` method.
+will have the same format used by the ``print_`` method.
 So writing::
 
     fd.write(str(record))
@@ -376,7 +384,7 @@ So it is possible to write code like the following::
         for index, field in enumerate(record):
             print(index, field)
 
-:class:`epr.DSD` and :class:`epr.Filed` classes implement the ``__eq__``
+:class:`epr.DSD` and :class:`epr.Field` classes implement the ``__eq__``
 and ``__ne__`` methods for objects comparison::
 
     if filed1 == field2:
@@ -402,5 +410,18 @@ that returns the number of elements in the field::
     If the field contains a string then the string length is
     returned.
 
+Finally the :class:`epr.Product` class acts as a `context manager`_ (i.e. it
+implements the ``__enter__`` and ``__exit__`` methods).
+
+This allows the user to write code like the following::
+
+    with epr.open('ASA_IMS_ ... _4650.N1') as product:
+        print(product)
+
+that ensure that the product is closed as soon as the program exits the
+``with`` block.
+
+
 .. _`special method`: http://docs.python.org/reference/datamodel.html
 .. _pythonic: http://www.cafepy.com/article/be_pythonic
+.. _`context manager`: http://docs.python.org/3/library/stdtypes.html#context-manager-types

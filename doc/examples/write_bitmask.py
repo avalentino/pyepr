@@ -21,6 +21,8 @@ Example to call the main function::
 
 '''
 
+from __future__ import print_function
+
 import sys
 import epr
 
@@ -47,22 +49,21 @@ def main(*argv):
     image_file_path = argv[3]
 
     # Open the product; an argument is a path to product data file
-    product = epr.open(product_file_path)
+    with epr.open(product_file_path) as product:
+        offset_x = 0
+        offset_y = 0
+        source_width = product.get_scene_width()
+        source_height = product.get_scene_height()
+        source_step_x = 1
+        source_step_y = 1
 
-    offset_x = 0
-    offset_y = 0
-    source_width  = product.get_scene_width()
-    source_height = product.get_scene_height()
-    source_step_x = 1
-    source_step_y = 1
+        bm_raster = epr.create_bitmask_raster(source_width, source_height,
+                                              source_step_x, source_step_y)
 
-    bm_raster = epr.create_bitmask_raster(source_width, source_height,
-                                          source_step_x, source_step_y)
+        product.read_bitmask_raster(bm_expr, offset_x, offset_y, bm_raster)
 
-    product.read_bitmask_raster(bm_expr, offset_x, offset_y, bm_raster)
-
-    with open(image_file_path, 'wb') as out_stream:
-        bm_raster.data.tofile(out_stream)
+        with open(image_file_path, 'wb') as out_stream:
+            bm_raster.data.tofile(out_stream)
 
     print 'Raw image data successfully written to "%s".' % image_file_path
     print 'Data type is "byte", size is %d x %d pixels.' % (source_width,

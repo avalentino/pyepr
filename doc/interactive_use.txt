@@ -75,7 +75,7 @@ available classes and functions::
         .. _ESA: http://earth.esa.int
 
     In [3]: epr.__version__, epr.EPR_C_API_VERSION
-    Out[3]: ('0.7.1', '2.3dev')
+    Out[3]: ('0.7.2', '2.3dev')
 
 Docstrings are available for almost all classes, methods and functions in
 the :mod:`epr` and they can be displayed using the :func:`help` python_
@@ -87,40 +87,27 @@ Also IPython_ provides a handy tab completion mechanism to automatically
 complete commands or to display available functions and classes::
 
     In [4]: product = epr. [TAB]
-    epr.Band                     epr.E_TID_TIME
-    epr.__builtins__             epr.E_TID_UCHAR
-    epr.__class__                epr.E_TID_UINT
-    epr._CLib                    epr.E_TID_UNKNOWN
-    epr._close_api               epr.E_TID_USHORT
-    epr.collections              epr.Field
-    epr.create_bitmask_raster    epr.__file__
-    epr.create_raster            epr.__format__
-    epr.Dataset                  epr.__getattribute__
-    epr.data_type_id_to_str      epr.get_data_type_size
-    epr.__delattr__              epr.get_sample_model_name
-    epr.__dict__                 epr.get_scaling_method_name
-    epr.__doc__                  epr.__hash__
-    epr.DSD                      epr.__init__
-    epr.EPR_C_API_VERSION        epr.__name__
-    epr.EPRError                 epr.__new__
-    epr.EprObject                epr.np
-    epr.EPRTime                  epr.open
-    epr.EPRValueError            epr.__package__
-    epr.E_SMID_LIN               epr.Product
-    epr.E_SMID_LOG               epr.Raster
-    epr.E_SMID_NON               epr.Record
-    epr.E_SMOD_1OF1              epr.__reduce__
-    epr.E_SMOD_1OF2              epr.__reduce_ex__
-    epr.E_SMOD_2OF2              epr.__repr__
-    epr.E_SMOD_2TOF              epr.__revision__
-    epr.E_SMOD_3TOI              epr.__setattr__
-    epr.E_TID_CHAR               epr.__sizeof__
-    epr.E_TID_DOUBLE             epr.so
-    epr.E_TID_FLOAT              epr.__str__
-    epr.E_TID_INT                epr.__subclasshook__
-    epr.E_TID_SHORT              epr.sys
-    epr.E_TID_SPARE              epr.__test__
-    epr.E_TID_STRING             epr.__version__
+    epr.Band                     epr.E_TID_STRING
+    epr.DSD                      epr.E_TID_TIME
+    epr.Dataset                  epr.E_TID_UCHAR
+    epr.EPRError                 epr.E_TID_UINT
+    epr.EPRTime                  epr.E_TID_UNKNOWN
+    epr.EPRValueError            epr.E_TID_USHORT
+    epr.EPR_C_API_VERSION        epr.EprObject
+    epr.E_SMID_LIN               epr.Field
+    epr.E_SMID_LOG               epr.Product
+    epr.E_SMID_NON               epr.Raster
+    epr.E_SMOD_1OF1              epr.Record
+    epr.E_SMOD_1OF2              epr.create_bitmask_raster
+    epr.E_SMOD_2OF2              epr.create_raster
+    epr.E_SMOD_2TOF              epr.data_type_id_to_str
+    epr.E_SMOD_3TOI              epr.get_data_type_size
+    epr.E_TID_CHAR               epr.get_sample_model_name
+    epr.E_TID_DOUBLE             epr.get_scaling_method_name
+    epr.E_TID_FLOAT              epr.np
+    epr.E_TID_INT                epr.open
+    epr.E_TID_SHORT              epr.so
+    epr.E_TID_SPARE              epr.sys
 
 
 :class:`epr.Product` navigation
@@ -133,24 +120,18 @@ instance of the desired ENVISAT_ :class:`epr.Product`::
     'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1')
 
     In [4]: product.
-    product.bands                product.get_num_dsds
-    product.__class__            product.get_scene_height
-    product.datasets             product.get_scene_width
-    product.__delattr__          product.get_sph
-    product.__doc__              product.__hash__
-    product.file_path            product.id_string
-    product.__format__           product.__init__
-    product.__getattribute__     product.meris_iodd_version
-    product.get_band             product.__new__
-    product.get_band_at          product.read_bitmask_raster
-    product.get_band_names       product.__reduce__
-    product.get_dataset          product.__reduce_ex__
-    product.get_dataset_at       product.__repr__
-    product.get_dataset_names    product.__setattr__
-    product.get_dsd_at           product.__sizeof__
-    product.get_mph              product.__str__
-    product.get_num_bands        product.__subclasshook__
-    product.get_num_datasets     product.tot_size
+    product.bands                product.get_mph
+    product.close                product.get_num_bands
+    product.closed               product.get_num_datasets
+    product.datasets             product.get_num_dsds
+    product.file_path            product.get_scene_height
+    product.get_band             product.get_scene_width
+    product.get_band_at          product.get_sph
+    product.get_band_names       product.id_string
+    product.get_dataset          product.meris_iodd_version
+    product.get_dataset_at       product.read_bitmask_raster
+    product.get_dataset_names    product.tot_size
+    product.get_dsd_at
 
     In [5]: product.tot_size / 1024.**2
     Out[5]: 132.01041889190674
@@ -183,15 +164,9 @@ get all desired information from the product::
     Out[8]: epr.Dataset(MAIN_PROCESSING_PARAMS_ADS) 1 records
 
     In [9]: record = dataset.[TAB]
-    dataset.__class__         dataset.get_name          dataset.__reduce__
-    dataset.create_record     dataset.get_num_records   dataset.__reduce_ex__
-    dataset.__delattr__       dataset.__hash__          dataset.__repr__
-    dataset.description       dataset.__init__          dataset.__setattr__
-    dataset.__doc__           dataset.__iter__          dataset.__sizeof__
-    dataset.__format__        dataset.__new__           dataset.__str__
-    dataset.__getattribute__  dataset.product           dataset.__subclasshook__
-    dataset.get_dsd           dataset.read_record
-    dataset.get_dsd_name      dataset.records
+    dataset.create_record    dataset.get_dsd_name     dataset.product
+    dataset.description      dataset.get_name         dataset.read_record
+    dataset.get_dsd          dataset.get_num_records  dataset.records
 
     In [9]: record = dataset.read_record(0)
 
@@ -284,25 +259,17 @@ Dealing with image data is simple as well::
     In [19]: band = product.get_band('proc_data')
 
     In [20]: data = band. [TAB]
-    band.bm_expr                   band.read_as_array
-    band.__class__                 band.read_raster
-    band.create_compatible_raster  band.__reduce__
-    band.data_type                 band.__reduce_ex__
-    band.__delattr__               band.__repr__
-    band.description               band.sample_model
-    band.__doc__                   band.scaling_factor
-    band.__format__                band.scaling_method
-    band.__getattribute__          band.scaling_offset
-    band.get_name                  band.__setattr__
-    band.__hash__                  band.__sizeof__
-    band.__init__                  band.spectr_band_index
-    band.lines_mirrored            band.__str__
-    band.__new__                   band.__subclasshook__
+    band.bm_expr                   band.read_raster
+    band.create_compatible_raster  band.sample_model
+    band.data_type                 band.scaling_factor
+    band.description               band.scaling_method
+    band.get_name                  band.scaling_offset
+    band.lines_mirrored            band.spectr_band_index
     band.product                   band.unit
-    band.__pyx_vtable__
+    band.read_as_array
 
-    In [20]: data = band.read_as_array(1000, 1000, xoffset=100, yoffset=6500, \
-    xstep=2, ystep=2)
+    In [20]: data = band.read_as_array(1000, 1000, xoffset=100, \
+    yoffset=6500, xstep=2, ystep=2)
 
     In [21]: data
     Out[21]:
@@ -333,6 +300,37 @@ Dealing with image data is simple as well::
 
 
 .. _iterable: http://docs.python.org/glossary.html#term-iterable
+
+
+Closing the epr.Product
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Finally the :class:`epr.Product` can be closed using the
+:meth:`epr.Product.close` method::
+
+    In [26]: product.close()
+
+After a product is closed no more I/O operations can be performed on it.
+Any attempt to do it will raise a :exc:`ValueError`::
+
+    In [27]: product.tot_size / 1024.**2
+    -------------------------------------------------------------------------
+    ValueError                              Traceback (most recent call last)
+    <ipython-input-13-6420c80534dc> in <module>()
+    ----> 1 product.tot_size / 1024.**2
+
+    epr.so in epr.Product.tot_size.__get__ (src/epr.c:16534)()
+
+    epr.so in epr.Product.check_closed_product (src/epr.c:16230)()
+
+    ValueError: I/O operation on closed file
+
+
+At any time the user can check whenever a :class:`epr.Product` is closed or
+not using the :attr:`epr.Product.closed` property::
+
+    In [28]: product.closed
+    Out[28]: True
 
 .. raw:: latex
 

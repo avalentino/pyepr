@@ -35,7 +35,8 @@ At first import time the underlaying  C library is opportunely initialized.
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bands.py
-   :lines: 1-13
+   :language: python
+   :lines: 1-15
 
 
 The main program
@@ -48,7 +49,8 @@ The main program in quite simple (this is just an example).
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bands.py
-   :lines: 53-
+   :language: python
+   :lines: 55-
 
 It performs some basic command line arguments handling and then open the
 input product.
@@ -58,7 +60,8 @@ input product.
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bands.py
-   :lines: 95-96
+   :language: python
+   :lines: 97-99
 
 Finally the core function (:func:`write_raw_image`) is called on each band
 specified on the command:
@@ -68,7 +71,8 @@ specified on the command:
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bands.py
-   :lines: 98-99
+   :language: python
+   :lines: 100-101
 
 
 The :func:`write_raw_image` core function
@@ -81,6 +85,7 @@ The core function is :func:`write_raw_image`.
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bands.py
+   :language: python
    :pyobject: write_raw_image
 
 It generates a flat binary file with data of a single band whose name is
@@ -93,7 +98,8 @@ First the output file name is computed using the :mod:`os` module.
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bands.py
-   :lines: 21-22
+   :language: python
+   :lines: 23-25
 
 Then the desired band is retrieved using the :meth:`epr.Product.get_band`
 method and some of its parameters are loaded in to local variables:
@@ -103,7 +109,8 @@ method and some of its parameters are loaded in to local variables:
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bands.py
-   :lines: 24-26
+   :language: python
+   :lines: 26-27
 
 Band data are accessed by means of a :class:`epr.Raster` object.
 
@@ -118,7 +125,8 @@ with the band data:
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bands.py
-   :lines: 30-31
+   :language: python
+   :lines: 32-34
 
 Then data are read using the :meth:`epr.Band.read_raster` method:
 
@@ -127,7 +135,8 @@ Then data are read using the :meth:`epr.Band.read_raster` method:
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bands.py
-   :lines: 33-34
+   :language: python
+   :lines: 36-37
 
 Then the output file object is created (in binary mode of course)
 
@@ -136,7 +145,8 @@ Then the output file object is created (in binary mode of course)
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bands.py
-   :lines: 36
+   :language: python
+   :lines: 39
 
 and data are copied to the output file one line at time
 
@@ -145,7 +155,8 @@ and data are copied to the output file one line at time
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bands.py
-   :lines: 38-39
+   :language: python
+   :lines: 41-42
 
 Please note that it has been used :data:`epr.Raster.data` attribute of the
 :class:`epr.Raster` objects that exposes :class:`epr.Raster` data with the
@@ -165,7 +176,7 @@ powerful :class:`numpy.ndarray` interface.
             return 3;
         }
 
-        for (y = 0; y < (uint)raster->raster_height; y ++) {
+        for (y = 0; y < (uint)raster->raster_height; ++y) {
             numwritten = fwrite(epr_get_raster_line_addr(raster, y),
                                 raster->elem_size,
                                 raster->raster_width,
