@@ -2,8 +2,8 @@ Change history
 ==============
 
 
-PyEPR 0.7.2 (in development)
-----------------------------
+PyEPR 0.8 (07/09/2013)
+----------------------
 
 * now the :class:`epr.Product` objects have a :meth:`epr.Product.close`
   method that can be used to explicitly close products without relying
