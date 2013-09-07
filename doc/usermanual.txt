@@ -107,7 +107,7 @@ The easier way to install PyEPR_ is using tools like pip_ or easy_install_::
     In the above example the required numpy_ package is explicitly included in
     the list of packages to be installed.
 
-    .. seealso:: _Requirements
+    .. seealso:: Requirements_
 
 PyEPR_ uses the standard Python_ distutils_ so it can be installed from
 sources using the following command::
