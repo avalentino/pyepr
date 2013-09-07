@@ -41,7 +41,7 @@ in a product file.
 
 '''
 
-__version__ = '0.8.1dev'
+__version__ = '0.8.1'
 __revision__ = __version__  # deprecated
 
 
