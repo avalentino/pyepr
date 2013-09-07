@@ -463,12 +463,13 @@ class EPRValueError(EPRError, ValueError):
     pass
 
 
-cdef int pyepr_check_errors() except -1:
+cdef pyepr_check_errors():
     cdef int code
     cdef char* msg
     code = epr_get_last_err_code()
     if code != e_err_none:
         msg = <char*>epr_get_last_err_message()
+        epr_clear_err()
 
         # @TODO: if not msg: msg = EPR_ERR_MSG[code]
         if (e_err_invalid_product_id <= code <= e_err_invalid_keyword_name or
@@ -479,13 +480,8 @@ cdef int pyepr_check_errors() except -1:
         else:
             raise EPRError(_to_str(msg, 'ascii'), code)
 
-        epr_clear_err()
-        return -1
 
-    return 0
-
-
-cdef int pyepr_null_ptr_error(msg='null pointer') except -1:
+cdef pyepr_null_ptr_error(msg='null pointer'):
     cdef int code
     cdef char* eprmsg = <char*>epr_get_last_err_message()
 
@@ -493,15 +489,13 @@ cdef int pyepr_null_ptr_error(msg='null pointer') except -1:
     if not code:
         code = None
 
-    raise EPRValueError('%s: %s' % (msg, _to_str(eprmsg, 'ascii')), code=code)
-
     epr_clear_err()
 
-    return -1
+    raise EPRValueError('%s: %s' % (msg, _to_str(eprmsg, 'ascii')), code=code)
 
 
 cdef FILE* pyepr_get_file_stream(object ostream) except NULL:
-    cdef FILE* fstream
+    cdef FILE* fstream = NULL
     cdef int fileno
 
     if ostream is None:
@@ -511,16 +505,14 @@ cdef FILE* pyepr_get_file_stream(object ostream) except NULL:
         ostream.flush()
     except AttributeError, e:
         raise TypeError(str(e))
-        return NULL
-
-    fileno = PyObject_AsFileDescriptor(ostream)
-    if fileno == -1:
-        raise TypeError('bad output stream')
-        return NULL
-
-    fstream = fdopen(fileno, 'w')
-    if fstream is NULL:
-        raise TypeError('invalid ostream')
+    else:
+        fileno = PyObject_AsFileDescriptor(ostream)
+        if fileno == -1:
+            raise TypeError('bad output stream')
+        else:
+            fstream = fdopen(fileno, 'w')
+            if fstream is NULL:
+                raise TypeError('invalid ostream')
 
     return fstream
 
@@ -1505,20 +1497,20 @@ cdef class Raster(EprObject):
     # --- high level interface ------------------------------------------------
     cdef np.ndarray toarray(self):
         cdef np.NPY_TYPES dtype = _epr_to_numpy_type_id(self._ptr.data_type)
+        cdef np.npy_intp shape[2]
+        cdef np.ndarray result
+
         if dtype == np.NPY_NOTYPE:
             raise TypeError('invalid data type')
-            return
+        else:
+            shape[0] = self._ptr.raster_height
+            shape[1] = self._ptr.raster_width
 
-        cdef np.npy_intp shape[2]
-        shape[0] = self._ptr.raster_height
-        shape[1] = self._ptr.raster_width
+            result = np.PyArray_SimpleNewFromData(2, shape, dtype,
+                                                  self._ptr.buffer)
 
-        cdef np.ndarray result
-        result = np.PyArray_SimpleNewFromData(2, shape, dtype,
-                                              self._ptr.buffer)
-
-        # Make the ndarray keep a reference to this object
-        np.set_array_base(result, self)
+            # Make the ndarray keep a reference to this object
+            np.set_array_base(result, self)
 
         return result
 
