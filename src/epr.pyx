@@ -465,10 +465,10 @@ class EPRValueError(EPRError, ValueError):
 
 cdef pyepr_check_errors():
     cdef int code
-    cdef char* msg
+    cdef str msg
     code = epr_get_last_err_code()
     if code != e_err_none:
-        msg = <char*>epr_get_last_err_message()
+        msg = _to_str(<char*>epr_get_last_err_message(), 'ascii')
         epr_clear_err()
 
         # @TODO: if not msg: msg = EPR_ERR_MSG[code]
@@ -476,14 +476,14 @@ cdef pyepr_check_errors():
             code in (e_err_null_pointer,
                      e_err_illegal_arg,
                      e_err_index_out_of_range)):
-            raise EPRValueError(_to_str(msg, 'ascii'), code)
+            raise EPRValueError(msg, code)
         else:
-            raise EPRError(_to_str(msg, 'ascii'), code)
+            raise EPRError(msg, code)
 
 
 cdef pyepr_null_ptr_error(msg='null pointer'):
     cdef int code
-    cdef char* eprmsg = <char*>epr_get_last_err_message()
+    cdef str eprmsg = _to_str(<char*>epr_get_last_err_message(), 'ascii')
 
     code = epr_get_last_err_code()
     if not code:
@@ -491,7 +491,7 @@ cdef pyepr_null_ptr_error(msg='null pointer'):
 
     epr_clear_err()
 
-    raise EPRValueError('%s: %s' % (msg, _to_str(eprmsg, 'ascii')), code=code)
+    raise EPRValueError('%s: %s' % (msg, eprmsg), code=code)
 
 
 cdef FILE* pyepr_get_file_stream(object ostream) except NULL:
