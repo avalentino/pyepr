@@ -1395,7 +1395,7 @@ cdef class Raster(EprObject):
 
     cdef EPR_SRaster* _ptr
     cdef Band _parent
-    cdef object _data       # @TODO: ndarray
+    cdef np.ndarray _data
 
     def __dealloc__(self):
         if self._ptr is not NULL:
