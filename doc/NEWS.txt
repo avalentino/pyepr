@@ -16,6 +16,7 @@ PyEPR 0.7.2 (in development)
   the reference manual
 * the :data:`epr.__revision__` module attribute is now deprecated
 * some *cythonization* warnings have been fixed
+* several small improvements to the documentation
 
 
 PyEPR 0.7.1 (19/08/2013)
