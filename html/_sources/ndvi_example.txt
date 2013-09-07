@@ -29,7 +29,8 @@ The code have been kept very simple and it consists in a single function
 .. literalinclude:: examples/write_ndvi.py
    :linenos:
 
-The ENVISAT_ :class:`epr.Product` is opened using the :func:`epr.open` function.
+The ENVISAT_ :class:`epr.Product` is opened using the :func:`epr.open`
+function.
 
 .. raw:: latex
 
@@ -64,7 +65,8 @@ to allocate the correct amount of memory.
 
 For sake of simplicity :class:`epr.Raster` object are created with the same
 size of the whole product (with no sub-sampling) using the
-:meth:`epr.Band.create_compatible_raster` method of the :class:`epr.Band` class:
+:meth:`epr.Band.create_compatible_raster` method of the :class:`epr.Band`
+class:
 
 .. raw:: latex
 
@@ -73,8 +75,8 @@ size of the whole product (with no sub-sampling) using the
 .. literalinclude:: examples/write_ndvi.py
    :lines: 56-64
 
-Then data are actually loaded into memory using the :meth:`epr.Band.read_raster`
-method.
+Then data are actually loaded into memory using the
+:meth:`epr.Band.read_raster` method.
 Since :class:`epr.Raster` objects have been defined to match the whole
 product, offset parameters are set to zero (data are read starting from
 specified offset):
@@ -118,8 +120,8 @@ This part of the code tries to mimic closely the original C code
 .. code-block:: c
 
     out_stream = fopen(argv[2], "wb");
-    for (j = 0; j < height; j++) {
-        for (i = 0; i < width; i++) {
+    for (j = 0; j < height; ++j) {
+        for (i = 0; i < width; ++i) {
             rad1 = epr_get_pixel_as_float(raster1, i, j);
             rad2 = epr_get_pixel_as_float(raster2, i, j);
             if ((rad1 + rad2) != 0.0) {

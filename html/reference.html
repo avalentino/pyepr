@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API Reference &mdash; PyEPR 0.7.1 documentation</title>
+    <title>API Reference &mdash; PyEPR 0.8 documentation</title>
     
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.7.1',
+        VERSION:     '0.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.7.1 documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.8 documentation" href="index.html" />
     <link rel="next" title="Change history" href="NEWS.html" />
     <link rel="prev" title="NDVI computation" href="ndvi_example.html" /> 
   </head>
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="ndvi_example.html" title="NDVI computation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.7.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.8 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -239,7 +239,8 @@ contained in the product</p>
 <dl class="method">
 <dt id="epr.Product.read_bitmask_raster">
 <tt class="descname">read_bitmask_raster</tt><big>(</big><em>bm_expr</em>, <em>xoffset</em>, <em>yoffset</em>, <em>raster</em><big>)</big><a class="headerlink" href="#epr.Product.read_bitmask_raster" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates a bit-mask raster</p>
+<dd><blockquote>
+<div><p>Calculates a bit-mask raster</p>
 <p>Calculates a bit-mask, composed of flags of the given product
 and combined as described in the given bit-mask expression, for
 the a certain dimension and sub-sampling as defined in the
@@ -248,24 +249,23 @@ given raster.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>bm_expr</strong> &#8211; a string holding the logical expression for the definition
+<tr class="field-odd field"><th class="field-name">param bm_expr:</th><td class="field-body">a string holding the logical expression for the definition
 of the bit-mask. In a bit-mask expression, any number of
 the flag-names (found in the DDDB) can be composed with
 &#8220;(&#8221;, &#8221;)&#8221;, &#8220;NOT&#8221;, &#8220;AND&#8221;, &#8220;OR&#8221;. Valid bit-mask expression are
 for example <tt class="docutils literal"><span class="pre">flags.LAND</span> <span class="pre">OR</span> <span class="pre">flags.CLOUD</span></tt> or
-<tt class="docutils literal"><span class="pre">NOT</span> <span class="pre">flags.WATER</span> <span class="pre">AND</span> <span class="pre">flags.TURBID_S</span></tt></li>
-<li><strong>xoffset</strong> &#8211; across-track co-ordinate in pixel co-ordinates (zero-based)
-of the upper right corner of the source-region</li>
-<li><strong>yoffset</strong> &#8211; along-track co-ordinate in pixel co-ordinates (zero-based)
-of the upper right corner of the source-region</li>
-<li><strong>raster</strong> &#8211; the raster for the bit-mask. The data type of the raster
-must be either <a class="reference internal" href="#epr.E_TID_UCHAR" title="epr.E_TID_UCHAR"><tt class="xref py py-data docutils literal"><span class="pre">E_TID_UCHAR</span></tt></a> or <a class="reference internal" href="#epr.E_TID_CHAR" title="epr.E_TID_CHAR"><tt class="xref py py-data docutils literal"><span class="pre">E_TID_CHAR</span></tt></a></li>
-</ul>
-</td>
+<tt class="docutils literal"><span class="pre">NOT</span> <span class="pre">flags.WATER</span> <span class="pre">AND</span> <span class="pre">flags.TURBID_S</span></tt></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">zero for success, an error code otherwise</p>
-</td>
+<tr class="field-even field"><th class="field-name">param xoffset:</th><td class="field-body">across-track co-ordinate in pixel co-ordinates (zero-based)
+of the upper right corner of the source-region</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">param yoffset:</th><td class="field-body">along-track co-ordinate in pixel co-ordinates (zero-based)
+of the upper right corner of the source-region</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param raster:</th><td class="field-body">the raster for the bit-mask. The data type of the raster
+must be either <a class="reference internal" href="#epr.E_TID_UCHAR" title="epr.E_TID_UCHAR"><tt class="xref py py-data docutils literal"><span class="pre">E_TID_UCHAR</span></tt></a> or <a class="reference internal" href="#epr.E_TID_CHAR" title="epr.E_TID_CHAR"><tt class="xref py py-data docutils literal"><span class="pre">E_TID_CHAR</span></tt></a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">zero for success, an error code otherwise</td>
 </tr>
 </tbody>
 </table>
@@ -273,6 +273,19 @@ must be either <a class="reference internal" href="#epr.E_TID_UCHAR" title="epr.
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#epr.create_bitmask_raster" title="epr.create_bitmask_raster"><tt class="xref py py-func docutils literal"><span class="pre">create_bitmask_raster()</span></tt></a></p>
 </div>
+</div></blockquote>
+<dl class="method">
+<dt id="epr.Product.close">
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Closes the <a class="reference internal" href="#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt></a> product and free the underlying
+file descriptor.</p>
+<p>This method has no effect if the <a class="reference internal" href="#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt></a> is already
+closed. Once the <a class="reference internal" href="#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt></a> is closed, any operation on
+it will raise a ValueError.</p>
+<p>As a convenience, it is allowed to call this method more than
+once; only the first call, however, will have an effect.</p>
+</dd></dl>
+
 </dd></dl>
 
 <p class="rubric">High level interface methods</p>
@@ -281,6 +294,12 @@ must be either <a class="reference internal" href="#epr.E_TID_UCHAR" title="epr.
 <p class="last">the following methods are part of the <em>high level</em> Python API and
 do not have any correspondent function in the C API.</p>
 </div>
+<dl class="attribute">
+<dt id="epr.Product.closed">
+<tt class="descname">closed</tt><a class="headerlink" href="#epr.Product.closed" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if the <a class="reference internal" href="#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt></a> is closed.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="epr.Product.get_dataset_names">
 <tt class="descname">get_dataset_names</tt><big>(</big><big>)</big><a class="headerlink" href="#epr.Product.get_dataset_names" title="Permalink to this definition">¶</a></dt>
@@ -311,6 +330,8 @@ following <em>special methods</em>:</p>
 <ul class="simple">
 <li>__repr__</li>
 <li>__str__</li>
+<li>__enter__</li>
+<li>__exit__</li>
 </ul>
 </dd></dl>
 
@@ -1219,6 +1240,15 @@ if the file could not be opened.</td>
 </tr>
 </tbody>
 </table>
+<p>The <a class="reference internal" href="#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt></a> class supports context management so the recommended
+way to ensure that a product is actually closed as soon as a task is
+completed is to use the <tt class="docutils literal"><span class="pre">with</span></tt> statement:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;ASA_IMP_1PNUPA20060202_ ... _3110.N1&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">product</span><span class="p">:</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_dataset</span><span class="p">(</span><span class="s">&#39;MAIN_PROCESSING_PARAMS_ADS&#39;</span><span class="p">)</span>
+    <span class="n">record</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">read_record</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -1366,6 +1396,20 @@ into the raster. Default: 1.</li>
 </div>
 <div class="section" id="data">
 <h2>Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="epr.__version__">
+<tt class="descclassname">epr.</tt><tt class="descname">__version__</tt><a class="headerlink" href="#epr.__version__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Version string of PyEPR</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="epr.__revision__">
+<tt class="descclassname">epr.</tt><tt class="descname">__revision__</tt><a class="headerlink" href="#epr.__revision__" title="Permalink to this definition">¶</a></dt>
+<dd><p>PyEPR revision (currently it is the same as <a class="reference internal" href="#epr.__version__" title="epr.__version__"><tt class="xref py py-data docutils literal"><span class="pre">__version__</span></tt></a>)</p>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 7.2.</span></p>
+</dd></dl>
+
 <dl class="data">
 <dt id="epr.EPR_C_API_VERSION">
 <tt class="descclassname">epr.</tt><tt class="descname">EPR_C_API_VERSION</tt><a class="headerlink" href="#epr.EPR_C_API_VERSION" title="Permalink to this definition">¶</a></dt>
@@ -1563,12 +1607,12 @@ into the raster. Default: 1.</li>
         <li class="right" >
           <a href="ndvi_example.html" title="NDVI computation"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.7.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.8 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011-2013, Antonio Valentino.
-      Last updated on Aug 19, 2013.
+      Last updated on Sep 07, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

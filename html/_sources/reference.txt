@@ -195,12 +195,30 @@ Product
       .. seealso:: :func:`create_bitmask_raster`
 
 
+    .. method:: close
+
+       Closes the :class:`Product` product and free the underlying
+       file descriptor.
+
+       This method has no effect if the :class:`Product` is already
+       closed. Once the :class:`Product` is closed, any operation on
+       it will raise a ValueError.
+
+       As a convenience, it is allowed to call this method more than
+       once; only the first call, however, will have an effect.
+
+
    .. rubric:: High level interface methods
 
    .. note::
 
       the following methods are part of the *high level* Python API and
       do not have any correspondent function in the C API.
+
+   .. attribute:: closed
+
+      True if the :class:`Product` is closed.
+
 
    .. method:: get_dataset_names
 
@@ -229,6 +247,8 @@ Product
 
    * __repr__
    * __str__
+   * __enter__
+   * __exit__
 
 
 Dataset
@@ -1024,6 +1044,15 @@ Functions
         product. An exception (:exc:`exceptions.ValueError`) is raised
         if the file could not be opened.
 
+   The :class:`Product` class supports context management so the recommended
+   way to ensure that a product is actually closed as soon as a task is
+   completed is to use the ``with`` statement::
+
+       with open('ASA_IMP_1PNUPA20060202_ ... _3110.N1') as product:
+           dataset = product.get_dataset('MAIN_PROCESSING_PARAMS_ADS')
+           record = dataset.read_record(0)
+           print(record)
+
    .. seealso :class:`Product`
 
 
@@ -1140,6 +1169,18 @@ EPRValueError
 
 Data
 ----
+
+.. data:: __version__
+
+   Version string of PyEPR
+
+
+.. data:: __revision__
+
+   PyEPR revision (currently it is the same as :data:`__version__`)
+
+   .. deprecated:: 7.2
+
 
 .. data:: EPR_C_API_VERSION
 

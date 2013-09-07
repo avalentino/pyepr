@@ -28,6 +28,7 @@ that also includes command line arguments handling:
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bitmask.py
+   :language: python
    :linenos:
 
 In order to use the Python_ EPR API the :mod:`epr` module is imported:
@@ -37,17 +38,21 @@ In order to use the Python_ EPR API the :mod:`epr` module is imported:
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bitmask.py
-   :lines: 25
+   :lines: 27
 
 As usual the ENVISAT_ product is opened using the :func:`epr.open` function
 that returns an :class:`epr.Product` instance.
+In this case the :func:`epr.open` is used together with a ``with`` statement
+so that the :class:`epr.Product` instance is closed automatically when the
+program exits the ``with`` block.
 
 .. raw:: latex
 
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bitmask.py
-   :lines: 49-50
+   :language: python
+   :lines: 51-52
 
 Scene size parameters are retrieved form the :class:`epr.Product` object
 using the :meth:`epr.Product.get_scene_width` and
@@ -58,7 +63,8 @@ using the :meth:`epr.Product.get_scene_width` and
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bitmask.py
-   :lines: 54-55
+   :language: python
+   :lines: 55-56
 
 The EPR API allows to manage data by means of :class:`epr.Raster` objects, so
 the function :func:`epr.create_bitmask_raster`, specific for bitmasks, is used
@@ -66,15 +72,16 @@ to create a :class:`epr.Raster` instance.
 
 .. seealso:: :func:`epr.create_raster`
 
-Data are actually read using the :meth:`epr.Product.read_bitmask_raster` method
-of the :class:`epr.Product` class:
+Data are actually read using the :meth:`epr.Product.read_bitmask_raster`
+method of the :class:`epr.Product` class:
 
 .. raw:: latex
 
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bitmask.py
-   :lines: 62
+   :language: python
+   :lines: 63
 
 The :meth:`epr.Product.read_bitmask_raster` method receives in input the
 *bm_expr* parameter that is set via command line:
@@ -84,11 +91,12 @@ The :meth:`epr.Product.read_bitmask_raster` method receives in input the
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bitmask.py
-   :lines: 46
+   :language: python
+   :lines: 48
 
 *bm_expr* is a string that define the logical expression for the definition
-of the bit-mask. In a bit-mask expression, any number of the flag-names (found
-in the DDDB) can be composed with “(”, ”)”, “NOT”, “AND”, “OR”.
+of the bit-mask. In a bit-mask expression, any number of the flag-names
+(found in the DDDB) can be composed with “(”, ”)”, “NOT”, “AND”, “OR”.
 
 Valid bit-mask expression are for example::
 
@@ -108,7 +116,8 @@ of the :class:`epr.Raster` objects that exposes data via the
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bitmask.py
-   :lines: 64-65
+   :language: python
+   :lines: 65-66
 
 
 .. _Python: http://www.python.org
