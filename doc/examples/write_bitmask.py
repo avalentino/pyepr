@@ -39,7 +39,7 @@ def main(*argv):
               'logic')
         print('  and output-file is the output filename.')
         print('Example:')
-        print("  MER_RR__2P_TEST.N1 'l2_flags.LAND and !l2_flags.BRIGHT' "
+        print("  MER_RR__2P_TEST.N1 'l2_flags.LAND and not l2_flags.BRIGHT' "
               "my_flags.raw")
         print
         sys.exit(1)
@@ -65,9 +65,9 @@ def main(*argv):
         with open(image_file_path, 'wb') as out_stream:
             bm_raster.data.tofile(out_stream)
 
-    print 'Raw image data successfully written to "%s".' % image_file_path
-    print 'Data type is "byte", size is %d x %d pixels.' % (source_width,
-                                                            source_height)
+    print('Raw image data successfully written to "%s".' % image_file_path)
+    print('Data type is "byte", size is %d x %d pixels.' % (source_width,
+                                                            source_height))
 
 
 if __name__ == '__main__':
