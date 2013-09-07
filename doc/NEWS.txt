@@ -8,6 +8,7 @@ PyEPR 0.8.1 (07/09/2013)
 * fixed an important bug in the error checking code introduced in previous
   release (closes :issue:`8`)
 * fixed the NDVI example
+* no more display link URL in footnotes of the PDF User Manual
 
 
 PyEPR 0.8 (07/09/2013)
