@@ -37,7 +37,7 @@ function.
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_ndvi.py
-   :lines: 47
+   :lines: 49
 
 The name of the product is in the first argument of the program call.
 In order to keep the code simple no check is performed to ensure that the
@@ -53,7 +53,7 @@ method:
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_ndvi.py
-   :lines: 49-54
+   :lines: 51-56
 
 *band1* and *band2* are used to read the calibrated radiances into the
 :class:`epr.Raster` objects that allow to access data matrices with the
@@ -73,7 +73,7 @@ class:
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_ndvi.py
-   :lines: 56-64
+   :lines: 58-66
 
 Then data are actually loaded into memory using the
 :meth:`epr.Band.read_raster` method.
@@ -86,7 +86,7 @@ specified offset):
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_ndvi.py
-   :lines: 66-74
+   :lines: 68-76
 
 .. note::
 
@@ -100,7 +100,7 @@ After opening (in binary mode) the stream for the output
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_ndvi.py
-   :lines: 76-78
+   :lines: 78-80
 
 the program simply loops over all pixel and calculate the NDVI with the
 following formula:
@@ -112,7 +112,7 @@ following formula:
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_ndvi.py
-   :lines: 80-93
+   :lines: 82-95
 
 This part of the code tries to mimic closely the original C code
 (`write_ndvi.c`_)
@@ -145,7 +145,7 @@ used to write the NDVI of the pixel n the file in binary format.
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_ndvi.py
-   :lines: 92
+   :lines: 94
 
 .. note::
 
@@ -164,7 +164,7 @@ used to write the NDVI of the pixel n the file in binary format.
         idx = numpy.where(aux != 0)
 
         # actual NDVI computation
-        ndvi[idx] = (raster2.data[idx] + raster1.data[idx]) / aux[idx]
+        ndvi[idx] = (raster2.data[idx] - raster1.data[idx]) / aux[idx]
 
     Finally data can be saved to file simply using the
     :meth:`numpy.ndarray.tofile` method::

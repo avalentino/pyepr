@@ -5,7 +5,7 @@ Change history
 PyEPR 0.8.1 (in development)
 ----------------------
 
-* TBW
+* fixed the NDVI example
 
 
 PyEPR 0.8 (07/09/2013)
