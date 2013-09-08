@@ -93,6 +93,8 @@ To clone the git_ repository the following command can be used::
 .. _git: http://git-scm.com
 
 
+.. _installation:
+
 Installation
 ------------
 
@@ -104,6 +106,12 @@ The easier way to install PyEPR_ is using tools like pip_ or easy_install_::
 
     the :file:`setup.py` script does not use easy_install_ specific functions
     so it is unable to handle dependencies automatically.
+
+    Also the :file:`setup.py` script uses numpy_ to retrieve the path of
+    headers and libraries.
+    For this reaseon numpy_ must be already installed when :file:`setup.py`
+    is executed.
+
     In the above example the required numpy_ package is explicitly included in
     the list of packages to be installed.
 
