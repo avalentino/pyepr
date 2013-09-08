@@ -132,7 +132,6 @@ any data field contained in a product file.
             include_dirs=include_dirs,
             libraries=libraries,
             #define_macros=[('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION'),],
-            #extra_compile_args=['-Wno-strict-prototypes', '-ansi'],
         ),
     ],
     requires=['numpy'],
