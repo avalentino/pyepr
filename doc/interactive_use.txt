@@ -16,8 +16,8 @@ ESA_ web site.
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _ENVISAT: http://envisat.esa.int
 .. _ASAR: http://envisat.esa.int/handbooks/asar
-.. _IPython: http://ipython.scipy.org/moin
-.. _matplotlib: http://matplotlib.sourceforge.net
+.. _IPython: http://ipython.org
+.. _matplotlib: http://matplotlib.org
 .. _`free sample`: http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz
 .. _ESA: http://earth.esa.int
 
@@ -68,7 +68,7 @@ available classes and functions::
         The raw data access makes it possible to read any data field contained
         in a product file.
 
-        .. _PyEPR: http://avalentino.github.com/pyepr
+        .. _PyEPR: http://avalentino.github.io/pyepr
         .. _Python: http://www.python.org
         .. _`EPR API`: https://github.com/bcdev/epr-api
         .. _ENVISAT: http://envisat.esa.int

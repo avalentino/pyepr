@@ -2,7 +2,7 @@
 ENVISAT Product Reader Python API
 =================================
 
-:HomePage:  http://avalentino.github.com/pyepr
+:HomePage:  http://avalentino.github.io/pyepr
 :Author:    Antonio Valentino
 :Contact:   antonio.valentino@tiscali.it
 :Copyright: 2011-2013, Antonio Valentino <antonio.valentino@tiscali.it>
@@ -54,7 +54,7 @@ Download
 
 Official source tarballs can be downloaded form PyPi_:
 
-    http://pypi.python.org/pypi/pyepr
+    https://pypi.python.org/pypi/pyepr
 
 The source code of the development versions is available on the GitHub_
 project page
@@ -65,7 +65,7 @@ To clone the git_ repository the following command can be used::
 
     $ git clone https://github.com/avalentino/pyepr.git
 
-.. _PyPi: http://pypi.python.org
+.. _PyPi: https://pypi.python.org/pypi
 .. _GitHub: https://github.com
 .. _git: http://git-scm.com
 
@@ -90,8 +90,8 @@ To install PyEPR_ in a non-standard path::
 
     $ python setup.py install --prefix=<TARGET_PATH>
 
-.. _pip: http://pypi.python.org/pypi/pip
-.. _easy_install: http://pypi.python.org/pypi/setuptools#using-setuptools-and-easyinstall
+.. _pip: https://pypi.python.org/pypi/pip
+.. _easy_install: https://pypi.python.org/pypi/setuptools#using-setuptools-and-easyinstall
 
 
 License

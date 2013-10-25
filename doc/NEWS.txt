@@ -132,8 +132,8 @@ PyEPR 0.5 (25/04/2011)
 * dropped old versions of cython_; now cython_ 0.14.1 or newer is required
 * suppressed several constness related warnings
 
-.. _`Python 3`: http://docs.python.org/py3k
-.. _intersphinx: http://sphinx.pocoo.org/latest/ext/intersphinx.html
+.. _`Python 3`: http://docs.python.org/3
+.. _intersphinx: http://sphinx-doc.org/latest/ext/intersphinx.html
 .. _cython: http://www.cython.org
 
 
@@ -184,7 +184,7 @@ PyEPR 0.2 (20/03/2011)
 * introduced some utility methods to :class:`epr.Product` and
   :class:`epr.Record` classes
 
-.. _sphinx: http://sphinx.pocoo.org
+.. _sphinx: http://sphinx-doc.org
 
 
 PyEPR 0.1 (09/03/2011)
