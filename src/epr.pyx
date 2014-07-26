@@ -1892,9 +1892,25 @@ cdef class Band(EprObject):
 
         if src_width == 0:
             src_width = self._parent.get_scene_width()
+        elif src_width > self._parent.get_scene_width():
+            raise ValueError('requeted raster width (%d) is too large for '
+                             'the Band (scene_width=%d)' % (
+                                src_width, self._parent.get_scene_width()))
 
         if src_height == 0:
             src_height = self._parent.get_scene_height()
+        elif src_height > self._parent.get_scene_height():
+            raise ValueError('requeted raster height (%d) is too large for '
+                             'the Band (scene_height=%d)' % (
+                                src_height, self._parent.get_scene_height()))
+
+        if xstep > src_width:
+            raise ValueError('xstep (%d) too large for the requested width '
+                             '(%d)' % (xstep, src_width))
+
+        if ystep > src_height:
+            raise ValueError('ystep (%d) too large for the requested height '
+                             '(%d)' % (ystep, src_height))
 
         raster_ptr = epr_create_compatible_raster(self._ptr,
                                                   src_width, src_height,
@@ -1946,6 +1962,12 @@ cdef class Band(EprObject):
 
         if raster is None:
             raster = self.create_compatible_raster()
+
+        if (xoffset + raster.source_width > self.product.get_scene_width() or
+                yoffset + raster.source_height >
+                    self.product.get_scene_height()):
+            raise ValueError(
+                'at lease part of the requested area is outside the scene')
 
         with nogil:
             ret = epr_read_band_raster(self._ptr, xoffset, yoffset,
