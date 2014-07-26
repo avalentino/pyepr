@@ -900,7 +900,7 @@ class TestBand(unittest.TestCase):
         h, w = self.TEST_DATA.shape
         self.assertTrue(np.allclose(data[:h, :w], self.TEST_DATA))
 
-    # @TODO: check, it seems to be an upstream bug or a metter of data
+    # @TODO: check, it seems to be an upstream bug or a matter of data
     #        mirroring
     # @SEEALSO: https://www.brockmann-consult.de/beam-jira/browse/EPR-2
     #def test_read_as_array_with_step(self):
