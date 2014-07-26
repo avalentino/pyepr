@@ -1820,8 +1820,7 @@ cdef class Band(EprObject):
 
         return _to_str(name, 'ascii')
 
-    # @TODO: default values for src_width and src_height
-    def create_compatible_raster(self, uint src_width, uint src_height,
+    def create_compatible_raster(self, uint src_width=0, uint src_height=0,
                                  uint xstep=1, uint ystep=1):
         '''create_compatible_raster(self, src_width, src_height, xstep=1, ystep=1)
 
@@ -1863,32 +1862,39 @@ cdef class Band(EprObject):
 
         :param src_width:
             the width (across track dimension) of the source to be read
-            into the raster
+            into the raster (default: scene_width)
         :param src_height:
             the height (along track dimension) of the source to be read
-            into the raster
+            into the raster (default: scene_height)
         :param xstep:
             the sub-sampling step across track of the source when
-            reading into the raster
+            reading into the raster (default=1)
         :param ystep:
             the sub-sampling step along track of the source when
-            reading into the raster
+            reading into the raster (default=1)
         :returns:
             the new raster instance or raises an exception
             (:exc:`EPRValueError`) if an error occurred
 
+        .. note::
+
+            src_width and src_height are the dimantion of the of the source
+            area. If one specifies a *step* parameter the resulting raster
+            will have a size that is smaller that the specifies source size::
+
+                raster_size = src_size // step
+
         '''
 
-        # @TODO: improve
-        #if width is None:
-        #    width = self._parent.get_scene_width()
-        #
-        #if height is None:
-        #    height = self._parent.get_scene_height()
-
-        cdef EPR_SRaster* raster_ptr
+        cdef EPR_SRaster* raster_ptr=NULL
 
         self.check_closed_product()
+
+        if src_width == 0:
+            src_width = self._parent.get_scene_width()
+
+        if src_height == 0:
+            src_height = self._parent.get_scene_height()
 
         raster_ptr = epr_create_compatible_raster(self._ptr,
                                                   src_width, src_height,
