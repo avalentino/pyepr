@@ -46,56 +46,53 @@ def main(*argv):
         sys.exit(1)
 
     # Open the product
-    product = epr.open(argv[1])
+    with epr.open(argv[1]) as product:
 
-    # The NDVI shall be calculated using bands 6 and 8.
-    band1_name = 'radiance_6'
-    band2_name = 'radiance_10'
+        # The NDVI shall be calculated using bands 6 and 8.
+        band1_name = 'radiance_6'
+        band2_name = 'radiance_10'
 
-    band1 = product.get_band(band1_name)
-    band2 = product.get_band(band2_name)
+        band1 = product.get_band(band1_name)
+        band2 = product.get_band(band2_name)
 
-    # Allocate memory for the rasters
-    width = product.get_scene_width()
-    height = product.get_scene_height()
-    subsampling_x = 1
-    subsampling_y = 1
-    raster1 = band1.create_compatible_raster(width, height,
-                                             subsampling_x, subsampling_y)
-    raster2 = band2.create_compatible_raster(width, height,
-                                             subsampling_x, subsampling_y)
+        # Allocate memory for the rasters
+        width = product.get_scene_width()
+        height = product.get_scene_height()
+        subsampling_x = 1
+        subsampling_y = 1
+        raster1 = band1.create_compatible_raster(width, height,
+                                                 subsampling_x, subsampling_y)
+        raster2 = band2.create_compatible_raster(width, height,
+                                                 subsampling_x, subsampling_y)
 
-    # Read the radiance into the raster.
-    offset_x = 0
-    offset_y = 0
+        # Read the radiance into the raster.
+        offset_x = 0
+        offset_y = 0
 
-    logging.info('read "%s" data' % band1_name)
-    band1.read_raster(offset_x, offset_y, raster1)
+        logging.info('read "%s" data' % band1_name)
+        band1.read_raster(offset_x, offset_y, raster1)
 
-    logging.info('read "%s" data' % band2_name)
-    band2.read_raster(offset_x, offset_y, raster2)
+        logging.info('read "%s" data' % band2_name)
+        band2.read_raster(offset_x, offset_y, raster2)
 
-    # Open the output file
-    logging.info('write ndvi to "%s"' % argv[2])
-    out_stream = open(argv[2], 'wb')
+        # Open the output file
+        logging.info('write ndvi to "%s"' % argv[2])
+        with open(argv[2], 'wb') as out_stream:
 
-    # Loop over all pixel and calculate the NDVI.
-    #
-    # @NOTE: looping over data matrices is not the best soluton.
-    #        It is done here just for demostrative purposes
-    for j in range(height):
-        for i in range(width):
-            rad1 = raster1.get_pixel(i, j)
-            rad2 = raster2.get_pixel(i, j)
-            if (rad1 + rad2) != 0.0:
-                ndvi = (rad2 - rad1) / (rad2 + rad1)
-            else:
-                ndvi = -1.0
-            out_stream.write(struct.pack('f', ndvi))
-    logging.info('ndvi was written success')
-
-    out_stream.close()
-    product.close()
+            # Loop over all pixel and calculate the NDVI.
+            #
+            # @NOTE: looping over data matrices is not the best soluton.
+            #        It is done here just for demostrative purposes
+            for j in range(height):
+                for i in range(width):
+                    rad1 = raster1.get_pixel(i, j)
+                    rad2 = raster2.get_pixel(i, j)
+                    if (rad1 + rad2) != 0.0:
+                        ndvi = (rad2 - rad1) / (rad2 + rad1)
+                    else:
+                        ndvi = -1.0
+                    out_stream.write(struct.pack('f', ndvi))
+            logging.info('ndvi was written success')
 
 
 if __name__ == '__main__':

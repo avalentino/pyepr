@@ -39,7 +39,20 @@ function.
 .. literalinclude:: examples/write_ndvi.py
    :lines: 49
 
-The name of the product is in the first argument of the program call.
+As usual in modern python programs the *with* statement has been used to
+ensure that the product is automatically closed as soon as the program exits
+the block.
+Of course it is possible to use a simple assignment form::
+
+    product = open(argv[1])
+    
+but in this case the user should take care of manually call::
+
+    product.close()
+
+when appropriate.
+
+The name of the product is in the first argument passed to the program.
 In order to keep the code simple no check is performed to ensure that the
 product is a valid L1B product.
 
