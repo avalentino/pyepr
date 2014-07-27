@@ -1969,14 +1969,14 @@ cdef class Band(EprObject):
             raise ValueError(
                 'at lease part of the requested area is outside the scene')
 
+        raster._data = None
+
         with nogil:
             ret = epr_read_band_raster(self._ptr, xoffset, yoffset,
                                        raster._ptr)
 
         if ret != 0:
             pyepr_check_errors()
-
-        raster._data = None
 
         return raster
 
