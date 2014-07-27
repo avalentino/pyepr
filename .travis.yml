@@ -16,4 +16,4 @@ before_install:
 
 install: python setup.py build_ext --inplace
 
-script: make check
+script: make PYTHON=python check
