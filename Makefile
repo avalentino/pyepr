@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
-PYTHON = python
+PYTHON = python3
 CYTHON = cython
 TEST_DATSET_URL = "http://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz"
 TEST_DATSET = test/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1
