@@ -24,9 +24,16 @@ import re
 import sys
 import numbers
 import operator
-import unittest
 import tempfile
 import functools
+
+try:
+    from unittest import skipIf
+except ImportError:
+    import unittest2 as unittest
+else:
+    del skipIf
+    import unittest
 
 import numpy as np
 import numpy.testing as npt
@@ -943,6 +950,7 @@ class TestBand(unittest.TestCase):
                  self.XOFFSET:self.XOFFSET + self.WIDTH],
             box)
 
+    @unittest.skipIf(epr.EPR_C_API_VERSION < '2.3.1', 'EPR_C_API < 2.3.1')
     def test_read_as_array_grid(self):
         band = self.product.get_band('latitude')
         data = band.read_as_array()

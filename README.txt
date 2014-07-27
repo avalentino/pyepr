@@ -41,12 +41,14 @@ correctly installed and configured:
   with a copy of the PER C API sources)
 * a reasonably updated C compiler (build only)
 * Cython_ >= 0.13 (build only)
+* unittest2_ (only required for Python < 2.7)
 
 .. _Python2: Python_
 .. _Python3: Python_
 .. _numpy: http://www.numpy.org
 .. _gcc: http://gcc.gnu.org
 .. _Cython: http://cython.org
+.. _unittest2: https://pypi.python.org/pypi/unittest2
 
 
 Download
