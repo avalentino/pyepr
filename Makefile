@@ -74,7 +74,7 @@ distclean: clean
 	$(RM) -r LICENSES epr-api-src
 
 check: ext $(TEST_DATSET)
-	$(PYTHON) test/test_all.py --verbose
+	env PYTHONPATH=. $(PYTHON) test/test_all.py --verbose
 
 debug:
 	$(PYTHON) setup.py build_ext --inplace --debug

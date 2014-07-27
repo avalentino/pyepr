@@ -32,7 +32,6 @@ import numpy as np
 import numpy.testing as npt
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
-sys.path.insert(0, os.path.join(TESTDIR, os.pardir))
 
 import epr
 
