@@ -29,6 +29,7 @@ import tempfile
 import functools
 
 import numpy as np
+import numpy.testing as npt
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(TESTDIR, os.pardir))
@@ -855,7 +856,6 @@ class TestBand(unittest.TestCase):
         # @NOTE: data type on disk is epr.E_TID_USHORT
         self.assertEqual(raster.data_type, epr.E_TID_FLOAT)
 
-
     def test_read_raster(self):
         rasterin = self.band.create_compatible_raster(self.WIDTH, self.HEIGHT)
 
@@ -918,7 +918,7 @@ class TestBand(unittest.TestCase):
         self.assertEqual(data.dtype, self.DATA_TYPE)
 
         h, w = self.TEST_DATA.shape
-        self.assertTrue(np.allclose(data[:h, :w], self.TEST_DATA))
+        npt.assert_allclose(data[:h, :w], self.TEST_DATA)
 
     # @TODO: check, it seems to be an upstream bug or a matter of data
     #        mirroring
@@ -1179,7 +1179,7 @@ class TestRaster(unittest.TestCase):
         self.assertEqual(data.dtype, EPR_TO_NUMPY_TYPE[self.raster.data_type])
 
         ny, nx = self.TEST_DATA.shape
-        self.assertTrue(np.allclose(data[:ny, :nx], self.TEST_DATA))
+        npt.assert_allclose(data[:ny, :nx], self.TEST_DATA)
 
     def test_data_property_two_times(self):
         data1 = self.raster.data
@@ -1207,7 +1207,7 @@ class TestRaster(unittest.TestCase):
         self.assertTrue(isinstance(data, np.ndarray))
 
         ny, nx = self.TEST_DATA.shape
-        self.assertTrue(np.allclose(data[:ny, :nx], self.TEST_DATA))
+        npt.assert_allclose(data[:ny, :nx], self.TEST_DATA)
 
 
 class TestRasterRead(TestRaster):
@@ -1551,8 +1551,7 @@ class TestField(unittest.TestCase):
         self.assertTrue(isinstance(vect, np.ndarray))
         self.assertEqual(vect.shape, (self.field.get_num_elems(),))
         self.assertEqual(vect.dtype, np.int8)
-        self.assertTrue(np.allclose(vect[:len(self.FIELD_VALUES)],
-                                    self.FIELD_VALUES))
+        npt.assert_allclose(vect[:len(self.FIELD_VALUES)], self.FIELD_VALUES)
 
 
 class TestFieldWithMiltipleElems(TestField):
