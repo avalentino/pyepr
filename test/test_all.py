@@ -919,6 +919,42 @@ class TestBand(unittest.TestCase):
         h, w = self.TEST_DATA.shape
         npt.assert_allclose(data[:h, :w], self.TEST_DATA)
 
+    def test_read_as_array_default(self):
+        data = self.band.read_as_array()
+
+        self.assertTrue(isinstance(data, np.ndarray))
+        self.assertEqual(
+            data.shape,
+            (self.product.get_scene_height(), self.product.get_scene_width()))
+        self.assertEqual(data.dtype, self.DATA_TYPE)
+
+        h, w = self.TEST_DATA.shape
+        npt.assert_allclose(
+            data[self.YOFFSET:self.YOFFSET + h, self.XOFFSET:self.XOFFSET + w],
+            self.TEST_DATA)
+
+    def test_read_as_array_data(self):
+        data = self.band.read_as_array()
+        box = self.band.read_as_array(self.WIDTH, self.HEIGHT,
+                                      self.XOFFSET, self.YOFFSET)
+
+        npt.assert_array_equal(
+            data[self.YOFFSET:self.YOFFSET + self.HEIGHT,
+                 self.XOFFSET:self.XOFFSET + self.WIDTH],
+            box)
+
+    def test_read_as_array_grid(self):
+        band = self.product.get_band('latitude')
+        data = band.read_as_array()
+
+        box = band.read_as_array(self.WIDTH, self.HEIGHT,
+                                 self.XOFFSET, self.YOFFSET)
+
+        npt.assert_array_equal(
+            data[self.YOFFSET:self.YOFFSET + self.HEIGHT,
+                 self.XOFFSET:self.XOFFSET + self.WIDTH],
+            box)
+
     # @TODO: check, it seems to be an upstream bug or a matter of data
     #        mirroring
     # @SEEALSO: https://www.brockmann-consult.de/beam-jira/browse/EPR-2
