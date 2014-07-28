@@ -68,7 +68,7 @@ if eprsrcdir:
     print('using EPR C API sources at "{}"'.format(eprsrcdir))
 else:
     libraries.append('epr_api')
-    print('using pre-built dynamic libraray for EPR C API')
+    print('using pre-built dynamic library for EPR C API')
 
 
 def get_version():
