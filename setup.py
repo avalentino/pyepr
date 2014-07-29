@@ -73,7 +73,8 @@ else:
 
 def get_version():
     filename = os.path.join('src', 'epr.pyx')
-    data = open(filename).read()
+    with open(filename) as fd:
+        data = fd.read()
 
     mobj = re.search(
         r"^__version__\s*=\s*\'(?P<version>\d+(\.\d+)*(\+|(\-)?dev)?)\'",
