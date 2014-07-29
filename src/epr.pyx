@@ -368,6 +368,7 @@ cimport numpy as np
 np.import_array()
 
 import sys
+import weakref
 from collections import namedtuple
 
 import numpy as np
@@ -1387,7 +1388,7 @@ cdef class Raster(EprObject):
 
     cdef EPR_SRaster* _ptr
     cdef Band _parent
-    cdef np.ndarray _data
+    cdef object _data
 
     def __dealloc__(self):
         if self._ptr is not NULL:
@@ -1524,15 +1525,20 @@ cdef class Raster(EprObject):
         '''
 
         def __get__(self):
+            cdef object data
+
             if self._data is not None:
-                return self._data
+                data = self._data()
+                if data is not None:
+                    return data
 
             if self._ptr.buffer is NULL:
                 return np.ndarray(())
 
-            self._data = self.toarray()
+            data = self.toarray()
+            self._data = weakref.ref(data)
 
-            return self._data
+            return data
 
     def __repr__(self):
         return '%s %s (%dL x %dP)' % (super(Raster, self).__repr__(),

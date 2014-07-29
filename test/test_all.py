@@ -28,6 +28,11 @@ import tempfile
 import functools
 
 try:
+    import resource
+except ImportError:
+    resource = None
+
+try:
     from unittest import skipIf
 except ImportError:
     import unittest2 as unittest
@@ -2034,6 +2039,28 @@ class TestDirectInstantiation(unittest.TestCase):
 class TestLibVersion(unittest.TestCase):
     def test_c_api_version(self):
         self.assertTrue(isinstance(epr.EPR_C_API_VERSION, str))
+
+
+@unittest.skipIf(resource is None, '"resource" module not available')
+class TestMemoryLeaks(unittest.TestCase):
+    # See gh-10 (https://github.com/avalentino/pyepr/issues/10)
+
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+
+    def test_memory_leacks_on_read_as_array(self):
+        N = 100
+
+        m1 = 86420
+        m2 = 97531
+
+        for n in range(N):
+            with epr.open(self.PRODUCT_FILE) as p:
+                p.get_band('l2_flags').read_as_array()
+            if n == 0:
+                m1 = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+            m2 = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+
+        self.assertEqual(m1, m2)
 
 
 if __name__ == '__main__':
