@@ -2048,19 +2048,15 @@ class TestMemoryLeaks(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
 
     def test_memory_leacks_on_read_as_array(self):
-        N = 100
-
-        m1 = 86420
-        m2 = 97531
+        N = 10
 
         for n in range(N):
             with epr.open(self.PRODUCT_FILE) as p:
                 p.get_band('l2_flags').read_as_array()
-            if n == 0:
+            if n <= 1:
                 m1 = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
             m2 = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-
-        self.assertEqual(m1, m2)
+        self.assertLessEqual(m2 - m1, 8)
 
 
 if __name__ == '__main__':
