@@ -49,14 +49,15 @@ TESTDIR = os.path.abspath(os.path.dirname(__file__))
 import epr
 
 
-def has_epr_c_bug_009():
+def has_epr_c_bug_pyepr009():
     v = LooseVersion(epr.EPR_C_API_VERSION)
     if 'pyepr' in v.version:
         return v < LooseVersion('2.3dev_pyepr082')
     else:
         return v <= LooseVersion('2.3')
 
-EPR_C_BUG_009 = has_epr_c_bug_009()
+EPR_C_BUG_PYEPR009 = has_epr_c_bug_pyepr009()
+EPR_C_BUG_BCEPR002 = EPR_C_BUG_PYEPR009
 
 
 EPR_TO_NUMPY_TYPE = {
@@ -953,7 +954,7 @@ class TestBand(unittest.TestCase):
         self.assertRaises(ValueError, self.band.read_raster,
                           invalid_xoffset, invalid_yoffset, raster)
 
-    def test_read_as_array(self):
+    def test_read_as_array_ref(self):
         data = self.band.read_as_array(self.WIDTH, self.HEIGHT,
                                        self.XOFFSET, self.YOFFSET)
 
@@ -963,6 +964,16 @@ class TestBand(unittest.TestCase):
 
         h, w = self.TEST_DATA.shape
         npt.assert_allclose(data[:h, :w], self.TEST_DATA)
+
+    def test_read_as_array_cross(self):
+        data = self.band.read_as_array()
+        box = self.band.read_as_array(self.WIDTH, self.HEIGHT,
+                                      self.XOFFSET, self.YOFFSET)
+
+        npt.assert_array_equal(
+            data[self.YOFFSET:self.YOFFSET + self.HEIGHT,
+                 self.XOFFSET:self.XOFFSET + self.WIDTH],
+            box)
 
     def test_read_as_array_default(self):
         data = self.band.read_as_array()
@@ -978,37 +989,106 @@ class TestBand(unittest.TestCase):
             data[self.YOFFSET:self.YOFFSET + h, self.XOFFSET:self.XOFFSET + w],
             self.TEST_DATA)
 
-    def test_read_as_array(self):
-        data = self.band.read_as_array()
-        box = self.band.read_as_array(self.WIDTH, self.HEIGHT,
-                                      self.XOFFSET, self.YOFFSET)
+    # @SEEALSO: https://www.brockmann-consult.de/beam-jira/browse/EPR-2
+    @unittest.skipIf(EPR_C_BUG_BCEPR002, 'buggy EPR_C_API detected')
+    def test_read_as_array_with_step_2(self):
+        step = 2
+        band = self.band
 
-        npt.assert_array_equal(
-            data[self.YOFFSET:self.YOFFSET + self.HEIGHT,
-                 self.XOFFSET:self.XOFFSET + self.WIDTH],
+        data = band.read_as_array()
+        box = band.read_as_array(self.WIDTH, self.HEIGHT,
+                                 self.XOFFSET, self.YOFFSET, step, step)
+
+        self.assertTrue(isinstance(box, np.ndarray))
+        self.assertEqual(
+            box.shape,
+            ((self.HEIGHT - 1) // step + 1, (self.WIDTH - 1) // step + 1))
+        self.assertEqual(box.dtype, self.DATA_TYPE)
+
+        npt.assert_allclose(
+            data[self.YOFFSET:self.YOFFSET + self.HEIGHT:step,
+                 self.XOFFSET:self.XOFFSET + self.WIDTH:step],
             box)
 
-    # @TODO: check, it seems to be an upstream bug or a matter of data
-    #        mirroring
-    # @SEEALSO: https://www.brockmann-consult.de/beam-jira/browse/EPR-2
-    #def test_read_as_array_with_step(self):
-    #    width = 400
-    #    height = 300
-    #
-    #    data = self.band.read_as_array(width, height,
-    #                                   self.XOFFSET, self.YOFFSET, 2, 2)
-    #
-    #    self.assertTrue(isinstance(data, np.ndarray))
-    #    self.assertEqual(data.shape, (height/2, width/2))
-    #    self.assertEqual(data.dtype, self.DATA_TYPE)
-    #
-    #    h, w = self.TEST_DATA.shape
-    #    self.assertTrue(
-    #               np.all(data[:h / 2, :w / 2] == self.TEST_DATA[::2, ::2]))
-    #    #self.assertTrue(
-    #    #           np.all(data[:h / 2, :w / 2] == self.TEST_DATA[::2, 1::2]))
+        h, w = self.TEST_DATA.shape
+        npt.assert_allclose(
+            box[:(h-1)//step+1, :(w-1)//step+1],
+            self.TEST_DATA[::step, ::step])
 
-    # @TODO: more read_as_array testing
+    @unittest.skipIf(EPR_C_BUG_BCEPR002, 'buggy EPR_C_API detected')
+    def test_read_as_array_with_step_3(self):
+        step = 3
+        band = self.band
+
+        data = band.read_as_array()
+        box = band.read_as_array(self.WIDTH, self.HEIGHT,
+                                 self.XOFFSET, self.YOFFSET, step, step)
+
+        self.assertTrue(isinstance(box, np.ndarray))
+        self.assertEqual(
+            box.shape,
+            ((self.HEIGHT - 1) // step + 1, (self.WIDTH - 1) // step + 1))
+        self.assertEqual(box.dtype, self.DATA_TYPE)
+
+        npt.assert_allclose(
+            data[self.YOFFSET:self.YOFFSET + self.HEIGHT:step,
+                 self.XOFFSET:self.XOFFSET + self.WIDTH:step],
+            box)
+
+        h, w = self.TEST_DATA.shape
+        npt.assert_allclose(
+            box[:(h-1)//step+1, :(w-1)//step+1],
+            self.TEST_DATA[::step, ::step])
+
+    @unittest.skipIf(EPR_C_BUG_BCEPR002, 'buggy EPR_C_API detected')
+    def test_read_as_array_with_step_4(self):
+        step = 4
+        band = self.band
+
+        data = band.read_as_array()
+        box = band.read_as_array(self.WIDTH, self.HEIGHT,
+                                 self.XOFFSET, self.YOFFSET, step, step)
+
+        self.assertTrue(isinstance(box, np.ndarray))
+        self.assertEqual(
+            box.shape,
+            ((self.HEIGHT - 1) // step + 1, (self.WIDTH - 1) // step + 1))
+        self.assertEqual(box.dtype, self.DATA_TYPE)
+
+        npt.assert_allclose(
+            data[self.YOFFSET:self.YOFFSET + self.HEIGHT:step,
+                 self.XOFFSET:self.XOFFSET + self.WIDTH:step],
+            box)
+
+        h, w = self.TEST_DATA.shape
+        npt.assert_allclose(
+            box[:(h-1)//step+1, :(w-1)//step+1],
+            self.TEST_DATA[::step, ::step])
+
+    @unittest.skipIf(EPR_C_BUG_BCEPR002, 'buggy EPR_C_API detected')
+    def test_read_as_array_with_step_5(self):
+        step = 5
+        band = self.band
+
+        data = band.read_as_array()
+        box = band.read_as_array(self.WIDTH, self.HEIGHT,
+                                 self.XOFFSET, self.YOFFSET, step, step)
+
+        self.assertTrue(isinstance(box, np.ndarray))
+        self.assertEqual(
+            box.shape,
+            ((self.HEIGHT - 1) // step + 1, (self.WIDTH - 1) // step + 1))
+        self.assertEqual(box.dtype, self.DATA_TYPE)
+
+        npt.assert_allclose(
+            data[self.YOFFSET:self.YOFFSET + self.HEIGHT:step,
+                 self.XOFFSET:self.XOFFSET + self.WIDTH:step],
+            box)
+
+        h, w = self.TEST_DATA.shape
+        npt.assert_allclose(
+            box[:(h-1)//step+1, :(w-1)//step+1],
+            self.TEST_DATA[::step, ::step])
 
 
 class TestAnnotationBand(TestBand):
@@ -1040,17 +1120,21 @@ class TestAnnotationBand(TestBand):
          32.74848557, 32.71598434, 32.68351364, 32.65105438, 32.61858749],
     ])
 
-    @unittest.skipIf(EPR_C_BUG_009, 'buggy EPR_C_API detected')
+    @unittest.skipIf(EPR_C_BUG_PYEPR009, 'buggy EPR_C_API detected')
     def test_read_raster(self):
         super(TestAnnotationBand, self).test_read_raster()
 
-    @unittest.skipIf(EPR_C_BUG_009, 'buggy EPR_C_API detected')
+    @unittest.skipIf(EPR_C_BUG_PYEPR009, 'buggy EPR_C_API detected')
     def test_read_raster_default_offset(self):
         super(TestAnnotationBand, self).test_read_raster_default_offset()
 
-    @unittest.skipIf(EPR_C_BUG_009, 'buggy EPR_C_API detected')
-    def test_read_as_array(self):
-        super(TestAnnotationBand, self).test_read_as_array()
+    @unittest.skipIf(EPR_C_BUG_PYEPR009, 'buggy EPR_C_API detected')
+    def test_read_as_array_ref(self):
+        super(TestAnnotationBand, self).test_read_as_array_ref()
+
+    @unittest.skipIf(EPR_C_BUG_PYEPR009, 'buggy EPR_C_API detected')
+    def test_read_as_array_cross(self):
+        super(TestAnnotationBand, self).test_read_as_array_cross()
 
 
 class TestBandHighLevelAPI(unittest.TestCase):
@@ -1353,15 +1437,15 @@ class TestAnnotatedRasterRead(TestRasterRead):
     RASTER_YOFFSET = TestAnnotationBand.YOFFSET
     TEST_DATA = TestAnnotationBand.TEST_DATA
 
-    @unittest.skipIf(EPR_C_BUG_009, 'buggy EPR_C_API detected')
+    @unittest.skipIf(EPR_C_BUG_PYEPR009, 'buggy EPR_C_API detected')
     def test_get_pixel(self):
         super(TestAnnotatedRasterRead, self).test_get_pixel()
 
-    @unittest.skipIf(EPR_C_BUG_009, 'buggy EPR_C_API detected')
+    @unittest.skipIf(EPR_C_BUG_PYEPR009, 'buggy EPR_C_API detected')
     def test_data_property(self):
         super(TestAnnotatedRasterRead, self).test_data_property()
 
-    @unittest.skipIf(EPR_C_BUG_009, 'buggy EPR_C_API detected')
+    @unittest.skipIf(EPR_C_BUG_PYEPR009, 'buggy EPR_C_API detected')
     def test_data_property_raster_scope(self):
         super(TestAnnotatedRasterRead, self).test_data_property_raster_scope()
 
