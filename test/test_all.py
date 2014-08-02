@@ -651,8 +651,7 @@ class TestDatasetOnClosedProduct(unittest.TestCase):
         self.assertTrue(isinstance(self.dataset.product, epr.Product))
 
     def test_description_property(self):
-        # @TODO: check
-        self.assertEqual(self.dataset.description, '')
+        self.assertRaises(ValueError, getattr, self.dataset, 'description')
 
     def test_get_name(self):
         self.assertRaises(ValueError, self.dataset.get_name)

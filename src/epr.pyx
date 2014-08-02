@@ -2095,10 +2095,11 @@ cdef class Dataset(EprObject):
         '''A short description of the band's contents'''
 
         def __get__(self):
-            if self._ptr.description is NULL:
-                return ''
-            else:
-                return _to_str(self._ptr.description, 'ascii')
+            if self._ptr is not NULL:
+                self.check_closed_product()
+                if self._ptr.description is not NULL:
+                    return _to_str(self._ptr.description, 'ascii')
+            return ''
 
     def get_name(self):
         '''get_name(self)
