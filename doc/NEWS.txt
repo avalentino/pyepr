@@ -2,8 +2,8 @@ Change history
 ==============
 
 
-PyEPR 0.8.2 (in development)
-----------------------------
+PyEPR 0.8.2 (03/08/2014)
+------------------------
 
 * fixed segfault caused by incorrect access to :attr:`epr.Dataset.description`
   string in case of closed products
