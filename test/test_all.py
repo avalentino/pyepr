@@ -26,6 +26,7 @@ import numbers
 import operator
 import tempfile
 import functools
+from distutils.version import LooseVersion
 
 try:
     import resource
@@ -46,6 +47,16 @@ import numpy.testing as npt
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
 
 import epr
+
+
+def has_epr_c_bug_009():
+    v = LooseVersion(epr.EPR_C_API_VERSION)
+    if 'pyepr' in v.version:
+        return v < LooseVersion('2.3dev_pyepr082')
+    else:
+        return v <= LooseVersion('2.3')
+
+EPR_C_BUG_009 = has_epr_c_bug_009()
 
 
 EPR_TO_NUMPY_TYPE = {
@@ -878,6 +889,11 @@ class TestBand(unittest.TestCase):
         # @NOTE: data type on disk is epr.E_TID_USHORT
         self.assertEqual(raster.data_type, epr.E_TID_FLOAT)
 
+        h, w = self.TEST_DATA.shape
+        npt.assert_allclose(raster.get_pixel(0, 0), self.TEST_DATA[0, 0])
+        npt.assert_allclose(raster.get_pixel(w - 1, h - 1),
+                            self.TEST_DATA[h - 1, w - 1])
+
     def test_read_raster_none(self):
         raster = self.band.read_raster()
 
@@ -887,18 +903,36 @@ class TestBand(unittest.TestCase):
         # @NOTE: data type on disk is epr.E_TID_USHORT
         self.assertEqual(raster.data_type, epr.E_TID_FLOAT)
 
+        h, w = self.TEST_DATA.shape
+        npt.assert_allclose(
+            raster.get_pixel(self.XOFFSET, self.YOFFSET), self.TEST_DATA[0, 0])
+        npt.assert_allclose(
+            raster.get_pixel(self.XOFFSET + w - 1, self.YOFFSET + h - 1),
+            self.TEST_DATA[h - 1, w - 1])
+
     def test_read_raster_default_offset(self):
-        height, width = self.TEST_DATA.shape
+        height = self.HEIGHT
+        width = self.WIDTH
 
         raster1 = self.band.create_compatible_raster(width, height)
         raster2 = self.band.create_compatible_raster(width, height)
 
-        self.band.read_raster(0, 0, raster1)
-        self.band.read_raster(raster=raster2)
+        r1 = self.band.read_raster(0, 0, raster1)
+        r2 = self.band.read_raster(raster=raster2)
 
+        self.assertTrue(r1 is raster1)
+        self.assertTrue(r2 is raster2)
         self.assertEqual(raster1.get_pixel(0, 0), raster2.get_pixel(0, 0))
         self.assertEqual(raster1.get_pixel(width - 1, height - 1),
                          raster2.get_pixel(width - 1, height - 1))
+
+        h, w = self.TEST_DATA.shape
+        npt.assert_allclose(
+            raster1.get_pixel(self.XOFFSET, self.YOFFSET),
+            self.TEST_DATA[0, 0])
+        npt.assert_allclose(
+            raster1.get_pixel(self.XOFFSET + w - 1, self.YOFFSET + h - 1),
+            self.TEST_DATA[h - 1, w - 1])
 
     def test_read_raster_with_invalid_raster(self):
         self.assertRaises(TypeError, self.band.read_raster, 0, 0, 0)
@@ -944,23 +978,10 @@ class TestBand(unittest.TestCase):
             data[self.YOFFSET:self.YOFFSET + h, self.XOFFSET:self.XOFFSET + w],
             self.TEST_DATA)
 
-    def test_read_as_array_data(self):
+    def test_read_as_array(self):
         data = self.band.read_as_array()
         box = self.band.read_as_array(self.WIDTH, self.HEIGHT,
                                       self.XOFFSET, self.YOFFSET)
-
-        npt.assert_array_equal(
-            data[self.YOFFSET:self.YOFFSET + self.HEIGHT,
-                 self.XOFFSET:self.XOFFSET + self.WIDTH],
-            box)
-
-    @unittest.skipIf(epr.EPR_C_API_VERSION < '2.3.1', 'EPR_C_API < 2.3.1')
-    def test_read_as_array_grid(self):
-        band = self.product.get_band('latitude')
-        data = band.read_as_array()
-
-        box = band.read_as_array(self.WIDTH, self.HEIGHT,
-                                 self.XOFFSET, self.YOFFSET)
 
         npt.assert_array_equal(
             data[self.YOFFSET:self.YOFFSET + self.HEIGHT,
@@ -988,6 +1009,48 @@ class TestBand(unittest.TestCase):
     #    #           np.all(data[:h / 2, :w / 2] == self.TEST_DATA[::2, 1::2]))
 
     # @TODO: more read_as_array testing
+
+
+class TestAnnotationBand(TestBand):
+    BAND_NAME = 'sun_zenith'
+    BAND_DESCTIPTION = 'Sun zenith angle'
+    SCALING_FACTOR = 9.999999974752427e-07
+    SCALING_OFFSET = 0.0
+    UNIT = 'deg'
+    TEST_DATA = np.asarray([
+        [33.11141205, 33.07904434, 33.04668045, 33.01435089, 32.98202515,
+         32.94969559, 32.91736603, 32.88507462, 32.85278320, 32.82049179],
+        [33.08905792, 33.05667114, 33.02428818, 32.99193954, 32.95959473,
+         32.92724609, 32.89489746, 32.86258316, 32.83027649, 32.79796219],
+        [33.06670380, 33.03429794, 33.00189590, 32.96953201, 32.93716431,
+         32.90479279, 32.87242889, 32.84009933, 32.80776978, 32.77543640],
+        [33.04434967, 33.01192474, 32.97950363, 32.94711685, 32.91473389,
+         32.88234329, 32.84995651, 32.81761169, 32.78525925, 32.75291061],
+        [33.02199554, 32.98955536, 32.95711136, 32.92470551, 32.89229965,
+         32.85989380, 32.82748795, 32.79512024, 32.76274872, 32.73038101],
+        [32.99978256, 32.96732330, 32.93486023, 32.90243149, 32.87001038,
+         32.83758163, 32.80516052, 32.77277374, 32.74037933, 32.70799255],
+        [32.97756958, 32.94509125, 32.91260529, 32.88016129, 32.84771729,
+         32.81527328, 32.78282928, 32.75042343, 32.71801376, 32.68560410],
+        [32.95535278, 32.92285538, 32.89035416, 32.85789108, 32.82542419,
+         32.79296494, 32.76049805, 32.72807693, 32.69564438, 32.66321945],
+        [32.93313980, 32.90061951, 32.86810303, 32.83562088, 32.80313873,
+         32.77065277, 32.73817062, 32.70572281, 32.67327881, 32.64083099],
+        [32.91106796, 32.87852859, 32.84599304, 32.81349182, 32.78099060,
+         32.74848557, 32.71598434, 32.68351364, 32.65105438, 32.61858749],
+    ])
+
+    @unittest.skipIf(EPR_C_BUG_009, 'buggy EPR_C_API detected')
+    def test_read_raster(self):
+        super(TestAnnotationBand, self).test_read_raster()
+
+    @unittest.skipIf(EPR_C_BUG_009, 'buggy EPR_C_API detected')
+    def test_read_raster_default_offset(self):
+        super(TestAnnotationBand, self).test_read_raster_default_offset()
+
+    @unittest.skipIf(EPR_C_BUG_009, 'buggy EPR_C_API detected')
+    def test_read_as_array(self):
+        super(TestAnnotationBand, self).test_read_as_array()
 
 
 class TestBandHighLevelAPI(unittest.TestCase):
@@ -1281,6 +1344,26 @@ class TestRasterRead(TestRaster):
         data2 = self.raster.data
         self.assertEqual(data1[0, 0], data2[0, 0])
         self.assertTrue(np.all(data1 == data2))
+
+
+class TestAnnotatedRasterRead(TestRasterRead):
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    BAND_NAME = TestAnnotationBand.BAND_NAME
+    RASTER_XOFFSET = TestAnnotationBand.XOFFSET
+    RASTER_YOFFSET = TestAnnotationBand.YOFFSET
+    TEST_DATA = TestAnnotationBand.TEST_DATA
+
+    @unittest.skipIf(EPR_C_BUG_009, 'buggy EPR_C_API detected')
+    def test_get_pixel(self):
+        super(TestAnnotatedRasterRead, self).test_get_pixel()
+
+    @unittest.skipIf(EPR_C_BUG_009, 'buggy EPR_C_API detected')
+    def test_data_property(self):
+        super(TestAnnotatedRasterRead, self).test_data_property()
+
+    @unittest.skipIf(EPR_C_BUG_009, 'buggy EPR_C_API detected')
+    def test_data_property_raster_scope(self):
+        super(TestAnnotatedRasterRead, self).test_data_property_raster_scope()
 
 
 class TestRasterHighLevelAPI(unittest.TestCase):
