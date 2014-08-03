@@ -44,20 +44,7 @@ else:
 import numpy as np
 import numpy.testing as npt
 
-TESTDIR = os.path.abspath(os.path.dirname(__file__))
-
 import epr
-
-
-def has_epr_c_bug_pyepr009():
-    v = LooseVersion(epr.EPR_C_API_VERSION)
-    if 'pyepr' in v.version:
-        return v < LooseVersion('2.3dev_pyepr082')
-    else:
-        return v <= LooseVersion('2.3')
-
-EPR_C_BUG_PYEPR009 = has_epr_c_bug_pyepr009()
-EPR_C_BUG_BCEPR002 = EPR_C_BUG_PYEPR009
 
 
 EPR_TO_NUMPY_TYPE = {
@@ -76,6 +63,19 @@ EPR_TO_NUMPY_TYPE = {
 }
 
 
+def has_epr_c_bug_pyepr009():
+    v = LooseVersion(epr.EPR_C_API_VERSION)
+    if 'pyepr' in v.version:
+        return v < LooseVersion('2.3dev_pyepr082')
+    else:
+        return v <= LooseVersion('2.3')
+
+
+EPR_C_BUG_PYEPR009 = has_epr_c_bug_pyepr009()
+EPR_C_BUG_BCEPR002 = EPR_C_BUG_PYEPR009
+
+
+TESTDIR = os.path.abspath(os.path.dirname(__file__))
 TEST_PRODUCT = 'MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1'
 
 
