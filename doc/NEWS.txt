@@ -5,8 +5,25 @@ Change history
 PyEPR 0.8.2 (in development)
 ----------------------------
 
+* fixed segfault caused by incorrect access to :attr:`epr.Dataset.description`
+  string in case of closed products
+* fixed a memory leak in :class:`epr.Raster` (closes :issue:`10`)
+* the size parameters (*src_width* and *src_height*) in
+  :meth:`epr.Band.create_compatible_raster` are now optional. By default a
+  :class:`epr.Raster` with the same size of the scene is created
+* the test suite have been improved
+* improved the :doc:`NDVI computation example <ndvi_example>`
+* updates sphinx config
 * small clarification in the :ref:`installation` section of the
   :doc:`usermanual`.
+* EPR C API (version bundled with the official source tar-ball)
+
+  - in case of error always free resources before setting the error code.
+    This avoids error shadowing in some cases.
+  - fixed a bug that caused reading of the incorrect portion of data in case
+    of mirrored annotation datasets (closes :issue:`9`)
+  - fixed a bug that caused incorrect data sub-sampling in case of mirrored
+    datasets
 
 
 PyEPR 0.8.1 (07/09/2013)
