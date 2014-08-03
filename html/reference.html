@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API Reference &mdash; PyEPR 0.8.1 documentation</title>
+    <title>API Reference &mdash; PyEPR 0.8.2dev documentation</title>
     
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.8.1',
+        URL_ROOT:    './',
+        VERSION:     '0.8.2dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.8.1 documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.8.2dev documentation" href="index.html" />
     <link rel="next" title="Change history" href="NEWS.html" />
     <link rel="prev" title="NDVI computation" href="ndvi_example.html" /> 
   </head>
@@ -43,7 +41,7 @@
         <li class="right" >
           <a href="ndvi_example.html" title="NDVI computation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.8.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.8.2dev documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -73,7 +71,7 @@ in a product file.</p>
 <dd><p>ENVISAT product</p>
 <p>The Product class provides methods and properties to get information
 about an ENVISAT product file.</p>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#epr.open" title="epr.open"><tt class="xref py py-func docutils literal"><span class="pre">open()</span></tt></a></p>
 </div>
@@ -269,7 +267,7 @@ must be either <a class="reference internal" href="#epr.E_TID_UCHAR" title="epr.
 </tr>
 </tbody>
 </table>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#epr.create_bitmask_raster" title="epr.create_bitmask_raster"><tt class="xref py py-func docutils literal"><span class="pre">create_bitmask_raster()</span></tt></a></p>
 </div>
@@ -465,7 +463,7 @@ following <em>special methods</em>:</p>
 <em class="property">class </em><tt class="descclassname">epr.</tt><tt class="descname">Record</tt><a class="headerlink" href="#epr.Record" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents a record read from an ENVISAT dataset</p>
 <p>A record is composed of multiple fields.</p>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">Field</span></tt></a></p>
 </div>
@@ -600,7 +598,7 @@ following <em>special methods</em>:</p>
 <dd><p>Represents a field within a record</p>
 <p>A field is composed of one or more data elements of one of the
 types defined in the internal <tt class="docutils literal"><span class="pre">field_info</span></tt> structure.</p>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">Record</span></tt></a></p>
 </div>
@@ -662,7 +660,7 @@ field.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the data array (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.7)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) having the type of
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the data array (<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.8)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>) having the type of
 the field</td>
 </tr>
 </tbody>
@@ -924,7 +922,7 @@ can be given too</li>
 
 <dl class="method">
 <dt id="epr.Band.create_compatible_raster">
-<tt class="descname">create_compatible_raster</tt><big>(</big><em>src_width</em>, <em>src_height</em><span class="optional">[</span>, <em>xstep</em>, <em>ystep</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.Band.create_compatible_raster" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">create_compatible_raster</tt><big>(</big><span class="optional">[</span><em>src_width</em>, <em>src_height</em>, <em>xstep</em>, <em>ystep</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.Band.create_compatible_raster" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a raster which is compatible with the data type of the band</p>
 <p>The created raster is used to read the data in it (see
 <a class="reference internal" href="#epr.Band.read_raster" title="epr.Band.read_raster"><tt class="xref py py-meth docutils literal"><span class="pre">Band.read_raster()</span></tt></a>).</p>
@@ -956,9 +954,11 @@ along track (source_step_y) directions.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>src_width</strong> &#8211; the width (across track dimension) of the source to be read
-into the raster</li>
+into the raster. Default: scene width (see
+<a class="reference internal" href="#epr.Product.get_scene_width" title="epr.Product.get_scene_width"><tt class="xref py py-attr docutils literal"><span class="pre">Product.get_scene_width</span></tt></a>)</li>
 <li><strong>src_height</strong> &#8211; the height (along track dimension) of the source to be read
-into the raster</li>
+into the raster. Default: scene height (see
+<a class="reference internal" href="#epr.Product.get_scene_height" title="epr.Product.get_scene_height"><tt class="xref py py-attr docutils literal"><span class="pre">Product.get_scene_height</span></tt></a>)</li>
 <li><strong>xstep</strong> &#8211; the sub-sampling step across track of the source when reading
 into the raster. Default: 1.</li>
 <li><strong>ystep</strong> &#8211; the sub-sampling step along track of the source when reading
@@ -972,6 +972,15 @@ into the raster. Default: 1.</li>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p><em>src_width</em> and <em>src_height</em> are the dimantion of the of the source
+area. If one specifies a <em>step</em> parameter the resulting raster
+will have a size that is smaller that the specifies source size:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="n">raster_size</span> <span class="o">=</span> <span class="n">src_size</span> <span class="o">//</span> <span class="n">step</span>
+</pre></div>
+</div>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -1009,7 +1018,7 @@ instantiated</li>
 </table>
 <p>This method raises an instance of the appropriate
 <a class="reference internal" href="#epr.EPRError" title="epr.EPRError"><tt class="xref py py-exc docutils literal"><span class="pre">EPRError</span></tt></a> sub-class if case of errors</p>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#epr.Band.create_compatible_raster" title="epr.Band.create_compatible_raster"><tt class="xref py py-meth docutils literal"><span class="pre">Band.create_compatible_raster()</span></tt></a> and
 <a class="reference internal" href="#epr.create_raster" title="epr.create_raster"><tt class="xref py py-func docutils literal"><span class="pre">create_raster()</span></tt></a></p>
@@ -1025,7 +1034,7 @@ do not have any correspondent function in the C API.</p>
 <dl class="method">
 <dt id="epr.Band.read_as_array">
 <tt class="descname">read_as_array</tt><big>(</big><span class="optional">[</span><em>width</em>, <em>height</em>, <em>xoffset</em>, <em>yoffset</em>, <em>xstep</em>, <em>ystep</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#epr.Band.read_as_array" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads the specified source region as an <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.7)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a></p>
+<dd><p>Reads the specified source region as an <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.8)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a></p>
 <p>The source-region is a defined part of the whole ENVISAT
 product image, which shall be read into a raster.
 In this routine the co-ordinates are specified, where the
@@ -1054,14 +1063,14 @@ reading into the raster. Default: 1</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.7)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> instance in which data are read</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.8)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> instance in which data are read</p>
 </td>
 </tr>
 </tbody>
 </table>
 <p>This method raises an instance of the appropriate
 <a class="reference internal" href="#epr.EPRError" title="epr.EPRError"><tt class="xref py py-exc docutils literal"><span class="pre">EPRError</span></tt></a> sub-class if case of errors</p>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#epr.Band.create_compatible_raster" title="epr.Band.create_compatible_raster"><tt class="xref py py-meth docutils literal"><span class="pre">Band.create_compatible_raster()</span></tt></a>,
 <a class="reference internal" href="#epr.create_raster" title="epr.create_raster"><tt class="xref py py-func docutils literal"><span class="pre">create_raster()</span></tt></a> and <a class="reference internal" href="#epr.Band.read_raster" title="epr.Band.read_raster"><tt class="xref py py-meth docutils literal"><span class="pre">Band.read_raster()</span></tt></a></p>
@@ -1125,7 +1134,7 @@ do not have a counterpart in the C API.</p>
 <dl class="attribute">
 <dt id="epr.Raster.data">
 <tt class="descname">data</tt><a class="headerlink" href="#epr.Raster.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Raster data exposed as <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.7)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> object</p>
+<dd><p>Raster data exposed as <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.8)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> object</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">this property shares the data buffer with the <a class="reference internal" href="#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">Raster</span></tt></a>
@@ -1288,7 +1297,7 @@ later use as a bit-mask.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>data_type</strong> &#8211; <p>the type of the data to stored in the raster, must be one of
 E_TID_*.</p>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#data-type-identifiers">Data type Identifiers</a></p>
 </div>
@@ -1311,7 +1320,7 @@ into the raster. Default: 1.</li>
 </tr>
 </tbody>
 </table>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last">description of <a class="reference internal" href="#epr.Band.create_compatible_raster" title="epr.Band.create_compatible_raster"><tt class="xref py py-meth docutils literal"><span class="pre">Band.create_compatible_raster()</span></tt></a></p>
 </div>
@@ -1344,7 +1353,7 @@ into the raster. Default: 1.</li>
 </tr>
 </tbody>
 </table>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last">the description of <a class="reference internal" href="#epr.Band.create_compatible_raster" title="epr.Band.create_compatible_raster"><tt class="xref py py-meth docutils literal"><span class="pre">Band.create_compatible_raster()</span></tt></a></p>
 </div>
@@ -1406,8 +1415,9 @@ into the raster. Default: 1.</li>
 <dt id="epr.__revision__">
 <tt class="descclassname">epr.</tt><tt class="descname">__revision__</tt><a class="headerlink" href="#epr.__revision__" title="Permalink to this definition">¶</a></dt>
 <dd><p>PyEPR revision (currently it is the same as <a class="reference internal" href="#epr.__version__" title="epr.__version__"><tt class="xref py py-data docutils literal"><span class="pre">__version__</span></tt></a>)</p>
-<p class="deprecated">
-<span class="versionmodified">Deprecated since version 7.2.</span></p>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 7.2.</span></p>
+</div>
 </dd></dl>
 
 <dl class="data">
@@ -1607,13 +1617,13 @@ into the raster. Default: 1.</li>
         <li class="right" >
           <a href="ndvi_example.html" title="NDVI computation"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.8.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.8.2dev documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011-2013, Antonio Valentino.
-      Last updated on Sep 07, 2013.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        &copy; Copyright 2011-2014, Antonio Valentino.
+      Last updated on Aug 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

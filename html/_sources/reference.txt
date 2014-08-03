@@ -766,7 +766,7 @@ Band
       Gets the name of the band
 
 
-   .. method:: create_compatible_raster(src_width, src_height[, xstep, ystep])
+   .. method:: create_compatible_raster([src_width, src_height, xstep, ystep])
 
       Creates a raster which is compatible with the data type of the band
 
@@ -802,10 +802,12 @@ Band
 
       :param src_width:
             the width (across track dimension) of the source to be read
-            into the raster
+            into the raster. Default: scene width (see
+            :attr:`Product.get_scene_width`)
       :param src_height:
             the height (along track dimension) of the source to be read
-            into the raster
+            into the raster. Default: scene height (see
+            :attr:`Product.get_scene_height`)
       :param xstep:
             the sub-sampling step across track of the source when reading
             into the raster. Default: 1.
@@ -815,6 +817,14 @@ Band
       :returns:
             the new raster instance or raises an exception
             (:exc:`EPRValueError`) if an error occurred
+
+      .. note::
+
+         *src_width* and *src_height* are the dimantion of the of the source
+         area. If one specifies a *step* parameter the resulting raster
+         will have a size that is smaller that the specifies source size::
+
+             raster_size = src_size // step
 
 
    .. method:: read_raster([xoffset, yoffset, raster])

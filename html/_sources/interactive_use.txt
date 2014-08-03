@@ -16,8 +16,8 @@ ESA_ web site.
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _ENVISAT: http://envisat.esa.int
 .. _ASAR: http://envisat.esa.int/handbooks/asar
-.. _IPython: http://ipython.scipy.org/moin
-.. _matplotlib: http://matplotlib.sourceforge.net
+.. _IPython: http://ipython.org
+.. _matplotlib: http://matplotlib.org
 .. _`free sample`: http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz
 .. _ESA: http://earth.esa.int
 
@@ -68,14 +68,14 @@ available classes and functions::
         The raw data access makes it possible to read any data field contained
         in a product file.
 
-        .. _PyEPR: http://avalentino.github.com/pyepr
+        .. _PyEPR: http://avalentino.github.io/pyepr
         .. _Python: http://www.python.org
         .. _`EPR API`: https://github.com/bcdev/epr-api
         .. _ENVISAT: http://envisat.esa.int
         .. _ESA: http://earth.esa.int
 
     In [3]: epr.__version__, epr.EPR_C_API_VERSION
-    Out[3]: ('0.8.1', '2.3dev')
+    Out[3]: ('0.8.2', '2.3dev')
 
 Docstrings are available for almost all classes, methods and functions in
 the :mod:`epr` and they can be displayed using the :func:`help` python_

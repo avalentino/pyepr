@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>User Manual &mdash; PyEPR 0.8.1 documentation</title>
+    <title>User Manual &mdash; PyEPR 0.8.2dev documentation</title>
     
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.8.1',
+        URL_ROOT:    './',
+        VERSION:     '0.8.2dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.8.1 documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.8.2dev documentation" href="index.html" />
     <link rel="next" title="Tutorials" href="tutorials.html" />
     <link rel="prev" title="ENVISAT Product Reader Python API" href="index.html" /> 
   </head>
@@ -43,7 +41,7 @@
         <li class="right" >
           <a href="index.html" title="ENVISAT Product Reader Python API"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.8.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.8.2dev documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -88,11 +86,12 @@ Parameters&#8221; record to the standard output:</p>
 correctly installed and configured:</p>
 <ul class="simple">
 <li><a class="reference external" href="http://www.python.org">Python2</a> &gt;= 2.6 or <a class="reference external" href="http://www.python.org">Python3</a> &gt;= 3.1</li>
-<li><a class="reference external" href="http://www.numpy.org">numpy</a> &gt;= 1.3.0</li>
+<li><a class="reference external" href="http://www.numpy.org">numpy</a> &gt;= 1.5.0</li>
 <li><a class="reference external" href="https://github.com/bcdev/epr-api">EPR API</a> &gt;= 2.2 (optional, since PyEPR 0.7 the source tar-ball comes
 with a copy of the PER C API sources)</li>
 <li>a reasonably updated C compiler <a class="footnote-reference" href="#id3" id="id1">[1]</a> (build only)</li>
 <li><a class="reference external" href="http://cython.org">Cython</a> &gt;= 0.13 <a class="footnote-reference" href="#id4" id="id2">[2]</a> (optional and build only)</li>
+<li><a class="reference external" href="https://pypi.python.org/pypi/unittest2">unittest2</a> (only required for Python &lt; 2.7)</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -118,9 +117,9 @@ wants to build a development version of <a class="reference external" href="http
 </div>
 <div class="section" id="download">
 <h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
-<p>Official source tar-balls can be downloaded form <a class="reference external" href="http://pypi.python.org">PyPi</a>:</p>
+<p>Official source tar-balls can be downloaded form <a class="reference external" href="https://pypi.python.org/pypi">PyPi</a>:</p>
 <blockquote>
-<div><a class="reference external" href="http://pypi.python.org/pypi/pyepr">http://pypi.python.org/pypi/pyepr</a></div></blockquote>
+<div><a class="reference external" href="https://pypi.python.org/pypi/pyepr">https://pypi.python.org/pypi/pyepr</a></div></blockquote>
 <p>The source code of the development versions is available on the <a class="reference external" href="https://github.com">GitHub</a>
 project page</p>
 <blockquote>
@@ -131,18 +130,22 @@ project page</p>
 </div>
 </div>
 <div class="section" id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>The easier way to install <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> is using tools like <a class="reference external" href="http://pypi.python.org/pypi/pip">pip</a> or <a class="reference external" href="http://pypi.python.org/pypi/setuptools#using-setuptools-and-easyinstall">easy_install</a>:</p>
+<span id="id5"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>The easier way to install <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> is using tools like <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a> or <a class="reference external" href="https://pypi.python.org/pypi/setuptools#using-setuptools-and-easyinstall">easy_install</a>:</p>
 <div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>pip install numpy pyepr
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>the <tt class="file docutils literal"><span class="pre">setup.py</span></tt> script does not use <a class="reference external" href="http://pypi.python.org/pypi/setuptools#using-setuptools-and-easyinstall">easy_install</a> specific functions
-so it is unable to handle dependencies automatically.
-In the above example the required <a class="reference external" href="http://www.numpy.org">numpy</a> package is explicitly included in
+<p>the <tt class="file docutils literal"><span class="pre">setup.py</span></tt> script does not use <a class="reference external" href="https://pypi.python.org/pypi/setuptools#using-setuptools-and-easyinstall">easy_install</a> specific functions
+so it is unable to handle dependencies automatically.</p>
+<p>Also the <tt class="file docutils literal"><span class="pre">setup.py</span></tt> script uses <a class="reference external" href="http://www.numpy.org">numpy</a> to retrieve the path of
+headers and libraries.
+For this reaseon <a class="reference external" href="http://www.numpy.org">numpy</a> must be already installed when <tt class="file docutils literal"><span class="pre">setup.py</span></tt>
+is executed.</p>
+<p>In the above example the required <a class="reference external" href="http://www.numpy.org">numpy</a> package is explicitly included in
 the list of packages to be installed.</p>
-<div class="admonition-see-also last admonition seealso">
+<div class="last admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#requirements">Requirements</a></p>
 </div>
@@ -268,7 +271,7 @@ amount of data contained in <a class="reference external" href="http://envisat.e
 the field</p>
 </li>
 <li><p class="first">the <cite>Raster.data</cite> property is a 2D array exposes data contained in the
-<a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> object in form of <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.7)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a></p>
+<a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> object in form of <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.8)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p><a class="reference internal" href="reference.html#epr.Raster.data" title="epr.Raster.data"><tt class="xref py py-attr docutils literal"><span class="pre">epr.Raster.data</span></tt></a> directly exposes <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a>
@@ -289,7 +292,7 @@ the <a class="reference external" href="http://www.python.org">Python</a> EPR AP
 C API). It is mainly a facility method that allows users to get access
 to band data without creating an intermediate <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> object.
 It read a slice of data from the <a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">epr.Band</span></tt></a> and returns it as a
-2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.7)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>.</p>
+2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.8)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>.</p>
 </li>
 </ul>
 </div>
@@ -499,13 +502,13 @@ implements the <tt class="docutils literal"><span class="pre">__enter__</span></
         <li class="right" >
           <a href="index.html" title="ENVISAT Product Reader Python API"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.8.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.8.2dev documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011-2013, Antonio Valentino.
-      Last updated on Sep 07, 2013.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        &copy; Copyright 2011-2014, Antonio Valentino.
+      Last updated on Aug 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

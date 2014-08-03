@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Interactive use of PyEPR &mdash; PyEPR 0.8.1 documentation</title>
+    <title>Interactive use of PyEPR &mdash; PyEPR 0.8.2dev documentation</title>
     
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.8.1',
+        URL_ROOT:    './',
+        VERSION:     '0.8.2dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.8.1 documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.8.2dev documentation" href="index.html" />
     <link rel="up" title="Tutorials" href="tutorials.html" />
     <link rel="next" title="Exporting band data" href="bands_example.html" />
     <link rel="prev" title="Tutorials" href="tutorials.html" /> 
@@ -44,7 +42,7 @@
         <li class="right" >
           <a href="tutorials.html" title="Tutorials"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.8.1 documentation</a> &raquo;</li>
+        <li><a href="index.html">PyEPR 0.8.2dev documentation</a> &raquo;</li>
           <li><a href="tutorials.html" accesskey="U">Tutorials</a> &raquo;</li> 
       </ul>
     </div>  
@@ -58,9 +56,9 @@
 <h1>Interactive use of <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a><a class="headerlink" href="#interactive-use-of-pyepr" title="Permalink to this headline">¶</a></h1>
 <p>In this tutorial it is showed an example of how to use <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> interactively
 to open, browse and display data of an <a class="reference external" href="http://envisat.esa.int">ENVISAT</a> <a class="reference external" href="http://envisat.esa.int/handbooks/asar">ASAR</a> product.</p>
-<p>For the interactive session it is used the <a class="reference external" href="http://ipython.scipy.org/moin">IPython</a> interactive shell an
+<p>For the interactive session it is used the <a class="reference external" href="http://ipython.org">IPython</a> interactive shell an
 started with the <em class="xref std std-option">ipython -pylab</em> option to enable interactive
-plotting provided by the <a class="reference external" href="http://matplotlib.sourceforge.net">matplotlib</a> package.</p>
+plotting provided by the <a class="reference external" href="http://matplotlib.org">matplotlib</a> package.</p>
 <p>The <a class="reference external" href="http://envisat.esa.int/handbooks/asar">ASAR</a> product used in this example is a <a class="reference external" href="http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz">free sample</a> available at the
 <a class="reference external" href="http://earth.esa.int">ESA</a> web site.</p>
 <div class="section" id="epr-module-and-classes">
@@ -105,20 +103,20 @@ available classes and functions:</p>
 <span class="go">    The raw data access makes it possible to read any data field contained</span>
 <span class="go">    in a product file.</span>
 
-<span class="go">    .. _PyEPR: http://avalentino.github.com/pyepr</span>
+<span class="go">    .. _PyEPR: http://avalentino.github.io/pyepr</span>
 <span class="go">    .. _Python: http://www.python.org</span>
 <span class="go">    .. _`EPR API`: https://github.com/bcdev/epr-api</span>
 <span class="go">    .. _ENVISAT: http://envisat.esa.int</span>
 <span class="go">    .. _ESA: http://earth.esa.int</span>
 
 <span class="gp">In [3]: </span><span class="n">epr</span><span class="o">.</span><span class="n">__version__</span><span class="p">,</span> <span class="n">epr</span><span class="o">.</span><span class="n">EPR_C_API_VERSION</span>
-<span class="gr">Out[3]: </span><span class="p">(</span><span class="s">&#39;0.8.1&#39;</span><span class="p">,</span> <span class="s">&#39;2.3dev&#39;</span><span class="p">)</span>
+<span class="gr">Out[3]: </span><span class="p">(</span><span class="s">&#39;0.8.2&#39;</span><span class="p">,</span> <span class="s">&#39;2.3dev&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Docstrings are available for almost all classes, methods and functions in
 the <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><tt class="xref py py-mod docutils literal"><span class="pre">epr</span></tt></a> and they can be displayed using the <a class="reference external" href="http://docs.python.org/library/functions.html#help" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">help()</span></tt></a> <a class="reference external" href="http://www.python.org">python</a>
-command or the <tt class="docutils literal"><span class="pre">?</span></tt> <a class="reference external" href="http://ipython.scipy.org/moin">IPython</a> shortcut as showed above.</p>
-<p>Also <a class="reference external" href="http://ipython.scipy.org/moin">IPython</a> provides a handy tab completion mechanism to automatically
+command or the <tt class="docutils literal"><span class="pre">?</span></tt> <a class="reference external" href="http://ipython.org">IPython</a> shortcut as showed above.</p>
+<p>Also <a class="reference external" href="http://ipython.org">IPython</a> provides a handy tab completion mechanism to automatically
 complete commands or to display available functions and classes:</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [4]: </span><span class="n">product</span> <span class="o">=</span> <span class="n">epr</span><span class="o">.</span> <span class="p">[</span><span class="n">TAB</span><span class="p">]</span>
 <span class="go">epr.Band                     epr.E_TID_STRING</span>
@@ -326,7 +324,7 @@ the following:</p>
 </pre></div>
 </div>
 <div class="figure">
-<img alt="_images/ASA_IMP_crop.png" src="_images/ASA_IMP_crop.png" style="width: 100%;" />
+<a class="reference internal image-reference" href="_images/ASA_IMP_crop.png"><img alt="_images/ASA_IMP_crop.png" src="_images/ASA_IMP_crop.png" style="width: 100%;" /></a>
 <p class="caption">Image data read from the &#8220;proc_data&#8221; band</p>
 </div>
 </div>
@@ -419,14 +417,14 @@ not using the <a class="reference internal" href="reference.html#epr.Product.clo
         <li class="right" >
           <a href="tutorials.html" title="Tutorials"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.8.1 documentation</a> &raquo;</li>
+        <li><a href="index.html">PyEPR 0.8.2dev documentation</a> &raquo;</li>
           <li><a href="tutorials.html" >Tutorials</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011-2013, Antonio Valentino.
-      Last updated on Sep 07, 2013.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+        &copy; Copyright 2011-2014, Antonio Valentino.
+      Last updated on Aug 03, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>
