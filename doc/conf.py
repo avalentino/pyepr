@@ -61,7 +61,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'PyEPR'
-copyright = u'2011-2014, Antonio Valentino'
+copyright = u'2011-2015, Antonio Valentino'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -307,10 +307,10 @@ texinfo_documents = [
 # -- Options for Epub output ----------------------------------------------
 
 # Bibliographic Dublin Core info.
-epub_title = u'PyEPR'
+epub_title = project
 epub_author = u'Antonio Valentino'
-epub_publisher = u'Antonio Valentino'
-epub_copyright = u'2011-2014, Antonio Valentino'
+epub_publisher = epub_author
+epub_copyright = copyright
 
 # The basename for the epub file. It defaults to the project name.
 #epub_basename = u'PyEPR'
