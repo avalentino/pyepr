@@ -45,8 +45,8 @@ build: off
 #test_script:
 #  - "%WITH_COMPILER% %PYTHON%/python setup.py test"
 
-after_test:
-  - "%WITH_COMPILER% %PYTHON%/python setup.py bdist_wheel"
+#after_test:
+#  - "%WITH_COMPILER% %PYTHON%/python setup.py bdist_wheel"
 
 artifacts:
   - path: dist\*
