@@ -62,11 +62,11 @@ print('HAVE_SETUPTOOLS: {}'.format(HAVE_SETUPTOOLS))
 
 
 try:
-    from Cython.Distutils import build_ext
-    sources = [os.path.join('src', 'epr.pyx')]
+    from Cython.Build import cythonize
+    HAVE_CYTHON = True
 except ImportError:
-    from distutils.command.build_ext import build_ext
-    sources = [os.path.join('src', 'epr.c')]
+    HAVE_CYTHON = False
+print('HAVE_CYTHON: {}'.format(HAVE_CYTHON))
 
 
 class PyEprExtension(Extension):
@@ -131,6 +131,8 @@ class PyEprExtension(Extension):
 
 
 def get_extension():
+    # @NOTE: uses the HAVE_CYTHON global variable
+
     # command line arguments management
     eprsrcdir = None
     for arg in list(sys.argv):
@@ -147,6 +149,12 @@ def get_extension():
         # libraries=['m'],
         # define_macros=[('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION'),],
     )
+
+    if HAVE_CYTHON:
+        extlist = cythonize([ext])
+        ext = extlist[0]
+    else:
+        ext.convert_pyx_sources_to_lang()
 
     return ext
 
@@ -193,8 +201,7 @@ any data field contained in a product file.
     ],
     platforms=['any'],
     license='GPL3',
-    cmdclass={'build_ext': build_ext},
-    requires=['numpy'],
+    requires=['numpy'],     # XXX: check
 )
 
 
@@ -205,6 +212,8 @@ def setup_package():
     if HAVE_SETUPTOOLS:
         KWARGS.setdefault('setup_requires', []).append('numpy')
         KWARGS.setdefault('install_requires', []).append('numpy')
+        if ext.setup_requires_cython:
+            KWARGS.setup_requires.append('cython')
 
     setup(**KWARGS)
 
