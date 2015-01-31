@@ -58,7 +58,7 @@ except ImportError:
     from distutils.core import setup
     from distutils.extension import Extension
     HAVE_SETUPTOOLS = False
-print('HAVE_SETUPTOOLS: {}'.format(HAVE_SETUPTOOLS))
+print('HAVE_SETUPTOOLS: {0}'.format(HAVE_SETUPTOOLS))
 
 
 try:
@@ -66,7 +66,7 @@ try:
     HAVE_CYTHON = True
 except ImportError:
     HAVE_CYTHON = False
-print('HAVE_CYTHON: {}'.format(HAVE_CYTHON))
+print('HAVE_CYTHON: {0}'.format(HAVE_CYTHON))
 
 
 class PyEprExtension(Extension):
@@ -74,7 +74,11 @@ class PyEprExtension(Extension):
         self._include_dirs = []
         eprsrcdir = kwargs.pop('eprsrcdir', None)
 
-        super(PyEprExtension, self).__init__(*args, **kwargs)
+        #super(PyEprExtension, self).__init__(*args, **kwargs)
+
+        # @COMPATIBILITY: Extension is an old style class in Python 2
+        Extension.__init__(self, *args, **kwargs)
+
         self.sources.extend(self._extra_sources(eprsrcdir))
         self.setup_requires_cython = False
 
