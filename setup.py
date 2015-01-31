@@ -69,15 +69,13 @@ except ImportError:
 print('HAVE_CYTHON: {0}'.format(HAVE_CYTHON))
 
 
-class PyEprExtension(Extension):
+# @COMPATIBILITY: Extension is an old style class in Python 2
+class PyEprExtension(Extension, object):
     def __init__(self, *args, **kwargs):
         self._include_dirs = []
         eprsrcdir = kwargs.pop('eprsrcdir', None)
 
-        #super(PyEprExtension, self).__init__(*args, **kwargs)
-
-        # @COMPATIBILITY: Extension is an old style class in Python 2
-        Extension.__init__(self, *args, **kwargs)
+        super(PyEprExtension, self).__init__(*args, **kwargs)
 
         self.sources.extend(self._extra_sources(eprsrcdir))
         self.setup_requires_cython = False
