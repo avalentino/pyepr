@@ -61,12 +61,6 @@ except ImportError:
 print('HAVE_SETUPTOOLS: {}'.format(HAVE_SETUPTOOLS))
 
 
-source = []
-libraries = []
-include_dirs = []
-eprsrcdir = None
-
-
 try:
     from Cython.Distutils import build_ext
     sources = [os.path.join('src', 'epr.pyx')]
@@ -75,33 +69,47 @@ except ImportError:
     sources = [os.path.join('src', 'epr.c')]
 
 
-from numpy.distutils.misc_util import get_numpy_include_dirs
-include_dirs.extend(get_numpy_include_dirs())
+def get_extension():
+    source = []
+    libraries = []
+    include_dirs = []
 
+    from numpy.distutils.misc_util import get_numpy_include_dirs
+    include_dirs.extend(get_numpy_include_dirs())
 
-# command line arguments management
-for arg in list(sys.argv):
-    if arg.startswith('--epr-api-src='):
-        eprsrcdir = os.path.expanduser(arg.split('=')[1])
-        if eprsrcdir.lower() == 'none':
-            eprsrcdir = False
-        sys.argv.remove(arg)
+    # command line arguments management
+    eprsrcdir = None
+    for arg in list(sys.argv):
+        if arg.startswith('--epr-api-src='):
+            eprsrcdir = os.path.expanduser(arg.split('=')[1])
+            if eprsrcdir.lower() == 'none':
+                eprsrcdir = False
+            sys.argv.remove(arg)
+            break
 
+    # check for local epr-api sources
+    if eprsrcdir is None:
+        if os.path.isdir('epr-api-src'):
+            eprsrcdir = 'epr-api-src'
 
-# check for local epr-api sources
-if eprsrcdir is None:
-    if os.path.isdir('epr-api-src'):
-        eprsrcdir = 'epr-api-src'
+    if eprsrcdir:
+        include_dirs.append(eprsrcdir)
+        sources.extend(glob.glob(os.path.join(eprsrcdir, 'epr_*.c')))
+        #libraries.append('m')
+        print('using EPR C API sources at "{}"'.format(eprsrcdir))
+    else:
+        libraries.append('epr_api')
+        print('using pre-built dynamic library for EPR C API')
 
+    ect = Extension(
+        'epr',
+        sources=sources,
+        include_dirs=include_dirs,
+        libraries=libraries,
+        #define_macros=[('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION'),],
+    )
 
-if eprsrcdir:
-    include_dirs.append(eprsrcdir)
-    sources.extend(glob.glob(os.path.join(eprsrcdir, 'epr_*.c')))
-    #libraries.append('m')
-    print('using EPR C API sources at "{}"'.format(eprsrcdir))
-else:
-    libraries.append('epr_api')
-    print('using pre-built dynamic library for EPR C API')
+    return ext
 
 
 KWARGS = dict(
@@ -152,13 +160,7 @@ any data field contained in a product file.
 
 
 def setup_package():
-    ext = Extension(
-        'epr',
-        sources=sources,
-        include_dirs=include_dirs,
-        libraries=libraries,
-        #define_macros=[('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION'),],
-    )
+    ext = get_extension()
     KWARGS['ext_modules'] = [ext]
 
     if HAVE_SETUPTOOLS:
