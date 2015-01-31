@@ -25,6 +25,18 @@ import re
 import sys
 import glob
 
+
+def get_version(filename):
+    with open(filename) as fd:
+        data = fd.read()
+
+    mobj = re.search(
+        '''^__version__\s*=\s*(?P<q>['"])(?P<version>\d+(\.\d+)*.*)(?P=q)''',
+        data, re.MULTILINE)
+
+    return mobj.group('version')
+
+
 from distutils.core import setup
 from distutils.extension import Extension
 
@@ -69,17 +81,6 @@ if eprsrcdir:
 else:
     libraries.append('epr_api')
     print('using pre-built dynamic library for EPR C API')
-
-
-def get_version(filename):
-    with open(filename) as fd:
-        data = fd.read()
-
-    mobj = re.search(
-        '''^__version__\s*=\s*(?P<q>['"])(?P<version>\d+(\.\d+)*.*)(?P=q)''',
-        data, re.MULTILINE)
-
-    return mobj.group('version')
 
 
 setup(
