@@ -71,13 +71,12 @@ else:
     print('using pre-built dynamic library for EPR C API')
 
 
-def get_version():
-    filename = os.path.join('src', 'epr.pyx')
+def get_version(filename):
     with open(filename) as fd:
         data = fd.read()
 
     mobj = re.search(
-        r"^__version__\s*=\s*\'(?P<version>\d+(\.\d+)*(\+|(\-)?dev)?)\'",
+        '''^__version__\s*=\s*(?P<q>['"])(?P<version>\d+(\.\d+)*.*)(?P=q)''',
         data, re.MULTILINE)
 
     return mobj.group('version')
@@ -85,7 +84,7 @@ def get_version():
 
 setup(
     name='pyepr',
-    version=get_version(),
+    version=get_version(os.path.join('src', 'epr.pyx')),
     author='Antonio Valentino',
     author_email='antonio.valentino@tiscali.it',
     url='http://avalentino.github.com/pyepr',
