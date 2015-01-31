@@ -212,6 +212,7 @@ def setup_package():
     KWARGS['ext_modules'] = [ext]
 
     if HAVE_SETUPTOOLS:
+        KWARGS['test_suite'] = 'test'
         KWARGS.setdefault('setup_requires', []).append('numpy')
         KWARGS.setdefault('install_requires', []).append('numpy')
         if ext.setup_requires_cython:
