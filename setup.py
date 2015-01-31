@@ -69,14 +69,68 @@ except ImportError:
     sources = [os.path.join('src', 'epr.c')]
 
 
+class PyEprExtension(Extension):
+    def __init__(self, *args, **kwargs):
+        self._include_dirs = []
+        eprsrcdir = kwargs.pop('eprsrcdir', None)
+
+        super(PyEprExtension, self).__init__(*args, **kwargs)
+        self.sources.extend(self._extra_sources(eprsrcdir))
+        self.setup_requires_cython = False
+
+    def _extra_sources(self, eprsrcdir=None):
+        sources = []
+
+        # check for local epr-api sources
+        if eprsrcdir is None:
+            default_eprapisrc = os.path.join('epr-api-src')
+            if os.path.isdir(default_eprapisrc):
+                eprsrcdir = default_eprapisrc
+
+        if eprsrcdir:
+            self._include_dirs.append(eprsrcdir)
+            sources.extend(glob.glob(os.path.join(eprsrcdir, 'epr_*.c')))
+            print('using EPR C API sources at "{}"'.format(eprsrcdir))
+        else:
+            self.libraries.append('epr_api')
+            print('using pre-built dynamic libraray for EPR C API')
+
+        return sources
+
+    @property
+    def include_dirs(self):
+        from numpy.distutils.misc_util import get_numpy_include_dirs
+        return self._include_dirs + get_numpy_include_dirs()
+
+    @include_dirs.setter
+    def include_dirs(self, value):
+        self._include_dirs = value
+
+    # disable setuptools automatic conversion
+    def _convert_pyx_sources_to_lang(self):
+        pass
+
+    def convert_pyx_sources_to_lang(self):
+        lang = self.language or ''
+        target_ext = '.cpp' if lang.lower() == 'c++' else '.c'
+
+        sources = []
+        for src in self.sources:
+            if src.endswith('.pyx'):
+                csrc = re.sub('.pyx$', target_ext, src)
+                if os.path.exists(csrc):
+                    sources.append(csrc)
+                else:
+                    self.setup_requires_cython = True
+                    sources.append(src)
+
+        if not self.setup_requires_cython:
+            self.sources = sources
+
+        return self.setup_requires_cython
+
+
 def get_extension():
-    source = []
-    libraries = []
-    include_dirs = []
-
-    from numpy.distutils.misc_util import get_numpy_include_dirs
-    include_dirs.extend(get_numpy_include_dirs())
-
     # command line arguments management
     eprsrcdir = None
     for arg in list(sys.argv):
@@ -87,26 +141,11 @@ def get_extension():
             sys.argv.remove(arg)
             break
 
-    # check for local epr-api sources
-    if eprsrcdir is None:
-        if os.path.isdir('epr-api-src'):
-            eprsrcdir = 'epr-api-src'
-
-    if eprsrcdir:
-        include_dirs.append(eprsrcdir)
-        sources.extend(glob.glob(os.path.join(eprsrcdir, 'epr_*.c')))
-        #libraries.append('m')
-        print('using EPR C API sources at "{}"'.format(eprsrcdir))
-    else:
-        libraries.append('epr_api')
-        print('using pre-built dynamic library for EPR C API')
-
-    ect = Extension(
+    ext = PyEprExtension(
         'epr',
-        sources=sources,
-        include_dirs=include_dirs,
-        libraries=libraries,
-        #define_macros=[('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION'),],
+        sources=[os.path.join('src', 'epr.pyx')],
+        # libraries=['m'],
+        # define_macros=[('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION'),],
     )
 
     return ext
