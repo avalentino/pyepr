@@ -104,7 +104,7 @@ else:
     print('using pre-built dynamic library for EPR C API')
 
 
-setup(
+KWARGS = dict(
     name='pyepr',
     version=get_version(os.path.join('src', 'epr.pyx')),
     author='Antonio Valentino',
@@ -147,14 +147,26 @@ any data field contained in a product file.
     platforms=['any'],
     license='GPL3',
     cmdclass={'build_ext': build_ext},
-    ext_modules=[
-        Extension(
-            'epr',
-            sources=sources,
-            include_dirs=include_dirs,
-            libraries=libraries,
-            #define_macros=[('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION'),],
-        ),
-    ],
     requires=['numpy'],
 )
+
+
+def setup_package():
+    ext = Extension(
+        'epr',
+        sources=sources,
+        include_dirs=include_dirs,
+        libraries=libraries,
+        #define_macros=[('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION'),],
+    )
+    KWARGS['ext_modules'] = [ext]
+
+    if HAVE_SETUPTOOLS:
+        KWARGS.setdefault('setup_requires', []).append('numpy')
+        KWARGS.setdefault('install_requires', []).append('numpy')
+
+    setup(**KWARGS)
+
+
+if __name__ == '__main__':
+    setup_package()
