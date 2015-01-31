@@ -37,8 +37,29 @@ def get_version(filename):
     return mobj.group('version')
 
 
-from distutils.core import setup
-from distutils.extension import Extension
+def get_use_setuptools():
+    use_setuptools = os.environ.get('USE_SETUPTOOLS', True)
+    if str(use_setuptools).lower() in ('false', 'off', 'n', 'no', '0'):
+        use_setuptools = False
+        print('USE_SETUPTOOLS: {}'.format(use_setuptools))
+    else:
+        use_setuptools = True
+
+    return use_setuptools
+
+
+try:
+    if not get_use_setuptools():
+        raise ImportError
+
+    from setuptools import setup, Extension
+    HAVE_SETUPTOOLS = True
+except ImportError:
+    from distutils.core import setup
+    from distutils.extension import Extension
+    HAVE_SETUPTOOLS = False
+print('HAVE_SETUPTOOLS: {}'.format(HAVE_SETUPTOOLS))
+
 
 source = []
 libraries = []
