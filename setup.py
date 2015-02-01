@@ -90,7 +90,7 @@ class PyEprExtension(Extension, object):
                 eprsrcdir = default_eprapisrc
 
         if eprsrcdir:
-            print('using EPR C API sources at "{}"'.format(eprsrcdir))
+            print('using EPR C API sources at "{0}"'.format(eprsrcdir))
             self._include_dirs.append(eprsrcdir)
             sources.extend(glob.glob(os.path.join(eprsrcdir, 'epr_*.c')))
 
