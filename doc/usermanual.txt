@@ -173,6 +173,13 @@ directory and decompressed.
 
 __ http://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz
 
+.. note::
+
+    since PyEPR_ 0.8.3 the test product is downloaded and decompressed
+    automatically by the test script if not already available.
+    In this case a working Internet connection is expected to be available
+    when the test suite is run.
+
 On GNU Linux platforms the following shell commands can be used::
 
     $ cd pyepr-X.Y.Z/tests
