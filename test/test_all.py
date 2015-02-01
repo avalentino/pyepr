@@ -22,10 +22,12 @@
 import os
 import re
 import sys
+import gzip
 import numbers
 import operator
 import tempfile
 import functools
+import contextlib
 from distutils.version import LooseVersion
 
 try:
@@ -40,6 +42,11 @@ except ImportError:
 else:
     del skipIf
     import unittest
+
+try:
+    from urllib.request import urlopen
+except ImportError:
+    from urllib2 import urlopen
 
 import numpy as np
 import numpy.testing as npt
@@ -114,6 +121,23 @@ def equal_products(product1, product2):
             return False
 
     return True
+
+
+def setUpModule():
+    filename = os.path.join(TESTDIR, TEST_PRODUCT)
+    url = 'http://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz'
+    if not os.path.exists(filename):
+        with contextlib.closing(urlopen(url)) as src:
+            with open(filename + '.gz', 'wb') as dst:
+                for data in src:
+                    dst.write(data)
+
+        with contextlib.closing(gzip.GzipFile(filename + '.gz')) as src:
+            with open(filename, 'wb') as dst:
+                for data in src:
+                    dst.write(data)
+
+        os.remove(filename + '.gz')
 
 
 class TestOpenProduct(unittest.TestCase):
