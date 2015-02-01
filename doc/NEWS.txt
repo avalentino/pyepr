@@ -21,6 +21,9 @@ PyEPR 0.8.3 (in development)
     $ python3 setup.py test
 
 * enable continuous integration and testing in for Windows_ using AppVeyor_
+* status badges for
+  `AppVeyor <https://ci.appveyor.com/project/avalentino/pyepr>_ and PyPI_
+  added to the HTML doc index
 
 
 .. _pip: https://pip.pypa.io
@@ -28,6 +31,7 @@ PyEPR 0.8.3 (in development)
 .. _numpy: http://www.numpy.org
 .. _Windows: windows.microsoft.com
 .. _AppVeyor: http://www.appveyor.com
+.. _PyPI: https://pypi.python.org/pypi/pyepr
 
 
 PyEPR 0.8.2 (03/08/2014)
