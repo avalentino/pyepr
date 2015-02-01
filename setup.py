@@ -161,7 +161,7 @@ def get_extension():
     return ext
 
 
-KWARGS = dict(
+config = dict(
     name='pyepr',
     version=get_version(os.path.join('src', 'epr.pyx')),
     author='Antonio Valentino',
@@ -209,16 +209,16 @@ any data field contained in a product file.
 
 def setup_package():
     ext = get_extension()
-    KWARGS['ext_modules'] = [ext]
+    config['ext_modules'] = [ext]
 
     if HAVE_SETUPTOOLS:
-        KWARGS['test_suite'] = 'test'
-        KWARGS.setdefault('setup_requires', []).append('numpy')
-        KWARGS.setdefault('install_requires', []).append('numpy')
+        config['test_suite'] = 'test'
+        config.setdefault('setup_requires', []).append('numpy')
+        config.setdefault('install_requires', []).append('numpy')
         if ext.setup_requires_cython:
-            KWARGS.setup_requires.append('cython')
+            config.setup_requires.append('cython')
 
-    setup(**KWARGS)
+    setup(**config)
 
 
 if __name__ == '__main__':
