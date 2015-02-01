@@ -51,7 +51,7 @@ available classes and functions::
     In [2]: epr?
 
     Base Class:       <type 'module'>
-    String Form:   <module 'epr' from 'epr.so'>
+    String Form:      <module 'epr' from 'epr.so'>
     Namespace:        Interactive
     File:             /home/antonio/projects/pyepr/epr.so
     Docstring:
@@ -75,7 +75,7 @@ available classes and functions::
         .. _ESA: http://earth.esa.int
 
     In [3]: epr.__version__, epr.EPR_C_API_VERSION
-    Out[3]: ('0.8.2', '2.3dev')
+    Out[3]: ('0.8.3', '2.3dev')
 
 Docstrings are available for almost all classes, methods and functions in
 the :mod:`epr` and they can be displayed using the :func:`help` python_

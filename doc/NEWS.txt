@@ -2,8 +2,8 @@ Change history
 ==============
 
 
-PyEPR 0.8.3 (in development)
-----------------------------
+PyEPR 0.8.3 (01/02/2015)
+------------------------
 
 * the :file:`setup.py` script has been completely rewritten to be more
   "pip_ friendly".  The new script uses setuptools_ if available and
