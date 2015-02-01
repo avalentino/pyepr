@@ -41,10 +41,12 @@ install:
   - "powershell .appveyor\\install.ps1"
 
 build: off
-  - "%WITH_COMPILER% %PYTHON%/python setup.py bdist_wheel"
 
 test_script:
   - "%WITH_COMPILER% %PYTHON%/python setup.py test"
+
+after_test:
+  - "%WITH_COMPILER% %PYTHON%/python setup.py bdist_wheel"
 
 artifacts:
   - path: dist\*
