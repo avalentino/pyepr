@@ -65,7 +65,7 @@ clean:
 	$(RM) -r build dist pyepr.egg-info
 	$(RM) -r $$(find doc -name __pycache__) $$(find test -name __pycache__)
 	$(RM) MANIFEST src/*.c src/*.o *.so
-	$(RM) tests/*.py[co] doc/sphinxext/*.py[co] README.html
+	$(RM) test/*.py[co] doc/sphinxext/*.py[co] README.html
 	$(MAKE) -C doc clean
 	find . -name '*~' -delete
 
@@ -73,6 +73,7 @@ distclean: clean
 	$(RM) $(TEST_DATSET)
 	$(RM) -r doc/html
 	$(RM) -r LICENSES epr-api-src
+	$(MAKE) -C test -f checksetup.mak distclean
 
 check: ext $(TEST_DATSET)
 	env PYTHONPATH=. $(PYTHON) test/test_all.py --verbose
