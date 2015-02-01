@@ -90,19 +90,24 @@ class PyEprExtension(Extension, object):
                 eprsrcdir = default_eprapisrc
 
         if eprsrcdir:
+            print('using EPR C API sources at "{}"'.format(eprsrcdir))
             self._include_dirs.append(eprsrcdir)
             sources.extend(glob.glob(os.path.join(eprsrcdir, 'epr_*.c')))
-            print('using EPR C API sources at "{}"'.format(eprsrcdir))
+
         else:
-            self.libraries.append('epr_api')
             print('using pre-built dynamic libraray for EPR C API')
+            if 'epr_api' not in self.libraries:
+                self.libraries.append('epr_api')
+
+        sources = sorted(set(sources).difference(self.sources))
 
         return sources
 
     @property
     def include_dirs(self):
         from numpy.distutils.misc_util import get_numpy_include_dirs
-        return self._include_dirs + get_numpy_include_dirs()
+        includes = set(get_numpy_include_dirs()).difference(self._include_dirs)
+        return self._include_dirs + sorted(includes)
 
     @include_dirs.setter
     def include_dirs(self, value):
