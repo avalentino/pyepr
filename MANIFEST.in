@@ -3,7 +3,7 @@ include LICENSE.txt
 include requirements.txt
 
 recursive-include LICENSES *.txt
-recursive-include test *.py
+recursive-include tests *.py
 recursive-include src *.pyx *.c
 recursive-include epr-api-src *.c *.h
 

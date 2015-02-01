@@ -212,7 +212,7 @@ def setup_package():
     config['ext_modules'] = [ext]
 
     if HAVE_SETUPTOOLS:
-        config['test_suite'] = 'test'
+        config['test_suite'] = 'tests'
         config.setdefault('setup_requires', []).append('numpy')
         config.setdefault('install_requires', []).append('numpy')
         if ext.setup_requires_cython:

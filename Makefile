@@ -21,7 +21,7 @@
 PYTHON = python3
 CYTHON = cython
 TEST_DATSET_URL = "http://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz"
-TEST_DATSET = test/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1
+TEST_DATSET = tests/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1
 
 EPRAPIROOT = ../epr-api
 
@@ -63,9 +63,9 @@ doc:
 clean:
 	$(PYTHON) setup.py clean --all
 	$(RM) -r build dist pyepr.egg-info
-	$(RM) -r $$(find doc -name __pycache__) $$(find test -name __pycache__)
+	$(RM) -r $$(find doc -name __pycache__) $$(find tests -name __pycache__)
 	$(RM) MANIFEST src/*.c src/*.o *.so
-	$(RM) test/*.py[co] doc/sphinxext/*.py[co] README.html
+	$(RM) tests/*.py[co] doc/sphinxext/*.py[co] README.html
 	$(MAKE) -C doc clean
 	find . -name '*~' -delete
 
@@ -73,10 +73,10 @@ distclean: clean
 	$(RM) $(TEST_DATSET)
 	$(RM) -r doc/html
 	$(RM) -r LICENSES epr-api-src
-	$(MAKE) -C test -f checksetup.mak distclean
+	$(MAKE) -C tests -f checksetup.mak distclean
 
 check: ext $(TEST_DATSET)
-	env PYTHONPATH=. $(PYTHON) test/test_all.py --verbose
+	env PYTHONPATH=. $(PYTHON) tests/test_all.py --verbose
 
 debug:
 	$(PYTHON) setup.py build_ext --inplace --debug
@@ -84,5 +84,5 @@ debug:
 data: $(TEST_DATSET)
 
 $(TEST_DATSET):
-	wget -P test $(TEST_DATSET_URL)
+	wget -P tests $(TEST_DATSET_URL)
 	gunzip $@
