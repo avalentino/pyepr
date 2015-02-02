@@ -756,6 +756,7 @@ class TestBand(unittest.TestCase):
     SCALING_FACTOR = 0.10000000149011612
     SCALING_OFFSET = -0.10000000149011612
     UNIT = 'g/cm^2'
+    RTOL = 1e-7
     DATA_TYPE = np.float32
     TEST_DATA = np.asarray([
         [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
@@ -916,9 +917,12 @@ class TestBand(unittest.TestCase):
         self.assertEqual(raster.data_type, epr.E_TID_FLOAT)
 
         h, w = self.TEST_DATA.shape
-        npt.assert_allclose(raster.get_pixel(0, 0), self.TEST_DATA[0, 0])
+        npt.assert_allclose(raster.get_pixel(0, 0),
+                            self.TEST_DATA[0, 0],
+                            rtol=self.RTOL)
         npt.assert_allclose(raster.get_pixel(w - 1, h - 1),
-                            self.TEST_DATA[h - 1, w - 1])
+                            self.TEST_DATA[h - 1, w - 1],
+                            rtol=self.RTOL)
 
     def test_read_raster_none(self):
         raster = self.band.read_raster()
@@ -931,10 +935,13 @@ class TestBand(unittest.TestCase):
 
         h, w = self.TEST_DATA.shape
         npt.assert_allclose(
-            raster.get_pixel(self.XOFFSET, self.YOFFSET), self.TEST_DATA[0, 0])
+            raster.get_pixel(self.XOFFSET, self.YOFFSET),
+            self.TEST_DATA[0, 0],
+            rtol=self.RTOL)
         npt.assert_allclose(
             raster.get_pixel(self.XOFFSET + w - 1, self.YOFFSET + h - 1),
-            self.TEST_DATA[h - 1, w - 1])
+            self.TEST_DATA[h - 1, w - 1],
+            rtol=self.RTOL)
 
     def test_read_raster_default_offset(self):
         height = self.HEIGHT
@@ -955,10 +962,12 @@ class TestBand(unittest.TestCase):
         h, w = self.TEST_DATA.shape
         npt.assert_allclose(
             raster1.get_pixel(self.XOFFSET, self.YOFFSET),
-            self.TEST_DATA[0, 0])
+            self.TEST_DATA[0, 0],
+            rtol=self.RTOL)
         npt.assert_allclose(
             raster1.get_pixel(self.XOFFSET + w - 1, self.YOFFSET + h - 1),
-            self.TEST_DATA[h - 1, w - 1])
+            self.TEST_DATA[h - 1, w - 1],
+            rtol=self.RTOL)
 
     def test_read_raster_with_invalid_raster(self):
         self.assertRaises(TypeError, self.band.read_raster, 0, 0, 0)
@@ -988,7 +997,7 @@ class TestBand(unittest.TestCase):
         self.assertEqual(data.dtype, self.DATA_TYPE)
 
         h, w = self.TEST_DATA.shape
-        npt.assert_allclose(data[:h, :w], self.TEST_DATA)
+        npt.assert_allclose(data[:h, :w], self.TEST_DATA, rtol=self.RTOL)
 
     def test_read_as_array_cross(self):
         data = self.band.read_as_array()
@@ -1012,7 +1021,8 @@ class TestBand(unittest.TestCase):
         h, w = self.TEST_DATA.shape
         npt.assert_allclose(
             data[self.YOFFSET:self.YOFFSET + h, self.XOFFSET:self.XOFFSET + w],
-            self.TEST_DATA)
+            self.TEST_DATA,
+            rtol=self.RTOL)
 
     # @SEEALSO: https://www.brockmann-consult.de/beam-jira/browse/EPR-2
     @unittest.skipIf(EPR_C_BUG_BCEPR002, 'buggy EPR_C_API detected')
@@ -1033,7 +1043,8 @@ class TestBand(unittest.TestCase):
         npt.assert_allclose(
             data[self.YOFFSET:self.YOFFSET + self.HEIGHT:step,
                  self.XOFFSET:self.XOFFSET + self.WIDTH:step],
-            box)
+            box,
+            rtol=self.RTOL)
 
         h, w = self.TEST_DATA.shape
         npt.assert_allclose(
@@ -1063,7 +1074,8 @@ class TestBand(unittest.TestCase):
         h, w = self.TEST_DATA.shape
         npt.assert_allclose(
             box[:(h-1)//step+1, :(w-1)//step+1],
-            self.TEST_DATA[::step, ::step])
+            self.TEST_DATA[::step, ::step],
+            rtol=self.RTOL)
 
     @unittest.skipIf(EPR_C_BUG_BCEPR002, 'buggy EPR_C_API detected')
     def test_read_as_array_with_step_4(self):
@@ -1113,7 +1125,8 @@ class TestBand(unittest.TestCase):
         h, w = self.TEST_DATA.shape
         npt.assert_allclose(
             box[:(h-1)//step+1, :(w-1)//step+1],
-            self.TEST_DATA[::step, ::step])
+            self.TEST_DATA[::step, ::step],
+            rtol=self.RTOL)
 
 
 class TestAnnotationBand(TestBand):
@@ -1122,6 +1135,7 @@ class TestAnnotationBand(TestBand):
     SCALING_FACTOR = 9.999999974752427e-07
     SCALING_OFFSET = 0.0
     UNIT = 'deg'
+    RTOL = 1e-6
     TEST_DATA = np.asarray([
         [33.111412048339843750, 33.079044342041015625,
          33.046680450439453125, 33.014350891113281250,
@@ -1357,6 +1371,7 @@ class TestRaster(unittest.TestCase):
     RASTER_HEIGHT = TestBand.HEIGHT
     RASTER_DATA_TYPE = epr.E_TID_FLOAT
     RASTER_ELEM_SIZE = 4
+    RTOL = 1e-7
     TEST_DATA = np.zeros((10, 10))
 
     def setUp(self):
@@ -1428,7 +1443,7 @@ class TestRaster(unittest.TestCase):
         self.assertEqual(data.dtype, EPR_TO_NUMPY_TYPE[self.raster.data_type])
 
         ny, nx = self.TEST_DATA.shape
-        npt.assert_allclose(data[:ny, :nx], self.TEST_DATA)
+        npt.assert_allclose(data[:ny, :nx], self.TEST_DATA, rtol=self.RTOL)
 
     def test_data_property_two_times(self):
         data1 = self.raster.data
@@ -1456,7 +1471,7 @@ class TestRaster(unittest.TestCase):
         self.assertTrue(isinstance(data, np.ndarray))
 
         ny, nx = self.TEST_DATA.shape
-        npt.assert_allclose(data[:ny, :nx], self.TEST_DATA)
+        npt.assert_allclose(data[:ny, :nx], self.TEST_DATA, rtol=self.RTOL)
 
 
 class TestRasterRead(TestRaster):
@@ -1491,6 +1506,7 @@ class TestAnnotatedRasterRead(TestRasterRead):
     RASTER_XOFFSET = TestAnnotationBand.XOFFSET
     RASTER_YOFFSET = TestAnnotationBand.YOFFSET
     TEST_DATA = TestAnnotationBand.TEST_DATA
+    RTOL = 1e-6
 
     @unittest.skipIf(EPR_C_BUG_PYEPR009, 'buggy EPR_C_API detected')
     def test_get_pixel(self):
