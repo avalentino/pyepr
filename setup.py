@@ -226,7 +226,7 @@ def setup_package():
         config.setdefault('setup_requires', []).append('numpy')
         config.setdefault('install_requires', []).append('numpy')
         if ext.setup_requires_cython:
-            config.setup_requires.append('cython')
+            config['setup_requires'].append('cython')
 
     setup(**config)
 
