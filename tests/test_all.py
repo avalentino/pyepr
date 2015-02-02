@@ -217,7 +217,8 @@ class TestProduct(unittest.TestCase):
         self.product.close()
 
     def test_file_path_property(self):
-        self.assertEqual(self.product.file_path, self.PRODUCT_FILE)
+        self.assertEqual(self.product.file_path,
+                         self.PRODUCT_FILE.replace('\\', '/'))
 
     def test_tot_size_property(self):
         self.assertEqual(self.product.tot_size, self.TOT_SIZE)
