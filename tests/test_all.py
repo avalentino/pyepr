@@ -1043,13 +1043,13 @@ class TestBand(unittest.TestCase):
         npt.assert_allclose(
             data[self.YOFFSET:self.YOFFSET + self.HEIGHT:step,
                  self.XOFFSET:self.XOFFSET + self.WIDTH:step],
-            box,
-            rtol=self.RTOL)
+            box)
 
         h, w = self.TEST_DATA.shape
         npt.assert_allclose(
             box[:(h-1)//step+1, :(w-1)//step+1],
-            self.TEST_DATA[::step, ::step])
+            self.TEST_DATA[::step, ::step],
+            rtol=self.RTOL)
 
     @unittest.skipIf(EPR_C_BUG_BCEPR002, 'buggy EPR_C_API detected')
     def test_read_as_array_with_step_3(self):
