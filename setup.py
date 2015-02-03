@@ -138,8 +138,6 @@ class PyEprExtension(Extension, object):
 
 
 def get_extension():
-    # @NOTE: uses the HAVE_CYTHON global variable
-
     # command line arguments management
     eprsrcdir = None
     for arg in list(sys.argv):
@@ -155,8 +153,10 @@ def get_extension():
         sources=[os.path.join('src', 'epr.pyx')],
         # libraries=['m'],
         # define_macros=[('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION'),],
+        eprsrcdir=eprsrcdir,
     )
 
+    # @NOTE: uses the HAVE_CYTHON global variable
     if HAVE_CYTHON:
         extlist = cythonize([ext])
         ext = extlist[0]
