@@ -10,7 +10,7 @@ PyEPR 0.8.3 (01/02/2015)
   functions that use numpy_ are evaluated lazily so to give a chance to
   pip_ and setuptools_ to install dependencies, numpy_, before they are
   actually used.
-  This should make PyEPR_ "pip-installable" even on system there numpy_
+  This should make PyEPR "pip-installable" even on system there numpy_
   is not already installed.
 * the :file:`test` directory has been renamed into :file:`tests`
 * the test suite now has a :func:setUpModule: function that automatically
