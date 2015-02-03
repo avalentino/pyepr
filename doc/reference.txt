@@ -1189,7 +1189,7 @@ Data
 
    PyEPR revision (currently it is the same as :data:`__version__`)
 
-   .. deprecated:: 7.2
+   .. deprecated:: 0.7.2
 
 
 .. data:: EPR_C_API_VERSION
