@@ -5,6 +5,8 @@ Change history
 PyEPR 0.8.3 (xx/02/2015)
 ------------------------
 
+* :meth:`epr.Field.get_elems` now also handles :data:`epr.E_TID_STRING` and
+  :data:`epr.E_TID_TIME` data types
 * the :file:`setup.py` script has been completely rewritten to be more
   "pip_ friendly".  The new script uses setuptools_ if available and
   functions that use numpy_ are evaluated lazily so to give a chance to

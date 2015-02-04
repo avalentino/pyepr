@@ -1839,6 +1839,29 @@ class TestField(unittest.TestCase):
         npt.assert_allclose(vect[:len(self.FIELD_VALUES)], self.FIELD_VALUES)
 
 
+class TestTimeField(TestField):
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    DATASET_NAME = 'Quality_ADS'
+
+    FIELD_NAME = 'dsr_time'
+    FIELD_DESCRIPTION = 'Start time of the measurement'
+    FIELD_TYPE = epr.E_TID_TIME
+    FIELD_TYPE_NAME = 'time'
+    FIELD_NUM_ELEMS = 1
+    FIELD_VALUES = (epr.EPRTime(days=171, seconds=38598, microseconds=260634),)
+    FIELD_UNIT = 'MJD'
+
+    def test_get_elems(self):
+        vect = self.field.get_elems()
+        self.assertTrue(isinstance(vect, np.ndarray))
+        self.assertEqual(vect.shape, (self.field.get_num_elems(),))
+        self.assertEqual(vect.dtype, epr.MJD)
+        value = self.FIELD_VALUES[0]
+        self.assertEqual(vect[0]['days'], value.days)
+        self.assertEqual(vect[0]['seconds'], value.seconds)
+        self.assertEqual(vect[0]['microseconds'], value.microseconds)
+
+
 class TestFieldWithMiltipleElems(TestField):
     DATASET_NAME = TestProduct.DATASET_NAME
     FIELD_NAME = 'wvapour_cont_pix'

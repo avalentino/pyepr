@@ -395,6 +395,11 @@ cdef inline str _to_str(b, encoding='UTF-8'):
 
 # utils
 EPRTime = namedtuple('EPRTime', ('days', 'seconds', 'microseconds'))
+MJD = np.dtype([
+    ('days', 'i{}'.format(sizeof(int))),
+    ('seconds', 'u{}'.format(sizeof(uint))),
+    ('microseconds', 'u{}'.format(sizeof(uint))),
+])
 
 EPR_C_API_VERSION = _to_str(EPR_PRODUCT_API_VERSION_STR, 'ascii')
 
@@ -952,6 +957,7 @@ cdef class Field(EprObject):
         cdef size_t num_elems
         cdef size_t i
         cdef np.ndarray out
+        cdef EPR_Time* t
 
         self.check_closed_product()
 
@@ -1015,6 +1021,29 @@ cdef class Field(EprObject):
             out = np.ndarray(num_elems, np.double)
             for i in range(num_elems):
                 out[i] = (<double*>buf)[i]
+        elif etype == e_tid_string:
+            if num_elems != 1:
+                raise ValueError(
+                    'unexpected number of elements: %d' % num_elems)
+            buf = <char*>epr_get_field_elem_as_str(self._ptr)
+            if buf is NULL:
+                pyepr_null_ptr_error(msg)
+            out = np.asarray(<char*>buf)
+        elif etype == e_tid_time:
+            if num_elems != 1:
+                raise ValueError(
+                    'unexpected number of elements: %d' % num_elems)
+            t = <EPR_Time*>epr_get_field_elem_as_mjd(self._ptr)
+            if t is NULL:
+                pyepr_null_ptr_error(msg)
+            out = np.ndarray(1, MJD)
+            out[0]['days'] = t.days
+            out[0]['seconds'] = t.seconds
+            out[0]['microseconds'] = t.microseconds
+        #elif etype == e_tid_unknown:
+        #    pass
+        #elif etype = e_tid_spare:
+        #    pass
         else:
             raise ValueError('invalid field type')
 
