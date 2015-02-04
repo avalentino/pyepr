@@ -2,7 +2,7 @@ Change history
 ==============
 
 
-PyEPR 0.8.3 (01/02/2015)
+PyEPR 0.8.3 (xx/02/2015)
 ------------------------
 
 * the :file:`setup.py` script has been completely rewritten to be more
@@ -13,23 +13,23 @@ PyEPR 0.8.3 (01/02/2015)
   This should make PyEPR "pip-installable" even on system there numpy_
   is not already installed.
 * the :file:`test` directory has been renamed into :file:`tests`
-* the test suite now has a :func:setUpModule: function that automatically
+* the test suite now has a :func:`setUpModule` function that automatically
   downloads the ENVISAT test data required for test execution.
   The download only happens if the test dataset is not already available.
 * tests can now be run using the :file:`setup.py` script::
 
     $ python3 setup.py test
 
-* enable continuous integration and testing in for Windows_ using AppVeyor_
+* enable continuous integration and testing in for Windows_ using AppVeyor_.
 * status badges for
-  `AppVeyor <https://ci.appveyor.com/project/avalentino/pyepr>_ and PyPI_
-  added to the HTML doc index
+  `AppVeyor CI <https://ci.appveyor.com/project/avalentino/pyepr>`_ and
+  PyPI_ added to the HTML doc index
 
 
 .. _pip: https://pip.pypa.io
 .. _setuptools: https://bitbucket.org/pypa/setuptools
 .. _numpy: http://www.numpy.org
-.. _Windows: windows.microsoft.com
+.. _Windows: http://windows.microsoft.com
 .. _AppVeyor: http://www.appveyor.com
 .. _PyPI: https://pypi.python.org/pypi/pyepr
 
