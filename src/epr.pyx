@@ -396,9 +396,9 @@ cdef inline str _to_str(b, encoding='UTF-8'):
 # utils
 EPRTime = namedtuple('EPRTime', ('days', 'seconds', 'microseconds'))
 MJD = np.dtype([
-    ('days', 'i{}'.format(sizeof(int))),
-    ('seconds', 'u{}'.format(sizeof(uint))),
-    ('microseconds', 'u{}'.format(sizeof(uint))),
+    ('days', 'i%d' % sizeof(int)),
+    ('seconds', 'u%d' % sizeof(uint)),
+    ('microseconds', 'u%d' % sizeof(uint)),
 ])
 
 EPR_C_API_VERSION = _to_str(EPR_PRODUCT_API_VERSION_STR, 'ascii')
