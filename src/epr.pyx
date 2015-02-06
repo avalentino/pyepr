@@ -68,6 +68,16 @@ cdef extern from 'epr_api.h' nogil:
     ctypedef unsigned int   uint
     ctypedef unsigned long  ulong
 
+    ctypedef int EPR_Magic
+
+    int EPR_MAGIC_PRODUCT_ID
+    int EPR_MAGIC_DATASET_ID
+    int EPR_MAGIC_BAND_ID
+    int EPR_MAGIC_RECORD
+    int EPR_MAGIC_FIELD
+    int EPR_MAGIC_RASTER
+    int EPR_MAGIC_FLAG_DEF
+
     enum EPR_ErrCode:
         e_err_none = 0
         e_err_null_pointer = 1
@@ -138,24 +148,24 @@ cdef extern from 'epr_api.h' nogil:
         uint microseconds
 
     struct EPR_FlagDef:
-        #EPR_Magic magic
+        EPR_Magic magic
         char* name
         uint bit_mask
         char* description
 
     struct EPR_Field:
-        #EPR_Magic magic
+        EPR_Magic magic
         #EPR_FieldInfo* info
         void* elems
 
     struct EPR_Record:
-        #EPR_Magic magic
+        EPR_Magic magic
         #EPR_RecordInfo* info
         uint num_fields
         EPR_Field** fields
 
     struct EPR_DSD:
-        #EPR_Magic magic
+        EPR_Magic magic
         int index
         char* ds_name
         char* ds_type
@@ -166,7 +176,7 @@ cdef extern from 'epr_api.h' nogil:
         uint dsr_size
 
     struct EPR_Raster:
-        #EPR_Magic magic
+        EPR_Magic magic
         EPR_DataTypeId data_type
         uint elem_size
         uint source_width
@@ -178,7 +188,7 @@ cdef extern from 'epr_api.h' nogil:
         void* buffer
 
     struct EPR_ProductId:
-        #EPR_Magic magic
+        EPR_Magic magic
         char* file_path
         FILE* istream
         uint  tot_size
@@ -195,7 +205,7 @@ cdef extern from 'epr_api.h' nogil:
         int meris_iodd_version
 
     struct EPR_DatasetId:
-        #EPR_Magic magic
+        EPR_Magic magic
         EPR_ProductId* product_id
         char* dsd_name
         EPR_DSD* dsd
@@ -210,7 +220,7 @@ cdef extern from 'epr_api.h' nogil:
         int elem_index              # -1 if not used
 
     struct EPR_BandId:
-        #EPR_Magic magic
+        EPR_Magic magic
         EPR_ProductId* product_id
         char* band_name
         int spectr_band_index
@@ -428,6 +438,15 @@ E_SMOD_2TOF = e_smod_2TOF
 E_SMID_NON = e_smid_non
 E_SMID_LIN = e_smid_lin
 E_SMID_LOG = e_smid_log
+
+# EPR magic IDs
+_EPR_MAGIC_PRODUCT_ID = EPR_MAGIC_PRODUCT_ID
+_EPR_MAGIC_DATASET_ID = EPR_MAGIC_DATASET_ID
+_EPR_MAGIC_BAND_ID = EPR_MAGIC_BAND_ID
+_EPR_MAGIC_RECORD = EPR_MAGIC_RECORD
+_EPR_MAGIC_FIELD = EPR_MAGIC_FIELD
+_EPR_MAGIC_RASTER = EPR_MAGIC_RASTER
+_EPR_MAGIC_FLAG_DEF = EPR_MAGIC_FLAG_DEF
 
 
 cdef np.NPY_TYPES _epr_to_numpy_type_id(EPR_DataTypeId epr_type):
@@ -750,6 +769,14 @@ cdef class DSD(EprObject):
                 raise TypeError('DSD only implements "==" and "!=" operators')
         else:
             return NotImplemented
+
+    # --- low level interface -------------------------------------------------
+    property _magic:
+        '''The magic number for internal C structure'''
+
+        def __get__(self):
+            self.check_closed_product()
+            return self._ptr.magic
 
 
 cdef new_dsd(EPR_SDSD* ptr, object parent=None):
@@ -1178,6 +1205,14 @@ cdef class Field(EprObject):
         else:
             return epr_get_field_num_elems(self._ptr)
 
+    # --- low level interface -------------------------------------------------
+    property _magic:
+        '''The magic number for internal C structure'''
+
+        def __get__(self):
+            self.check_closed_product()
+            return self._ptr.magic
+
 
 cdef new_field(EPR_SField* ptr, Record parent=None):
     if ptr is NULL:
@@ -1394,6 +1429,14 @@ cdef class Record(EprObject):
         return '%s %d fields' % (super(Record, self).__repr__(),
                                  self.get_num_fields())
 
+    # --- low level interface -------------------------------------------------
+    property _magic:
+        '''The magic number for internal C structure'''
+
+        def __get__(self):
+            self.check_closed_product()
+            return self._ptr.magic
+
 
 cdef new_record(EPR_SRecord* ptr, object parent=None, bint dealloc=False):
     if ptr is NULL:
@@ -1573,6 +1616,13 @@ cdef class Raster(EprObject):
         return '%s %s (%dL x %dP)' % (super(Raster, self).__repr__(),
                                       data_type_id_to_str(self.data_type),
                                       self.get_height(), self.get_width())
+
+    # --- low level interface -------------------------------------------------
+    property _magic:
+        '''The magic number for internal C structure'''
+
+        def __get__(self):
+            return self._ptr.magic
 
 
 cdef new_raster(EPR_SRaster* ptr, Band parent=None):
@@ -2082,6 +2132,14 @@ cdef class Band(EprObject):
         return 'epr.Band(%s) of epr.Product(%s)' % (self.get_name(),
                                                     self.product.id_string)
 
+    # --- low level interface -------------------------------------------------
+    property _magic:
+        '''The magic number for internal C structure'''
+
+        def __get__(self):
+            self.check_closed_product()
+            return self._ptr.magic
+
 
 cdef new_band(EPR_SBandId* ptr, Product parent=None):
     if ptr is NULL:
@@ -2282,6 +2340,14 @@ cdef class Dataset(EprObject):
     def __repr__(self):
         return 'epr.Dataset(%s) %d records' % (self.get_name(),
                                                self.get_num_records())
+
+    # --- low level interface -------------------------------------------------
+    property _magic:
+        '''The magic number for internal C structure'''
+
+        def __get__(self):
+            self.check_closed_product()
+            return self._ptr.magic
 
 
 cdef new_dataset(EPR_SDatasetId* ptr, Product parent=None):
@@ -2743,6 +2809,14 @@ cdef class Product(EprObject):
 
     def __exit__(self, *exc_info):
         self.close()
+
+    # --- low level interface -------------------------------------------------
+    property _magic:
+        '''The magic number for internal C structure'''
+
+        def __get__(self):
+            self.check_closed_product()
+            return self._ptr.magic
 
 
 def open(filename):

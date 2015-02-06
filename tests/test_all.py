@@ -508,6 +508,19 @@ class TestProductHighLevelAPI(unittest.TestCase):
         self.assertTrue(product.closed)
 
 
+class TestProductLowLevelAPI(unittest.TestCase):
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+
+    def setUp(self):
+        self.product = epr.Product(self.PRODUCT_FILE)
+
+    def tearDown(self):
+        self.product.close()
+
+    def test_magic(self):
+        self.assertEqual(self.product._magic, epr._EPR_MAGIC_PRODUCT_ID)
+
+
 class TestClosedProduct(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = 'Vapour_Content'
@@ -1248,6 +1261,20 @@ class TestBandHighLevelAPI(unittest.TestCase):
         self.assertTrue(isinstance(str(band), str))
 
 
+class TestBandLowLevelAPI(unittest.TestCase):
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+
+    def setUp(self):
+        self.product = epr.Product(self.PRODUCT_FILE)
+        self.band = self.product.get_band_at(0)
+
+    def tearDown(self):
+        self.product.close()
+
+    def test_magic(self):
+        self.assertEqual(self.band._magic, epr._EPR_MAGIC_BAND_ID)
+
+
 class TestBandOnClosedProduct(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     WIDTH = 12
@@ -1568,6 +1595,19 @@ class TestRasterHighLevelAPI(unittest.TestCase):
         self.assertTrue(isinstance(str(self.raster), str))
 
 
+class TestRasterLowLevelAPI(unittest.TestCase):
+    RASTER_WIDTH = 400
+    RASTER_HEIGHT = 300
+    RASTER_DATA_TYPE = epr.E_TID_FLOAT
+
+    def setUp(self):
+        self.raster = epr.create_raster(self.RASTER_DATA_TYPE,
+                                        self.RASTER_WIDTH, self.RASTER_HEIGHT)
+
+    def test_magic(self):
+        self.assertEqual(self.raster._magic, epr._EPR_MAGIC_RASTER)
+
+
 class TestRecord(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = 'Quality_ADS'
@@ -1707,6 +1747,21 @@ class TestRecordHighLevelAPI(unittest.TestCase):
 
     def test_str_type(self):
         self.assertTrue(isinstance(str(self.record), str))
+
+
+class TestRecordLowLevelAPI(unittest.TestCase):
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+
+    def setUp(self):
+        self.product = epr.Product(self.PRODUCT_FILE)
+        dataset = self.product.get_dataset_at(0)
+        self.record = dataset.read_record(0)
+
+    def tearDown(self):
+        self.product.close()
+
+    def test_magic(self):
+        self.assertEqual(self.record._magic, epr._EPR_MAGIC_RECORD)
 
 
 class TestMultipleRecordsHighLevelAPI(unittest.TestCase):
@@ -2006,6 +2061,22 @@ class TestFieldHighLevelAPI2(unittest.TestCase):
     #    self.assertEqual(len(field), len(field.get_elem()))
 
 
+class TestFieldLowLevelAPI(unittest.TestCase):
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+
+    def setUp(self):
+        self.product = epr.Product(self.PRODUCT_FILE)
+        dataset = self.product.get_dataset_at(0)
+        record = dataset.read_record(0)
+        self.field = record.get_field('perc_water_abs_aero')
+
+    def tearDown(self):
+        self.product.close()
+
+    def test_magic(self):
+        self.assertEqual(self.field._magic, epr._EPR_MAGIC_FIELD)
+
+
 class TestFieldOnClosedProduct(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = 'Quality_ADS'
@@ -2149,6 +2220,21 @@ class TestDsdHighLevelAPI(unittest.TestCase):
 
     def test_str_type(self):
         self.assertTrue(isinstance(str(self.dsd), str))
+
+
+class TestDsdLowLevelAPI(unittest.TestCase):
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+
+    def setUp(self):
+        self.product = epr.Product(self.PRODUCT_FILE)
+        self.dsd = self.product.get_dsd_at(0)
+
+    def tearDown(self):
+        self.product.close()
+
+    def test_magic(self):
+        #self.assertEqual(self.dsd._magic, epr._EPR_MAGIC_DSD_ID)
+        self.assertTrue(isinstance(self.dsd._magic, int))
 
 
 class TestDSDOnCloserProduct(unittest.TestCase):
