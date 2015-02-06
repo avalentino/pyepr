@@ -209,6 +209,9 @@ class TestProduct(unittest.TestCase):
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
 
+    def tearDown(self):
+        self.product.close()
+
     def test_close(self):
         self.product.close()
 
@@ -430,6 +433,9 @@ class TestProductHighLevelAPI(unittest.TestCase):
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
 
+    def tearDown(self):
+        self.product.close()
+
     def test_closed(self):
         self.assertFalse(self.product.closed)
         self.product.close()
@@ -592,6 +598,9 @@ class TestDataset(unittest.TestCase):
         self.product = epr.Product(self.PRODUCT_FILE)
         self.dataset = self.product.get_dataset(self.DATASET_NAME)
 
+    def tearDown(self):
+        self.product.close()
+
     def test_product_property(self):
         self.assertTrue(equal_products(self.dataset.product, self.product))
 
@@ -634,6 +643,9 @@ class TestDatasetHighLevelAPI(unittest.TestCase):
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
         self.dataset = self.product.get_dataset(self.DATASET_NAME)
+
+    def tearDown(self):
+        self.product.close()
 
     def test_records(self):
         records = self.dataset.records()
@@ -784,6 +796,9 @@ class TestBand(unittest.TestCase):
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
         self.band = self.product.get_band(self.BAND_NAME)
+
+    def tearDown(self):
+        self.product.close()
 
     def test_product_property(self):
         self.assertTrue(equal_products(self.band.product, self.product))
@@ -1212,6 +1227,9 @@ class TestBandHighLevelAPI(unittest.TestCase):
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
 
+    def tearDown(self):
+        self.product.close()
+
     def test_repr(self):
         pattern = ('epr.Band\((?P<name>\w+)\) of '
                    'epr.Product\((?P<product_id>\w+)\)')
@@ -1490,6 +1508,9 @@ class TestRasterRead(TestRaster):
         self.band.read_raster(self.RASTER_XOFFSET, self.RASTER_YOFFSET,
                               self.raster)
 
+    def tearDown(self):
+        self.product.close()
+
     def test_data_property_shared_semantics_readload(self):
         data1 = self.raster.data
         data1[0, 0] *= 2
@@ -1554,9 +1575,12 @@ class TestRecord(unittest.TestCase):
     FIELD_NAME = 'perc_water_abs_aero'
 
     def setUp(self):
-        product = epr.Product(self.PRODUCT_FILE)
-        dataset = product.get_dataset(self.DATASET_NAME)
+        self.product = epr.Product(self.PRODUCT_FILE)
+        dataset = self.product.get_dataset(self.DATASET_NAME)
         self.record = dataset.read_record(0)
+
+    def tearDown(self):
+        self.product.close()
 
     def test_get_num_fields(self):
         self.assertEqual(self.record.get_num_fields(), self.NUM_FIELD)
@@ -1648,9 +1672,12 @@ class TestRecordHighLevelAPI(unittest.TestCase):
     ]
 
     def setUp(self):
-        product = epr.Product(self.PRODUCT_FILE)
-        self.dataset = product.get_dataset(self.DATASET_NAME)
+        self.product = epr.Product(self.PRODUCT_FILE)
+        self.dataset = self.product.get_dataset(self.DATASET_NAME)
         self.record = self.dataset.read_record(0)
+
+    def tearDown(self):
+        self.product.close()
 
     def test_get_field_names_number(self):
         self.assertEqual(len(self.record.get_field_names()),
@@ -1687,8 +1714,11 @@ class TestMultipleRecordsHighLevelAPI(unittest.TestCase):
     DATASET_NAME = TestProduct.DATASET_NAME
 
     def setUp(self):
-        product = epr.Product(self.PRODUCT_FILE)
-        self.dataset = product.get_dataset(self.DATASET_NAME)
+        self.product = epr.Product(self.PRODUCT_FILE)
+        self.dataset = self.product.get_dataset(self.DATASET_NAME)
+
+    def tearDown(self):
+        self.product.close()
 
     def test_repr(self):
         pattern = '<epr\.Record object at 0x\w+> (?P<num>\d+) fields'
@@ -1728,8 +1758,11 @@ class TestMphRecordHighLevelAPI(TestRecordHighLevelAPI):
     ]
 
     def setUp(self):
-        product = epr.Product(self.PRODUCT_FILE)
-        self.record = product.get_mph()
+        self.product = epr.Product(self.PRODUCT_FILE)
+        self.record = self.product.get_mph()
+
+    def tearDown(self):
+        self.product.close()
 
 
 class TestRecordOnClosedProduct(unittest.TestCase):
@@ -1790,10 +1823,13 @@ class TestField(unittest.TestCase):
     FIELD_UNIT = '%'
 
     def setUp(self):
-        product = epr.Product(self.PRODUCT_FILE)
-        dataset = product.get_dataset(self.DATASET_NAME)
+        self.product = epr.Product(self.PRODUCT_FILE)
+        dataset = self.product.get_dataset(self.DATASET_NAME)
         record = dataset.read_record(0)
         self.field = record.get_field(self.FIELD_NAME)
+
+    def tearDown(self):
+        self.product.close()
 
     @quiet
     def test_print_field(self):
@@ -2036,6 +2072,9 @@ class TestDSD(unittest.TestCase):
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
         self.dsd = self.product.get_dsd_at(self.DSD_INDEX)
+
+    def tearDown(self):
+        self.product.close()
 
     def test_index(self):
         self.assertEqual(self.dsd.index, self.DSD_INDEX)
