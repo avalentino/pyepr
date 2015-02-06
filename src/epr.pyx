@@ -153,6 +153,13 @@ cdef extern from 'epr_api.h' nogil:
         uint bit_mask
         char* description
 
+    struct EPR_PtrArray:
+        unsigned int capacity
+        unsigned int length
+        void** elems
+
+    ctypedef EPR_PtrArray EPR_SPtrArray
+
     struct EPR_Field:
         EPR_Magic magic
         #EPR_FieldInfo* info
@@ -197,11 +204,11 @@ cdef extern from 'epr_api.h' nogil:
         char* id_string
         EPR_Record* mph_record
         EPR_Record* sph_record
-        #EPR_PtrArray* dsd_array
-        #EPR_PtrArray* record_info_cache
-        #EPR_PtrArray* param_table
-        #EPR_PtrArray* dataset_ids
-        #EPR_PtrArray* band_ids
+        EPR_PtrArray* dsd_array
+        EPR_PtrArray* record_info_cache
+        EPR_PtrArray* param_table
+        EPR_PtrArray* dataset_ids
+        EPR_PtrArray* band_ids
         int meris_iodd_version
 
     struct EPR_DatasetId:
@@ -231,7 +238,7 @@ cdef extern from 'epr_api.h' nogil:
         float scaling_offset
         float scaling_factor
         char* bm_expr
-        #EPR_SPtrArray* flag_coding
+        EPR_SPtrArray* flag_coding
         char* unit
         char* description
         epr_boolean lines_mirrored
