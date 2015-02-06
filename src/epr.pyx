@@ -159,6 +159,7 @@ cdef extern from 'epr_api.h' nogil:
         void** elems
 
     ctypedef EPR_PtrArray EPR_SPtrArray
+    ctypedef EPR_RecordInfo EPR_SRecordInfo
 
     struct EPR_Field:
         EPR_Magic magic
@@ -167,7 +168,7 @@ cdef extern from 'epr_api.h' nogil:
 
     struct EPR_Record:
         EPR_Magic magic
-        #EPR_RecordInfo* info
+        EPR_RecordInfo* info
         uint num_fields
         EPR_Field** fields
 
@@ -218,7 +219,7 @@ cdef extern from 'epr_api.h' nogil:
         EPR_DSD* dsd
         char* dataset_name
         #struct RecordDescriptor* record_descriptor
-        #EPR_SRecordInfo* record_info
+        EPR_SRecordInfo* record_info
         char* description
 
     struct EPR_DatasetRef:
@@ -377,6 +378,14 @@ cdef extern from 'epr_api.h' nogil:
 
     EPR_SRaster* epr_create_raster(EPR_EDataTypeId, uint, uint, uint, uint)
     EPR_SRaster* epr_create_bitmask_raster(uint, uint, uint, uint)
+
+
+# @NOTE: this is define in epr_record.h header that is not part of the
+# public API (not installed in debian)
+ctypedef struct EPR_RecordInfo:
+    char* dataset_name
+    EPR_SPtrArray* field_infos
+    uint tot_size
 
 
 from cpython.version cimport PY_MAJOR_VERSION
@@ -1381,6 +1390,31 @@ cdef class Record(EprObject):
 
         return new_field(field_ptr, self)
 
+    property dataset_name:
+        '''The name of the dataset to which this record belongs to'''
+
+        def __get__(self):
+            self.check_closed_product()
+            cdef EPR_RecordInfo* info = <EPR_RecordInfo*>self._ptr.info
+            return _to_str(info.dataset_name)
+
+    property tot_size:
+        '''The total size in bytes of the record
+
+        It includes all data elements of all fields of a record in a
+        product file.
+
+        *tot_size* is a derived variable, it is computed at runtime
+        and not stored in the DSD-DB.
+
+        '''
+
+        def __get__(self):
+            self.check_closed_product()
+            cdef EPR_RecordInfo* info = <EPR_RecordInfo*>self._ptr.info
+            return info.tot_size
+
+
     # --- high level interface ------------------------------------------------
     def get_field_names(self):
         '''get_field_names(self)
@@ -2317,6 +2351,7 @@ cdef class Dataset(EprObject):
     # --- high level interface ------------------------------------------------
     # @NOTE: generator and generator expressions are not yet implemented in
     #        cython. As a workaround a list is used
+    # @TODO: check
     def records(self):
         '''records(self)
 

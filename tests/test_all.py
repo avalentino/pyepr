@@ -1613,6 +1613,7 @@ class TestRecord(unittest.TestCase):
     DATASET_NAME = 'Quality_ADS'
     NUM_FIELD = 21
     FIELD_NAME = 'perc_water_abs_aero'
+    TOT_SIZE = 32
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
@@ -1682,6 +1683,12 @@ class TestRecord(unittest.TestCase):
     def test_get_field_at_invalid_index(self):
         index = self.record.get_num_fields() + 10
         self.assertRaises(ValueError, self.record.get_field_at, index)
+
+    def test_dataset_name(self):
+        self.assertEqual(self.record.dataset_name, self.DATASET_NAME)
+
+    def test_tot_size(self):
+        self.assertEqual(self.record.tot_size, self.TOT_SIZE)
 
 
 class TestRecordHighLevelAPI(unittest.TestCase):

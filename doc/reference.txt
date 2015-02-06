@@ -373,6 +373,24 @@ Record
    .. seealso:: :class:`Field`
 
 
+   .. rubric:: Attributes
+
+   .. attribute::  dataset_name
+
+      The name of the dataset to which this record belongs to
+
+
+   .. attribute:: tot_size
+
+      The total size in bytes of the record
+
+      It includes all data elements of all fields of a record in a
+      product file.
+
+      *tot_size* is a derived variable, it is computed at runtime
+      and not stored in the DSD-DB.
+
+
    .. rubric:: Methods
 
    .. method:: get_field(name)
