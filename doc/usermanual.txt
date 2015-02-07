@@ -175,7 +175,7 @@ __ http://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV2000
 
 .. note::
 
-    since PyEPR_ 0.8.3 the test product is downloaded and decompressed
+    since PyEPR_ 0.9.0 the test product is downloaded and decompressed
     automatically by the test script if not already available.
     In this case a working Internet connection is expected to be available
     when the test suite is run.
