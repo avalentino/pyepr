@@ -62,11 +62,29 @@ cdef extern from 'stdio.h' nogil:
 cdef extern from 'epr_api.h' nogil:
     char* EPR_PRODUCT_API_VERSION_STR
 
-    ctypedef int            epr_boolean
-    ctypedef unsigned char  uchar
-    ctypedef unsigned short ushort
-    ctypedef unsigned int   uint
-    ctypedef unsigned long  ulong
+    ctypedef int               epr_boolean
+    ctypedef unsigned char     uchar
+    ctypedef unsigned short    ushort
+    ctypedef unsigned int      uint
+    ctypedef unsigned long     ulong
+
+    ctypedef EPR_Time          EPR_STime
+    #ctypedef EPR_FlagDef       EPR_SFlagDef
+    ctypedef EPR_PtrArray      EPR_SPtrArray
+    ctypedef EPR_FieldInfo     EPR_SFieldInfo
+    ctypedef EPR_RecordInfo    EPR_SRecordInfo
+    ctypedef EPR_Field         EPR_SField
+    ctypedef EPR_Record        EPR_SRecord
+    ctypedef EPR_DSD           EPR_SDSD
+    ctypedef EPR_Raster        EPR_SRaster
+    ctypedef EPR_BandId        EPR_SBandId
+    ctypedef EPR_DatasetId     EPR_SDatasetId
+    ctypedef EPR_ProductId     EPR_SProductId
+    ctypedef EPR_ErrCode       EPR_EErrCode
+    ctypedef EPR_LogLevel      EPR_ELogLevel
+    ctypedef EPR_SampleModel   EPR_ESampleModel
+    ctypedef EPR_ScalingMethod EPR_EScalingMethod
+    ctypedef EPR_DataTypeId    EPR_EDataTypeId
 
     ctypedef int EPR_Magic
 
@@ -158,10 +176,6 @@ cdef extern from 'epr_api.h' nogil:
         unsigned int length
         void** elems
 
-    ctypedef EPR_PtrArray EPR_SPtrArray
-    ctypedef EPR_FieldInfo EPR_SFieldInfo
-    ctypedef EPR_RecordInfo EPR_SRecordInfo
-
     struct EPR_Field:
         EPR_Magic magic
         EPR_FieldInfo* info
@@ -244,20 +258,6 @@ cdef extern from 'epr_api.h' nogil:
         char* unit
         char* description
         epr_boolean lines_mirrored
-
-    ctypedef EPR_ErrCode       EPR_EErrCode
-    ctypedef EPR_LogLevel      EPR_ELogLevel
-    ctypedef EPR_SampleModel   EPR_ESampleModel
-    ctypedef EPR_ScalingMethod EPR_EScalingMethod
-    ctypedef EPR_DataTypeId    EPR_EDataTypeId
-    ctypedef EPR_ProductId     EPR_SProductId
-    ctypedef EPR_DatasetId     EPR_SDatasetId
-    ctypedef EPR_BandId        EPR_SBandId
-    ctypedef EPR_Raster        EPR_SRaster
-    ctypedef EPR_Record        EPR_SRecord
-    ctypedef EPR_Field         EPR_SField
-    ctypedef EPR_DSD           EPR_SDSD
-    ctypedef EPR_Time          EPR_STime
 
     # @TODO: improve logging and error management (--> custom handlers)
     # logging and error handling function pointers
