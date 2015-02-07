@@ -2121,18 +2121,25 @@ class TestFieldHighLevelAPI2(unittest.TestCase):
 
 class TestFieldLowLevelAPI(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    DATASET_INDEX = 0
+    RECORD_INDEX = 0
+    FIELD_NAME = 'perc_water_abs_aero'
+    FIELD_OFFSET = 13
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
-        dataset = self.product.get_dataset_at(0)
-        record = dataset.read_record(0)
-        self.field = record.get_field('perc_water_abs_aero')
+        dataset = self.product.get_dataset_at(self.DATASET_INDEX)
+        record = dataset.read_record(self.RECORD_INDEX)
+        self.field = record.get_field(self.FIELD_NAME)
 
     def tearDown(self):
         self.product.close()
 
     def test_magic(self):
         self.assertEqual(self.field._magic, epr._EPR_MAGIC_FIELD)
+
+    def test_offset(self):
+        self.assertEqual(self.field._offset, self.FIELD_OFFSET)
 
 
 class TestFieldOnClosedProduct(unittest.TestCase):

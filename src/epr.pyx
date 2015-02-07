@@ -1259,6 +1259,33 @@ cdef class Field(EprObject):
             self.check_closed_product()
             return self._ptr.magic
 
+    property _offset:
+        '''Field offset within the Record'''
+
+        def __get__(self):
+            cdef int i = 0
+            cdef int num_fields_in_record = 0
+            cdef long offset = 0
+            cdef const_char* name = NULL
+            cdef const EPR_Field* field = NULL
+            cdef const EPR_FieldInfo* info = NULL
+            cdef const EPR_Record* record = NULL
+
+            self.check_closed_product()
+
+            info = <EPR_FieldInfo*>self._ptr.info
+            name = info.name
+            record = self._parent._ptr
+            num_fields_in_record = epr_get_num_fields(record)
+            for i in range(num_fields_in_record):
+                field = epr_get_field_at(record, i)
+                info = <EPR_FieldInfo*>field.info
+                if info.name == name:
+                    break
+                offset += info.tot_size
+
+            return offset
+
 
 cdef new_field(EPR_SField* ptr, Record parent=None):
     if ptr is NULL:
@@ -1517,7 +1544,7 @@ cdef class Record(EprObject):
             return self._ptr.magic
 
     property _offset:
-        '''Record offset within the dataset'''
+        '''Record offset within the Dataset'''
 
         def __get__(self):
             if self._index >= 0:
