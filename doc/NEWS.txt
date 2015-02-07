@@ -22,7 +22,8 @@ PyEPR 0.8.3 (xx/02/2015)
 
     $ python3 setup.py test
 
-* enable continuous integration and testing in for Windows_ using AppVeyor_.
+* enable continuous integration and testing in for Windows_ using AppVeyor_
+  (32bit only)
 * status badges for
   `AppVeyor CI <https://ci.appveyor.com/project/avalentino/pyepr>`_ and
   PyPI_ added to the HTML doc index
