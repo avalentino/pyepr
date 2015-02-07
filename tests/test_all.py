@@ -606,6 +606,7 @@ class TestDataset(unittest.TestCase):
     DATASET_DESCRIPTION = 'Level 2 MDS Total Water vapour'
     NUM_RECORDS = 149
     DSD_NAME = 'MDS Vapour Content'
+    RECORD_INDEX = 0
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
@@ -636,14 +637,30 @@ class TestDataset(unittest.TestCase):
         record = self.dataset.create_record()
         self.assertTrue(isinstance(record, epr.Record))
 
+    def test_create_record_index(self):
+        record = self.dataset.create_record()
+        self.assertEqual(record.index, None)
+
     def test_read_record(self):
-        record = self.dataset.read_record(0)
+        record = self.dataset.read_record(self.RECORD_INDEX)
         self.assertTrue(isinstance(record, epr.Record))
+
+    def test_read_record_index(self):
+        record = self.dataset.read_record(self.RECORD_INDEX)
+        self.assertEqual(record.index, self.RECORD_INDEX)
 
     def test_read_record_passed(self):
         created_record = self.dataset.create_record()
-        read_record = self.dataset.read_record(0, created_record)
+        read_record = self.dataset.read_record(self.RECORD_INDEX,
+                                               created_record)
         self.assertTrue(created_record is read_record)
+
+    def test_read_record_passed_index(self):
+        created_record = self.dataset.create_record()
+        self.assertEqual(created_record.index, None)
+        read_record = self.dataset.read_record(self.RECORD_INDEX,
+                                               created_record)
+        self.assertEqual(read_record.index, self.RECORD_INDEX)
 
     def test_read_record_passed_invalid(self):
         self.assertRaises(TypeError, self.dataset.read_record, 0, 0)
@@ -1629,11 +1646,12 @@ class TestRecord(unittest.TestCase):
     NUM_FIELD = 21
     FIELD_NAME = 'perc_water_abs_aero'
     TOT_SIZE = 32
+    RECORD_INDEX = 0
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
         dataset = self.product.get_dataset(self.DATASET_NAME)
-        self.record = dataset.read_record(0)
+        self.record = dataset.read_record(self.RECORD_INDEX)
 
     def tearDown(self):
         self.product.close()
@@ -1704,6 +1722,9 @@ class TestRecord(unittest.TestCase):
 
     def test_tot_size(self):
         self.assertEqual(self.record.tot_size, self.TOT_SIZE)
+
+    def test_index(self):
+        self.assertEqual(self.record.index, self.RECORD_INDEX)
 
 
 class TestRecordHighLevelAPI(unittest.TestCase):
@@ -1840,6 +1861,9 @@ class TestMphRecordHighLevelAPI(TestRecordHighLevelAPI):
 
     def tearDown(self):
         self.product.close()
+
+    def test_index(self):
+        self.assertEqual(self.record.index, None)
 
 
 class TestRecordOnClosedProduct(unittest.TestCase):

@@ -1284,6 +1284,7 @@ cdef class Record(EprObject):
     cdef EPR_SRecord* _ptr
     cdef object _parent     # Dataset or Product
     cdef bint _dealloc
+    cdef int _index
 
     def __dealloc__(self):
         if not self._dealloc:
@@ -1444,6 +1445,20 @@ cdef class Record(EprObject):
             cdef EPR_RecordInfo* info = <EPR_RecordInfo*>self._ptr.info
             return info.tot_size
 
+    property index:
+        '''Index of the record within the dataset
+
+        It is *None* for empty records (created with
+        :meth:`Dataset.create_record` but still not read) and for *MPH*
+        (see :meth:`epr.Product.get_mph`) and *SPH* (see
+        :meth:`epr.Product.get_sph`) records.
+
+        .. seealso:: :meth:`epr.Dataset.read_record`
+
+        '''
+
+        def __get__(self):
+            return self._index if self._index >= 0 else None
 
     # --- high level interface ------------------------------------------------
     def get_field_names(self):
@@ -1511,6 +1526,7 @@ cdef new_record(EPR_SRecord* ptr, object parent=None, bint dealloc=False):
     instance._ptr = ptr
     instance._parent = parent       # Dataset or Product
     instance._dealloc = dealloc
+    instance._index = -1
 
     return instance
 
@@ -2408,6 +2424,8 @@ cdef class Dataset(EprObject):
         if not record:
             record = new_record(record_ptr, self, True)
 
+        record._index = index
+
         return record
 
     # --- high level interface ------------------------------------------------
@@ -2794,7 +2812,7 @@ cdef class Product(EprObject):
         :returns:
             zero for success, an error code otherwise
 
-        .. seealso: :func:`create_bitmask_raster`
+        .. seealso:: :func:`epr.create_bitmask_raster`
 
         '''
 

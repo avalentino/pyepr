@@ -395,6 +395,18 @@ Record
       and not stored in the DSD-DB.
 
 
+   .. attribute:: index
+
+      Index of the record within the :class:`Dataset`
+
+      It is *None* for empty records (created with
+      :meth:`Dataset.create_record` but still not read) and for *MPH*
+      (see :meth:`Product.get_mph`) and *SPH* (see :meth:`Product.get_sph`)
+      records.
+
+     .. seealso:: :meth:`Dataset.read_record`
+
+
    .. rubric:: Methods
 
    .. method:: get_field(name)
