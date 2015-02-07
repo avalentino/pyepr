@@ -585,7 +585,7 @@ cdef class _CLib:
     def __cinit__(self, *args, **kwargs):
         cdef bytes msg
 
-        # @TODO:check
+        # @TODO: check
         #if EPR_C_API_VERSION != '2.2':
         #    raise ImportError('C library version not supported: "%s"' %
         #                                                    EPR_C_API_VERSION)
@@ -1469,8 +1469,6 @@ cdef class Record(EprObject):
 
         return names
 
-    # @NOTE: generator and generator expressions are not yet implemented in
-    #        cython. As a workaround a list is used
     def fields(self):
         '''fields(self)
 
@@ -1478,18 +1476,13 @@ cdef class Record(EprObject):
 
         '''
 
-        # @TODO: use __iter__ when generator expressions will be available
-        #return list(self)
-        cdef int idx
-        self.check_closed_product()
-        return [self.get_field_at(idx)
-                            for idx in range(epr_get_num_fields(self._ptr))]
+        return list(self)
 
     def __iter__(self):
-        # @TODO: use generator expression when it will be available
-        #return (self.get_field_at(idx)
-        #                    for idx in range(epr_get_num_elems(self._ptr)))
-        return iter(self.fields())
+        cdef int idx
+        self.check_closed_product()
+        return (self.get_field_at(idx)
+                            for idx in range(epr_get_num_fields(self._ptr)))
 
     def __str__(self):
         self.check_closed_product()
@@ -2415,9 +2408,6 @@ cdef class Dataset(EprObject):
         return record
 
     # --- high level interface ------------------------------------------------
-    # @NOTE: generator and generator expressions are not yet implemented in
-    #        cython. As a workaround a list is used
-    # @TODO: check
     def records(self):
         '''records(self)
 
@@ -2425,20 +2415,13 @@ cdef class Dataset(EprObject):
 
         '''
 
-        # @TODO: use __iter__ when generator expressions will be available
-        #return list(self)
-        cdef int idx
-
-        self.check_closed_product()
-
-        return [self.read_record(idx)
-                            for idx in range(epr_get_num_records(self._ptr))]
+        return list(self)
 
     def __iter__(self):
-        # @TODO: use generator expression when it will be available
-        #return (self.get_field_at(idx)
-        #                    for idx in range(epr_get_num_elems(self._ptr)))
-        return iter(self.records())
+        cdef int idx
+        self.check_closed_product()
+        return (self.read_record(idx)
+                            for idx in range(epr_get_num_records(self._ptr)))
 
     def __str__(self):
         lines = [repr(self), '']
@@ -2874,8 +2857,6 @@ cdef class Product(EprObject):
 
         return names
 
-    # @NOTE: generator and generator expressions are not yet implemented in
-    #        cython. As a workaround a list is used
     def datasets(self):
         '''datasets(self)
 

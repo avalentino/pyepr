@@ -50,7 +50,7 @@ correctly installed and configured:
 * `EPR API`_ >= 2.2 (optional, since PyEPR 0.7 the source tar-ball comes
   with a copy of the PER C API sources)
 * a reasonably updated C compiler [#]_ (build only)
-* Cython_ >= 0.13 [#]_ (optional and build only)
+* Cython_ >= 0.15 [#]_ (optional and build only)
 * unittest2_ (only required for Python < 2.7)
 
 .. note:: in order to build PyEPR_ for Python3_ it is required Cython_ >= 0.15
