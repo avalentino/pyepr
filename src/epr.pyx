@@ -2225,6 +2225,29 @@ cdef class Band(EprObject):
             return self._ptr.magic
 
 
+    property _field_index:
+        '''Index or the field (within the dataset) containing the raw
+        data used to create the band's pixel values.
+
+        It is set to -1 if not used
+
+        '''
+
+        def __get__(self):
+            return self._ptr.dataset_ref.field_index
+
+    property _elem_index:
+        '''Index or the element (within the dataset field) containing
+        the raw data used to create the band's pixel values.
+
+        It is set to -1 if not used
+
+        '''
+
+        def __get__(self):
+            return self._ptr.dataset_ref.elem_index
+
+
 cdef new_band(EPR_SBandId* ptr, Product parent=None):
     if ptr is NULL:
         pyepr_null_ptr_error()

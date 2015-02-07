@@ -1270,6 +1270,8 @@ class TestBandHighLevelAPI(unittest.TestCase):
 
 class TestBandLowLevelAPI(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    FIELD_INDEX = 3
+    ELEM_INDEX = -1
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
@@ -1280,6 +1282,12 @@ class TestBandLowLevelAPI(unittest.TestCase):
 
     def test_magic(self):
         self.assertEqual(self.band._magic, epr._EPR_MAGIC_BAND_ID)
+
+    def test_field_index(self):
+        self.assertEqual(self.band._field_index, self.FIELD_INDEX)
+
+    def test_elem_index(self):
+        self.assertEqual(self.band._elem_index, self.ELEM_INDEX)
 
 
 class TestBandOnClosedProduct(unittest.TestCase):
