@@ -2359,8 +2359,7 @@ cdef class Dataset(EprObject):
 
         return new_record(epr_create_record(self._ptr), self, True)
 
-    # @TODO: default: index=0
-    def read_record(self, uint index, Record record=None):
+    def read_record(self, uint index=0, Record record=None):
         '''read_record(self, index, record=None)
 
         Reads specified record of the dataset
@@ -2378,7 +2377,7 @@ cdef class Dataset(EprObject):
         be  returned.
 
         :param index:
-            the zero-based record index
+            the zero-based record index (default: 0)
         :param record:
             a pre-created record to reduce memory reallocation, can be
             ``None`` (default) to let the function allocate a new
@@ -2386,6 +2385,10 @@ cdef class Dataset(EprObject):
         :returns:
             the record in which the data has been read into or raises
             an exception (:exc:`EPRValueError`) if an error occurred
+
+        .. versionchanged:: 0.9
+
+           The *index* parameter now defaults to zero
 
         '''
 

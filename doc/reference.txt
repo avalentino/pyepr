@@ -329,7 +329,7 @@ Dataset
       be  returned.
 
       :param index:
-            the zero-based record index
+            the zero-based record index (default: 0)
       :param record:
             a pre-created record to reduce memory reallocation, can be
             ``None`` (default) to let the function allocate a new
@@ -337,6 +337,10 @@ Dataset
       :returns:
             the record in which the data has been read into or raises
             an exception (:exc:`EPRValueError`) if an error occurred
+
+      .. versionchanged:: 0.9
+
+         The *index* parameter now defaults to zero
 
 
    .. rubric:: High level interface methods
