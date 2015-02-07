@@ -787,6 +787,14 @@ Band
       The geophysical unit for the band's pixel values
 
 
+   .. attribute:: dataset
+
+      The source dataset
+
+      The source dataset containing the raw data used to create the
+      band's pixel values.
+
+
    .. rubric:: Methods
 
    .. method:: get_name

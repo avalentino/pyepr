@@ -1961,6 +1961,19 @@ cdef class Band(EprObject):
         def __get__(self):
             return <bint>self._ptr.lines_mirrored
 
+    property dataset:
+        '''The source dataset
+
+        The source dataset containing the raw data used to create the
+        band's pixel values.
+
+        '''
+
+        def __get__(self):
+            cdef EPR_SDatasetId* dataset_id = self._ptr.dataset_ref.dataset_id
+            cdef const_char* name = epr_get_dataset_name(dataset_id)
+            return self.product.get_dataset(name)
+
     def get_name(self):
         '''get_name(self)
 

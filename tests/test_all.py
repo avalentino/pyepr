@@ -751,6 +751,7 @@ class TestDatasetOnClosedProduct(unittest.TestCase):
 
 class TestBand(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    DATASET_NAME = 'Vapour_Content'
     BAND_NAMES = (
         'latitude',
         'longitude',
@@ -851,6 +852,11 @@ class TestBand(unittest.TestCase):
     def test_lines_mirrored_property(self):
         self.assertTrue(isinstance(self.band.lines_mirrored, bool))
         self.assertEqual(self.band.lines_mirrored, True)
+
+    def test_dataset_property(self):
+        dataset = self.band.dataset
+        self.assertTrue(isinstance(dataset, epr.Dataset))
+        self.assertEqual(dataset.get_name(), self.DATASET_NAME)
 
     def test_get_name(self):
         for index in range(len(self.BAND_NAMES)):
@@ -1158,6 +1164,7 @@ class TestBand(unittest.TestCase):
 
 
 class TestAnnotationBand(TestBand):
+    DATASET_NAME = 'Tie_points_ADS'
     BAND_NAME = 'sun_zenith'
     BAND_DESCTIPTION = 'Sun zenith angle'
     SCALING_FACTOR = 9.999999974752427e-07
