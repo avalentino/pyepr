@@ -1516,6 +1516,15 @@ cdef class Record(EprObject):
             self.check_closed_product()
             return self._ptr.magic
 
+    property _offset:
+        '''Record offset within the dataset'''
+
+        def __get__(self):
+            if self._index >= 0:
+                return self._index * self.tot_size
+            else:
+                return None
+
 
 cdef new_record(EPR_SRecord* ptr, object parent=None, bint dealloc=False):
     if ptr is NULL:

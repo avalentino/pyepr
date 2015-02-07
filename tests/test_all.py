@@ -1794,17 +1794,23 @@ class TestRecordHighLevelAPI(unittest.TestCase):
 
 class TestRecordLowLevelAPI(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    RECORD_INDEX = 1
+    RECORD_SIZE = 32
+    RECORD_OFFSET = RECORD_INDEX * RECORD_SIZE
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
         dataset = self.product.get_dataset_at(0)
-        self.record = dataset.read_record(0)
+        self.record = dataset.read_record(self.RECORD_INDEX)
 
     def tearDown(self):
         self.product.close()
 
     def test_magic(self):
         self.assertEqual(self.record._magic, epr._EPR_MAGIC_RECORD)
+
+    def test_offset(self):
+        self.assertEqual(self.record._offset, self.RECORD_OFFSET)
 
 
 class TestMultipleRecordsHighLevelAPI(unittest.TestCase):
