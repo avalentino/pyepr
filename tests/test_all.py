@@ -1883,6 +1883,7 @@ class TestField(unittest.TestCase):
     FIELD_NUM_ELEMS = 1
     FIELD_VALUES = (81,)
     FIELD_UNIT = '%'
+    #FIELD_OFFSET = 13
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
@@ -1935,6 +1936,11 @@ class TestField(unittest.TestCase):
         self.assertEqual(vect.shape, (self.field.get_num_elems(),))
         self.assertEqual(vect.dtype, np.int8)
         npt.assert_allclose(vect[:len(self.FIELD_VALUES)], self.FIELD_VALUES)
+
+    def test_tot_size(self):
+        elem_size = epr.get_data_type_size(self.FIELD_TYPE)
+        tot_size = elem_size * self.FIELD_NUM_ELEMS
+        self.assertEqual(self.field.tot_size, tot_size)
 
 
 class TestTimeField(TestField):

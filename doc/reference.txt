@@ -503,6 +503,16 @@ Field
    .. seealso:: :class:`Record`
 
 
+   .. rubric:: Attributes
+
+   .. attribute::  tot_size
+
+        The total size in bytes of all data elements of a field.
+
+        *tot_size* is a derived variable, it is computed at runtime and
+        not stored in the DSD-DB.
+
+
    .. method:: get_description
 
       Gets the description of the field

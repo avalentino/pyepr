@@ -159,11 +159,12 @@ cdef extern from 'epr_api.h' nogil:
         void** elems
 
     ctypedef EPR_PtrArray EPR_SPtrArray
+    ctypedef EPR_FieldInfo EPR_SFieldInfo
     ctypedef EPR_RecordInfo EPR_SRecordInfo
 
     struct EPR_Field:
         EPR_Magic magic
-        #EPR_FieldInfo* info
+        EPR_FieldInfo* info
         void* elems
 
     struct EPR_Record:
@@ -380,8 +381,24 @@ cdef extern from 'epr_api.h' nogil:
     EPR_SRaster* epr_create_bitmask_raster(uint, uint, uint, uint)
 
 
-# @NOTE: this is define in epr_record.h header that is not part of the
-# public API (not installed in debian)
+# @IMPORTANT:
+#
+#   the following structures are not part of the public API.
+#   It is not ensured that relative header files are available at build time
+#   (e.g. debian does not install them), so structures are relìplicated here.
+#   It is fundamental to ensure that structures defined here are kept totally
+#   in sync with the one defined in EPR C API.
+
+# epr_field.h
+ctypedef struct EPR_FieldInfo:
+    char* name
+    EPR_EDataTypeId data_type_id
+    uint num_elems
+    char* unit
+    char* description
+    uint tot_size
+
+# epr_record.h
 ctypedef struct EPR_RecordInfo:
     char* dataset_name
     EPR_SPtrArray* field_infos
@@ -1091,6 +1108,19 @@ cdef class Field(EprObject):
             raise ValueError('invalid field type')
 
         return out
+
+    property tot_size:
+        '''The total size in bytes of all data elements of a field.
+
+        *tot_size* is a derived variable, it is computed at runtime and
+        not stored in the DSD-DB.
+
+        '''
+
+        def __get__(self):
+            cdef EPR_FieldInfo* info = <EPR_FieldInfo*>self._ptr.info
+            return info.tot_size
+
 
     # --- high level interface ------------------------------------------------
     def __repr__(self):
