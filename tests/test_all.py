@@ -1809,8 +1809,8 @@ class TestRecordLowLevelAPI(unittest.TestCase):
     def test_magic(self):
         self.assertEqual(self.record._magic, epr._EPR_MAGIC_RECORD)
 
-    def test_offset(self):
-        self.assertEqual(self.record._offset, self.RECORD_OFFSET)
+    def test_get_offset(self):
+        self.assertEqual(self.record.get_offset(), self.RECORD_OFFSET)
 
 
 class TestMultipleRecordsHighLevelAPI(unittest.TestCase):
@@ -2112,6 +2112,7 @@ class TestFieldHighLevelAPI2(unittest.TestCase):
         field = record.get_field('spare_1')
         self.assertEqual(len(field), field.get_num_elems())
 
+    # @TODO: check
     #def test_len_e_tid_string(self):
     #    dataset = self.product.get_dataset_at(0)
     #    record = dataset.read_record(0)
@@ -2138,8 +2139,8 @@ class TestFieldLowLevelAPI(unittest.TestCase):
     def test_magic(self):
         self.assertEqual(self.field._magic, epr._EPR_MAGIC_FIELD)
 
-    def test_offset(self):
-        self.assertEqual(self.field._offset, self.FIELD_OFFSET)
+    def test_get_offset(self):
+        self.assertEqual(self.field.get_offset(), self.FIELD_OFFSET)
 
 
 class TestFieldOnClosedProduct(unittest.TestCase):

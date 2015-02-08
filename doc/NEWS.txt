@@ -22,8 +22,8 @@ PyEPR 0.9 (in development)
 * new :attr:`epr.Record.tot_size` and :attr:`epr.Field.tot_size` properties
   returning the total size in bytes of the :class:`epr.Record` and
   :class:`epr.Field` respectively
-* added support for some low level feature: *_magic* attribute,
-  :meth:`epr.Record._offset` and :meth:`epr.Field._offset` methods
+* added support for some low level feature: *_magic* private attribute,
+  :meth:`epr.Record.get_offset` and :meth:`epr.Field.get_offset` methods
 * use generator expression for `__iter__` special methods
 * the *index* parameter of the :meth:`epr.Dataset.read_record` method is
   now optional (defaults to zero)

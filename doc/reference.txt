@@ -479,6 +479,11 @@ Record
          instances
 
 
+   .. method:: get_offset
+
+      Record offset in bytes within the :class:`Dataset`
+
+
    .. rubric:: High level interface methods
 
    .. note::
@@ -595,6 +600,11 @@ Field
          the *ostream* parameter have to be a *real* file not
          a generic stream object like :class:`StringIO.StringIO`
          instances
+
+
+   .. method:: get_offset
+
+      Field offset in bytes within the :class:`Record`
 
 
    .. rubric:: Special methods
