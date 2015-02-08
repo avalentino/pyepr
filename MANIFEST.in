@@ -4,7 +4,7 @@ include requirements.txt
 
 recursive-include LICENSES *.txt
 recursive-include tests *.py
-recursive-include src *.pyx *.c
+recursive-include src *.pyx *.pxd *.c
 recursive-include epr-api-src *.c *.h
 
 recursive-include doc *.txt *.py Makefile make.bat *.png
