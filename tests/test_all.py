@@ -1318,12 +1318,11 @@ class TestBandOnClosedProduct(unittest.TestCase):
     def test_product_property(self):
         self.assertTrue(isinstance(self.band.product, epr.Product))
 
-    # @TODO: check
-    #def test_properties(self):
-    #    for name in ('spectr_band_index', 'sample_model', 'data_type',
-    #                 'scaling_method', 'scaling_offset', 'scaling_factor',
-    #                 'bm_expr', 'unit', 'description', 'lines_mirrored'):
-    #        self.assertRaises(ValueError, getattr, self.band, name)
+    def test_properties(self):
+        # 'sample_model', 'data_type', 'scaling_method', 'scaling_offset',
+        # 'scaling_factor', 'bm_expr', 'unit', 'description', 'lines_mirrored'
+        for name in ('spectr_band_index',):
+            self.assertRaises(ValueError, getattr, self.band, name)
 
     def test_sample_model_property(self):
         self.assertEqual(self.band.sample_model, 0)
@@ -1879,11 +1878,14 @@ class TestRecordOnClosedProduct(unittest.TestCase):
         product = epr.Product(self.PRODUCT_FILE)
         dataset = product.get_dataset(self.DATASET_NAME)
         self.record = dataset.read_record(0)
+        self.mph = product.get_mph()
         product.close()
 
-    # @TODO: check
-    #def test_get_num_fields(self):
-    #    self.assertEqual(self.record.get_num_fields(), self.NUM_FIELD)
+    def test_get_num_fields(self):
+        self.assertEqual(self.record.get_num_fields(), self.NUM_FIELD)
+
+    def test_get_num_fields_mph(self):
+        self.assertEqual(self.mph.get_num_fields(), 34)
 
     def test_print_(self):
         self.assertRaises(ValueError, self.record.print_)
