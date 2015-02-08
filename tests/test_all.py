@@ -1352,10 +1352,6 @@ class TestBandOnClosedProduct(unittest.TestCase):
 
     def test_lines_mirrored_property(self):
         self.assertTrue(isinstance(self.band.lines_mirrored, bool))
-        # @TODO: check
-        #self.assertEqual(self.band.lines_mirrored, False)
-
-    # END: check
 
     def test_get_name(self):
         self.assertRaises(ValueError, self.product.get_band_at, 0)
@@ -1646,8 +1642,8 @@ class TestRecord(unittest.TestCase):
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
-        dataset = self.product.get_dataset(self.DATASET_NAME)
-        self.record = dataset.read_record(self.RECORD_INDEX)
+        self.dataset = self.product.get_dataset(self.DATASET_NAME)
+        self.record = self.dataset.read_record(self.RECORD_INDEX)
 
     def tearDown(self):
         self.product.close()
@@ -1715,6 +1711,10 @@ class TestRecord(unittest.TestCase):
 
     def test_dataset_name(self):
         self.assertEqual(self.record.dataset_name, self.DATASET_NAME)
+
+    def test_dataset_name_new(self):
+        record = self.dataset.create_record()
+        self.assertEqual(record.dataset_name, self.DATASET_NAME)
 
     def test_tot_size(self):
         self.assertEqual(self.record.tot_size, self.TOT_SIZE)

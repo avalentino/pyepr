@@ -1104,7 +1104,10 @@ cdef class Record(EprObject):
         def __get__(self):
             self.check_closed_product()
             cdef EPR_RecordInfo* info = <EPR_RecordInfo*>self._ptr.info
-            return _to_str(info.dataset_name)
+            if info.dataset_name == NULL:
+                return ''
+            else:
+                return _to_str(info.dataset_name)
 
     property tot_size:
         '''The total size in bytes of the record
