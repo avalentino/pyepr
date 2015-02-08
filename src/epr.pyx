@@ -45,11 +45,6 @@ __version__ = '0.9.0' + '.dev'
 __revision__ = __version__  # deprecated
 
 
-cdef extern from *:
-    ctypedef char const_char 'const char'
-    ctypedef void const_void 'const void'
-
-
 from libc cimport string as cstring
 from libc cimport stdio
 from libc.stdio cimport FILE, fdopen
@@ -268,7 +263,7 @@ cdef extern from 'epr_api.h' nogil:
     # error handling
     void epr_set_err_handler(EPR_FErrHandler)
     EPR_EErrCode epr_get_last_err_code()
-    const_char* epr_get_last_err_message()
+    const char* epr_get_last_err_message()
     void epr_clear_err()
 
     # API initialization/finalization
@@ -277,7 +272,7 @@ cdef extern from 'epr_api.h' nogil:
 
     # DATATYPE
     uint epr_get_data_type_size(EPR_EDataTypeId)
-    const_char* epr_data_type_id_to_str(EPR_EDataTypeId)
+    const char* epr_data_type_id_to_str(EPR_EDataTypeId)
 
     # open products
     EPR_SProductId* epr_open_product(char*)
@@ -300,8 +295,8 @@ cdef extern from 'epr_api.h' nogil:
     int epr_read_bitmask_raster(EPR_SProductId*, char*, int, int, EPR_SRaster*)
 
     # DATASET
-    const_char* epr_get_dataset_name(EPR_SDatasetId*)
-    const_char* epr_get_dsd_name(EPR_SDatasetId*)
+    const char* epr_get_dataset_name(EPR_SDatasetId*)
+    const char* epr_get_dsd_name(EPR_SDatasetId*)
     uint epr_get_num_records(EPR_SDatasetId*)
     EPR_SDSD* epr_get_dsd(EPR_SDatasetId*)
     EPR_SRecord* epr_create_record(EPR_SDatasetId*)
@@ -321,10 +316,10 @@ cdef extern from 'epr_api.h' nogil:
     void epr_print_field(EPR_SField*, FILE*)
     void epr_dump_field(EPR_SField*)
 
-    const_char* epr_get_field_unit(EPR_SField*)
-    const_char* epr_get_field_description(EPR_SField*)
+    const char* epr_get_field_unit(EPR_SField*)
+    const char* epr_get_field_description(EPR_SField*)
     uint epr_get_field_num_elems(EPR_SField*)
-    const_char* epr_get_field_name(EPR_SField*)
+    const char* epr_get_field_name(EPR_SField*)
     EPR_EDataTypeId epr_get_field_type(EPR_SField*)
 
     char epr_get_field_elem_as_char(EPR_SField*, uint)
@@ -335,10 +330,10 @@ cdef extern from 'epr_api.h' nogil:
     uint epr_get_field_elem_as_uint(EPR_SField*, uint)
     float epr_get_field_elem_as_float(EPR_SField*, uint)
     double epr_get_field_elem_as_double(EPR_SField*, uint)
-    const_char* epr_get_field_elem_as_str(EPR_SField*)
+    const char* epr_get_field_elem_as_str(EPR_SField*)
     EPR_STime* epr_get_field_elem_as_mjd(EPR_SField*)
 
-    const_char* epr_get_field_elems_char(EPR_SField*)
+    const char* epr_get_field_elems_char(EPR_SField*)
     uchar* epr_get_field_elems_uchar(EPR_SField*)
     short* epr_get_field_elems_short(EPR_SField*)
     ushort* epr_get_field_elems_ushort(EPR_SField*)
@@ -353,7 +348,7 @@ cdef extern from 'epr_api.h' nogil:
     uint epr_copy_field_elems_as_doubles(EPR_SField*, double*, uint)
 
     # BAND
-    const_char* epr_get_band_name(EPR_SBandId*)
+    const char* epr_get_band_name(EPR_SBandId*)
     EPR_SRaster* epr_create_compatible_raster(EPR_SBandId*, uint, uint, uint,
                                               uint)
     int epr_read_band_raster(EPR_SBandId*, int, int, EPR_SRaster*)
@@ -875,7 +870,7 @@ cdef class Field(EprObject):
 
         '''
 
-        cdef const_char* unit = NULL
+        cdef const char* unit = NULL
 
         self.check_closed_product()
 
@@ -1009,7 +1004,7 @@ cdef class Field(EprObject):
         '''
 
         # @NOTE: internal C const pointer is not shared with numpy
-        cdef const_void* buf
+        cdef const void* buf
         cdef size_t num_elems
         cdef size_t i
         cdef np.ndarray out
@@ -1262,7 +1257,7 @@ cdef class Field(EprObject):
             cdef int i = 0
             cdef int num_fields_in_record = 0
             cdef long offset = 0
-            cdef const_char* name = NULL
+            cdef const char* name = NULL
             cdef const EPR_Field* field = NULL
             cdef const EPR_FieldInfo* info = NULL
             cdef const EPR_Record* record = NULL
@@ -2012,7 +2007,7 @@ cdef class Band(EprObject):
 
         def __get__(self):
             cdef EPR_SDatasetId* dataset_id = self._ptr.dataset_ref.dataset_id
-            cdef const_char* name = epr_get_dataset_name(dataset_id)
+            cdef const char* name = epr_get_dataset_name(dataset_id)
             return self.product.get_dataset(name)
 
     def get_name(self):
