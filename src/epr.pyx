@@ -41,7 +41,7 @@ in a product file.
 
 '''
 
-__version__ = '0.9.0'
+__version__ = '0.9.0' + '.dev'
 __revision__ = __version__  # deprecated
 
 
@@ -54,9 +54,10 @@ from libc cimport string as cstring
 from libc cimport stdio
 from libc.stdio cimport FILE
 
-
-cdef extern from 'stdio.h' nogil:
-    FILE* fdopen(int, char *mode)
+# @TODO: new in cython 0.19
+from libc.stdio cimport fdopen
+#cdef extern from 'stdio.h' nogil:
+#    FILE* fdopen(int, char *mode)
 
 
 cdef extern from 'epr_api.h' nogil:
