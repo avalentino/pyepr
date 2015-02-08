@@ -834,10 +834,6 @@ class TestBand(unittest.TestCase):
     def test_product_property(self):
         self.assertTrue(equal_products(self.band.product, self.product))
 
-    # @TODO: check
-    #def test_dataset_ref_property(self):
-    #    self.assertEqual(self.band.dataset_ref, ???)
-
     def test_spectr_band_index_property(self):
         self.assertEqual(self.band.spectr_band_index, -1)
 
