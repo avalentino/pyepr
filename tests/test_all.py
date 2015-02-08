@@ -468,7 +468,7 @@ class TestProductHighLevelAPI(unittest.TestCase):
             ref_band = self.product.get_band_at(index)
             self.assertEqual(band.get_name(), ref_band.get_name())
 
-    # @TODO: complete
+    # @TODO: not implemented
     #def test_iter(self):
     #    pass
 
@@ -2110,11 +2110,11 @@ class TestFieldHighLevelAPI2(unittest.TestCase):
         field = record.get_field('spare_1')
         self.assertEqual(len(field), field.get_num_elems())
 
-    # @TODO: check
+    # @TODO: no e_tid_string field available
     #def test_len_e_tid_string(self):
     #    dataset = self.product.get_dataset_at(0)
     #    record = dataset.read_record(0)
-    #    field = record.get_field('filter_window')
+    #    field = record.get_field('???')
     #    self.assertEqual(len(field), len(field.get_elem()))
 
 
