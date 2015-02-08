@@ -52,12 +52,7 @@ cdef extern from *:
 
 from libc cimport string as cstring
 from libc cimport stdio
-from libc.stdio cimport FILE
-
-# @TODO: new in cython 0.19
-from libc.stdio cimport fdopen
-#cdef extern from 'stdio.h' nogil:
-#    FILE* fdopen(int, char *mode)
+from libc.stdio cimport FILE, fdopen
 
 
 cdef extern from 'epr_api.h' nogil:

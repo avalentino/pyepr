@@ -223,10 +223,10 @@ def setup_package():
 
     if HAVE_SETUPTOOLS:
         config['test_suite'] = 'tests'
-        config.setdefault('setup_requires', []).append('numpy')
-        config.setdefault('install_requires', []).append('numpy')
+        config.setdefault('setup_requires', []).append('numpy>=1.5')
+        config.setdefault('install_requires', []).append('numpy>=1.5')
         if ext.setup_requires_cython:
-            config['setup_requires'].append('cython')
+            config['setup_requires'].append('cython>=0.19')
 
     setup(**config)
 

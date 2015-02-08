@@ -18,7 +18,7 @@ PyEPR 0.9 (in development)
 * the test suite now has a :func:`setUpModule` function that automatically
   downloads the ENVISAT test data required for test execution.
   The download only happens if the test dataset is not already available.
-* minimum required version for cython_ is now 0.15
+* minimum required version for cython_ is now 0.19
 * tests can now be run using the :file:`setup.py` script::
 
     $ python3 setup.py test
