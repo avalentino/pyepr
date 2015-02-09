@@ -1878,14 +1878,14 @@ class TestRecordOnClosedProduct(unittest.TestCase):
         product = epr.Product(self.PRODUCT_FILE)
         dataset = product.get_dataset(self.DATASET_NAME)
         self.record = dataset.read_record(0)
-        self.mph = product.get_mph()
+        #self.mph = product.get_mph()
         product.close()
 
     def test_get_num_fields(self):
         self.assertEqual(self.record.get_num_fields(), self.NUM_FIELD)
 
-    def test_get_num_fields_mph(self):
-        self.assertEqual(self.mph.get_num_fields(), 34)
+    #def test_get_num_fields_mph(self):
+    #    self.assertEqual(self.mph.get_num_fields(), 34)
 
     def test_print_(self):
         self.assertRaises(ValueError, self.record.print_)
