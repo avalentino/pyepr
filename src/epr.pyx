@@ -301,6 +301,19 @@ cdef class EprObject:
                                                     self.__class__.__name__)
 
 
+cpdef get_numpy_dtype(EPR_EDataTypeId type_id):
+    '''get_numpy_dtype(epr_type)
+
+    Return the numpy datatype specified EPR type ID
+
+    '''
+
+    try:
+        return _DTYPE_MAP[type_id]
+    except KeyError:
+        raise ValueError('invalid EPR type ID: %d' % type_id)
+
+
 cpdef uint get_data_type_size(EPR_EDataTypeId type_id):
     '''get_data_type_size(type_id)
 

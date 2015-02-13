@@ -1128,22 +1128,27 @@ Functions
    .. seealso :class:`Product`
 
 
-.. function:: data_type_id_to_str
+.. function:: data_type_id_to_str(type_id)
 
    Gets the 'C' data type string for the given data type
 
 
-.. function:: get_data_type_size
+.. function:: get_data_type_size(type_id)
 
    Gets the size in bytes for an element of the given data type
 
 
-.. function:: get_sample_model_name
+.. function:: get_numpy_dtype(type_id)
+
+   Return the numpy datatype specified EPR type ID
+
+
+.. function:: get_sample_model_name(model)
 
    Return the name of the specified sample model
 
 
-.. function:: get_scaling_method_name
+.. function:: get_scaling_method_name(method)
 
    Return the name of the specified scaling method
 

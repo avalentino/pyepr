@@ -1977,7 +1977,7 @@ class TestField(unittest.TestCase):
         vect = self.field.get_elems()
         self.assertTrue(isinstance(vect, np.ndarray))
         self.assertEqual(vect.shape, (self.field.get_num_elems(),))
-        self.assertEqual(vect.dtype, np.int8)
+        self.assertEqual(vect.dtype, epr.get_numpy_dtype(self.FIELD_TYPE))
         npt.assert_allclose(vect[:len(self.FIELD_VALUES)], self.FIELD_VALUES)
 
     def test_tot_size(self):
@@ -2379,6 +2379,22 @@ class TestDataypeFunctions(unittest.TestCase):
         epr.E_TID_TIME:    12,
     }
 
+    TYPE_MAP = {
+        epr.E_TID_UNKNOWN: None,
+        epr.E_TID_UCHAR:   np.uint8,
+        epr.E_TID_CHAR:    np.int8,
+        epr.E_TID_USHORT:  np.uint16,
+        epr.E_TID_SHORT:   np.int16,
+        epr.E_TID_UINT:    np.uint32,
+        epr.E_TID_INT:     np.int32,
+        epr.E_TID_FLOAT:   np.float32,
+        epr.E_TID_DOUBLE:  np.float64,
+        epr.E_TID_STRING:  np.bytes_,
+        epr.E_TID_SPARE:   None,
+        epr.E_TID_TIME:    epr.MJD,
+    }
+
+
     def test_data_type_id_to_str(self):
         for type_id, type_name in self.TYPE_NAMES.items():
             self.assertEqual(epr.data_type_id_to_str(type_id), type_name)
@@ -2392,6 +2408,14 @@ class TestDataypeFunctions(unittest.TestCase):
 
     def test_get_data_type_size_invalid(self):
         self.assertEqual(epr.get_data_type_size(500), 0)
+
+    def test_epr_to_numpy_dtype(self):
+        for epr_type in self.TYPE_MAP:
+            #with self.subTest(epr_type=epr_type): # TODO: update (new in 3.4)
+            #    self.assertEqual(
+            #        epr.get_numpy_dtype(epr_type), self.TYPE_MAP[epr_type])
+            self.assertEqual(
+                epr.get_numpy_dtype(epr_type), self.TYPE_MAP[epr_type])
 
 
 class TestScalingMethodFunctions(unittest.TestCase):
