@@ -689,100 +689,94 @@ cdef class Field(EprObject):
 
         '''
 
-        # @NOTE: internal C const pointer is not shared with numpy
-        cdef const void* buf
-        cdef size_t num_elems
-        cdef size_t i
+        cdef void* buf = NULL
+        cdef int nd = 1
+        cdef np.npy_intp shape[1]
         cdef np.ndarray out
-        cdef EPR_Time* t
+        cdef EPR_Time* t = NULL
+        cdef np.NPY_TYPES dtype
 
         self.check_closed_product()
 
-        num_elems = epr_get_field_num_elems(self._ptr)
+        shape[0] = epr_get_field_num_elems(self._ptr)
         etype = epr_get_field_type(self._ptr)
         msg = 'Filed("%s") elems pointer is null' % self.get_name()
 
-        if etype == e_tid_uchar:
-            buf = <uchar*>epr_get_field_elems_uchar(self._ptr)
-            if buf is NULL:
-                pyepr_null_ptr_error(msg)
-            out = np.ndarray(num_elems, np.byte)
-            for i in range(num_elems):
-                out[i] = (<uchar*>buf)[i]
-        elif etype == e_tid_char:
-            buf = <char*>epr_get_field_elems_char(self._ptr)
-            if buf is NULL:
-                pyepr_null_ptr_error(msg)
-            out = np.ndarray(num_elems, np.byte)
-            for i in range(num_elems):
-                out[i] = (<char*>buf)[i]
-        elif etype == e_tid_ushort:
-            buf = <ushort*>epr_get_field_elems_ushort(self._ptr)
-            if buf is NULL:
-                pyepr_null_ptr_error(msg)
-            out = np.ndarray(num_elems, np.ushort)
-            for i in range(num_elems):
-                out[i] = (<ushort*>buf)[i]
-        elif etype == e_tid_short:
-            buf = <short*>epr_get_field_elems_short(self._ptr)
-            if buf is NULL:
-                pyepr_null_ptr_error(msg)
-            out = np.ndarray(num_elems, np.short)
-            for i in range(num_elems):
-                out[i] = (<short*>buf)[i]
-        elif etype == e_tid_uint:
-            buf = <uint*>epr_get_field_elems_uint(self._ptr)
-            if buf is NULL:
-                pyepr_null_ptr_error(msg)
-            out = np.ndarray(num_elems, np.uint)
-            for i in range(num_elems):
-                out[i] = (<uint*>buf)[i]
-        elif etype == e_tid_int:
-            buf = <int*>epr_get_field_elems_int(self._ptr)
-            if buf is NULL:
-                pyepr_null_ptr_error(msg)
-            out = np.ndarray(num_elems, np.int)
-            for i in range(num_elems):
-                out[i] = (<int*>buf)[i]
-        elif etype == e_tid_float:
-            buf = <float*>epr_get_field_elems_float(self._ptr)
-            if buf is NULL:
-                pyepr_null_ptr_error(msg)
-            out = np.ndarray(num_elems, np.float32)
-            for i in range(num_elems):
-                out[i] = (<float*>buf)[i]
-        elif etype == e_tid_double:
-            buf = <double*>epr_get_field_elems_double(self._ptr)
-            if buf is NULL:
-                pyepr_null_ptr_error(msg)
-            out = np.ndarray(num_elems, np.double)
-            for i in range(num_elems):
-                out[i] = (<double*>buf)[i]
-        elif etype == e_tid_string:
-            if num_elems != 1:
+        if etype == e_tid_time:
+            if shape[0] != 1:
                 raise ValueError(
-                    'unexpected number of elements: %d' % num_elems)
-            buf = <char*>epr_get_field_elem_as_str(self._ptr)
-            if buf is NULL:
-                pyepr_null_ptr_error(msg)
-            out = np.asarray(<char*>buf)
-        elif etype == e_tid_time:
-            if num_elems != 1:
-                raise ValueError(
-                    'unexpected number of elements: %d' % num_elems)
+                    'unexpected number of elements: %d' % shape[0])
             t = <EPR_Time*>epr_get_field_elem_as_mjd(self._ptr)
             if t is NULL:
                 pyepr_null_ptr_error(msg)
+
             out = np.ndarray(1, MJD)
             out[0]['days'] = t.days
             out[0]['seconds'] = t.seconds
             out[0]['microseconds'] = t.microseconds
+
+            return out
+
+        if etype == e_tid_uchar:
+            dtype = np.NPY_UBYTE
+            buf = <uchar*>epr_get_field_elems_uchar(self._ptr)
+            if buf is NULL:
+                pyepr_null_ptr_error(msg)
+        elif etype == e_tid_char:
+            dtype = np.NPY_BYTE
+            buf = <char*>epr_get_field_elems_char(self._ptr)
+            if buf is NULL:
+                pyepr_null_ptr_error(msg)
+        elif etype == e_tid_ushort:
+            dtype = np.NPY_USHORT
+            buf = <ushort*>epr_get_field_elems_ushort(self._ptr)
+            if buf is NULL:
+                pyepr_null_ptr_error(msg)
+        elif etype == e_tid_short:
+            dtype = np.NPY_SHORT
+            buf = <short*>epr_get_field_elems_short(self._ptr)
+            if buf is NULL:
+                pyepr_null_ptr_error(msg)
+        elif etype == e_tid_uint:
+            dtype = np.NPY_UINT
+            buf = <uint*>epr_get_field_elems_uint(self._ptr)
+            if buf is NULL:
+                pyepr_null_ptr_error(msg)
+        elif etype == e_tid_int:
+            dtype = np.NPY_INT
+            buf = <int*>epr_get_field_elems_int(self._ptr)
+            if buf is NULL:
+                pyepr_null_ptr_error(msg)
+        elif etype == e_tid_float:
+            dtype = np.NPY_FLOAT
+            buf = <float*>epr_get_field_elems_float(self._ptr)
+            if buf is NULL:
+                pyepr_null_ptr_error(msg)
+        elif etype == e_tid_double:
+            dtype = np.NPY_DOUBLE
+            buf = <double*>epr_get_field_elems_double(self._ptr)
+            if buf is NULL:
+                pyepr_null_ptr_error(msg)
+        elif etype == e_tid_string:
+            if shape[0] != 1:
+                raise ValueError(
+                    'unexpected number of elements: %d' % shape[0])
+            nd = 0
+            dtype = np.NPY_STRING
+            buf = <char*>epr_get_field_elem_as_str(self._ptr)
+            if buf is NULL:
+                pyepr_null_ptr_error(msg)
         #elif etype == e_tid_unknown:
         #    pass
         #elif etype = e_tid_spare:
         #    pass
         else:
             raise ValueError('invalid field type')
+
+        out = np.PyArray_SimpleNewFromData(nd, shape, dtype, <void*>buf)
+        #np.PyArray_CLEARFLAG(out, NPY_ARRAY_WRITEABLE)  # new in numpy 1.7
+        # Make the ndarray keep a reference to this object
+        np.set_array_base(out, self)
 
         return out
 

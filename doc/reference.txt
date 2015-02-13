@@ -583,6 +583,12 @@ Field
             the data array (:class:`numpy.ndarray`) having the type of
             the field
 
+      .. versionchanged:: 0.9
+
+         the returned :class:`numpy.ndarray` shares the data buffer with
+         the C :c:`Field` structure so any change in its contents is also
+         reflected to the :class:`Filed` object
+
 
    .. method:: print_([ostream])
 
