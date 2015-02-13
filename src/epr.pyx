@@ -129,26 +129,58 @@ _EPR_MAGIC_FLAG_DEF = EPR_MAGIC_FLAG_DEF
 
 
 cdef np.NPY_TYPES _epr_to_numpy_type_id(EPR_DataTypeId epr_type):
-    if epr_type == E_TID_UCHAR:
+    if epr_type == e_tid_uchar:
         return np.NPY_UBYTE
-    if epr_type == E_TID_CHAR:
+    if epr_type == e_tid_char:
         return np.NPY_BYTE
-    if epr_type == E_TID_USHORT:
+    if epr_type == e_tid_ushort:
         return np.NPY_USHORT
-    if epr_type == E_TID_SHORT:
+    if epr_type == e_tid_short:
         return np.NPY_SHORT
-    if epr_type == E_TID_UINT:
+    if epr_type == e_tid_uint:
         return np.NPY_UINT
-    if epr_type == E_TID_INT:
+    if epr_type == e_tid_int:
         return np.NPY_INT
-    if epr_type == E_TID_FLOAT:
+    if epr_type == e_tid_float:
         return np.NPY_FLOAT
-    if epr_type == E_TID_DOUBLE:
+    if epr_type == e_tid_double:
         return np.NPY_DOUBLE
-    if epr_type == E_TID_STRING:
+    if epr_type == e_tid_string:
         return np.NPY_STRING
 
     return np.NPY_NOTYPE
+
+
+_DTYPE_MAP = {
+    E_TID_UCHAR:   np.uint8,
+    E_TID_CHAR:    np.int8,
+    E_TID_USHORT:  np.uint16,
+    E_TID_SHORT:   np.int16,
+    E_TID_UINT:    np.uint32,
+    E_TID_INT:     np.int32,
+    E_TID_FLOAT:   np.float32,
+    E_TID_DOUBLE:  np.float64,
+    E_TID_STRING:  np.bytes_,
+    E_TID_TIME:    MJD,
+    E_TID_SPARE:   None,
+    E_TID_UNKNOWN: None,
+}
+
+
+_METHOD_MAP = {
+    E_SMID_NON: 'NONE',
+    E_SMID_LIN: 'LIN',
+    E_SMID_LOG: 'LOG',
+}
+
+
+_MODEL_MAP = {
+    E_SMOD_1OF1: '1OF1',
+    E_SMOD_1OF2: '1OF2',
+    E_SMOD_2OF2: '2OF2',
+    E_SMOD_3TOI: '3TOI',
+    E_SMOD_2TOF: '2TOF',
+}
 
 
 class EPRError(Exception):
@@ -269,7 +301,7 @@ cdef class EprObject:
                                                     self.__class__.__name__)
 
 
-def get_data_type_size(EPR_EDataTypeId type_id):
+cpdef uint get_data_type_size(EPR_EDataTypeId type_id):
     '''get_data_type_size(type_id)
 
     Gets the size in bytes for an element of the given data type
@@ -279,7 +311,7 @@ def get_data_type_size(EPR_EDataTypeId type_id):
     return epr_get_data_type_size(type_id)
 
 
-def data_type_id_to_str(EPR_EDataTypeId type_id):
+cpdef str data_type_id_to_str(EPR_EDataTypeId type_id):
     '''data_type_id_to_str(type_id)
 
     Gets the 'C' data type string for the given data type
@@ -291,42 +323,28 @@ def data_type_id_to_str(EPR_EDataTypeId type_id):
     return _to_str(type_id_str, 'ascii')
 
 
-def get_scaling_method_name(method):
+cpdef str get_scaling_method_name(EPR_ScalingMethod method):
     '''get_scaling_method_name(method)
 
     Return the name of the specified scaling method
 
     '''
 
-    mmap = {
-        E_SMID_NON: 'NONE',
-        E_SMID_LIN: 'LIN',
-        E_SMID_LOG: 'LOG',
-    }
-
     try:
-        return mmap[method]
+        return _METHOD_MAP[method]
     except KeyError:
         raise ValueError('invalid scaling method: "%s"' % method)
 
 
-def get_sample_model_name(model):
+cpdef str get_sample_model_name(EPR_SampleModel model):
     '''get_sample_model_name(model)
 
     Return the name of the specified sample model
 
     '''
 
-    mmap = {
-        E_SMOD_1OF1: '1OF1',
-        E_SMOD_1OF2: '1OF2',
-        E_SMOD_2OF2: '2OF2',
-        E_SMOD_3TOI: '3TOI',
-        E_SMOD_2TOF: '2TOF',
-    }
-
     try:
-        return mmap[model]
+        return _MODEL_MAP[model]
     except KeyError:
         raise ValueError('invalid sample model: "%s"' % model)
 

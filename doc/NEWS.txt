@@ -24,6 +24,8 @@ PyEPR 0.9 (in development)
   :class:`epr.Field` respectively
 * added support for some low level feature: *_magic* private attribute,
   :meth:`epr.Record.get_offset` and :meth:`epr.Field.get_offset` methods
+* improved :func:`epr.get_data_type_size`, :func:`epr.data_type_id_to_str`,
+  :func:`epr.get_scaling_method_name` and :func:`epr.get_sample_model_name`
 * use generator expression for `__iter__` special methods
 * the *index* parameter of the :meth:`epr.Dataset.read_record` method is
   now optional (defaults to zero)
