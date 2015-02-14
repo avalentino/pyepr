@@ -42,8 +42,6 @@ in a product file.
 '''
 
 __version__ = '0.9.0.dev'
-__revision__ = __version__  # deprecated
-
 
 from libc cimport string as cstring
 from libc cimport stdio

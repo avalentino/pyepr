@@ -35,6 +35,7 @@ PyEPR 0.9 (in development)
   now optional (defaults to zero)
 * drop `const_char` and `const_void` definitions form :file:`epr.pyx`,
   no longer necessary
+* the deprecated `__revision__` variable has been removed
 * declarations of the EPR C API have been moved to the new :file:`epr.pyd`
 * the :file:`setup.py` script has been completely rewritten to be more
   "pip_ friendly".  The new script uses setuptools_ if available and
