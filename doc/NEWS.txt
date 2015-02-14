@@ -5,38 +5,46 @@ Change history
 PyEPR 0.9 (in development)
 --------------------------
 
-* :meth:`epr.Field.get_elems` now also handles :data:`epr.E_TID_STRING` and
-  :data:`epr.E_TID_TIME` data types
-* new :attr:`epr.Record.index` property returning the index of the
-  :class:`epr.Record` within the :class:`epr.Dataset`
-* new :attr:`epr.Band.dataset` property returning the source
-  :class:`epr.Dataset` object containing the raw data used to create the
-  :class:`epr.Band`\ ’s pixel values
-* new :attr:`epr.Band._field_index` and :attr:`epr.Band._elem_index`
-  properties returning the :class:`epr.Field` index (within the
-  :class:`epr.Record`) and the element index (within the :class:`epr.Field`)
-  containing the raw data used to create the :class:`epr.Band`\ ’s pixel
-  values
-* new :attr:`epr.Record.dataset_name` property returning the name of the
-  :class:`epr.Dataset` from which the dataset has bee read
-* new :attr:`epr.Record.tot_size` and :attr:`epr.Field.tot_size` properties
-  returning the total size in bytes of the :class:`epr.Record` and
-  :class:`epr.Field` respectively
-* new :func:`epr.get_numpy_dtype` function: retrieves the numpy_ data type
-  corresponding to the specified EPR type ID
-* added support for some low level feature: *_magic* private attribute,
-  :meth:`epr.Record.get_offset` and :meth:`epr.Field.get_offset` methods
-* improved :func:`epr.get_data_type_size`, :func:`epr.data_type_id_to_str`,
-  :func:`epr.get_scaling_method_name` and :func:`epr.get_sample_model_name`
-* improved :meth:`epr.Field.get_elems` method to remove loops and
-  unnecessary data copy
-* use generator expression for `__iter__` special methods
+* new functions/methods and properties:
+
+  - :attr:`epr.Record.index` property: returns the index of the
+    :class:`epr.Record` within the :class:`epr.Dataset`
+  - :attr:`epr.Band.dataset` property: returns the source
+    :class:`epr.Dataset` object containing the raw data used to create
+    the :class:`epr.Band`\ ’s pixel values
+  - :attr:`epr.Band._field_index` and :attr:`epr.Band._elem_index`
+    properties: return the :class:`epr.Field` index (within the
+    :class:`epr.Record`) and the element index (within the
+    :class:`epr.Field`) containing the raw data used to create the
+    :class:`epr.Band`\ ’s pixel values
+  - :attr:`epr.Record.dataset_name` property: returns the name of the
+    :class:`epr.Dataset` from which the dataset has bee read
+  - :attr:`epr.Record.tot_size` and :attr:`epr.Field.tot_size` properties:
+    return the total size in bytes of the :class:`epr.Record` and
+    :class:`epr.Field` respectively
+  - :func:`epr.get_numpy_dtype` function: retrieves the numpy_ data type
+    corresponding to the specified EPR type ID
+  - added support for some low level feature: *_magic* private attribute,
+    :meth:`epr.Record.get_offset` and :meth:`epr.Field.get_offset` methods
+
+* improved functions/methods:
+
+  - :meth:`epr.Field.get_elems` now also handles :data:`epr.E_TID_STRING` and
+    :data:`epr.E_TID_TIME` data types
+  - improved :func:`epr.get_data_type_size`, :func:`epr.data_type_id_to_str`,
+    :func:`epr.get_scaling_method_name` and :func:`epr.get_sample_model_name`
+    functions that are now defined using the cython `cpdef` directive
+  - the :meth:`epr.Field.get_elems` method has been re-written to remove
+    loops and unnecessary data copy
+  - now generator expressions are used to implement `__iter__` special methods
+
 * the *index* parameter of the :meth:`epr.Dataset.read_record` method is
   now optional (defaults to zero)
-* drop `const_char` and `const_void` definitions form :file:`epr.pyx`,
-  no longer necessary
 * the deprecated `__revision__` variable has been removed
 * declarations of the EPR C API have been moved to the new :file:`epr.pyd`
+* the `const_char` and `const_void` definitions have been dropped,
+  no longer necessary with cython_ >= 0.19
+* minimum required version for cython_ is now 0.19
 * the :file:`setup.py` script has been completely rewritten to be more
   "pip_ friendly".  The new script uses setuptools_ if available and
   functions that use numpy_ are evaluated lazily so to give a chance to
@@ -48,7 +56,6 @@ PyEPR 0.9 (in development)
 * the test suite now has a :func:`setUpModule` function that automatically
   downloads the ENVISAT test data required for test execution.
   The download only happens if the test dataset is not already available.
-* minimum required version for cython_ is now 0.19
 * tests can now be run using the :file:`setup.py` script::
 
     $ python3 setup.py test
