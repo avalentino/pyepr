@@ -51,11 +51,12 @@ from epr cimport *
 
 from cpython.version cimport PY_MAJOR_VERSION
 from cpython.object cimport PyObject_AsFileDescriptor
+from cpython.weakref cimport PyWeakref_NewRef
+
 cimport numpy as np
 np.import_array()
 
 import sys
-import weakref
 from collections import namedtuple
 
 import numpy as np
@@ -797,14 +798,19 @@ cdef class Field(EprObject):
                     self.get_num_elems(), data_type_id_to_str(self.get_type()))
 
     def __str__(self):
+        cdef object name = self.get_name()
         cdef EPR_DataTypeId type_ = self.get_type()
+        cdef int num_elems = 0
+
         if type_ == e_tid_string:
-            return '%s = "%s"' % (self.get_name(), self.get_elem())
+            return '%s = "%s"' % (name, self.get_elem())
         elif type_ == e_tid_time:
             days, seconds, microseconds = self.get_elem()
-            return '%s = {d=%d, j=%d, m=%d}' % (self.get_name(),
+            return '%s = {d=%d, j=%d, m=%d}' % (name,
                                                 days, seconds, microseconds)
         else:
+            num_elems = epr_get_field_num_elems(self._ptr)
+
             if type_ == e_tid_uchar:
                 fmt = '%u'
             elif type_ == e_tid_char:
@@ -822,18 +828,18 @@ cdef class Field(EprObject):
             elif type_ == e_tid_double:
                 fmt = '%f'
             else:
-                if self.get_num_elems() > 1:
-                    data = ['<<unknown data type>>'] * self.get_elems()
+                if num_elems > 1:
+                    data = ['<<unknown data type>>'] * num_elems
                     data = ', '.join(data)
-                    return '%s = {%s}' % (self.get_name(), data)
+                    return '%s = {%s}' % (name, data)
                 else:
-                    return '%s = <<unknown data type>>' % (self.get_name())
+                    return '%s = <<unknown data type>>' % name
 
-            if self.get_num_elems() > 1:
+            if num_elems > 1:
                 data = ', '.join([fmt % item for item in self.get_elems()])
-                return '%s = {%s}' % (self.get_name(), data)
+                return '%s = {%s}' % (name, data)
             else:
-                return '%s = %s' % (self.get_name(), fmt % self.get_elem())
+                return '%s = %s' % (name, fmt % self.get_elem())
 
     def __richcmp__(self, other, int op):
         cdef int ret
@@ -907,8 +913,8 @@ cdef class Field(EprObject):
                 return (cstring.memcmp(p1.elems, p2.elems, n) != 0)
 
             else:
-                raise TypeError('Field only implements "==" and '
-                                '"!=" operators')
+                raise TypeError(
+                    'Field only implements "==" and "!=" operators')
         else:
             return NotImplemented
 
@@ -1176,11 +1182,13 @@ cdef class Record(EprObject):
         cdef EPR_SField* field_ptr
         cdef int idx
         cdef char* name
+        cdef int num_fields
 
         self.check_closed_product()
+        num_fields = epr_get_num_fields(self._ptr)
 
         names = []
-        for idx in range(self.get_num_fields()):
+        for idx in range(num_fields):
             field_ptr = <EPR_SField*>epr_get_field_at(self._ptr, idx)
             name = <char*>epr_get_field_name(field_ptr)
             names.append(_to_str(name, 'ascii'))
@@ -1198,9 +1206,13 @@ cdef class Record(EprObject):
 
     def __iter__(self):
         cdef int idx
+        cdef int num_fields
+
         self.check_closed_product()
-        return (self.get_field_at(idx)
-                            for idx in range(epr_get_num_fields(self._ptr)))
+
+        num_fields = epr_get_num_fields(self._ptr)
+
+        return (self.get_field_at(idx) for idx in range(num_fields))
 
     def __str__(self):
         self.check_closed_product()
@@ -1399,7 +1411,7 @@ cdef class Raster(EprObject):
                 return np.ndarray(())
 
             data = self.toarray()
-            self._data = weakref.ref(data)
+            self._data = PyWeakref_NewRef(data, None)
 
             return data
 
@@ -1775,23 +1787,28 @@ cdef class Band(EprObject):
 
         '''
 
-        cdef EPR_SRaster* raster_ptr=NULL
+        cdef EPR_SRaster* raster_ptr = NULL
+        cdef int scene_width
+        cdef int scene_height
 
         self.check_closed_product()
 
+        scene_width = epr_get_scene_width(self._parent._ptr)
+        scene_height = epr_get_scene_height(self._parent._ptr)
+
         if src_width == 0:
-            src_width = self._parent.get_scene_width()
-        elif src_width > self._parent.get_scene_width():
-            raise ValueError('requeted raster width (%d) is too large for '
-                             'the Band (scene_width=%d)' % (
-                                src_width, self._parent.get_scene_width()))
+            src_width = scene_width
+        elif src_width > scene_width:
+            raise ValueError(
+                'requeted raster width (%d) is too large for the Band '
+                '(scene_width=%d)' % (src_width, scene_width))
 
         if src_height == 0:
-            src_height = self._parent.get_scene_height()
-        elif src_height > self._parent.get_scene_height():
-            raise ValueError('requeted raster height (%d) is too large for '
-                             'the Band (scene_height=%d)' % (
-                                src_height, self._parent.get_scene_height()))
+            src_height = scene_height
+        elif src_height > scene_height:
+            raise ValueError(
+                'requeted raster height (%d) is too large for the Band '
+                '(scene_height=%d)' % (src_height, scene_height))
 
         if xstep > src_width:
             raise ValueError('xstep (%d) too large for the requested width '
@@ -1846,15 +1863,19 @@ cdef class Band(EprObject):
         '''
 
         cdef int ret
+        cdef int scene_width
+        cdef int scene_height
 
         self.check_closed_product()
 
         if raster is None:
             raster = self.create_compatible_raster()
 
-        if (xoffset + raster.source_width > self.product.get_scene_width() or
-                yoffset + raster.source_height >
-                    self.product.get_scene_height()):
+        scene_width = epr_get_scene_width(self._parent._ptr)
+        scene_height = epr_get_scene_height(self._parent._ptr)
+
+        if (xoffset + raster._ptr.source_width > scene_width or
+                yoffset + raster._ptr.source_height > scene_height):
             raise ValueError(
                 'at lease part of the requested area is outside the scene')
 
@@ -1913,15 +1934,22 @@ cdef class Band(EprObject):
 
         '''
 
+        cdef int w
+        cdef int h
+        cdef EPR_ProductId* product_id
+
+        self.check_closed_product()
+        product_id = self._parent._ptr
+
         if width is None:
-            w = self.product.get_scene_width()
+            w = epr_get_scene_width(product_id)
             if w > xoffset:
                 width = w - xoffset
             else:
                 raise ValueError('xoffset os larger that he scene width')
 
         if height is None:
-            h = self.product.get_scene_height()
+            h = epr_get_scene_height(product_id)
             if h > yoffset:
                 height = h - yoffset
             else:
@@ -2559,9 +2587,14 @@ cdef class Product(EprObject):
         cdef EPR_SDatasetId* dataset_ptr
         cdef int idx
         cdef char* name
+        cdef int num_datasets
+
+        self.check_closed_product()
+
+        num_datasets = epr_get_num_datasets(self._ptr)
 
         names = []
-        for idx in range(self.get_num_datasets()):
+        for idx in range(num_datasets):
             dataset_ptr = epr_get_dataset_id_at(self._ptr, idx)
             name = <char*>epr_get_dataset_name(dataset_ptr)
             names.append(_to_str(name, 'ascii'))
@@ -2580,9 +2613,14 @@ cdef class Product(EprObject):
         cdef EPR_SBandId* band_ptr
         cdef int idx
         cdef char* name
+        cdef int num_bands
+
+        self.check_closed_product()
+
+        num_bands = epr_get_num_bands(self._ptr)
 
         names = []
-        for idx in range(self.get_num_bands()):
+        for idx in range(num_bands):
             band_ptr = epr_get_band_id_at(self._ptr, idx)
             name = <char*>epr_get_band_name(band_ptr)
             names.append(_to_str(name, 'ascii'))
@@ -2597,8 +2635,13 @@ cdef class Product(EprObject):
         '''
 
         cdef int idx
-        return [self.get_dataset_at(idx)
-                            for idx in range(epr_get_num_datasets(self._ptr))]
+        cdef int num_datasets
+
+        self.check_closed_product()
+
+        num_datasets = epr_get_num_datasets(self._ptr)
+
+        return [self.get_dataset_at(idx) for idx in range(num_datasets)]
 
     def bands(self):
         '''bands(self)
@@ -2607,8 +2650,13 @@ cdef class Product(EprObject):
 
         '''
 
-        return [self.get_band_at(idx)
-                            for idx in range(epr_get_num_bands(self._ptr))]
+        cdef int num_bands
+
+        self.check_closed_product()
+
+        num_bands = epr_get_num_bands(self._ptr)
+
+        return [self.get_band_at(idx) for idx in range(num_bands)]
 
     # @TODO: iter on both datasets and bands (??)
     #def __iter__(self):
