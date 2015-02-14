@@ -2236,12 +2236,17 @@ cdef class Product(EprObject):
 
     cdef EPR_SProductId* _ptr
     cdef object _fd
+    cdef str _mode
 
-    def __cinit__(self, filename):
+    def __cinit__(self, filename, mode='rb'):
         cdef bytes bfilename = _to_bytes(filename, _DEFAULT_FS_ENCODING)
         cdef char* cfilename = bfilename
 
+        if mode not in ('rb',):  # 'r+b'
+            raise ValueError('invalid open mode: "%s"' % mode)
+
         self._fd = None
+        self._mode = mode
 
         with nogil:
             self._ptr = epr_open_product(cfilename)
@@ -2262,7 +2267,7 @@ cdef class Product(EprObject):
         if self._ptr is NULL:
             raise ValueError('I/O operation on closed file')
 
-    def __init__(self, filename):
+    def __init__(self, filename, mode='rb'):
         # @NOTE: this method suppresses the default behavior of EprObject
         #        that is raising an exception when it is instantiated by
         #        the user.
@@ -2319,8 +2324,18 @@ cdef class Product(EprObject):
                 return None
             else:
                 file_no = fileno(self._ptr.istream)
-                self._fd = os.fdopen(file_no, 'rb')
+                self._fd = os.fdopen(file_no, self._mode)
                 return self._fd
+
+    property mode:
+        def __get__(self):
+            '''String that specifies the mode in which the file is opened
+
+            Possible values: 'rb' for read-only mode.
+
+            '''
+
+            return self._mode
 
     property tot_size:
         '''The total size in bytes of the product file'''
@@ -2711,7 +2726,7 @@ cdef class Product(EprObject):
             return self._ptr.magic
 
 
-def open(filename):
+def open(filename, mode='rb'):
     '''open(filename)
 
     Opens the ENVISAT product
@@ -2722,6 +2737,9 @@ def open(filename):
 
     :param product_file_path:
         the path to the ENVISAT product file
+    :param mode:
+        string that specifies the mode in which the file is opened.
+        Default: mode='rb'. Allowed values: 'rb'.
     :returns:
         the :class:`Product` instance representing the specified
         product. An exception (:exc:`exceptions.ValueError`) is raised
@@ -2731,7 +2749,7 @@ def open(filename):
 
     '''
 
-    return Product(filename)
+    return Product(filename, mode)
 
 
 # library initialization/finalization

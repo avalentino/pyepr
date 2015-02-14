@@ -48,6 +48,13 @@ Product
       The file's path including the file name
 
 
+   .. attribute:: mode
+
+      String that specifies the mode in which the file is opened
+
+      Possible values: 'rb' for read-only mode.
+
+
    .. attribute:: id_string
 
       The product identifier string obtained from the MPH parameter 'PRODUCT'
@@ -1116,7 +1123,7 @@ EPRTime
 Functions
 ---------
 
-.. function:: open(filename)
+.. function:: open(filename, mode='rb')
 
    Opens the ENVISAT product
 
@@ -1126,6 +1133,9 @@ Functions
 
    :param product_file_path:
         the path to the ENVISAT product file
+   :param mode:
+        string that specifies the mode in which the file is opened.
+        Default: mode='rb'. Allowed values: 'rb' for read-only mode.
    :returns:
         the :class:`Product` instance representing the specified
         product. An exception (:exc:`exceptions.ValueError`) is raised

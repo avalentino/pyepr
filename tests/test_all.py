@@ -224,6 +224,9 @@ class TestProduct(unittest.TestCase):
         self.assertEqual(self.product.file_path,
                          self.PRODUCT_FILE.replace('\\', '/'))
 
+    def test_mode_property(self):
+        self.assertEqual(self.product.mode, 'rb')
+
     def test_tot_size_property(self):
         self.assertEqual(self.product.tot_size, self.TOT_SIZE)
 
