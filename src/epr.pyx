@@ -47,6 +47,16 @@ from libc cimport string as cstring
 from libc cimport stdio
 from libc.stdio cimport FILE, fdopen
 
+
+IF UNAME_SYSNAME == 'Windows':
+    cdef extern from "stdio.h" nogil:
+        int fileno "_fileno" (FILE*)
+ELSE:
+    # posix
+    cdef extern from "stdio.h" nogil:
+        int fileno(FILE*)
+
+
 from epr cimport *
 
 from cpython.version cimport PY_MAJOR_VERSION
@@ -56,6 +66,7 @@ from cpython.weakref cimport PyWeakref_NewRef
 cimport numpy as np
 np.import_array()
 
+import os
 import sys
 from collections import namedtuple
 
@@ -2224,10 +2235,13 @@ cdef class Product(EprObject):
     '''
 
     cdef EPR_SProductId* _ptr
+    cdef object _fd
 
-    def __cinit__(self, filename, *args, **kargs):
+    def __cinit__(self, filename):
         cdef bytes bfilename = _to_bytes(filename, _DEFAULT_FS_ENCODING)
         cdef char* cfilename = bfilename
+
+        self._fd = None
 
         with nogil:
             self._ptr = epr_open_product(cfilename)
@@ -2286,18 +2300,27 @@ cdef class Product(EprObject):
             else:
                 return _to_str(self._ptr.file_path, 'ascii')
 
-    # @TODO: check
-    #property istream:
-    #    '''The input stream as returned by the ANSI C :c:func:`fopen`
-    #       function for the given file path
-    #
-    #    '''
-    #
-    #    def __get__(self):
-    #        if self._ptr.istream is NULL:
-    #            return None
-    #        else:
-    #            return os.fdopen(self._ptr.istream)
+    property istream:
+        '''The input stream as returned by the :func:`open` builtin function
+
+        The *istream* low level OS file desctiptor is shared with the
+        :class:`Product` instance so e.g. closing one of the :class:`Product`
+        object invalidates the file descriptor of the *istream* object.
+
+        '''
+
+        def __get__(self):
+            cdef int file_no
+
+            if self._fd is not None:
+                return self._fd
+
+            if self._ptr.istream is NULL:
+                return None
+            else:
+                file_no = fileno(self._ptr.istream)
+                self._fd = os.fdopen(file_no, 'rb')
+                return self._fd
 
     property tot_size:
         '''The total size in bytes of the product file'''

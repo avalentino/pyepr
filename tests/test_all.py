@@ -19,6 +19,7 @@
 # along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import io
 import os
 import re
 import sys
@@ -403,6 +404,14 @@ class TestProduct(unittest.TestCase):
             self.product.read_bitmask_raster(bm_expr, xoffset, yoffset, raster)
         except epr.EPRError as e:
             self.assertEqual(e.code, 7)
+
+    def test_istream(self):
+        self.assertTrue(isinstance(self.product.istream, io.BufferedIOBase))
+
+    def test_istream_read(self):
+        self.product.istream.seek(0)
+        data = self.product.istream.read(7)
+        self.assertEqual(data, b'PRODUCT')
 
 
 class TestProductHighLevelAPI(unittest.TestCase):
@@ -2393,7 +2402,6 @@ class TestDataypeFunctions(unittest.TestCase):
         epr.E_TID_SPARE:   None,
         epr.E_TID_TIME:    epr.MJD,
     }
-
 
     def test_data_type_id_to_str(self):
         for type_id, type_name in self.TYPE_NAMES.items():
