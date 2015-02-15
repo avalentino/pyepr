@@ -43,9 +43,10 @@ in a product file.
 
 __version__ = '0.9.0.dev'
 
-from libc cimport string as cstring
+from libc cimport errno
 from libc cimport stdio
-from libc.stdio cimport FILE, fdopen
+from libc.stdio cimport FILE
+from libc cimport string as cstring
 
 
 IF UNAME_SYSNAME == 'Windows':
@@ -256,8 +257,9 @@ cdef FILE* pyepr_get_file_stream(object ostream) except NULL:
         if fileno == -1:
             raise TypeError('bad output stream')
         else:
-            fstream = fdopen(fileno, 'w')
+            fstream = stdio.fdopen(fileno, 'w')
             if fstream is NULL:
+                errno.errno = 0
                 raise TypeError('invalid ostream')
 
     return fstream
@@ -2241,8 +2243,11 @@ cdef class Product(EprObject):
     def __cinit__(self, filename, mode='rb'):
         cdef bytes bfilename = _to_bytes(filename, _DEFAULT_FS_ENCODING)
         cdef char* cfilename = bfilename
+        cdef bytes bmode
+        cdef char* cmode
+        cdef int ret
 
-        if mode not in ('rb',):  # 'r+b'
+        if mode not in ('rb', 'rb+', 'r+b'):
             raise ValueError('invalid open mode: "%s"' % mode)
 
         self._fd = None
@@ -2250,6 +2255,20 @@ cdef class Product(EprObject):
 
         with nogil:
             self._ptr = epr_open_product(cfilename)
+
+        if '+' in mode:
+            # reopen in 'rb+ mode
+
+            bmode = _to_bytes(mode)
+            cmode = bmode
+
+            with nogil:
+                self._ptr.istream = stdio.freopen(cfilename, cmode,
+                                                  self._ptr.istream)
+            if self._ptr.istream is NULL:
+                errno.errno = 0
+                raise ValueError(
+                    'unable to open file "%s" in "%s" mode' % (filename, mode))
 
         if self._ptr is NULL:
             # try to get error info from the lib
@@ -2331,7 +2350,8 @@ cdef class Product(EprObject):
         def __get__(self):
             '''String that specifies the mode in which the file is opened
 
-            Possible values: 'rb' for read-only mode.
+            Possible values: 'rb' for read-only mode, 'rb+' for read-write
+            mode.
 
             '''
 
@@ -2739,7 +2759,8 @@ def open(filename, mode='rb'):
         the path to the ENVISAT product file
     :param mode:
         string that specifies the mode in which the file is opened.
-        Default: mode='rb'. Allowed values: 'rb'.
+        Allowed values: 'rb', 'rb+' for read-write mode.
+        Default: mode='rb'.
     :returns:
         the :class:`Product` instance representing the specified
         product. An exception (:exc:`exceptions.ValueError`) is raised

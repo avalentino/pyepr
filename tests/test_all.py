@@ -147,6 +147,34 @@ class TestOpenProduct(unittest.TestCase):
     def test_open(self):
         product = epr.open(self.PRODUCT_FILE)
         self.assertTrue(isinstance(product, epr.Product))
+        self.assertEqual(product.mode, 'rb')
+
+    def test_open_rb(self):
+        product = epr.open(self.PRODUCT_FILE, 'rb')
+        self.assertTrue(isinstance(product, epr.Product))
+        self.assertEqual(product.mode, 'rb')
+        self.assertEqual(product.istream.mode, 'rb')
+
+    def test_open_rwb_01(self):
+        product = epr.open(self.PRODUCT_FILE, 'r+b')
+        self.assertTrue(isinstance(product, epr.Product))
+        self.assertEqual(product.mode, 'r+b')
+        self.assertEqual(product.istream.mode, 'rb+')
+
+    def test_open_rwb_02(self):
+        product = epr.open(self.PRODUCT_FILE, 'rb+')
+        self.assertTrue(isinstance(product, epr.Product))
+        self.assertEqual(product.mode, 'rb+')
+        self.assertEqual(product.istream.mode, 'rb+')
+
+    def test_open_invalid_mode_01(self):
+        self.assertRaises(ValueError, epr.open, self.PRODUCT_FILE, '')
+
+    def test_open_invalid_mode_02(self):
+        self.assertRaises(ValueError, epr.open, self.PRODUCT_FILE, 'rx')
+
+    def test_open_invalid_mode_03(self):
+        self.assertRaises(ValueError, epr.open, self.PRODUCT_FILE, 0)
 
     if 'unicode' in dir(__builtins__):
 
@@ -185,6 +213,7 @@ class TestOpenProduct(unittest.TestCase):
 
 class TestProduct(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    OPEN_MODE = 'rb'
     ID_STRING = 'MER_LRC_2PTGMV20000620_104318_00000104X000_00000'
     TOT_SIZE = 407461
 
@@ -208,7 +237,7 @@ class TestProduct(unittest.TestCase):
     MERIS_IODD_VERSION = 7
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(self.PRODUCT_FILE, self.OPEN_MODE)
 
     def tearDown(self):
         self.product.close()
@@ -225,7 +254,7 @@ class TestProduct(unittest.TestCase):
                          self.PRODUCT_FILE.replace('\\', '/'))
 
     def test_mode_property(self):
-        self.assertEqual(self.product.mode, 'rb')
+        self.assertEqual(self.product.mode, self.OPEN_MODE)
 
     def test_tot_size_property(self):
         self.assertEqual(self.product.tot_size, self.TOT_SIZE)
@@ -415,6 +444,10 @@ class TestProduct(unittest.TestCase):
         self.product.istream.seek(0)
         data = self.product.istream.read(7)
         self.assertEqual(data, b'PRODUCT')
+
+
+class TestProductRW(TestProduct):
+    OPEN_MODE = 'rb+'
 
 
 class TestProductHighLevelAPI(unittest.TestCase):
@@ -614,6 +647,7 @@ class TestClosedProduct(unittest.TestCase):
 
 class TestDataset(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    OPEN_MODE = 'rb'
     DATASET_NAME = 'Vapour_Content'
     DATASET_DESCRIPTION = 'Level 2 MDS Total Water vapour'
     NUM_RECORDS = 149
@@ -621,7 +655,7 @@ class TestDataset(unittest.TestCase):
     RECORD_INDEX = 0
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(self.PRODUCT_FILE, self.OPEN_MODE)
         self.dataset = self.product.get_dataset(self.DATASET_NAME)
 
     def tearDown(self):
@@ -676,6 +710,10 @@ class TestDataset(unittest.TestCase):
 
     def test_read_record_passed_invalid(self):
         self.assertRaises(TypeError, self.dataset.read_record, 0, 0)
+
+
+class TestDatasetRW(TestDataset):
+    OPEN_MODE = 'rb+'
 
 
 class TestDatasetHighLevelAPI(unittest.TestCase):
@@ -780,6 +818,7 @@ class TestDatasetOnClosedProduct(unittest.TestCase):
 
 class TestBand(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    OPEN_MODE = 'rb+'
     DATASET_NAME = 'Vapour_Content'
     BAND_NAMES = (
         'latitude',
@@ -837,7 +876,7 @@ class TestBand(unittest.TestCase):
     ])
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(self.PRODUCT_FILE, self.OPEN_MODE)
         self.band = self.product.get_band(self.BAND_NAME)
 
     def tearDown(self):
@@ -1186,6 +1225,10 @@ class TestBand(unittest.TestCase):
             box[:(h-1)//step+1, :(w-1)//step+1],
             self.TEST_DATA[::step, ::step],
             rtol=self.RTOL)
+
+
+class TestBandRW(TestBand):
+    OPEN_MODE = 'rb+'
 
 
 class TestAnnotationBand(TestBand):
@@ -1645,6 +1688,7 @@ class TestRasterLowLevelAPI(unittest.TestCase):
 
 class TestRecord(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    OPEN_MODE = 'rb'
     DATASET_NAME = 'Quality_ADS'
     NUM_FIELD = 21
     FIELD_NAME = 'perc_water_abs_aero'
@@ -1652,7 +1696,7 @@ class TestRecord(unittest.TestCase):
     RECORD_INDEX = 0
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(self.PRODUCT_FILE, self.OPEN_MODE)
         self.dataset = self.product.get_dataset(self.DATASET_NAME)
         self.record = self.dataset.read_record(self.RECORD_INDEX)
 
@@ -1732,6 +1776,10 @@ class TestRecord(unittest.TestCase):
 
     def test_index(self):
         self.assertEqual(self.record.index, self.RECORD_INDEX)
+
+
+class TestRecordRW(TestRecord):
+    OPEN_MODE = 'rb+'
 
 
 class TestRecordHighLevelAPI(unittest.TestCase):
@@ -1929,6 +1977,7 @@ class TestRecordOnClosedProduct(unittest.TestCase):
 
 class TestField(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    OPEN_MODE = 'rb'
     DATASET_NAME = 'Quality_ADS'
 
     FIELD_NAME = 'perc_water_abs_aero'
@@ -1941,7 +1990,7 @@ class TestField(unittest.TestCase):
     #FIELD_OFFSET = 13
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(self.PRODUCT_FILE, self.OPEN_MODE)
         dataset = self.product.get_dataset(self.DATASET_NAME)
         record = dataset.read_record(0)
         self.field = record.get_field(self.FIELD_NAME)
@@ -1996,6 +2045,10 @@ class TestField(unittest.TestCase):
         elem_size = epr.get_data_type_size(self.FIELD_TYPE)
         tot_size = elem_size * self.FIELD_NUM_ELEMS
         self.assertEqual(self.field.tot_size, tot_size)
+
+
+class TestFieldRW(TestField):
+    OPEN_MODE = 'rb+'
 
 
 class TestTimeField(TestField):
@@ -2208,6 +2261,7 @@ class TestFieldOnClosedProduct(unittest.TestCase):
 
 class TestDSD(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    OPEN_MODE = 'rb'
     DSD_INDEX = 0
     DS_NAME = 'Quality ADS'
     DS_OFFSET = 12869
@@ -2217,7 +2271,7 @@ class TestDSD(unittest.TestCase):
     NUM_DSR = 5
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(self.PRODUCT_FILE, self.OPEN_MODE)
         self.dsd = self.product.get_dsd_at(self.DSD_INDEX)
 
     def tearDown(self):
@@ -2276,6 +2330,10 @@ class TestDSD(unittest.TestCase):
 
     def test_ne_dsd_record(self):
         self.assertTrue(self.dsd != self.product)
+
+
+class TestDSDRW(TestDSD):
+    OPEN_MODE = 'rb+'
 
 
 class TestDsdHighLevelAPI(unittest.TestCase):

@@ -52,7 +52,7 @@ Product
 
       String that specifies the mode in which the file is opened
 
-      Possible values: 'rb' for read-only mode.
+      Possible values: 'rb' for read-only mode, 'rb+' for read-write mode.
 
 
    .. attribute:: id_string
@@ -1135,7 +1135,8 @@ Functions
         the path to the ENVISAT product file
    :param mode:
         string that specifies the mode in which the file is opened.
-        Default: mode='rb'. Allowed values: 'rb' for read-only mode.
+        Allowed values: 'rb' for read-only mode, 'rb+' for read-write
+        mode. Default: mode='rb'.
    :returns:
         the :class:`Product` instance representing the specified
         product. An exception (:exc:`exceptions.ValueError`) is raised
