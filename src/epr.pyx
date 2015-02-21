@@ -2237,7 +2237,6 @@ cdef class Product(EprObject):
     '''
 
     cdef EPR_SProductId* _ptr
-    cdef object _fd
     cdef str _mode
 
     def __cinit__(self, filename, mode='rb'):
@@ -2250,7 +2249,6 @@ cdef class Product(EprObject):
         if mode not in ('rb', 'rb+', 'r+b'):
             raise ValueError('invalid open mode: "%s"' % mode)
 
-        self._fd = None
         self._mode = mode
 
         with nogil:
@@ -2324,27 +2322,18 @@ cdef class Product(EprObject):
             else:
                 return _to_str(self._ptr.file_path, 'ascii')
 
-    property istream:
-        '''The input stream as returned by the :func:`open` builtin function
+    property _fileno:
+        '''The fileno of the :class:`epr.Product` input stream
 
-        The *istream* low level OS file desctiptor is shared with the
-        :class:`Product` instance so e.g. closing one of the :class:`Product`
-        object invalidates the file descriptor of the *istream* object.
+        To be used with care.
 
         '''
 
         def __get__(self):
-            cdef int file_no
-
-            if self._fd is not None:
-                return self._fd
-
             if self._ptr.istream is NULL:
                 return None
             else:
-                file_no = fileno(self._ptr.istream)
-                self._fd = os.fdopen(file_no, self._mode)
-                return self._fd
+                return fileno(self._ptr.istream)
 
     property mode:
         def __get__(self):

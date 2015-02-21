@@ -74,15 +74,6 @@ Product
       The total size in bytes of the product file
 
 
-   .. attribute:: istream
-
-      The input stream as returned by the :func:`open` builtin function
-
-      The *istream* low level OS file desctiptor is shared with the
-      :class:`Product` instance so e.g. closing one of the :class:`Product`
-      object invalidates the file descriptor of the *istream* object.
-
-
    .. rubric:: Methods
 
    .. method:: get_band(name)

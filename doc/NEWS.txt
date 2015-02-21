@@ -24,8 +24,6 @@ PyEPR 0.9 (in development)
     :class:`epr.Field` respectively
   - :func:`epr.get_numpy_dtype` function: retrieves the numpy_ data type
     corresponding to the specified EPR type ID
-  - :attr:`istream` property: return the file object associated to the
-    :class:`epr.Product`
   - added support for some low level feature: the *_magic* private attribute
     stores the identifier of EPR C stricture, the
     :meth:`epr.Record.get_offset` returns the offset in bytes of the

@@ -153,19 +153,16 @@ class TestOpenProduct(unittest.TestCase):
         product = epr.open(self.PRODUCT_FILE, 'rb')
         self.assertTrue(isinstance(product, epr.Product))
         self.assertEqual(product.mode, 'rb')
-        self.assertEqual(product.istream.mode, 'rb')
 
     def test_open_rwb_01(self):
         product = epr.open(self.PRODUCT_FILE, 'r+b')
         self.assertTrue(isinstance(product, epr.Product))
         self.assertTrue(product.mode in ('r+b', 'rb+'))
-        self.assertTrue(product.istream.mode in ('r+b', 'rb+'))
 
     def test_open_rwb_02(self):
         product = epr.open(self.PRODUCT_FILE, 'rb+')
         self.assertTrue(isinstance(product, epr.Product))
         self.assertTrue(product.mode in ('r+b', 'rb+'))
-        self.assertTrue(product.istream.mode in ('r+b', 'rb+'))
 
     def test_open_invalid_mode_01(self):
         self.assertRaises(ValueError, epr.open, self.PRODUCT_FILE, '')
@@ -437,17 +434,12 @@ class TestProduct(unittest.TestCase):
         except epr.EPRError as e:
             self.assertEqual(e.code, 7)
 
-    def test_istream(self):
-        if sys.version_info >= (3,):
-            self.assertTrue(
-                isinstance(self.product.istream, io.BufferedIOBase))
-        else:
-            self.assertTrue(
-                isinstance(self.product.istream, (io.BufferedIOBase, file)))
+    def test_fileno(self):
+        self.assertTrue(isinstance(self.product._fileno, int))
 
-    def test_istream_read(self):
-        self.product.istream.seek(0)
-        data = self.product.istream.read(7)
+    def test_fileno_read(self):
+        os.lseek(self.product._fileno, 0, os.SEEK_SET)
+        data = os.read(self.product._fileno, 7)
         self.assertEqual(data, b'PRODUCT')
 
 
