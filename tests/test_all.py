@@ -158,14 +158,14 @@ class TestOpenProduct(unittest.TestCase):
     def test_open_rwb_01(self):
         product = epr.open(self.PRODUCT_FILE, 'r+b')
         self.assertTrue(isinstance(product, epr.Product))
-        self.assertEqual(product.mode, 'r+b')
-        self.assertEqual(product.istream.mode, 'rb+')
+        self.assertTrue(product.mode in ('r+b', 'rb+'))
+        self.assertTrue(product.istream.mode in ('r+b', 'rb+'))
 
     def test_open_rwb_02(self):
         product = epr.open(self.PRODUCT_FILE, 'rb+')
         self.assertTrue(isinstance(product, epr.Product))
-        self.assertEqual(product.mode, 'rb+')
-        self.assertEqual(product.istream.mode, 'rb+')
+        self.assertTrue(product.mode in ('r+b', 'rb+'))
+        self.assertTrue(product.istream.mode in ('r+b', 'rb+'))
 
     def test_open_invalid_mode_01(self):
         self.assertRaises(ValueError, epr.open, self.PRODUCT_FILE, '')
@@ -438,7 +438,12 @@ class TestProduct(unittest.TestCase):
             self.assertEqual(e.code, 7)
 
     def test_istream(self):
-        self.assertTrue(isinstance(self.product.istream, io.BufferedIOBase))
+        if sys.version_info >= (3,):
+            self.assertTrue(
+                isinstance(self.product.istream, io.BufferedIOBase))
+        else:
+            self.assertTrue(
+                isinstance(self.product.istream, (io.BufferedIOBase, file)))
 
     def test_istream_read(self):
         self.product.istream.seek(0)
