@@ -556,11 +556,10 @@ cdef class Field(EprObject):
 
         if not found:
             offset = None
+        elif absolute:
+            offset += self._parent._get_offset(absolute)
 
-        if absolute:
-            return offset + self._parent._get_offset()
-        else:
-            return offset
+        return offset
 
 
     def print_(self, ostream=None):
@@ -859,7 +858,7 @@ cdef class Field(EprObject):
         cstring.memcpy(<void*>buf, <const void*>elems.data, datasize)
 
         with nogil:
-            stdio.fseek(istream, file_offset, stdio.SEEK_SET)
+            stdio.fseek(istream, file_offset + field_offset, stdio.SEEK_SET)
             ret = stdio.fwrite(self._ptr.elems, elemsize, nelems,
                                product._ptr.istream)
         if ret != datasize:
@@ -1142,9 +1141,9 @@ cdef class Record(EprObject):
         # assert self._index is not None
 
         if absolure:
-            return offset + self._parent._get_offset()
-        else:
-            return offset
+            offset += (<Dataset>self._parent)._get_offset()
+
+        return offset
 
     def get_num_fields(self):
         '''get_num_fields(self)

@@ -2052,6 +2052,36 @@ class TestFieldRW(TestField):
     OPEN_MODE = 'rb+'
 
 
+class TestFieldWriteOnReadOnly(unittest.TestCase):
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    OPEN_MODE = 'rb'
+    DATASET_NAME = 'Vapour_Content'
+    RECORD_INDEX = 10
+
+    FIELD_NAME = 'wvapour_cont_pix'
+    FIELD_DESCRIPTION = 'Water Vapour Content pixel #1- #281'
+    FIELD_TYPE = epr.E_TID_UCHAR
+    FIELD_TYPE_NAME = 'uchar'
+    FIELD_UNIT = ''
+    FIELD_NUM_ELEMS = 281
+
+    def setUp(self):
+        self.filename = self.PRODUCT_FILE + '_'
+        shutil.copy(self.PRODUCT_FILE, self.filename)
+        self.product = epr.Product(self.filename, self.OPEN_MODE)
+        dataset = self.product.get_dataset(self.DATASET_NAME)
+        record = dataset.read_record(self.RECORD_INDEX)
+        self.field = record.get_field(self.FIELD_NAME)
+
+    def tearDown(self):
+        self.product.close()
+        os.unlink(self.filename)
+
+    def test_write_on_read_only_product(self):
+        value = self.field.get_elem() + 10
+        self.assertRaises(TypeError, self.field.set_elem, value)
+
+
 class TestFieldWrite(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     OPEN_MODE = 'rb+'
@@ -2064,6 +2094,7 @@ class TestFieldWrite(unittest.TestCase):
     FIELD_TYPE = epr.E_TID_UCHAR
     FIELD_TYPE_NAME = 'uchar'
     FIELD_UNIT = ''
+    FIELD_INDEX = 2
     FIELD_NUM_ELEMS = 281
     FIELD_VALUES = (
         1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
@@ -2087,8 +2118,19 @@ class TestFieldWrite(unittest.TestCase):
         self.filename = self.PRODUCT_FILE + '_'
         shutil.copy(self.PRODUCT_FILE, self.filename)
         self.product = None
+        self.dataset = None
+        self.record = None
         self.field = None
         self.reopen(self.OPEN_MODE)
+        self.offset = self._get_offset()
+
+    def _get_offset(self):
+        offset = self.dataset.get_dsd().ds_offset
+        offset += self.record.index * self.record.tot_size
+        for i in range(self.FIELD_INDEX):
+            offset += self.record.get_field_at(i).tot_size
+
+        return offset
 
     def tearDown(self):
         self.product.close()
@@ -2098,9 +2140,17 @@ class TestFieldWrite(unittest.TestCase):
         if self.product is not None:
             self.product.close()
         self.product = epr.Product(self.filename, mode)
-        dataset = self.product.get_dataset(self.DATASET_NAME)
-        record = dataset.read_record(self.RECORD_INDEX)
-        self.field = record.get_field(self.FIELD_NAME)
+        self.dataset = self.product.get_dataset(self.DATASET_NAME)
+        self.record = self.dataset.read_record(self.RECORD_INDEX)
+        self.field = self.record.get_field(self.FIELD_NAME)
+
+    def read(self, offset=0, size=None):
+        if size is None:
+            size = self.field.tot_size
+
+        os.lseek(self.product._fileno, self.offset + offset, os.SEEK_SET)
+
+        return os.read(self.product._fileno, size)
 
     def test_set_elem(self):
         self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
@@ -2112,11 +2162,19 @@ class TestFieldWrite(unittest.TestCase):
         npt.assert_array_equal(self.field.get_elems(), self.FIELD_VALUES)
         self.assertEqual(self.field.get_elem(), self.FIELD_VALUES[0])
 
+        orig_data = self.read()
+
         value = self.field.get_elem() + 10
         self.field.set_elem(value)
 
         if self.REOPEN:
             self.reopen()
+        else:
+            self.product.flush()
+
+        data = self.read()
+        self.assertEqual(len(data), len(orig_data))
+        self.assertNotEqual(data, orig_data)
 
         self.assertEqual(self.field.get_elem(), value)
 
@@ -2141,11 +2199,18 @@ class TestFieldWrite(unittest.TestCase):
         npt.assert_array_equal(self.field.get_elems(), self.FIELD_VALUES)
         self.assertEqual(self.field.get_elem(0), self.FIELD_VALUES[0])
 
+        orig_data = self.read()
+
         value = self.field.get_elem(0) + 10
         self.field.set_elem(value)
 
         if self.REOPEN:
             self.reopen()
+        else:
+            self.product.flush()
+
+        data = self.read()
+        self.assertNotEqual(data, orig_data)
 
         self.assertEqual(self.field.get_elem(0), value)
 
@@ -2170,11 +2235,18 @@ class TestFieldWrite(unittest.TestCase):
         npt.assert_array_equal(self.field.get_elems(), self.FIELD_VALUES)
         self.assertEqual(self.field.get_elem(20), self.FIELD_VALUES[20])
 
+        orig_data = self.read()
+
         value = self.field.get_elem(20) + 1
         self.field.set_elem(value, 20)
 
         if self.REOPEN:
             self.reopen()
+        else:
+            self.product.flush()
+
+        data = self.read()
+        self.assertNotEqual(data, orig_data)
 
         self.assertEqual(self.field.get_elem(20), value)
 
@@ -2198,11 +2270,18 @@ class TestFieldWrite(unittest.TestCase):
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
         npt.assert_array_equal(self.field.get_elems(), self.FIELD_VALUES)
 
+        orig_data = self.read()
+
         values = self.field.get_elems() + 1
         self.field.set_elems(values)
 
         if self.REOPEN:
             self.reopen()
+        else:
+            self.product.flush()
+
+        data = self.read()
+        self.assertNotEqual(data, orig_data)
 
         self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
         self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
