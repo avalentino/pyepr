@@ -24,6 +24,7 @@ import os
 import re
 import sys
 import gzip
+import shutil
 import numbers
 import operator
 import tempfile
@@ -171,7 +172,7 @@ class TestOpenProduct(unittest.TestCase):
         self.assertRaises(ValueError, epr.open, self.PRODUCT_FILE, 'rx')
 
     def test_open_invalid_mode_03(self):
-        self.assertRaises(ValueError, epr.open, self.PRODUCT_FILE, 0)
+        self.assertRaises(TypeError, epr.open, self.PRODUCT_FILE, 0)
 
     if 'unicode' in dir(__builtins__):
 
@@ -2046,6 +2047,177 @@ class TestField(unittest.TestCase):
 
 class TestFieldRW(TestField):
     OPEN_MODE = 'rb+'
+
+
+class TestFieldWrite(unittest.TestCase):
+    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    OPEN_MODE = 'rb+'
+    REOPEN = False
+    DATASET_NAME = 'Vapour_Content'
+    RECORD_INDEX = 10
+
+    FIELD_NAME = 'wvapour_cont_pix'
+    FIELD_DESCRIPTION = 'Water Vapour Content pixel #1- #281'
+    FIELD_TYPE = epr.E_TID_UCHAR
+    FIELD_TYPE_NAME = 'uchar'
+    FIELD_UNIT = ''
+    FIELD_NUM_ELEMS = 281
+    FIELD_VALUES = (
+        1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3,
+        3, 3, 3, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 3, 3,
+        3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1,
+        1,
+    )
+
+    def setUp(self):
+        self.filename = self.PRODUCT_FILE + '_'
+        shutil.copy(self.PRODUCT_FILE, self.filename)
+        self.product = None
+        self.field = None
+        self.reopen(self.OPEN_MODE)
+
+    def tearDown(self):
+        self.product.close()
+        os.unlink(self.filename)
+
+    def reopen(self, mode='rb'):
+        if self.product is not None:
+            self.product.close()
+        self.product = epr.Product(self.filename, mode)
+        dataset = self.product.get_dataset(self.DATASET_NAME)
+        record = dataset.read_record(self.RECORD_INDEX)
+        self.field = record.get_field(self.FIELD_NAME)
+
+    def test_set_elem(self):
+        self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
+        self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
+        self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
+        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
+                         self.FIELD_TYPE_NAME)
+        self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
+        npt.assert_array_equal(self.field.get_elems(), self.FIELD_VALUES)
+        self.assertEqual(self.field.get_elem(), self.FIELD_VALUES[0])
+
+        value = self.field.get_elem() + 10
+        self.field.set_elem(value)
+
+        if self.REOPEN:
+            self.reopen()
+
+        self.assertEqual(self.field.get_elem(), value)
+
+        self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
+        self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
+        self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
+        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
+                         self.FIELD_TYPE_NAME)
+        self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
+
+        values = np.array(self.FIELD_VALUES)
+        values[0] = value
+        npt.assert_array_equal(self.field.get_elems(), values)
+
+    def test_set_elem0(self):
+        self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
+        self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
+        self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
+        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
+                         self.FIELD_TYPE_NAME)
+        self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
+        npt.assert_array_equal(self.field.get_elems(), self.FIELD_VALUES)
+        self.assertEqual(self.field.get_elem(0), self.FIELD_VALUES[0])
+
+        value = self.field.get_elem(0) + 10
+        self.field.set_elem(value)
+
+        if self.REOPEN:
+            self.reopen()
+
+        self.assertEqual(self.field.get_elem(0), value)
+
+        self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
+        self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
+        self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
+        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
+                         self.FIELD_TYPE_NAME)
+        self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
+
+        values = np.array(self.FIELD_VALUES)
+        values[0] = value
+        npt.assert_array_equal(self.field.get_elems(), values)
+
+    def test_set_elem20(self):
+        self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
+        self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
+        self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
+        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
+                         self.FIELD_TYPE_NAME)
+        self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
+        npt.assert_array_equal(self.field.get_elems(), self.FIELD_VALUES)
+        self.assertEqual(self.field.get_elem(20), self.FIELD_VALUES[20])
+
+        value = self.field.get_elem(20) + 1
+        self.field.set_elem(value, 20)
+
+        if self.REOPEN:
+            self.reopen()
+
+        self.assertEqual(self.field.get_elem(20), value)
+
+        self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
+        self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
+        self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
+        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
+                         self.FIELD_TYPE_NAME)
+        self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
+
+        values = np.array(self.FIELD_VALUES)
+        values[20] = value
+        npt.assert_array_equal(self.field.get_elems(), values)
+
+    def test_set_elems(self):
+        self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
+        self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
+        self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
+        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
+                         self.FIELD_TYPE_NAME)
+        self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
+        npt.assert_array_equal(self.field.get_elems(), self.FIELD_VALUES)
+
+        values = self.field.get_elems() + 1
+        self.field.set_elems(values)
+
+        if self.REOPEN:
+            self.reopen()
+
+        self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
+        self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
+        self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
+        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
+                         self.FIELD_TYPE_NAME)
+        self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
+        npt.assert_array_equal(self.field.get_elems(), values)
+
+    def test_set_mph_elem(self):
+        mph = self.product.get_mph()
+        field = mph.get_field_at(3)
+        self.assertRaises(NotImplementedError, field.set_elem, 5)
+
+
+# TODO: check
+#class TestFieldWriteReopen(TestFieldWrite):
+#    REOPEN = True
 
 
 class TestTimeField(TestField):

@@ -42,7 +42,7 @@ PyEPR 0.9 (in development)
     loops and unnecessary data copy
   - now generator expressions are used to implement `__iter__` special methods
 
-* basic support for opening products in read-write mode
+* basic support for opening products in read-write mode @TBW
 * the *index* parameter of the :meth:`epr.Dataset.read_record` method is
   now optional (defaults to zero)
 * the deprecated `__revision__` variable has been removed

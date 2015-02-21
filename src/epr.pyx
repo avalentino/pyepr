@@ -529,6 +529,40 @@ cdef class Field(EprObject):
     cdef inline check_closed_product(self):
         self._parent.check_closed_product()
 
+    cdef inline _check_write_mode(self):
+        self._parent._check_write_mode()
+
+    cdef long _get_offset(self, bint absolute=0):
+        cdef bint found = 0
+        cdef int i = 0
+        cdef int num_fields_in_record = 0
+        cdef long offset = 0
+        cdef const char* name = NULL
+        cdef const EPR_Field* field = NULL
+        cdef const EPR_FieldInfo* info = NULL
+        cdef const EPR_Record* record = NULL
+
+        info = <EPR_FieldInfo*>self._ptr.info
+        name = info.name
+        record = self._parent._ptr
+        num_fields_in_record = epr_get_num_fields(record)
+        for i in range(num_fields_in_record):
+            field = epr_get_field_at(record, i)
+            info = <EPR_FieldInfo*>field.info
+            if info.name == name:
+                found = 1
+                break
+            offset += info.tot_size
+
+        if not found:
+            offset = None
+
+        if absolute:
+            return offset + self._parent._get_offset()
+        else:
+            return offset
+
+
     def print_(self, ostream=None):
         '''print_(self, ostream=None)
 
@@ -792,6 +826,105 @@ cdef class Field(EprObject):
 
         return out
 
+    cdef _set_elems(self, np.ndarray elems, uint index=0):
+        cdef Record record
+        cdef Dataset dataset
+        cdef Product product
+        cdef FILE* istream
+        cdef size_t ret
+        cdef size_t nelems
+        cdef size_t elemsize
+        cdef size_t datasize
+        cdef long file_offset
+        cdef long field_offset
+        cdef char* buf
+        cdef EPR_DataTypeId etype = epr_get_field_type(self._ptr)
+
+        dtype = _DTYPE_MAP[etype]
+
+        elems = elems.astype(dtype)
+
+        record = self._parent
+        dataset = record._parent
+        product = dataset._parent
+        istream = product._ptr.istream
+
+        nelems = elems.size
+        elemsize = epr_get_data_type_size(etype)
+        datasize = elemsize * nelems
+        field_offset = index * elemsize
+        file_offset = self._get_offset(absolute=1)
+        buf = <char*>self._ptr.elems + field_offset
+
+        cstring.memcpy(<void*>buf, <const void*>elems.data, datasize)
+
+        with nogil:
+            stdio.fseek(istream, file_offset, stdio.SEEK_SET)
+            ret = stdio.fwrite(self._ptr.elems, elemsize, nelems,
+                               product._ptr.istream)
+        if ret != datasize:
+            raise IOError('write error')
+
+    def set_elem(self, elem, uint index=0):
+        '''get_elem(self, elem, index=0)
+
+        Field array element access
+
+        This function is for setting an array of field element of the
+        field.
+
+        :param elem:
+            value of the element to set
+        :param index:
+            the zero-based index of element to be returned, must not be
+            negative
+
+        '''
+
+        self.check_closed_product()
+        self._check_write_mode()
+
+        if self._parent.index is None:
+            raise NotImplementedError(
+                'setting elements is not implemented on MPH/SPH records')
+
+        elem = np.asarray(elem)
+        if elem.size != 1:
+            raise ValueError(
+                'invalid shape "%s", scalar value expected' % elem.shape)
+
+        self._set_elems(elem, index)
+
+    def set_elems(self, elems):
+        '''get_elems(self, elems)
+
+        Field array element access
+
+        This function is for setting an array of field elements of the
+        field.
+
+        :param elems:
+            np.ndarray of elements to set
+
+        '''
+
+        cdef uint nelems
+
+        self.check_closed_product()
+        self._check_write_mode()
+
+        if self._parent._index is None:
+            raise NotImplementedError(
+                'setting elements is not implemented on MPH/SPH records')
+
+        nelems = epr_get_field_num_elems(self._ptr)
+        elems = np.ascontiguousarray(elems)
+        if elems.ndim > 1 or elems.size != nelems:
+            raise ValueError('invalid shape "%s", "(%s,)" value expected' % (
+                elems.shape, nelems))
+
+        self._set_elems(elems)
+
     property tot_size:
         '''The total size in bytes of all data elements of a field.
 
@@ -950,33 +1083,8 @@ cdef class Field(EprObject):
     def get_offset(self):
         '''Field offset in bytes within the Record'''
 
-        cdef bint found = 0
-        cdef int i = 0
-        cdef int num_fields_in_record = 0
-        cdef long offset = 0
-        cdef const char* name = NULL
-        cdef const EPR_Field* field = NULL
-        cdef const EPR_FieldInfo* info = NULL
-        cdef const EPR_Record* record = NULL
-
         self.check_closed_product()
-
-        info = <EPR_FieldInfo*>self._ptr.info
-        name = info.name
-        record = self._parent._ptr
-        num_fields_in_record = epr_get_num_fields(record)
-        for i in range(num_fields_in_record):
-            field = epr_get_field_at(record, i)
-            info = <EPR_FieldInfo*>field.info
-            if info.name == name:
-                found = 1
-                break
-            offset += info.tot_size
-
-        if not found:
-            offset = None
-
-        return offset
+        return self._get_offset()
 
 
 cdef new_field(EPR_SField* ptr, Record parent=None):
@@ -1019,6 +1127,24 @@ cdef class Record(EprObject):
         else:
             #elif isinstance(self._parent, Product):
             (<Product>self._parent).check_closed_product()
+
+    cdef inline _check_write_mode(self):
+        if isinstance(self._parent, Dataset):
+            (<Dataset>self._parent)._check_write_mode()
+        else:
+            #elif isinstance(self._parent, Product):
+            (<Product>self._parent)._check_write_mode()
+
+    cdef inline uint _get_offset(self, bint absolure=0):
+        cdef EPR_RecordInfo* info = <EPR_RecordInfo*>self._ptr.info
+        cdef uint offset = self._index * info.tot_size
+
+        # assert self._index is not None
+
+        if absolure:
+            return offset + self._parent._get_offset()
+        else:
+            return offset
 
     def get_num_fields(self):
         '''get_num_fields(self)
@@ -1248,7 +1374,8 @@ cdef class Record(EprObject):
         '''Record offset in bytes within the Dataset'''
 
         if self._index >= 0:
-            return self._index * self.tot_size
+            self.check_closed_product()
+            return self._get_offset()
         else:
             return None
 
@@ -2040,6 +2167,13 @@ cdef class Dataset(EprObject):
     cdef inline check_closed_product(self):
         self._parent.check_closed_product()
 
+    cdef inline _check_write_mode(self):
+        self._parent._check_write_mode()
+
+    cdef inline uint _get_offset(self):
+        cdef const EPR_SDSD* dsd = epr_get_dsd(self._ptr)
+        return dsd.ds_offset
+
     property product:
         '''The :class:`Product` instance to which this dataset belongs to'''
 
@@ -2239,7 +2373,7 @@ cdef class Product(EprObject):
     cdef EPR_SProductId* _ptr
     cdef str _mode
 
-    def __cinit__(self, filename, mode='rb'):
+    def __cinit__(self, filename, str mode='rb'):
         cdef bytes bfilename = _to_bytes(filename, _DEFAULT_FS_ENCODING)
         cdef char* cfilename = bfilename
         cdef bytes bmode
@@ -2276,6 +2410,8 @@ cdef class Product(EprObject):
 
     def __dealloc__(self):
         if self._ptr is not NULL:
+            if '+' in self._mode:
+                stdio.fflush(self._ptr.istream)
             epr_close_product(self._ptr)
             pyepr_check_errors()
             self._ptr = NULL
@@ -2283,6 +2419,10 @@ cdef class Product(EprObject):
     cdef inline check_closed_product(self):
         if self._ptr is NULL:
             raise ValueError('I/O operation on closed file')
+
+    cdef inline _check_write_mode(self):
+        if '+' not in self._mode:
+            raise TypeError('write operation on read-only file')
 
     def __init__(self, filename, mode='rb'):
         # @NOTE: this method suppresses the default behavior of EprObject

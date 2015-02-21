@@ -597,6 +597,16 @@ Field
          reflected to the :class:`Filed` object
 
 
+   .. method:: set_elem([index])
+
+      @TBW
+
+
+   .. method:: set_elems
+
+      @TBW
+
+
    .. method:: print_([ostream])
 
       Write the field to specified file (default: :data:`sys.stdout`)
