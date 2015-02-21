@@ -2452,6 +2452,16 @@ cdef class Product(EprObject):
             pyepr_check_errors()
             self._ptr = NULL
 
+    def flush(self):
+        '''Flush the file stream'''
+
+        cdef int ret
+        if '+' in self.mode:
+            ret = stdio.fflush(self._ptr.istream)
+            if ret != 0:
+                errno.errno = 0
+                raise IOError('flush error')
+
     property file_path:
         '''The file's path including the file name'''
 

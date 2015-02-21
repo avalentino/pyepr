@@ -243,6 +243,9 @@ class TestProduct(unittest.TestCase):
     def test_close(self):
         self.product.close()
 
+    def test_flush(self):
+        self.product.close()
+
     def test_double_close(self):
         self.product.close()
         self.product.close()

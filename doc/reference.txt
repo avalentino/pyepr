@@ -215,6 +215,11 @@ Product
        once; only the first call, however, will have an effect.
 
 
+    .. method:: flush
+
+       Flush the file stream
+
+
    .. rubric:: High level interface methods
 
    .. note::
