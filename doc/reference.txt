@@ -294,12 +294,12 @@ Dataset
 
    .. method:: get_dsd
 
-      Gets the dataset descriptor (DSD)
+      Gets the dataset descriptor (:class:`DSD`)
 
 
    .. method:: get_dsd_name
 
-      Gets the name of the DSD (dataset descriptor)
+      Gets the name of the :class:`DSD` (dataset descriptor)
 
 
    .. method:: get_num_records
@@ -694,7 +694,7 @@ DSD
 
    .. attribute:: index
 
-      The index of this DSD (zero-based)
+      The index of this :class:`DSD` (zero-based)
 
 
    .. attribute:: num_dsr
@@ -1129,8 +1129,8 @@ Functions
    Opens the ENVISAT product
 
    Opens the ENVISAT product file with the given file path, reads MPH,
-   SPH and all DSDs, organized the table with parameter of line length
-   and tie points number.
+   SPH and all :class:`DSD`\ s, organized the table with parameter of line
+   length and tie points number.
 
    :param product_file_path:
         the path to the ENVISAT product file
