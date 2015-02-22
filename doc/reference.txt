@@ -395,6 +395,8 @@ Record
 
       The name of the dataset to which this record belongs to
 
+      .. versionadded:: 0.9
+
 
    .. attribute:: tot_size
 
@@ -405,6 +407,8 @@ Record
 
       *tot_size* is a derived variable, it is computed at runtime
       and not stored in the DSD-DB.
+
+      .. versionadded:: 0.9
 
 
    .. attribute:: index
@@ -417,6 +421,8 @@ Record
       records.
 
      .. seealso:: :meth:`Dataset.read_record`
+
+     .. versionadded:: 0.9
 
 
    .. rubric:: Methods
@@ -495,6 +501,8 @@ Record
 
       Record offset in bytes within the :class:`Dataset`
 
+      .. versionadded:: 0.9
+
 
    .. rubric:: High level interface methods
 
@@ -545,6 +553,8 @@ Field
         *tot_size* is a derived variable, it is computed at runtime and
         not stored in the DSD-DB.
 
+      .. versionadded:: 0.9
+
 
    .. method:: get_description
 
@@ -588,8 +598,7 @@ Field
 
       Field array element access
 
-      This function is for getting an array of field elements of the
-      field.
+      This function is for getting an array of field elements of the field.
 
       :returns:
             the data array (:class:`numpy.ndarray`) having the type of
@@ -598,8 +607,8 @@ Field
       .. versionchanged:: 0.9
 
          the returned :class:`numpy.ndarray` shares the data buffer with
-         the C :c:`Field` structure so any change in its contents is also
-         reflected to the :class:`Filed` object
+         the C :c:type:`Field` structure so any change in its contents is
+         also reflected to the :class:`Filed` object
 
 
    .. method:: set_elem([index])
@@ -650,6 +659,8 @@ Field
    .. method:: get_offset
 
       Field offset in bytes within the :class:`Record`
+
+      .. versionadded:: 0.9
 
 
    .. rubric:: Special methods
@@ -864,6 +875,8 @@ Band
 
       The source dataset containing the raw data used to create the
       band's pixel values.
+
+      .. versionadded:: 0.9
 
 
    .. rubric:: Methods
@@ -1190,6 +1203,8 @@ Functions
 .. function:: get_numpy_dtype(type_id)
 
    Return the numpy datatype specified EPR type ID
+
+   .. versionadded:: 0.9
 
 
 .. function:: get_sample_model_name(model)

@@ -22,7 +22,7 @@ PyEPR 0.9 (in development)
     :class:`epr.Field`) containing the raw data used to create the
     :class:`epr.Band`\ ’s pixel values
   - :attr:`epr.Record.dataset_name` property: returns the name of the
-    :class:`epr.Dataset` from which the dataset has bee read
+    :class:`epr.Dataset` from which the :class:`Record` has bee read
   - :attr:`epr.Record.tot_size` and :attr:`epr.Field.tot_size` properties:
     return the total size in bytes of the :class:`epr.Record` and
     :class:`epr.Field` respectively
