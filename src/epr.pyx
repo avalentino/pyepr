@@ -73,7 +73,8 @@ from collections import namedtuple
 
 import numpy as np
 
-cdef int PY3 = (PY_MAJOR_VERSION >= 3)
+cdef bint PY3 = (PY_MAJOR_VERSION >= 3)
+cdef bint SWAP_BYTES = (sys.byteorder == 'little')
 
 # internal utils
 _DEFAULT_FS_ENCODING = sys.getfilesystemencoding()
@@ -857,17 +858,20 @@ cdef class Field(EprObject):
 
         cstring.memcpy(<void*>buf, <const void*>elems.data, datasize)
 
+        if SWAP_BYTES:
+            elems = elems.byteswap()
+
         with nogil:
             stdio.fseek(istream, file_offset + field_offset, stdio.SEEK_SET)
-            ret = stdio.fwrite(self._ptr.elems, elemsize, nelems,
+            ret = stdio.fwrite(elems.data, elemsize, nelems,
                                product._ptr.istream)
         if ret != datasize:
             raise IOError('write error')
 
     def set_elem(self, elem, uint index=0):
-        '''get_elem(self, elem, index=0)
+        '''set_elem(self, elem, index=0)
 
-        Field array element access
+        Set Field array element
 
         This function is for setting an array of field element of the
         field.
@@ -875,8 +879,8 @@ cdef class Field(EprObject):
         :param elem:
             value of the element to set
         :param index:
-            the zero-based index of element to be returned, must not be
-            negative
+            the zero-based index of element to be set, must not be
+            negative. Default: 0.
 
         '''
 
@@ -895,9 +899,9 @@ cdef class Field(EprObject):
         self._set_elems(elem, index)
 
     def set_elems(self, elems):
-        '''get_elems(self, elems)
+        '''set_elems(self, elems)
 
-        Field array element access
+        Set Field array elements
 
         This function is for setting an array of field elements of the
         field.
@@ -2447,6 +2451,8 @@ cdef class Product(EprObject):
         '''
 
         if self._ptr is not NULL:
+            #if '+' in self.mode:
+            #    stdio.fflush(self._ptr.istream)
             epr_close_product(self._ptr)
             pyepr_check_errors()
             self._ptr = NULL

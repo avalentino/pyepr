@@ -5,6 +5,10 @@ Change history
 PyEPR 0.9 (in development)
 --------------------------
 
+* basic support for update mode: products can now be opened in update mode
+  ('rb+') and it is possible to call :meth:`epr.Field.set_elem` and
+  :meth:`epr.Field.set_elems` methods to set :class:`epr.Field` elements
+  changing the contents of the :class:`epr.Product` on disk.
 * new functions/methods and properties:
 
   - :attr:`epr.Record.index` property: returns the index of the
@@ -42,7 +46,6 @@ PyEPR 0.9 (in development)
     loops and unnecessary data copy
   - now generator expressions are used to implement `__iter__` special methods
 
-* basic support for opening products in read-write mode @TBW
 * the *index* parameter of the :meth:`epr.Dataset.read_record` method is
   now optional (defaults to zero)
 * the deprecated `__revision__` variable has been removed

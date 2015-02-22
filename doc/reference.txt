@@ -604,12 +604,29 @@ Field
 
    .. method:: set_elem([index])
 
-      @TBW
+      Set Field array element
+
+      This function is for setting an array of field element of the field.
+
+      :param elem:
+            value of the element to set
+      :param index:
+            the zero-based index of element to be set, must not be
+            negative. Default: 0.
+
+      .. versionadded:: 0.9
 
 
    .. method:: set_elems
 
-      @TBW
+      Set Field array elements
+
+      This function is for setting an array of field elements of the field.
+
+      :param elems:
+            np.ndarray of elements to set
+
+      .. versionadded:: 0.9
 
 
    .. method:: print_([ostream])

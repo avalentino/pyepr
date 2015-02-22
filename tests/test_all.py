@@ -2152,16 +2152,48 @@ class TestFieldWrite(unittest.TestCase):
 
         return os.read(self.product._fileno, size)
 
-    def test_set_elem(self):
+    def test_set_elem_metadata(self):
         self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
         self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
         self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
         self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
                          self.FIELD_TYPE_NAME)
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
+
+        value = self.field.get_elem() + 10
+        self.field.set_elem(value)
+
+        if self.REOPEN:
+            self.reopen()
+        else:
+            self.product.flush()
+
+        self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
+        self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
+        self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
+        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
+                         self.FIELD_TYPE_NAME)
+        self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
+
+    def test_set_elem_data(self):
         npt.assert_array_equal(self.field.get_elems(), self.FIELD_VALUES)
         self.assertEqual(self.field.get_elem(), self.FIELD_VALUES[0])
 
+        value = self.field.get_elem() + 10
+        self.field.set_elem(value)
+
+        if self.REOPEN:
+            self.reopen()
+        else:
+            self.product.flush()
+
+        self.assertEqual(self.field.get_elem(), value)
+
+        values = np.array(self.FIELD_VALUES)
+        values[0] = value
+        npt.assert_array_equal(self.field.get_elems(), values)
+
+    def test_set_elem_rawdata(self):
         orig_data = self.read()
 
         value = self.field.get_elem() + 10
@@ -2173,10 +2205,29 @@ class TestFieldWrite(unittest.TestCase):
             self.product.flush()
 
         data = self.read()
-        self.assertEqual(len(data), len(orig_data))
         self.assertNotEqual(data, orig_data)
 
-        self.assertEqual(self.field.get_elem(), value)
+        dtype = epr.get_numpy_dtype(self.FIELD_TYPE)
+        data = np.fromstring(data, dtype)
+        orig_data = np.fromstring(orig_data, dtype)
+        orig_data[0] = value
+        npt.assert_array_equal(data, orig_data)
+
+    def test_set_elem0_metadata(self):
+        self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
+        self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
+        self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
+        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
+                         self.FIELD_TYPE_NAME)
+        self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
+
+        value = self.field.get_elem(0) + 10
+        self.field.set_elem(value)
+
+        if self.REOPEN:
+            self.reopen()
+        else:
+            self.product.flush()
 
         self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
         self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
@@ -2184,21 +2235,26 @@ class TestFieldWrite(unittest.TestCase):
         self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
                          self.FIELD_TYPE_NAME)
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
+
+    def test_set_elem0_data(self):
+        npt.assert_array_equal(self.field.get_elems(), self.FIELD_VALUES)
+        self.assertEqual(self.field.get_elem(0), self.FIELD_VALUES[0])
+
+        value = self.field.get_elem(0) + 10
+        self.field.set_elem(value)
+
+        if self.REOPEN:
+            self.reopen()
+        else:
+            self.product.flush()
+
+        self.assertEqual(self.field.get_elem(0), value)
 
         values = np.array(self.FIELD_VALUES)
         values[0] = value
         npt.assert_array_equal(self.field.get_elems(), values)
 
-    def test_set_elem0(self):
-        self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
-        self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
-        self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
-        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
-                         self.FIELD_TYPE_NAME)
-        self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
-        npt.assert_array_equal(self.field.get_elems(), self.FIELD_VALUES)
-        self.assertEqual(self.field.get_elem(0), self.FIELD_VALUES[0])
-
+    def test_set_elem0_rawdata(self):
         orig_data = self.read()
 
         value = self.field.get_elem(0) + 10
@@ -2212,7 +2268,27 @@ class TestFieldWrite(unittest.TestCase):
         data = self.read()
         self.assertNotEqual(data, orig_data)
 
-        self.assertEqual(self.field.get_elem(0), value)
+        dtype = epr.get_numpy_dtype(self.FIELD_TYPE)
+        data = np.fromstring(data, dtype)
+        orig_data = np.fromstring(orig_data, dtype)
+        orig_data[0] = value
+        npt.assert_array_equal(data, orig_data)
+
+    def test_set_elem20_metadata(self):
+        self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
+        self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
+        self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
+        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
+                         self.FIELD_TYPE_NAME)
+        self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
+
+        value = self.field.get_elem(20) + 1
+        self.field.set_elem(value, 20)
+
+        if self.REOPEN:
+            self.reopen()
+        else:
+            self.product.flush()
 
         self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
         self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
@@ -2221,20 +2297,25 @@ class TestFieldWrite(unittest.TestCase):
                          self.FIELD_TYPE_NAME)
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
 
-        values = np.array(self.FIELD_VALUES)
-        values[0] = value
-        npt.assert_array_equal(self.field.get_elems(), values)
-
-    def test_set_elem20(self):
-        self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
-        self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
-        self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
-        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
-                         self.FIELD_TYPE_NAME)
-        self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
+    def test_set_elem20_data(self):
         npt.assert_array_equal(self.field.get_elems(), self.FIELD_VALUES)
         self.assertEqual(self.field.get_elem(20), self.FIELD_VALUES[20])
 
+        value = self.field.get_elem(20) + 1
+        self.field.set_elem(value, 20)
+
+        if self.REOPEN:
+            self.reopen()
+        else:
+            self.product.flush()
+
+        self.assertEqual(self.field.get_elem(20), value)
+
+        values = np.array(self.FIELD_VALUES)
+        values[20] = value
+        npt.assert_array_equal(self.field.get_elems(), values)
+
+    def test_set_elem20_rawdata(self):
         orig_data = self.read()
 
         value = self.field.get_elem(20) + 1
@@ -2248,7 +2329,27 @@ class TestFieldWrite(unittest.TestCase):
         data = self.read()
         self.assertNotEqual(data, orig_data)
 
-        self.assertEqual(self.field.get_elem(20), value)
+        dtype = epr.get_numpy_dtype(self.FIELD_TYPE)
+        data = np.fromstring(data, dtype)
+        orig_data = np.fromstring(orig_data, dtype)
+        orig_data[20] = value
+        npt.assert_array_equal(data, orig_data)
+
+    def test_set_elems_metadata(self):
+        self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
+        self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
+        self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
+        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
+                         self.FIELD_TYPE_NAME)
+        self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
+
+        values = self.field.get_elems() + 1
+        self.field.set_elems(values)
+
+        if self.REOPEN:
+            self.reopen()
+        else:
+            self.product.flush()
 
         self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
         self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
@@ -2257,19 +2358,20 @@ class TestFieldWrite(unittest.TestCase):
                          self.FIELD_TYPE_NAME)
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
 
-        values = np.array(self.FIELD_VALUES)
-        values[20] = value
-        npt.assert_array_equal(self.field.get_elems(), values)
-
-    def test_set_elems(self):
-        self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
-        self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
-        self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
-        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
-                         self.FIELD_TYPE_NAME)
-        self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
+    def test_set_elems_data(self):
         npt.assert_array_equal(self.field.get_elems(), self.FIELD_VALUES)
 
+        values = self.field.get_elems() + 1
+        self.field.set_elems(values)
+
+        if self.REOPEN:
+            self.reopen()
+        else:
+            self.product.flush()
+
+        npt.assert_array_equal(self.field.get_elems(), values)
+
+    def test_set_elems_rawdata(self):
         orig_data = self.read()
 
         values = self.field.get_elems() + 1
@@ -2283,13 +2385,11 @@ class TestFieldWrite(unittest.TestCase):
         data = self.read()
         self.assertNotEqual(data, orig_data)
 
-        self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
-        self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
-        self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
-        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
-                         self.FIELD_TYPE_NAME)
-        self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
-        npt.assert_array_equal(self.field.get_elems(), values)
+        dtype = epr.get_numpy_dtype(self.FIELD_TYPE)
+        data = np.fromstring(data, dtype)
+        orig_data = np.fromstring(orig_data, dtype)
+        orig_data += 1
+        npt.assert_array_equal(data, orig_data)
 
     def test_set_mph_elem(self):
         mph = self.product.get_mph()
@@ -2297,9 +2397,8 @@ class TestFieldWrite(unittest.TestCase):
         self.assertRaises(NotImplementedError, field.set_elem, 5)
 
 
-# TODO: check
-#class TestFieldWriteReopen(TestFieldWrite):
-#    REOPEN = True
+class TestFieldWriteReopen(TestFieldWrite):
+    REOPEN = True
 
 
 class TestTimeField(TestField):
