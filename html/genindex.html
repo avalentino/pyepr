@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Index &mdash; PyEPR 0.8.2 documentation</title>
+    <title>Index &mdash; PyEPR 0.9.0 documentation</title>
     
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.2',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.8.2 documentation" href="index.html" /> 
+    <link rel="top" title="PyEPR 0.9.0 documentation" href="index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -34,7 +34,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="#" title="General Index"
              accesskey="I">index</a></li>
-        <li><a href="index.html">PyEPR 0.8.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.9.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -71,10 +71,6 @@
   <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="reference.html#epr.EPRError.__init__">__init__() (epr.EPRError method)</a>
-  </dt>
-
-      
-  <dt><a href="reference.html#epr.__revision__">__revision__ (in module epr)</a>
   </dt>
 
   </dl></td>
@@ -168,6 +164,14 @@
   </dt>
 
       
+  <dt><a href="reference.html#epr.Band.dataset">dataset (epr.Band attribute)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#epr.Record.dataset_name">dataset_name (epr.Record attribute)</a>
+  </dt>
+
+      
   <dt><a href="reference.html#epr.Product.datasets">datasets() (epr.Product method)</a>
   </dt>
 
@@ -175,6 +179,8 @@
   <dt><a href="reference.html#epr.EPRTime.days">days (epr.EPRTime attribute)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="reference.html#epr.Band.description">description (epr.Band attribute)</a>
   </dt>
@@ -185,8 +191,6 @@
   </dt>
 
       </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="reference.html#epr.DSD.ds_name">ds_name (epr.DSD attribute)</a>
   </dt>
@@ -344,14 +348,18 @@
   <dt><a href="reference.html#epr.Record.fields">fields() (epr.Record method)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="reference.html#epr.Product.file_path">file_path (epr.Product attribute)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="reference.html#epr.DSD.filename">filename (epr.DSD attribute)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#epr.Product.flush">flush() (epr.Product method)</a>
   </dt>
 
   </dl></td>
@@ -432,12 +440,12 @@
   <dt><a href="reference.html#epr.Raster.get_height">get_height() (epr.Raster method)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="reference.html#epr.Product.get_mph">get_mph() (epr.Product method)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="reference.html#epr.Band.get_name">get_name() (epr.Band method)</a>
   </dt>
@@ -476,6 +484,20 @@
   <dt><a href="reference.html#epr.Dataset.get_num_records">get_num_records() (epr.Dataset method)</a>
   </dt>
 
+      
+  <dt><a href="reference.html#epr.get_numpy_dtype">get_numpy_dtype() (in module epr)</a>
+  </dt>
+
+      
+  <dt><a href="reference.html#epr.Field.get_offset">get_offset() (epr.Field method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="reference.html#epr.Record.get_offset">(epr.Record method)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="reference.html#epr.Raster.get_pixel">get_pixel() (epr.Raster method)</a>
   </dt>
@@ -528,6 +550,12 @@
   <dt><a href="reference.html#epr.DSD.index">index (epr.DSD attribute)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="reference.html#epr.Record.index">(epr.Record attribute)</a>
+  </dt>
+
+      </dl></dd>
   </dl></td>
 </tr></table>
 
@@ -548,10 +576,14 @@
   <dt><a href="reference.html#epr.Product.meris_iodd_version">meris_iodd_version (epr.Product attribute)</a>
   </dt>
 
+      
+  <dt><a href="reference.html#epr.EPRTime.microseconds">microseconds (epr.EPRTime attribute)</a>
+  </dt>
+
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="reference.html#epr.EPRTime.microseconds">microseconds (epr.EPRTime attribute)</a>
+  <dt><a href="reference.html#epr.Product.mode">mode (epr.Product attribute)</a>
   </dt>
 
   </dl></td>
@@ -676,8 +708,16 @@
   <dt><a href="reference.html#epr.EPRTime.seconds">seconds (epr.EPRTime attribute)</a>
   </dt>
 
+      
+  <dt><a href="reference.html#epr.Field.set_elem">set_elem() (epr.Field method)</a>
+  </dt>
+
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="reference.html#epr.Field.set_elems">set_elems() (epr.Field method)</a>
+  </dt>
+
       
   <dt><a href="reference.html#epr.Raster.source_height">source_height (epr.Raster attribute)</a>
   </dt>
@@ -705,9 +745,19 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="reference.html#epr.Product.tot_size">tot_size (epr.Product attribute)</a>
+  <dt><a href="reference.html#epr.Field.tot_size">tot_size (epr.Field attribute)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="reference.html#epr.Product.tot_size">(epr.Product attribute)</a>
+  </dt>
+
+        
+  <dt><a href="reference.html#epr.Record.tot_size">(epr.Record attribute)</a>
+  </dt>
+
+      </dl></dd>
   </dl></td>
 </tr></table>
 
@@ -754,12 +804,12 @@
         <li class="right" style="margin-right: 10px">
           <a href="#" title="General Index"
              >index</a></li>
-        <li><a href="index.html">PyEPR 0.8.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.9.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011-2014, Antonio Valentino.
-      Last updated on Aug 03, 2014.
+        &copy; Copyright 2011-2015, Antonio Valentino.
+      Last updated on Feb 27, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

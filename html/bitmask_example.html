@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Exporting bitmasks &mdash; PyEPR 0.8.2 documentation</title>
+    <title>Exporting bitmasks &mdash; PyEPR 0.9.0 documentation</title>
     
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.2',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.8.2 documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.9.0 documentation" href="index.html" />
     <link rel="up" title="Tutorials" href="tutorials.html" />
     <link rel="next" title="NDVI computation" href="ndvi_example.html" />
     <link rel="prev" title="Exporting band data" href="bands_example.html" /> 
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="bands_example.html" title="Exporting band data"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.8.2 documentation</a> &raquo;</li>
+        <li><a href="index.html">PyEPR 0.9.0 documentation</a> &raquo;</li>
           <li><a href="tutorials.html" accesskey="U">Tutorials</a> &raquo;</li> 
       </ul>
     </div>  
@@ -54,7 +54,7 @@
             
   <div class="section" id="exporting-bitmasks">
 <h1>Exporting bitmasks<a class="headerlink" href="#exporting-bitmasks" title="Permalink to this headline">¶</a></h1>
-<p>This tutorial shows how to generate bit masks from <a class="reference external" href="http://envisat.esa.int">ENVISAT</a> flags information
+<p>This tutorial shows how to generate bit masks from <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> flags information
 as &#8220;raw&#8221; image using <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a>.</p>
 <p>The example code (<a class="reference download internal" href="_downloads/write_bitmask.py"><tt class="xref download docutils literal"><span class="pre">examples/write_bitmask.py</span></tt></a>) is a direct
 translation of the C sample program <a class="reference external" href="https://github.com/bcdev/epr-api/blob/master/src/examples/write_bitmask.c">write_bitmask.c</a> bundled with the
@@ -139,7 +139,7 @@ that also includes command line arguments handling:</p>
 71
 72
 73
-74</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+74</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/env python3</span>
 
 <span class="c"># This program is a direct translation of the sample program</span>
 <span class="c"># &quot;write_bitmask.c&quot; bundled with the EPR-API distribution.</span>
@@ -215,11 +215,11 @@ that also includes command line arguments handling:</p>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
 </td></tr></table></div>
-<p>In order to use the <a class="reference external" href="http://www.python.org">Python</a> EPR API the <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><tt class="xref py py-mod docutils literal"><span class="pre">epr</span></tt></a> module is imported:</p>
+<p>In order to use the <a class="reference external" href="https://www.python.org">Python</a> EPR API the <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><tt class="xref py py-mod docutils literal"><span class="pre">epr</span></tt></a> module is imported:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">epr</span>
 </pre></div>
 </div>
-<p>As usual the <a class="reference external" href="http://envisat.esa.int">ENVISAT</a> product is opened using the <a class="reference internal" href="reference.html#epr.open" title="epr.open"><tt class="xref py py-func docutils literal"><span class="pre">epr.open()</span></tt></a> function
+<p>As usual the <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> product is opened using the <a class="reference internal" href="reference.html#epr.open" title="epr.open"><tt class="xref py py-func docutils literal"><span class="pre">epr.open()</span></tt></a> function
 that returns an <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> instance.
 In this case the <a class="reference internal" href="reference.html#epr.open" title="epr.open"><tt class="xref py py-func docutils literal"><span class="pre">epr.open()</span></tt></a> is used together with a <tt class="docutils literal"><span class="pre">with</span></tt> statement
 so that the <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> instance is closed automatically when the
@@ -264,9 +264,9 @@ of the bit-mask. In a bit-mask expression, any number of the flag-names
 </pre></div>
 </div>
 <p>Finally data are written to disk as a flat binary file using the
-<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.tofile.html#numpy.ndarray.tofile" title="(in NumPy v1.8)"><tt class="xref py py-meth docutils literal"><span class="pre">numpy.ndarray.tofile()</span></tt></a> method of the <a class="reference internal" href="reference.html#epr.Raster.data" title="epr.Raster.data"><tt class="xref py py-data docutils literal"><span class="pre">epr.Raster.data</span></tt></a> attribute
+<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.tofile.html#numpy.ndarray.tofile" title="(in NumPy v1.9)"><tt class="xref py py-meth docutils literal"><span class="pre">numpy.ndarray.tofile()</span></tt></a> method of the <a class="reference internal" href="reference.html#epr.Raster.data" title="epr.Raster.data"><tt class="xref py py-data docutils literal"><span class="pre">epr.Raster.data</span></tt></a> attribute
 of the <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> objects that exposes data via the
-<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.8)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> interface:</p>
+<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.9)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> interface:</p>
 <div class="highlight-python"><div class="highlight"><pre>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">image_file_path</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_stream</span><span class="p">:</span>
             <span class="n">bm_raster</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">out_stream</span><span class="p">)</span>
 </pre></div>
@@ -319,13 +319,13 @@ of the <a class="reference internal" href="reference.html#epr.Raster" title="epr
         <li class="right" >
           <a href="bands_example.html" title="Exporting band data"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.8.2 documentation</a> &raquo;</li>
+        <li><a href="index.html">PyEPR 0.9.0 documentation</a> &raquo;</li>
           <li><a href="tutorials.html" >Tutorials</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011-2014, Antonio Valentino.
-      Last updated on Aug 03, 2014.
+        &copy; Copyright 2011-2015, Antonio Valentino.
+      Last updated on Feb 27, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

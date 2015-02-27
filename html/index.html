@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ENVISAT Product Reader Python API &mdash; PyEPR 0.8.2 documentation</title>
+    <title>ENVISAT Product Reader Python API &mdash; PyEPR 0.9.0 documentation</title>
     
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.2',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.8.2 documentation" href="#" />
+    <link rel="top" title="PyEPR 0.9.0 documentation" href="#" />
     <link rel="next" title="User Manual" href="usermanual.html" /> 
   </head>
   <body>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="usermanual.html" title="User Manual"
              accesskey="N">next</a> |</li>
-        <li><a href="#">PyEPR 0.8.2 documentation</a> &raquo;</li> 
+        <li><a href="#">PyEPR 0.9.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -58,18 +58,18 @@
 </tr>
 <tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:antonio&#46;valentino&#37;&#52;&#48;tiscali&#46;it">antonio<span>&#46;</span>valentino<span>&#64;</span>tiscali<span>&#46;</span>it</a></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Copyright:</th><td class="field-body">2011-2014, Antonio Valentino</td>
+<tr class="field-even field"><th class="field-name">Copyright:</th><td class="field-body">2011-2015, Antonio Valentino</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">0.8.2</td>
+<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">0.9.0</td>
 </tr>
 </tbody>
 </table>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> provides <a class="reference external" href="http://www.python.org">Python</a> bindings for the ENVISAT Product Reader C API
-(<a class="reference external" href="https://github.com/bcdev/epr-api">EPR API</a>) for reading satellite data from <a class="reference external" href="http://envisat.esa.int">ENVISAT</a> <a class="reference external" href="http://earth.esa.int">ESA</a> (European
+<p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> provides <a class="reference external" href="https://www.python.org">Python</a> bindings for the ENVISAT Product Reader C API
+(<a class="reference external" href="https://github.com/bcdev/epr-api">EPR API</a>) for reading satellite data from <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> <a class="reference external" href="https://earth.esa.int">ESA</a> (European
 Space Agency) mission.</p>
-<p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a>, as well as the <a class="reference external" href="https://github.com/bcdev/epr-api">EPR API</a> for C, supports <a class="reference external" href="http://envisat.esa.int">ENVISAT</a> MERIS, AATSR
+<p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a>, as well as the <a class="reference external" href="https://github.com/bcdev/epr-api">EPR API</a> for C, supports <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> MERIS, AATSR
 Level 1B and Level 2 and also ASAR data products. It provides access to
 the data either on a geophysical (decoded, ready-to-use pixel samples)
 or on a raw data layer. The raw data access makes it possible to read
@@ -94,6 +94,7 @@ any data field contained in a product file.</p>
 <li class="toctree-l2"><a class="reference internal" href="usermanual.html#library-initialization">Library initialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="usermanual.html#high-level-api">High level API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="usermanual.html#special-methods">Special methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usermanual.html#update-support">Update support</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a><ul>
@@ -101,6 +102,7 @@ any data field contained in a product file.</p>
 <li class="toctree-l2"><a class="reference internal" href="bands_example.html">Exporting band data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bitmask_example.html">Exporting bitmasks</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ndvi_example.html">NDVI computation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="update_example.html">Update <tt class="docutils literal"><span class="pre">Field</span></tt> elements</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a><ul>
@@ -111,6 +113,7 @@ any data field contained in a product file.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="NEWS.html">Change history</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="NEWS.html#pyepr-0-9-27-02-2015">PyEPR 0.9 (27/02/2015)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="NEWS.html#pyepr-0-8-2-03-08-2014">PyEPR 0.8.2 (03/08/2014)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="NEWS.html#pyepr-0-8-1-07-09-2013">PyEPR 0.8.1 (07/09/2013)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="NEWS.html#pyepr-0-8-07-09-2013">PyEPR 0.8 (07/09/2013)</a></li>
@@ -132,7 +135,8 @@ any data field contained in a product file.</p>
 <p>Online documentation for other <a class="reference external" href="https://github.com/avalentino/pyepr">PyEpr</a> versions:</p>
 <ul class="simple">
 <li><a class="reference external" href="https://pyepr.readthedocs.org/en/latest/">latest</a> development</li>
-<li><a class="reference external" href="https://pyepr.readthedocs.org/en/v0.8.2/">0.8.2</a> (latest stable)</li>
+<li><a class="reference external" href="https://pyepr.readthedocs.org/en/v0.9/">0.9</a> (latest stable)</li>
+<li><a class="reference external" href="https://pyepr.readthedocs.org/en/v0.8.2/">0.8.2</a></li>
 <li><a class="reference external" href="https://pyepr.readthedocs.org/en/v0.8.1/">0.8.1</a></li>
 <li><a class="reference external" href="https://pyepr.readthedocs.org/en/v0.8/">0.8</a></li>
 <li><a class="reference external" href="https://pyepr.readthedocs.org/en/v0.7.1/">0.7.1</a></li>
@@ -143,7 +147,7 @@ any data field contained in a product file.</p>
 </div>
 <div class="section" id="license">
 <h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
-<p>Copyright (C) 2011-2014 Antonio Valentino &lt;<a class="reference external" href="mailto:antonio&#46;valentino&#37;&#52;&#48;tiscali&#46;it">antonio<span>&#46;</span>valentino<span>&#64;</span>tiscali<span>&#46;</span>it</a>&gt;</p>
+<p>Copyright (C) 2011-2015 Antonio Valentino &lt;<a class="reference external" href="mailto:antonio&#46;valentino&#37;&#52;&#48;tiscali&#46;it">antonio<span>&#46;</span>valentino<span>&#64;</span>tiscali<span>&#46;</span>it</a>&gt;</p>
 <p>PyEPR is free software: you can redistribute it and/or modify
 it under the terms of the <a class="reference external" href="http://www.gnu.org/licenses/gpl-3.0.html">GNU General Public License</a> as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -192,9 +196,31 @@ along with PyEPR.  If not, see &lt;<a class="reference external" href="http://ww
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script><div>
-<script type="text/javascript" src="http://www.ohloh.net/p/588314/widgets/project_thin_badge.js"></script>
+<script type="text/javascript" src="http://www.openhub.net/p/588314/widgets/project_thin_badge.js"></script>
 </div><div>
+<p>
+<a href="https://pypi.python.org/pypi/pyepr"><img src="https://pypip.in/version/pyepr/badge.svg" alt="Latest Version"/></a>
+</p>
+<p>
+<a href="https://pypi.python.org/pypi/pyepr"><img src="https://pypip.in/py_versions/pyepr/badge.svg" alt="Supported Python versions"/></a>
+</p>
+<p>
+<a href="https://pypi.python.org/pypi/pyepr"><img src="https://pypip.in/license/pyepr/badge.svg" alt="License"/></a>
+</p>
+<p>
+<a href="https://pypi.python.org/pypi/pyepr"><img src="https://pypip.in/download/pyepr/badge.svg" alt="Downloads"/></a>
+</p>
+<p>
+<a href="https://pypi.python.org/pypi/pyepr"><img src="https://pypip.in/wheel/pyepr/badge.svg" alt="Wheel Status"/></a>
+</p>
+</div><div>
+<p>
 <a href="https://travis-ci.org/avalentino/pyepr"><img src="https://travis-ci.org/avalentino/pyepr.png" alt="travis-ci status page"/></a>
+</p>
+</div><div>
+<p>
+<a href="https://ci.appveyor.com/project/avalentino/pyepr"><img src="https://ci.appveyor.com/api/projects/status/pno3t4bwf3pwqdwi?svg=true" alt="AppVeyor status page"/></a>
+</p>
 </div>
         </div>
       </div>
@@ -209,12 +235,12 @@ along with PyEPR.  If not, see &lt;<a class="reference external" href="http://ww
         <li class="right" >
           <a href="usermanual.html" title="User Manual"
              >next</a> |</li>
-        <li><a href="#">PyEPR 0.8.2 documentation</a> &raquo;</li> 
+        <li><a href="#">PyEPR 0.9.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011-2014, Antonio Valentino.
-      Last updated on Aug 03, 2014.
+        &copy; Copyright 2011-2015, Antonio Valentino.
+      Last updated on Feb 27, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

@@ -2,6 +2,88 @@ Change history
 ==============
 
 
+PyEPR 0.9 (27/02/2015)
+----------------------
+
+* basic support for update mode: products can now be opened in update mode
+  ('rb+') and it is possible to call :meth:`epr.Field.set_elem` and
+  :meth:`epr.Field.set_elems` methods to set :class:`epr.Field` elements
+  changing the contents of the :class:`epr.Product` on disk.
+  This feature is not available in the EPR C API.
+* new functions/methods and properties:
+
+  - :attr:`epr.Record.index` property: returns the index of the
+    :class:`epr.Record` within the :class:`epr.Dataset`
+  - :attr:`epr.Band.dataset` property: returns the source
+    :class:`epr.Dataset` object containing the raw data used to create
+    the :class:`epr.Band`\ ’s pixel values
+  - :attr:`epr.Band._field_index` and :attr:`epr.Band._elem_index`
+    properties: return the :class:`epr.Field` index (within the
+    :class:`epr.Record`) and the element index (within the
+    :class:`epr.Field`) containing the raw data used to create the
+    :class:`epr.Band`\ ’s pixel values
+  - :attr:`epr.Record.dataset_name` property: returns the name of the
+    :class:`epr.Dataset` from which the :class:`Record` has bee read
+  - :attr:`epr.Record.tot_size` and :attr:`epr.Field.tot_size` properties:
+    return the total size in bytes of the :class:`epr.Record` and
+    :class:`epr.Field` respectively
+  - :func:`epr.get_numpy_dtype` function: retrieves the numpy_ data type
+    corresponding to the specified EPR type ID
+  - added support for some low level feature: the *_magic* private attribute
+    stores the identifier of EPR C stricture, the
+    :meth:`epr.Record.get_offset` returns the offset in bytes of the
+    :class:`epr.Record` within the file, and the :meth:`epr.Field.get_offset`
+    method returns the :clasS:`epr.Field` offset within the
+    :class:`epr.Record`
+
+* improved functions/methods:
+
+  - :meth:`epr.Field.get_elems` now also handles :data:`epr.E_TID_STRING` and
+    :data:`epr.E_TID_TIME` data types
+  - improved :func:`epr.get_data_type_size`, :func:`epr.data_type_id_to_str`,
+    :func:`epr.get_scaling_method_name` and :func:`epr.get_sample_model_name`
+    functions that are now defined using the cython `cpdef` directive
+  - the :meth:`epr.Field.get_elems` method has been re-written to remove
+    loops and unnecessary data copy
+  - now generator expressions are used to implement `__iter__` special methods
+
+* the *index* parameter of the :meth:`epr.Dataset.read_record` method is
+  now optional (defaults to zero)
+* the deprecated `__revision__` variable has been removed
+* declarations of the EPR C API have been moved to the new :file:`epr.pyd`
+* the `const_char` and `const_void` definitions have been dropped,
+  no longer necessary with cython_ >= 0.19
+* minimum required version for cython_ is now 0.19
+* the :file:`setup.py` script has been completely rewritten to be more
+  "pip_ friendly".  The new script uses setuptools_ if available and
+  functions that use numpy_ are evaluated lazily so to give a chance to
+  pip_ and setuptools_ to install dependencies, numpy_, before they are
+  actually used.
+  This should make PyEPR "pip-installable" even on system there numpy_
+  is not already installed.
+* the :file:`test` directory has been renamed into :file:`tests`
+* the test suite now has a :func:`setUpModule` function that automatically
+  downloads the ENVISAT test data required for test execution.
+  The download only happens if the test dataset is not already available.
+* tests can now be run using the :file:`setup.py` script::
+
+    $ python3 setup.py test
+
+* enable continuous integration and testing in for Windows_ using AppVeyor_
+  (32bit only)
+* status badges for
+  `AppVeyor CI <https://ci.appveyor.com/project/avalentino/pyepr>`_ and
+  PyPI_ added to the HTML doc index
+
+
+.. _pip: https://pip.pypa.io
+.. _setuptools: https://bitbucket.org/pypa/setuptools
+.. _numpy: http://www.numpy.org
+.. _Windows: http://windows.microsoft.com
+.. _AppVeyor: http://www.appveyor.com
+.. _PyPI: https://pypi.python.org/pypi/pyepr
+
+
 PyEPR 0.8.2 (03/08/2014)
 ------------------------
 
@@ -73,7 +155,7 @@ PyEPR 0.7.1 (19/08/2013)
 
   - updated the :file:`README.txt` file to mention EPR C API sourced inclusion
     in the PyEPR 0.7 (and lates) source tar-ball
-  - small fix in the installation instructions: the pip tool does not have  a
+  - small fix in the installation instructions: the pip_ tool does not have  a
     "--prefix" parameter
   - always use the python3 syntax for the *print* function in all examples in
     the documentation
@@ -87,7 +169,7 @@ PyEPR 0.7.1 (19/08/2013)
     script
   - formatting
 
-.. _Ohloh: http://www.ohloh.net
+.. _Ohloh: https://www.openhub.net
 
 
 PyEPR 0.7 (04/08/2013)
@@ -99,7 +181,7 @@ PyEPR 0.7 (04/08/2013)
 * now the source tar-ball also includes a copy of the EPR C API sources
   so that no external C library is required to build PyEPR.
 
-  This features also makes it easier to install PyEPR using pip.
+  This features also makes it easier to install PyEPR using pip_.
 
   The user can still guild PyEPR against a system version of the ERP-API
   library simply using the :option:`--epr-api-src` option of the
@@ -149,9 +231,9 @@ PyEPR 0.5 (25/04/2011)
 * dropped old versions of cython_; now cython_ 0.14.1 or newer is required
 * suppressed several constness related warnings
 
-.. _`Python 3`: http://docs.python.org/3
+.. _`Python 3`: https://docs.python.org/3
 .. _intersphinx: http://sphinx-doc.org/latest/ext/intersphinx.html
-.. _cython: http://www.cython.org
+.. _cython: http://cython.org
 
 
 PyEPR 0.4 (10/04/2011)

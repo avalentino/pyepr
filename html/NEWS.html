@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Change history &mdash; PyEPR 0.8.2 documentation</title>
+    <title>Change history &mdash; PyEPR 0.9.0 documentation</title>
     
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.2',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.8.2 documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.9.0 documentation" href="index.html" />
     <link rel="prev" title="API Reference" href="reference.html" /> 
   </head>
   <body>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="reference.html" title="API Reference"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.8.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.9.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -48,6 +48,94 @@
             
   <div class="section" id="change-history">
 <h1>Change history<a class="headerlink" href="#change-history" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="pyepr-0-9-27-02-2015">
+<h2>PyEPR 0.9 (27/02/2015)<a class="headerlink" href="#pyepr-0-9-27-02-2015" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">basic support for update mode: products can now be opened in update mode
+(&#8216;rb+&#8217;) and it is possible to call <a class="reference internal" href="reference.html#epr.Field.set_elem" title="epr.Field.set_elem"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Field.set_elem()</span></tt></a> and
+<a class="reference internal" href="reference.html#epr.Field.set_elems" title="epr.Field.set_elems"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Field.set_elems()</span></tt></a> methods to set <a class="reference internal" href="reference.html#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">epr.Field</span></tt></a> elements
+changing the contents of the <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> on disk.
+This feature is not available in the EPR C API.</p>
+</li>
+<li><p class="first">new functions/methods and properties:</p>
+<ul class="simple">
+<li><a class="reference internal" href="reference.html#epr.Record.index" title="epr.Record.index"><tt class="xref py py-attr docutils literal"><span class="pre">epr.Record.index</span></tt></a> property: returns the index of the
+<a class="reference internal" href="reference.html#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">epr.Record</span></tt></a> within the <a class="reference internal" href="reference.html#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">epr.Dataset</span></tt></a></li>
+<li><a class="reference internal" href="reference.html#epr.Band.dataset" title="epr.Band.dataset"><tt class="xref py py-attr docutils literal"><span class="pre">epr.Band.dataset</span></tt></a> property: returns the source
+<a class="reference internal" href="reference.html#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">epr.Dataset</span></tt></a> object containing the raw data used to create
+the <a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">epr.Band</span></tt></a>’s pixel values</li>
+<li><tt class="xref py py-attr docutils literal"><span class="pre">epr.Band._field_index</span></tt> and <tt class="xref py py-attr docutils literal"><span class="pre">epr.Band._elem_index</span></tt>
+properties: return the <a class="reference internal" href="reference.html#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">epr.Field</span></tt></a> index (within the
+<a class="reference internal" href="reference.html#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">epr.Record</span></tt></a>) and the element index (within the
+<a class="reference internal" href="reference.html#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">epr.Field</span></tt></a>) containing the raw data used to create the
+<a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">epr.Band</span></tt></a>’s pixel values</li>
+<li><a class="reference internal" href="reference.html#epr.Record.dataset_name" title="epr.Record.dataset_name"><tt class="xref py py-attr docutils literal"><span class="pre">epr.Record.dataset_name</span></tt></a> property: returns the name of the
+<a class="reference internal" href="reference.html#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">epr.Dataset</span></tt></a> from which the <tt class="xref py py-class docutils literal"><span class="pre">Record</span></tt> has bee read</li>
+<li><a class="reference internal" href="reference.html#epr.Record.tot_size" title="epr.Record.tot_size"><tt class="xref py py-attr docutils literal"><span class="pre">epr.Record.tot_size</span></tt></a> and <a class="reference internal" href="reference.html#epr.Field.tot_size" title="epr.Field.tot_size"><tt class="xref py py-attr docutils literal"><span class="pre">epr.Field.tot_size</span></tt></a> properties:
+return the total size in bytes of the <a class="reference internal" href="reference.html#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">epr.Record</span></tt></a> and
+<a class="reference internal" href="reference.html#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">epr.Field</span></tt></a> respectively</li>
+<li><a class="reference internal" href="reference.html#epr.get_numpy_dtype" title="epr.get_numpy_dtype"><tt class="xref py py-func docutils literal"><span class="pre">epr.get_numpy_dtype()</span></tt></a> function: retrieves the <a class="reference external" href="http://www.numpy.org">numpy</a> data type
+corresponding to the specified EPR type ID</li>
+<li>added support for some low level feature: the <em>_magic</em> private attribute
+stores the identifier of EPR C stricture, the
+<a class="reference internal" href="reference.html#epr.Record.get_offset" title="epr.Record.get_offset"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Record.get_offset()</span></tt></a> returns the offset in bytes of the
+<a class="reference internal" href="reference.html#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">epr.Record</span></tt></a> within the file, and the <a class="reference internal" href="reference.html#epr.Field.get_offset" title="epr.Field.get_offset"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Field.get_offset()</span></tt></a>
+method returns the <a class="reference internal" href="reference.html#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">epr.Field</span></tt></a> offset within the
+<a class="reference internal" href="reference.html#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">epr.Record</span></tt></a></li>
+</ul>
+</li>
+<li><p class="first">improved functions/methods:</p>
+<ul class="simple">
+<li><a class="reference internal" href="reference.html#epr.Field.get_elems" title="epr.Field.get_elems"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Field.get_elems()</span></tt></a> now also handles <a class="reference internal" href="reference.html#epr.E_TID_STRING" title="epr.E_TID_STRING"><tt class="xref py py-data docutils literal"><span class="pre">epr.E_TID_STRING</span></tt></a> and
+<a class="reference internal" href="reference.html#epr.E_TID_TIME" title="epr.E_TID_TIME"><tt class="xref py py-data docutils literal"><span class="pre">epr.E_TID_TIME</span></tt></a> data types</li>
+<li>improved <a class="reference internal" href="reference.html#epr.get_data_type_size" title="epr.get_data_type_size"><tt class="xref py py-func docutils literal"><span class="pre">epr.get_data_type_size()</span></tt></a>, <a class="reference internal" href="reference.html#epr.data_type_id_to_str" title="epr.data_type_id_to_str"><tt class="xref py py-func docutils literal"><span class="pre">epr.data_type_id_to_str()</span></tt></a>,
+<a class="reference internal" href="reference.html#epr.get_scaling_method_name" title="epr.get_scaling_method_name"><tt class="xref py py-func docutils literal"><span class="pre">epr.get_scaling_method_name()</span></tt></a> and <a class="reference internal" href="reference.html#epr.get_sample_model_name" title="epr.get_sample_model_name"><tt class="xref py py-func docutils literal"><span class="pre">epr.get_sample_model_name()</span></tt></a>
+functions that are now defined using the cython <cite>cpdef</cite> directive</li>
+<li>the <a class="reference internal" href="reference.html#epr.Field.get_elems" title="epr.Field.get_elems"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Field.get_elems()</span></tt></a> method has been re-written to remove
+loops and unnecessary data copy</li>
+<li>now generator expressions are used to implement <cite>__iter__</cite> special methods</li>
+</ul>
+</li>
+<li><p class="first">the <em>index</em> parameter of the <a class="reference internal" href="reference.html#epr.Dataset.read_record" title="epr.Dataset.read_record"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Dataset.read_record()</span></tt></a> method is
+now optional (defaults to zero)</p>
+</li>
+<li><p class="first">the deprecated <cite>__revision__</cite> variable has been removed</p>
+</li>
+<li><p class="first">declarations of the EPR C API have been moved to the new <tt class="file docutils literal"><span class="pre">epr.pyd</span></tt></p>
+</li>
+<li><p class="first">the <cite>const_char</cite> and <cite>const_void</cite> definitions have been dropped,
+no longer necessary with <a class="reference external" href="http://cython.org">cython</a> &gt;= 0.19</p>
+</li>
+<li><p class="first">minimum required version for <a class="reference external" href="http://cython.org">cython</a> is now 0.19</p>
+</li>
+<li><p class="first">the <tt class="file docutils literal"><span class="pre">setup.py</span></tt> script has been completely rewritten to be more
+&#8220;<a class="reference external" href="https://pip.pypa.io">pip</a> friendly&#8221;.  The new script uses <a class="reference external" href="https://bitbucket.org/pypa/setuptools">setuptools</a> if available and
+functions that use <a class="reference external" href="http://www.numpy.org">numpy</a> are evaluated lazily so to give a chance to
+<a class="reference external" href="https://pip.pypa.io">pip</a> and <a class="reference external" href="https://bitbucket.org/pypa/setuptools">setuptools</a> to install dependencies, <a class="reference external" href="http://www.numpy.org">numpy</a>, before they are
+actually used.
+This should make PyEPR &#8220;pip-installable&#8221; even on system there <a class="reference external" href="http://www.numpy.org">numpy</a>
+is not already installed.</p>
+</li>
+<li><p class="first">the <tt class="file docutils literal"><span class="pre">test</span></tt> directory has been renamed into <tt class="file docutils literal"><span class="pre">tests</span></tt></p>
+</li>
+<li><p class="first">the test suite now has a <tt class="xref py py-func docutils literal"><span class="pre">setUpModule()</span></tt> function that automatically
+downloads the ENVISAT test data required for test execution.
+The download only happens if the test dataset is not already available.</p>
+</li>
+<li><p class="first">tests can now be run using the <tt class="file docutils literal"><span class="pre">setup.py</span></tt> script:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python3 setup.py test
+</pre></div>
+</div>
+</li>
+<li><p class="first">enable continuous integration and testing in for <a class="reference external" href="http://windows.microsoft.com">Windows</a> using <a class="reference external" href="http://www.appveyor.com">AppVeyor</a>
+(32bit only)</p>
+</li>
+<li><p class="first">status badges for
+<a class="reference external" href="https://ci.appveyor.com/project/avalentino/pyepr">AppVeyor CI</a> and
+<a class="reference external" href="https://pypi.python.org/pypi/pyepr">PyPI</a> added to the HTML doc index</p>
+</li>
+</ul>
+</div>
 <div class="section" id="pyepr-0-8-2-03-08-2014">
 <h2>PyEPR 0.8.2 (03/08/2014)<a class="headerlink" href="#pyepr-0-8-2-03-08-2014" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -92,9 +180,9 @@ on the garbage collector behaviour (closes <a class="reference external" href="h
 check if a <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> has been closed</li>
 <li>the <tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt> class now supports context management so they can be
 used in <tt class="docutils literal"><span class="pre">with</span></tt> statements</li>
-<li>added entries for <a class="reference internal" href="reference.html#epr.__version__" title="epr.__version__"><tt class="xref py py-data docutils literal"><span class="pre">epr.__version__</span></tt></a> and <a class="reference internal" href="reference.html#epr.__revision__" title="epr.__revision__"><tt class="xref py py-data docutils literal"><span class="pre">epr.__revision__</span></tt></a> in
+<li>added entries for <a class="reference internal" href="reference.html#epr.__version__" title="epr.__version__"><tt class="xref py py-data docutils literal"><span class="pre">epr.__version__</span></tt></a> and <tt class="xref py py-data docutils literal"><span class="pre">epr.__revision__</span></tt> in
 the reference manual</li>
-<li>the <a class="reference internal" href="reference.html#epr.__revision__" title="epr.__revision__"><tt class="xref py py-data docutils literal"><span class="pre">epr.__revision__</span></tt></a> module attribute is now deprecated</li>
+<li>the <tt class="xref py py-data docutils literal"><span class="pre">epr.__revision__</span></tt> module attribute is now deprecated</li>
 <li>some <em>cythonization</em> warnings have been fixed</li>
 <li>several small improvements to the documentation</li>
 </ul>
@@ -119,7 +207,7 @@ help</li>
 <li>several improvements to the documentation:<ul>
 <li>updated the <tt class="file docutils literal"><span class="pre">README.txt</span></tt> file to mention EPR C API sourced inclusion
 in the PyEPR 0.7 (and lates) source tar-ball</li>
-<li>small fix in the installation instructions: the pip tool does not have  a
+<li>small fix in the installation instructions: the <a class="reference external" href="https://pip.pypa.io">pip</a> tool does not have  a
 &#8220;&#8211;prefix&#8221; parameter</li>
 <li>always use the python3 syntax for the <em>print</em> function in all examples in
 the documentation</li>
@@ -128,7 +216,7 @@ the man page of the HTML doc</li>
 <li>removed <em>date</em> form the doc meta-data.  The documentation build date is
 reported in the front page of the LaTeX (PDF) doc and, starting from this
 release, in the footer of the HTML doc.</li>
-<li>the <a class="reference external" href="http://www.ohloh.net">Ohloh</a> widget has been added in the sidebar of the HTML doc</li>
+<li>the <a class="reference external" href="https://www.openhub.net">Ohloh</a> widget has been added in the sidebar of the HTML doc</li>
 <li>improved the regexp for detecting the SW version in the :file`setup.py`
 script</li>
 <li>formatting</li>
@@ -147,7 +235,7 @@ script</li>
 </li>
 <li><p class="first">now the source tar-ball also includes a copy of the EPR C API sources
 so that no external C library is required to build PyEPR.</p>
-<p>This features also makes it easier to install PyEPR using pip.</p>
+<p>This features also makes it easier to install PyEPR using <a class="reference external" href="https://pip.pypa.io">pip</a>.</p>
 <p>The user can still guild PyEPR against a system version of the ERP-API
 library simply using the <em class="xref std std-option">--epr-api-src</em> option of the
 <tt class="file docutils literal"><span class="pre">setup.py</span></tt> script with &#8220;None&#8221;&#8221; as value.</p>
@@ -166,7 +254,7 @@ The issue is in the EPR C API.</li>
 <div class="section" id="pyepr-0-6-1-26-04-2012">
 <h2>PyEPR 0.6.1 (26/04/2012)<a class="headerlink" href="#pyepr-0-6-1-26-04-2012" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>fix compatibility with <a class="reference external" href="http://www.cython.org">cython</a> 0.16</li>
+<li>fix compatibility with <a class="reference external" href="http://cython.org">cython</a> 0.16</li>
 <li>added a new option to the setup script (<em class="xref std std-option">--epr-api-src</em>) to build
 PyEPR using the EPR-API C sources</li>
 </ul>
@@ -174,25 +262,25 @@ PyEPR using the EPR-API C sources</li>
 <div class="section" id="pyepr-0-6-12-08-2011">
 <h2>PyEPR 0.6 (12/08/2011)<a class="headerlink" href="#pyepr-0-6-12-08-2011" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>full support for <a class="reference external" href="http://docs.python.org/3">Python 3</a></li>
+<li>full support for <a class="reference external" href="https://docs.python.org/3">Python 3</a></li>
 <li>improved code highligh in the documentation</li>
 <li>depend from cython &gt;= 0.13 instead of cython &gt;= 0.14.1.
-Cythonizing <tt class="file docutils literal"><span class="pre">epr.pyx</span></tt> with <a class="reference external" href="http://docs.python.org/3">Python 3</a> requires cython &gt;= 0.15</li>
+Cythonizing <tt class="file docutils literal"><span class="pre">epr.pyx</span></tt> with <a class="reference external" href="https://docs.python.org/3">Python 3</a> requires cython &gt;= 0.15</li>
 </ul>
 </div>
 <div class="section" id="pyepr-0-5-25-04-2011">
 <h2>PyEPR 0.5 (25/04/2011)<a class="headerlink" href="#pyepr-0-5-25-04-2011" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>stop using <a class="reference external" href="http://docs.python.org/c-api/file.html#PyFile_AsFile" title="(in Python v2.7)"><tt class="xref c c-func docutils literal"><span class="pre">PyFile_AsFile()</span></tt></a> that is no more available in
-<a class="reference external" href="http://docs.python.org/3">Python 3</a></li>
+<li>stop using <tt class="xref c c-func docutils literal"><span class="pre">PyFile_AsFile()</span></tt> that is no more available in
+<a class="reference external" href="https://docs.python.org/3">Python 3</a></li>
 <li>now documentation uses <a class="reference external" href="http://sphinx-doc.org/latest/ext/intersphinx.html">intersphinx</a> capabilities</li>
 <li>code examples added to documentation</li>
 <li>tutorials added to documentation</li>
 <li>the LICENSE.txt file is now included in the source distribution</li>
-<li>the <a class="reference external" href="http://www.cython.org">cython</a> construct <tt class="docutils literal"><span class="pre">with</span> <span class="pre">nogil</span></tt> is now used instead of calling
+<li>the <a class="reference external" href="http://cython.org">cython</a> construct <tt class="docutils literal"><span class="pre">with</span> <span class="pre">nogil</span></tt> is now used instead of calling
 <tt class="xref c c-func docutils literal"><span class="pre">Py_BEGIN_ALLOW_THREADS()</span></tt> and <tt class="xref c c-func docutils literal"><span class="pre">Py_END_ALLOW_THREADS()</span></tt>
 directly</li>
-<li>dropped old versions of <a class="reference external" href="http://www.cython.org">cython</a>; now <a class="reference external" href="http://www.cython.org">cython</a> 0.14.1 or newer is required</li>
+<li>dropped old versions of <a class="reference external" href="http://cython.org">cython</a>; now <a class="reference external" href="http://cython.org">cython</a> 0.14.1 or newer is required</li>
 <li>suppressed several constness related warnings</li>
 </ul>
 </div>
@@ -259,6 +347,7 @@ have a more <em>pythonic</em>  API</li>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Change history</a><ul>
+<li><a class="reference internal" href="#pyepr-0-9-27-02-2015">PyEPR 0.9 (27/02/2015)</a></li>
 <li><a class="reference internal" href="#pyepr-0-8-2-03-08-2014">PyEPR 0.8.2 (03/08/2014)</a></li>
 <li><a class="reference internal" href="#pyepr-0-8-1-07-09-2013">PyEPR 0.8.1 (07/09/2013)</a></li>
 <li><a class="reference internal" href="#pyepr-0-8-07-09-2013">PyEPR 0.8 (07/09/2013)</a></li>
@@ -309,12 +398,12 @@ have a more <em>pythonic</em>  API</li>
         <li class="right" >
           <a href="reference.html" title="API Reference"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.8.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.9.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011-2014, Antonio Valentino.
-      Last updated on Aug 03, 2014.
+        &copy; Copyright 2011-2015, Antonio Valentino.
+      Last updated on Feb 27, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
