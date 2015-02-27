@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # This program is a direct translation of the sample program
 # "write_bitmask.c" bundled with the EPR-API distribution.
