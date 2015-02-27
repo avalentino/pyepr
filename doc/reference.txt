@@ -52,7 +52,7 @@ Product
 
       String that specifies the mode in which the file is opened
 
-      Possible values: 'rb' for read-only mode, 'rb+' for read-write mode.
+      Possible values: `rb` for read-only mode, `rb+` for read-write mode.
 
 
    .. attribute:: id_string
@@ -89,10 +89,11 @@ Product
 
    .. method:: get_band_at(index)
 
-      Gets the band at the specified position within the product
+      Gets the :class:`Band` at the specified position within the
+      :class:`product`
 
       :param index:
-            the index identifying the position of the band, starting
+            the index identifying the position of the :class:`Band`, starting
             with 0, must not be negative
       :returns:
             the requested :class:`Band` instance, or raises a
@@ -101,21 +102,22 @@ Product
 
    .. method:: get_dataset(name)
 
-      Gets the dataset corresponding to the specified dataset name
+      Gets the :class:`Dataset` corresponding to the specified dataset name
 
       :param name:
-            the dataset name
+            the :class:`Dataset` name
       :returns:
             the requested :class:`Dataset` instance
 
 
    .. method:: get_dataset_at(index)
 
-      Gets the dataset at the specified position within the product
+      Gets the :class:`Dataset` at the specified position within the
+      :class:`Product`
 
       :param index:
-            the index identifying the position of the dataset, starting
-            with 0, must not be negative
+            the index identifying the position of the :class:`Dataset`,
+            starting with 0, must not be negative
       :returns:
             the requested :class:`Dataset`
 
@@ -124,8 +126,8 @@ Product
 
       Gets the :class:`DSD` at the specified position
 
-      Gets the :class:`DSD` (dataset descriptor) at the specified
-      position within the product.
+      Gets the :class:`DSD` (:class:`Dataset` descriptor) at the specified
+      position within the :class:`Product`.
 
       :param index:
             the index identifying the position of the :class:`DSD`,
@@ -134,38 +136,39 @@ Product
             the requested :class:`DSD` instance
 
 
-   .. method:: get_num_bands
+   .. method:: get_num_bands()
 
-      Gets the number of all bands contained in a product
-
-
-   .. method:: get_num_datasets
-
-      Gets the number of all datasets contained in a product
+      Gets the number of all :class:`Band`\ s contained in a :class:`Product`
 
 
-   .. method:: get_num_dsds
+   .. method:: get_num_datasets()
 
-      Gets the number of all :class:`DSD`\ s (dataset descriptors)
-      contained in the product
-
-
-   .. method:: get_scene_height
-
-      Gets the product's scene height in pixels
+      Gets the number of all :class:`Dataset`\ s contained in a
+      :class:`Product`
 
 
-   .. method:: get_scene_width
+   .. method:: get_num_dsds()
 
-      Gets the product's scene width in pixels
+      Gets the number of all :class:`DSD`\ s (:class:`Dataset` descriptors)
+      contained in the :class:`Product`
 
 
-   .. method:: get_mph
+   .. method:: get_scene_height()
+
+      Gets the :class:`Product` scene height in pixels
+
+
+   .. method:: get_scene_width()
+
+      Gets the :class:`Product` scene width in pixels
+
+
+   .. method:: get_mph()
 
       The :class:`Record` representing the main product header (MPH)
 
 
-   .. method:: get_sph
+   .. method:: get_sph()
 
       The :class:`Record` representing the specific product header (SPH)
 
@@ -174,7 +177,7 @@ Product
 
       Calculates a bit-mask raster
 
-      Calculates a bit-mask, composed of flags of the given product
+      Calculates a bit-mask, composed of flags of the given :class:`Product`
       and combined as described in the given bit-mask expression, for
       the a certain dimension and sub-sampling as defined in the
       given raster.
@@ -209,13 +212,13 @@ Product
 
        This method has no effect if the :class:`Product` is already
        closed. Once the :class:`Product` is closed, any operation on
-       it will raise a ValueError.
+       it will raise a :exc:`ValueError`.
 
        As a convenience, it is allowed to call this method more than
        once; only the first call, however, will have an effect.
 
 
-    .. method:: flush
+    .. method:: flush()
 
        Flush the file stream
 
@@ -225,31 +228,32 @@ Product
    .. note::
 
       the following methods are part of the *high level* Python API and
-      do not have any correspondent function in the C API.
+      do not have any corresponding function in the C API.
 
    .. attribute:: closed
 
       True if the :class:`Product` is closed.
 
 
-   .. method:: get_dataset_names
+   .. method:: get_dataset_names()
 
-      Return the list of names of the datasets in the product
-
-
-   .. method:: get_band_names
-
-      Return the list of names of the bands in the product
+      Return the list of names of the :class:`Dataset`\ s in the
+      :class:`Product`
 
 
-   .. method:: datasets
+   .. method:: get_band_names()
 
-      Return the list of dataset in the product
+      Return the list of names of the :class:`Band`\ s in the :class:`Product`
 
 
-   .. method:: bands
+   .. method:: datasets()
 
-      Return the list of bands in the product
+      Return the list of :class:`Dataset`\ s in the :class:`Product`
+
+
+   .. method:: bands()
+
+      Return the list of :class:`Band`\ s in the :class:`Product`
 
 
    .. rubric:: Special methods
@@ -282,70 +286,70 @@ Dataset
 
    .. attribute:: description
 
-      A short description of the band's contents
+      A short description of the :class:`Band` contents
 
 
    .. attribute:: product
 
-      The :class:`Product` instance to which this dataset belongs to
+      The :class:`Product` instance to which this :class:`Dataset` belongs to
 
 
    .. rubric:: Methods
 
-   .. method:: get_name
+   .. method:: get_name()
 
-      Gets the name of the dataset
-
-
-   .. method:: get_dsd
-
-      Gets the dataset descriptor (:class:`DSD`)
+      Gets the name of the :class:`Dataset`
 
 
-   .. method:: get_dsd_name
+   .. method:: get_dsd()
 
-      Gets the name of the :class:`DSD` (dataset descriptor)
-
-
-   .. method:: get_num_records
-
-      Gets the number of records of the dataset
+      Gets the :class:`Dataset` descriptor (:class:`DSD`)
 
 
-   .. method:: create_record
+   .. method:: get_dsd_name()
 
-      Creates a new record
+      Gets the name of the :class:`DSD` (:class:`Dataset` descriptor)
 
-      Creates a new, empty record with a structure compatible with
-      the dataset. Such a record is typically used in subsequent
-      calls to :meth:`Dataset.read_record`.
+
+   .. method:: get_num_records()
+
+      Gets the number of :class:`Record`\ s of the :class:`Dataset`
+
+
+   .. method:: create_record()
+
+      Creates a new :class:`Record`
+
+      Creates a new, empty :class:`Record` with a structure compatible with
+      the :class:`Dataset`. Such a :class:`Record` is typically used in
+      subsequent calls to :meth:`Dataset.read_record`.
 
       :returns:
-            the new record instance
+            the new :class:`Record` instance
 
 
    .. method:: read_record(index[, record])
 
-      Reads specified record of the dataset
+      Reads specified :class:`Record` of the :class:`Dataset`
 
-      The record is identified through the given zero-based record
-      index. In order to reduce memory reallocation, a record
-      (pre-)created by the method :meth:`Dataset.create_record` can
-      be passed to this method.
-      Data is then read into this given record.
+      The :class:`Record` is identified through the given zero-based
+      :class:`Record` index. In order to reduce memory reallocation, a
+      :class:`Record` (pre-)created by the method
+      :meth:`Dataset.create_record` can be passed to this method.
+      Data is then read into this given :class:`Record`.
 
-      If no record (``None``) is given, the method initiates a new
+      If no :class:`Record` (``None``) is given, the method initiates a new
       one.
 
-      In both cases, the record in which the data is read into will
-      be  returned.
+      In both cases, the :class:`Record` in which the data is read into will
+      be returned.
 
       :param index:
-            the zero-based record index (default: 0)
+            the zero-based :class:`Record` index (default: 0)
       :param record:
-            a pre-created record to reduce memory reallocation, can be
-            ``None`` (default) to let the function allocate a new
-            record
+            a pre-created :class:`Record` to reduce memory reallocation,
+            can be ``None`` (default) to let the function allocate a new
+            :class:`Record`
       :returns:
             the record in which the data has been read into or raises
             an exception (:exc:`EPRValueError`) if an error occurred
@@ -360,11 +364,11 @@ Dataset
    .. note::
 
       the following methods are part of the *high level* Python API and
-      do not have any correspondent function in the C API.
+      do not have any corresponding function in the C API.
 
-   .. method:: records
+   .. method:: records()
 
-      Return the list of records contained in the dataset
+      Return the list of :class:`Record`\ s contained in the :class:`Dataset`
 
 
    .. rubric:: Special methods
@@ -393,19 +397,19 @@ Record
 
    .. attribute::  dataset_name
 
-      The name of the dataset to which this record belongs to
+      The name of the :class:`Dataset` to which this :class:`Record` belongs to
 
       .. versionadded:: 0.9
 
 
    .. attribute:: tot_size
 
-      The total size in bytes of the record
+      The total size in bytes of the :class:`Record`
 
-      It includes all data elements of all fields of a record in a
-      product file.
+      It includes all data elements of all :class:`Field`\ s of a
+      :class:`Record` in a :class:`Product` file.
 
-      *tot_size* is a derived variable, it is computed at runtime
+      *tot_size* is a derived variable, it is computed at run-time
       and not stored in the DSD-DB.
 
       .. versionadded:: 0.9
@@ -413,12 +417,12 @@ Record
 
    .. attribute:: index
 
-      Index of the record within the :class:`Dataset`
+      Index of the :class:`Record` within the :class:`Dataset`
 
-      It is *None* for empty records (created with
+      It is *None* for empty :class:`Record`\ s (created with
       :meth:`Dataset.create_record` but still not read) and for *MPH*
       (see :meth:`Product.get_mph`) and *SPH* (see :meth:`Product.get_sph`)
-      records.
+      :class:`Record`\ s.
 
      .. seealso:: :meth:`Dataset.read_record`
 
@@ -429,13 +433,13 @@ Record
 
    .. method:: get_field(name)
 
-      Gets a field specified by name
+      Gets a :class:`Field` specified by name
 
-      The field is here identified through the given name.
-      It contains the field info and all corresponding values.
+      The :class:`Field` is here identified through the given name.
+      It contains the :class:`Field` info and all corresponding values.
 
       :param name:
-            the the name of required field
+            the the name of required :class:`Field`
       :returns:
             the specified :class:`Field` or raises an exception
             (:exc:`EPRValueError`) if an error occurred
@@ -443,25 +447,27 @@ Record
 
    .. method:: get_field_at(index)
 
-      Gets a field at the specified position within the record
+      Gets a :class:`Field` at the specified position within the
+      :class:`Record`
 
       :param index:
-            the zero-based index (position within record) of the field
+            the zero-based index (position within :class:`Record`) of the
+            :class:`Field`
       :returns:
-            the field or raises and exception (:exc:`EPRValueError`)
+            the :class:`Field` or raises and exception (:exc:`EPRValueError`)
             if an error occurred
 
 
-   .. method:: get_num_fields
+   .. method:: get_num_fields()
 
-      Gets the number of fields contained in the record
+      Gets the number of :class:`Field`\ s contained in the :class:`Record`
 
 
    .. method:: print_([ostream])
 
-      Write the record to specified file (default: :data:`sys.stdout`)
+      Write the :class:`Record` to specified file (default: :data:`sys.stdout`)
 
-      This method writes formatted contents of the record to
+      This method writes formatted contents of the :class:`Record` to
       specified *ostream* text file or (default) the ASCII output
       is be printed to standard output (:data:`sys.stdout`)
 
@@ -479,14 +485,14 @@ Record
 
       Write the specified field element to file (default: :data:`sys.stdout`)
 
-      This method writes formatted contents of the specified field
+      This method writes formatted contents of the specified :class:`Field`
       element to the *ostream* text file or (default) the ASCII output
       will be printed to standard output (:data:`sys.stdout`)
 
       :param field_index:
-            the index of field in the record
+            the index of :class:`Field` in the :class:`Record`
       :param element_index:
-            the index of element in the specified field
+            the index of element in the specified :class:`Field`
       :param ostream:
             the (opened) output file object
 
@@ -497,9 +503,9 @@ Record
          instances
 
 
-   .. method:: get_offset
+   .. method:: get_offset()
 
-      Record offset in bytes within the :class:`Dataset`
+      :class:`Record` offset in bytes within the :class:`Dataset`
 
       .. versionadded:: 0.9
 
@@ -509,16 +515,16 @@ Record
    .. note::
 
       the following methods are part of the *high level* Python API and
-      do not have any correspondent function in the C API.
+      do not have any corresponding function in the C API.
 
    .. method:: get_field_names
 
-      Return the list of names of the fields in the product
+      Return the list of names of the :class:`Field`\ s in the :class:`Record`
 
 
-   .. method:: fields
+   .. method:: fields()
 
-      Return the list of fields contained in the record
+      Return the list of :class:`Field`\ s contained in the :class:`Record`
 
 
    .. rubric:: Special methods
@@ -538,7 +544,7 @@ Field
 
    Represents a field within a record
 
-   A field is composed of one or more data elements of one of the
+   A :class:`Field` is composed of one or more data elements of one of the
    types defined in the internal ``field_info`` structure.
 
    .. seealso:: :class:`Record`
@@ -548,61 +554,62 @@ Field
 
    .. attribute::  tot_size
 
-        The total size in bytes of all data elements of a field.
+        The total size in bytes of all data elements of a :class:`Field`.
 
-        *tot_size* is a derived variable, it is computed at runtime and
+        *tot_size* is a derived variable, it is computed at run-time and
         not stored in the DSD-DB.
 
       .. versionadded:: 0.9
 
 
-   .. method:: get_description
+   .. method:: get_description()
 
-      Gets the description of the field
-
-
-   .. method:: get_name
-
-      Gets the name of the field
+      Gets the description of the :class:`Field`
 
 
-   .. method:: get_num_elems
+   .. method:: get_name()
 
-      Gets the number of elements of the field
-
-
-   .. method:: get_type
-
-      Gets the type of the field
+      Gets the name of the :class:`Field`
 
 
-   .. method:: get_unit
+   .. method:: get_num_elems()
 
-      Gets the unit of the field
+      Gets the number of elements of the :class:`Field`
+
+
+   .. method:: get_type()
+
+      Gets the type of the :class:`Field`
+
+
+   .. method:: get_unit()
+
+      Gets the unit of the :class:`Field`
 
 
    .. method:: get_elem([index])
 
-      Field single element access
+      :class:`Field` single element access
 
-      This function is for getting the elements of a field.
+      This function is for getting the elements of a :class:`Field`.
 
       :param index:
             the zero-based index of element to be returned, must not be
             negative. Default: 0.
       :returns:
-            the typed value from given field
+            the typed value from given :class:`Field`
 
 
-   .. method:: get_elems
+   .. method:: get_elems()
 
-      Field array element access
+      :class:`Field` array element access
 
-      This function is for getting an array of field elements of the field.
+      This function is for getting an array of field elements of the
+      :class:`Field`.
 
       :returns:
             the data array (:class:`numpy.ndarray`) having the type of
-            the field
+            the :class:`Field`
 
       .. versionchanged:: 0.9
 
@@ -611,11 +618,12 @@ Field
          also reflected to the :class:`Filed` object
 
 
-   .. method:: set_elem([index])
+   .. method:: set_elem(elem, [index])
 
-      Set Field array element
+      Set :class:`Field` array element
 
-      This function is for setting an array of field element of the field.
+      This function is for setting an array of field element of the
+      :class:`Field`.
 
       :param elem:
             value of the element to set
@@ -623,26 +631,35 @@ Field
             the zero-based index of element to be set, must not be
             negative. Default: 0.
 
+      .. note::
+
+         this method does not have any corresponding function in the C API.
+
       .. versionadded:: 0.9
 
 
-   .. method:: set_elems
+   .. method:: set_elems(elems)
 
-      Set Field array elements
+      Set :class:`Field` array elements
 
-      This function is for setting an array of field elements of the field.
+      This function is for setting an array of :class:`Field` elements of
+      the :class:`Field`.
 
       :param elems:
             np.ndarray of elements to set
+
+      .. note::
+
+         this method does not have any corresponding function in the C API.
 
       .. versionadded:: 0.9
 
 
    .. method:: print_([ostream])
 
-      Write the field to specified file (default: :data:`sys.stdout`)
+      Write the :class:`Field` to specified file (default: :data:`sys.stdout`)
 
-      This method writes formatted contents of the field to
+      This method writes formatted contents of the :class:`Field` to
       specified *ostream* text file or (default) the ASCII output
       is be printed to standard output (:data:`sys.stdout`)
 
@@ -656,7 +673,7 @@ Field
          instances
 
 
-   .. method:: get_offset
+   .. method:: get_offset()
 
       Field offset in bytes within the :class:`Record`
 
@@ -687,42 +704,42 @@ DSD
 
 .. class:: DSD
 
-   Dataset descriptor
+   :class:`Dataset` descriptor
 
    The DSD class contains information about the properties of a
-   dataset and its location within an ENVISAT product file
+   :class:`Dataset` and its location within an ENVISAT :class:`Product` file
 
 
    .. rubric:: Attributes
 
    .. attribute:: ds_name
 
-      The dataset name
+      The :class:`Dataset` name
 
 
    .. attribute:: ds_offset
 
-      The offset of dataset-information the product file
+      The offset of :class:`Dataset` in the :class:`Product` file
 
 
    .. attribute:: ds_size
 
-      The size of dataset-information in dataset product file
+      The size of :class:`Dataset` in the :class:`Product` file
 
 
    .. attribute:: ds_type
 
-      The dataset type descriptor
+      The :class:`Dataset` type descriptor
 
 
    .. attribute:: dsr_size
 
-      The size of dataset record for the given dataset name
+      The size of dataset record for the given :class:`Dataset` name
 
 
    .. attribute:: filename
 
-      The filename in the DDDB with the description of this dataset
+      The filename in the DDDB with the description of this :class:`Dataset`
 
 
    .. attribute:: index
@@ -732,7 +749,7 @@ DSD
 
    .. attribute:: num_dsr
 
-      The number of dataset records for the given dataset name
+      The number of dataset records for the given :class:`Dataset` name
 
 
    .. rubric:: Special methods
@@ -750,10 +767,11 @@ Band
 
 .. class:: Band
 
-   The band of an ENVISAT product
+   The band of an ENVISAT :class:`Product`
 
    The Band class contains information about a band within an ENVISAT
-   product file which has been opened with the :func:`open` function.
+   :class:`Product` file which has been opened with the :func:`open`
+   function.
 
    A new Band instance can be obtained with the :meth:`Product.get_band`
    method.
@@ -770,7 +788,7 @@ Band
 
    .. attribute:: data_type
 
-      The data type of the band's pixels
+      The data type of the :class:`Band` pixels
 
       Possible values are:
 
@@ -782,7 +800,7 @@ Band
 
    .. attribute:: description
 
-      A short description of the band's contents
+      A short description of the :class:`Band` contents
 
 
    .. attribute:: lines_mirrored
@@ -796,14 +814,14 @@ Band
 
    .. attribute:: product
 
-      The :class:`Product` instance to which this band belongs to
+      The :class:`Product` instance to which this :class:`Band` belongs to
 
 
    .. attribute:: sample_model
 
       The sample model operation
 
-      The sample model operation applied to the source dataset for
+      The sample model operation applied to the source :class:`Dataset` for
       getting the correct samples from the MDS (for example MERIS L2).
 
       Possible values are:
@@ -823,7 +841,8 @@ Band
       * ``*`` --> no factor provided (implies scaling_method=*)
       * ``const`` --> a floating point constant
       * ``GADS.field[.field2]`` --> value is provided in global
-        annotation dataset with name `GADS` in field `field``.
+        annotation :class:`Dataset` with name `GADS` in :class:`Field`
+        `field`.
         Optionally a second element index for multiple-element fields
         can be given too
 
@@ -852,57 +871,60 @@ Band
       * ``*`` --> no offset provided (implies scaling_method=*)
       * ``const`` --> a floating point constant
       * ``GADS.field[.field2]` --> value is provided in global
-        annotation dataset with name ``GADS`` in field ``field``.
+        annotation :class:`Dataset` with name ``GADS`` in :class:`Field`
+        ``field``.
         Optionally a second element index for multiple-element fields
         can be given too
 
 
    .. attribute:: spectr_band_index
 
-      The (zero-based) spectral band index
+      The (zero-based) spectral :class:`Band` index
 
-       -1 if this is not a spectral band
+       -1 if this is not a spectral :class:`Band`
 
 
    .. attribute:: unit
 
-      The geophysical unit for the band's pixel values
+      The geophysical unit for the :class:`Band` pixel values
 
 
    .. attribute:: dataset
 
-      The source dataset
+      The source :class:`Dataset`
 
-      The source dataset containing the raw data used to create the
-      band's pixel values.
+      The source :class:`Dataset` containing the raw data used to create the
+      :class:`Band` pixel values.
 
       .. versionadded:: 0.9
 
 
    .. rubric:: Methods
 
-   .. method:: get_name
+   .. method:: get_name()
 
-      Gets the name of the band
+      Gets the name of the :class:`Band`
 
 
    .. method:: create_compatible_raster([src_width, src_height, xstep, ystep])
 
-      Creates a raster which is compatible with the data type of the band
+      Creates a :class:`Raster` which is compatible with the data type of
+      the :class:`Band`
 
-      The created raster is used to read the data in it (see
+      The created :class:`Raster` is used to read the data in it (see
       :meth:`Band.read_raster`).
 
-      The raster is defined on the grid of the product, from which the
-      data are read. Spatial subsets and under-sampling are possible)
-      through the parameter of the method.
+      The :class:`Raster` is defined on the grid of the :class:`Product`,
+      from which the data are read. Spatial subsets and under-sampling are
+      possible) through the parameter of the method.
 
-      A raster is an object that allows direct access to data of a
-      certain portion of the ENVISAT product that are read into the it.
-      Such a portion is called the source. The complete ENVISAT product
-      can be much greater than the source. One can move the raster over
-      the complete ENVISAT product and read in turn different parts
-      (always of the size of the source) of it into the raster.
+      A :class:`Raster` is an object that allows direct access to data of a
+      certain portion of the ENVISAT :class:`Product` that are read into the
+      it. Such a portion is called the source. The complete ENVISAT
+      :class:`Product` can be much greater than the source.
+      One can move the :class:`Raster` over the complete ENVISAT
+      :class:`Product` and read in turn different parts
+      (always of the size of the source) of it into the :class:`Raster`.
       The source is specified by the parameters *height* and *width*.
 
       A typical example is a processing in blocks. Lets say, a block
@@ -912,52 +934,53 @@ Band
       Another example is a processing of complete image lines. Then,
       my source has a widths of the complete product (for example 1121
       for a MERIS RR product), and a height of 1). One can loop over
-      all blocks read into the raster and process it.
+      all blocks read into the :clasS:`Raster` and process it.
 
       In addition, it is possible to defined a sub-sampling step for
-      a raster. This means, that the source is not read 1:1 into the
-      raster, but that only every 2nd or 3rd pixel is read. This step
-      can be set differently for the across track (source_step_x) and
-      along track (source_step_y) directions.
+      a :class:`Raster`. This means, that the source is not read 1:1 into
+      the :class:`Raster`, but that only every 2nd or 3rd pixel is read.
+      This step can be set differently for the across track (source_step_x)
+      and along track (source_step_y) directions.
 
       :param src_width:
             the width (across track dimension) of the source to be read
-            into the raster. Default: scene width (see
+            into the :class:`Raster`. Default: scene width (see
             :attr:`Product.get_scene_width`)
       :param src_height:
             the height (along track dimension) of the source to be read
-            into the raster. Default: scene height (see
+            into the :class:`Raster`. Default: scene height (see
             :attr:`Product.get_scene_height`)
       :param xstep:
             the sub-sampling step across track of the source when reading
-            into the raster. Default: 1.
+            into the :class:`Raster`. Default: 1.
       :param ystep:
             the sub-sampling step along track of the source when reading
-            into the raster. Default: 1.
+            into the :class:`Raster`. Default: 1.
       :returns:
-            the new raster instance or raises an exception
+            the new :class:`Raster` instance or raises an exception
             (:exc:`EPRValueError`) if an error occurred
 
       .. note::
 
          *src_width* and *src_height* are the dimantion of the of the source
-         area. If one specifies a *step* parameter the resulting raster
-         will have a size that is smaller that the specifies source size::
+         area. If one specifies a *step* parameter the resulting
+         :class:`Raster` will have a size that is smaller that the specifies
+         source size::
 
              raster_size = src_size // step
 
 
    .. method:: read_raster([xoffset, yoffset, raster])
 
-      Reads (geo-)physical values of the band of the specified
+      Reads (geo-)physical values of the :class:`Band` of the specified
       source-region
 
       The source-region is a defined part of the whole ENVISAT
-      product image, which shall be read into a raster.
+      :class:`Product` image, which shall be read into a :class:`Raster`.
       In this routine the co-ordinates are specified, where the
       source-region to be read starts.
       The dimension of the region and the sub-sampling are attributes
-      of the raster into which the data are read.
+      of the :class:`Raster` into which the data are read.
 
       :param xoffset:
             across-track source co-ordinate in pixel co-ordinates
@@ -986,25 +1009,27 @@ Band
    .. note::
 
       the following methods are part of the *high level* Python API and
-      do not have any correspondent function in the C API.
+      do not have any corresponding function in the C API.
 
    .. method:: read_as_array([width, height, xoffset, yoffset, xstep, ystep])
 
       Reads the specified source region as an :class:`numpy.ndarray`
 
       The source-region is a defined part of the whole ENVISAT
-      product image, which shall be read into a raster.
+      :class:`Product` image, which shall be read into a :class:`Raster`.
       In this routine the co-ordinates are specified, where the
       source-region to be read starts.
       The dimension of the region and the sub-sampling are attributes
-      of the raster into which the data are read.
+      of the :class:`Raster` into which the data are read.
 
       :param src_width:
             the width (across track dimension) of the source to be read
-            into the raster. If not provided reads as much as possible
+            into the :class:`Raster`. If not provided reads as much as 
+            possible
       :param src_height:
             the height (along track dimension) of the source to be read
-            into the raster, If not provided reads as much as possible
+            into the :class:`Raster`, If not provided reads as much as
+            possible
       :param xoffset:
             across-track source co-ordinate in pixel co-ordinates
             (zero-based) of the upper right corner of the source-region.
@@ -1015,10 +1040,10 @@ Band
             Default 0.
       :param xstep:
             the sub-sampling step across track of the source when
-            reading into the raster. Default: 1
+            reading into the :class:`Raster`. Default: 1
       :param ystep:
             the sub-sampling step along track of the source when
-            reading into the raster. Default: 1
+            reading into the :class:`Raster`. Default: 1
       :returns:
             the :class:`numpy.ndarray` instance in which data are read
 
@@ -1051,7 +1076,7 @@ Raster
 
    .. attribute:: data_type
 
-      The data type of the band's pixels
+      The data type of the :class:`Band` pixels
 
       All ``E_TID_*`` types are possible
 
@@ -1095,10 +1120,11 @@ Raster
 
       .. note::
 
-         the :class:`Raster` objects do not have a field named *data* in the
-         corresponding C structure. The *EPR_SRaster* C structure have a
-         field named *buffer* that is a raw pointer to the data buffer and
-         it is not exposed as such in the Python API.
+         the :class:`Raster` objects do not have a :class:`Field` named
+         *data* in the corresponding C structure. The *EPR_SRaster* C
+         structure have a :class:`Field` named *buffer* that is a raw
+         pointer to the data buffer and it is not exposed as such in the
+         Python API.
 
 
    .. rubric:: Methods
@@ -1108,7 +1134,7 @@ Raster
       Single pixel access
 
       This function is for getting the values of the elements of a
-      raster (i.e. pixel)
+      :class:`Raster` (i.e. pixel)
 
       :param x:
             the (zero-based) X coordinate of the pixel
@@ -1118,20 +1144,20 @@ Raster
             the typed value at the given co-ordinate
 
 
-   .. method:: get_elem_size
+   .. method:: get_elem_size()
 
-      The size in byte of a single element (sample) of this raster's
+      The size in byte of a single element (sample) of this :class:`Raster`
       buffer
 
 
-   .. method:: get_height
+   .. method:: get_height()
 
-      Gets the raster's height in pixels
+      Gets the :class:`Raster` height in pixels
 
 
-   .. method:: get_width
+   .. method:: get_width()
 
-      Gets the raster's width in pixels
+      Gets the :class:`Raster` width in pixels
 
 
    .. rubric:: Special methods
@@ -1163,16 +1189,16 @@ Functions
 
    Opens the ENVISAT product
 
-   Opens the ENVISAT product file with the given file path, reads MPH,
-   SPH and all :class:`DSD`\ s, organized the table with parameter of line
-   length and tie points number.
+   Opens the ENVISAT :class:`Product` file with the given file path,
+   reads MPH, SPH and all :class:`DSD`\ s, organized the table with
+   parameter of line length and tie points number.
 
    :param product_file_path:
-        the path to the ENVISAT product file
+        the path to the ENVISAT :class:`Product` file
    :param mode:
         string that specifies the mode in which the file is opened.
-        Allowed values: 'rb' for read-only mode, 'rb+' for read-write
-        mode. Default: mode='rb'.
+        Allowed values: `rb` for read-only mode, `rb+` for read-write
+        mode. Default: mode=`rb`.
    :returns:
         the :class:`Product` instance representing the specified
         product. An exception (:exc:`exceptions.ValueError`) is raised
@@ -1202,7 +1228,7 @@ Functions
 
 .. function:: get_numpy_dtype(type_id)
 
-   Return the numpy datatype specified EPR type ID
+   Return the numpy data-type specified EPR type ID
 
    .. versionadded:: 0.9
 
@@ -1219,31 +1245,31 @@ Functions
 
 .. function:: create_raster(data_type, src_width, src_height[, xstep, ystep])
 
-   Creates a raster of the specified data type
+   Creates a :class:`Raster` of the specified data type
 
    This function can be used to create any type of raster, e.g. for
    later use as a bit-mask.
 
    :param data_type:
-        the type of the data to stored in the raster, must be one of
-        E_TID_*.
+        the type of the data to stored in the :class:`Raster`, must be one
+        of E_TID_*.
 
         .. seealso:: `Data type Identifiers`_
 
    :param src_width:
         the width (across track dimension) of the source to be read
-        into the raster.
+        into the :class:`Raster`.
         See description of :meth:`Band.create_compatible_raster`
    :param src_height:
         the height (along track dimension) of the source to be read
-        into the raster.
+        into the :class:`Raster`.
         See description of :meth:`Band.create_compatible_raster`
    :param xstep:
         the sub-sampling step across track of the source when reading
-        into the raster. Default: 1.
+        into the :class:`Raster`. Default: 1.
    :param ystep:
         the sub-sampling step along track of the source when reading
-        into the raster. Default: 1.
+        into the :class:`Raster`. Default: 1.
    :returns:
         the new :class:`Raster` instance
 
@@ -1252,24 +1278,24 @@ Functions
 
 .. function:: create_bitmask_raster(src_width, src_height[, xstep, ystep])
 
-   Creates a raster to be used for reading bitmasks
+   Creates a :class:`Raster` to be used for reading bitmasks
 
-   The raster returned always is of type ``byte``.
+   The :class:`Raster` returned always is of type ``byte``.
 
    :param src_width:
         the width (across track dimension) of the source to be read
-        into the raster
+        into the :class:`Raster`
    :param src_height:
         the height (along track dimension) of the source to be read
-        into the raster
+        into the :class:`Raster`
    :param xstep:
         the sub-sampling step across track of the source when reading
-        into the raster. Default: 1.
+        into the :class:`Raster`. Default: 1.
    :param ystep:
         the sub-sampling step along track of the source when reading
-        into the raster. Default: 1.
+        into the :class:`Raster`. Default: 1.
    :returns:
-        the new raster instance or raises an exception
+        the new :class:`Raster` instance or raises an exception
         (:exc:`EPRValueError`) if an error occurred
 
    .. seealso:: the description of :meth:`Band.create_compatible_raster`
@@ -1364,3 +1390,4 @@ Scaling Methods
 .. data:: E_SMID_LOG
 
    Logarithmic pixel scaling
+

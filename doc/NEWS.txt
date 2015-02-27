@@ -9,6 +9,7 @@ PyEPR 0.9 (in development)
   ('rb+') and it is possible to call :meth:`epr.Field.set_elem` and
   :meth:`epr.Field.set_elems` methods to set :class:`epr.Field` elements
   changing the contents of the :class:`epr.Product` on disk.
+  This feature is not available in the EPR C API.
 * new functions/methods and properties:
 
   - :attr:`epr.Record.index` property: returns the index of the

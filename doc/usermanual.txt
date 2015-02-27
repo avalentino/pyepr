@@ -32,6 +32,13 @@ Parameters" record to the standard output::
     print(record)
     product.close()
 
+Since version 0.9 PyEPR_ also include *update* features that are not
+available in the EPR C API.
+The user can open a product in update mode ('rb+') and call the
+:meth:`epr.Field.set_elem` and :meth:`epr.Field.set_elems` methods of
+:class:`epr.Field` class to update its elements and write changes to disk.
+
+
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _Python: http://www.python.org
 .. _`EPR API`: https://github.com/bcdev/epr-api
@@ -214,14 +221,14 @@ Memory management
 .. highlight:: python
 
 Being Python_ a very high level language uses have never to worry about
-memory allocation/deallocation. They simply have to instantiate objects::
+memory allocation/de-allocation. They simply have to instantiate objects::
 
     product = epr.Product('filename.N1')
 
 and use them freely.
 
 Objects are automatically destroyed when there are no more references to
-them and memory is deallocated automatically.
+them and memory is de-allocated automatically.
 
 Even better, each object holds a reference to other objects it depends
 on so the user never have to worry about identifiers validity or about
@@ -439,6 +446,45 @@ that ensure that the product is closed as soon as the program exits the
 ``with`` block.
 
 
+Update support
+--------------
+
+It is not possible to create new ENVISAT_ products for scratch with the
+EPR API. Indeed EPR means "**E**\ NVISAT **P**\ roduct **R**\ eaeder".
+Anyway, since version 0.9, PyEPR_ also include basic *update* features.
+This means that, while it is still not possible to create new
+:class:`Products`, the user can *update* existing ones changing the
+contents of any :class:`Field` in any record with the only exception of
+MPH and SPH :class:`Field`\s.
+
+The user can open a product in update mode ('rb+')::
+
+    product = epr.open('ASA_IMS_ ... _4650.N1', 'rb+')
+
+and update the :class:`epr.Field` element at a specific index::
+
+    field.set_elem(new_value, index) 
+
+or also update all elements ol the :class:`epr.Field` in one shot::
+
+    field.set_elems(new_values) 
+
+.. note::
+
+   unfortunately there are some limitations to the update support.
+   Many of the internal structures of the EPR C API are loaded when the
+   :class:`Product` is opened and are not automatically updated when the
+   :meth:`epr.Field.set_elem` and :meth:`epr.Field.set_elems` methods are
+   called.
+   In particular :class:`epr.Band`\ s contents may depend on several
+   :class:`epr.Field` values, e.g. the contents of `Scaling_Factor_GADS`
+   :class:`epr.Dataset`.
+   For this reason the user may need to close and re-open the
+   :class:`epr.Product` in order to have all changes effectively applied.
+
+   .. seealso:: :doc:`update_example`.
+
 .. _`special method`: http://docs.python.org/reference/datamodel.html
 .. _pythonic: http://www.cafepy.com/article/be_pythonic
 .. _`context manager`: http://docs.python.org/3/library/stdtypes.html#context-manager-types
+
