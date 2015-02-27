@@ -865,8 +865,9 @@ cdef class Field(EprObject):
             stdio.fseek(istream, file_offset + field_offset, stdio.SEEK_SET)
             ret = stdio.fwrite(elems.data, elemsize, nelems,
                                product._ptr.istream)
-        if ret != datasize:
-            raise IOError('write error')
+        if ret != nelems:
+            raise IOError(
+                'write error: %d of %d bytes written' % (ret, datasize))
 
     def set_elem(self, elem, uint index=0):
         '''set_elem(self, elem, index=0)
@@ -920,8 +921,8 @@ cdef class Field(EprObject):
             raise NotImplementedError(
                 'setting elements is not implemented on MPH/SPH records')
 
-        nelems = epr_get_field_num_elems(self._ptr)
         elems = np.ascontiguousarray(elems)
+        nelems = epr_get_field_num_elems(self._ptr)
         if elems.ndim > 1 or elems.size != nelems:
             raise ValueError('invalid shape "%s", "(%s,)" value expected' % (
                 elems.shape, nelems))
