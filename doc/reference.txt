@@ -16,10 +16,10 @@ The raw data access makes it possible to read any data field contained
 in a product file.
 
 .. _PyEPR: https://github.com/avalentino/pyepr
-.. _Python: http://www.python.org
+.. _Python: https://www.python.org
 .. _`EPR API`: https://github.com/bcdev/epr-api
-.. _ENVISAT: http://envisat.esa.int
-.. _ESA: http://earth.esa.int
+.. _ENVISAT: https://envisat.esa.int
+.. _ESA: https://earth.esa.int
 
 
 .. currentmodule:: epr
@@ -1024,7 +1024,7 @@ Band
 
       :param src_width:
             the width (across track dimension) of the source to be read
-            into the :class:`Raster`. If not provided reads as much as 
+            into the :class:`Raster`. If not provided reads as much as
             possible
       :param src_height:
             the height (along track dimension) of the source to be read

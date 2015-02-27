@@ -15,7 +15,7 @@ The program is invoked as follows:
     $ python write_bitmask.py <envisat-product> <bitmask-expression> \
     <output-file>
 
-.. _ENVISAT: http://envisat.esa.int
+.. _ENVISAT: https://envisat.esa.int
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _`write_bitmask.c`: https://github.com/bcdev/epr-api/blob/master/src/examples/write_bitmask.c
 
@@ -120,5 +120,5 @@ of the :class:`epr.Raster` objects that exposes data via the
    :lines: 65-66
 
 
-.. _Python: http://www.python.org
-.. _ENVISAT: http://envisat.esa.int
+.. _Python: https://www.python.org
+.. _ENVISAT: https://envisat.esa.int

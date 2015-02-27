@@ -130,7 +130,7 @@ extlinks = {
 
 # Intersphinx
 intersphinx_mapping = {
-    'python': ('http://docs.python.org', None),
+    'python': ('https://docs.python.org/3', None),
     'numpy':  ('http://docs.scipy.org/doc/numpy', None),
 }
 
@@ -376,4 +376,4 @@ epub_exclude_files = ['search.html']
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
-#intersphinx_mapping = {'http://docs.python.org/': None}
+#intersphinx_mapping = {'https://docs.python.org/': None}

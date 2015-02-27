@@ -40,10 +40,10 @@ The user can open a product in update mode ('rb+') and call the
 
 
 .. _PyEPR: https://github.com/avalentino/pyepr
-.. _Python: http://www.python.org
+.. _Python: https://www.python.org
 .. _`EPR API`: https://github.com/bcdev/epr-api
-.. _ENVISAT: http://envisat.esa.int
-.. _ESA: http://earth.esa.int
+.. _ENVISAT: https://envisat.esa.int
+.. _ESA: https://earth.esa.int
 
 
 Requirements
@@ -164,7 +164,7 @@ with the system `EPR API`_ C library::
 
 .. _pip: https://pypi.python.org/pypi/pip
 .. _easy_install: https://pypi.python.org/pypi/setuptools#using-setuptools-and-easyinstall
-.. _distutils: http://docs.python.org/distutils
+.. _distutils: https://docs.python.org/3/distutils
 
 
 Testing
@@ -176,7 +176,7 @@ MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1__,
 have to be downloaded from the ESA_ website, saved in the :file:`tests`
 directory and decompressed.
 
-__ http://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz
+__ https://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz
 
 .. note::
 
@@ -188,7 +188,7 @@ __ http://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV2000
 On GNU Linux platforms the following shell commands can be used::
 
     $ cd pyepr-X.Y.Z/tests
-    $ wget http://earth.esa.int/services/sample_products/meris/LRC/L2/\
+    $ wget https://earth.esa.int/services/sample_products/meris/LRC/L2/\
       MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz
     $ gunzip MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz
 
@@ -463,11 +463,11 @@ The user can open a product in update mode ('rb+')::
 
 and update the :class:`epr.Field` element at a specific index::
 
-    field.set_elem(new_value, index) 
+    field.set_elem(new_value, index)
 
 or also update all elements ol the :class:`epr.Field` in one shot::
 
-    field.set_elems(new_values) 
+    field.set_elems(new_values)
 
 .. note::
 
@@ -484,7 +484,7 @@ or also update all elements ol the :class:`epr.Field` in one shot::
 
    .. seealso:: :doc:`update_example`.
 
-.. _`special method`: http://docs.python.org/reference/datamodel.html
+.. _`special method`: https://docs.python.org/3/reference/datamodel.html
 .. _pythonic: http://www.cafepy.com/article/be_pythonic
-.. _`context manager`: http://docs.python.org/3/library/stdtypes.html#context-manager-types
+.. _`context manager`: https://docs.python.org/3/library/stdtypes.html#context-manager-types
 

@@ -169,7 +169,7 @@ PyEPR 0.7.1 (19/08/2013)
     script
   - formatting
 
-.. _Ohloh: http://www.ohloh.net
+.. _Ohloh: https://www.openhub.net
 
 
 PyEPR 0.7 (04/08/2013)
@@ -231,9 +231,9 @@ PyEPR 0.5 (25/04/2011)
 * dropped old versions of cython_; now cython_ 0.14.1 or newer is required
 * suppressed several constness related warnings
 
-.. _`Python 3`: http://docs.python.org/3
+.. _`Python 3`: https://docs.python.org/3
 .. _intersphinx: http://sphinx-doc.org/latest/ext/intersphinx.html
-.. _cython: http://www.cython.org
+.. _cython: http://cython.org
 
 
 PyEPR 0.4 (10/04/2011)

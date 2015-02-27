@@ -18,7 +18,7 @@ The program is invoked as follows:
     <output directory for the raster file> <dataset name 1> \
     [<dataset name 2> ... <dataset name N>]
 
-.. _ENVISAT: http://envisat.esa.int
+.. _ENVISAT: https://envisat.esa.int
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _`write_bands.c`: https://github.com/bcdev/epr-api/blob/master/src/examples/write_bands.c
 
@@ -194,5 +194,5 @@ powerful :class:`numpy.ndarray` interface.
         raster.data.tofile(out_stream)
 
 
-.. _Python: http://www.python.org
+.. _Python: https://www.python.org
 .. _pythonic: http://www.cafepy.com/article/be_pythonic

@@ -16,7 +16,7 @@ The program is invoked as follows:
     $ python write_ndvi.py <envisat-oroduct> <output-file>
 
 .. _PyEPR: https://github.com/avalentino/pyepr
-.. _MERIS: http://envisat.esa.int/handbooks/meris
+.. _MERIS: https://earth.esa.int/handbooks/meris/CNTR.html
 .. _`write_ndvi.c`: https://github.com/bcdev/epr-api/blob/master/src/examples/write_ndvi.c
 
 The code have been kept very simple and it consists in a single function
@@ -45,7 +45,7 @@ the block.
 Of course it is possible to use a simple assignment form::
 
     product = open(argv[1])
-    
+
 but in this case the user should take care of manually call::
 
     product.close()
@@ -185,7 +185,7 @@ used to write the NDVI of the pixel n the file in binary format.
         ndvi.tofile(out_stream)
 
 
-.. _ENVISAT: http://envisat.esa.int
-.. _Python: http://www.python.org
+.. _ENVISAT: https://envisat.esa.int
+.. _Python: https://www.python.org
 .. _pythonic: http://www.cafepy.com/article/be_pythonic
 

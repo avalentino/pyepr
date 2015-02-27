@@ -200,6 +200,6 @@ The complete code of the example can be found at
 
 
 .. _PyEPR: https://github.com/avalentino/pyepr
-.. _ENVISAT: http://envisat.esa.int
+.. _ENVISAT: https://envisat.esa.int
 .. _Matplotlib: http://matplotlib.org
 

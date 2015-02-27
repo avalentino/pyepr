@@ -14,12 +14,12 @@ The ASAR_ product used in this example is a `free sample`_ available at the
 ESA_ web site.
 
 .. _PyEPR: https://github.com/avalentino/pyepr
-.. _ENVISAT: http://envisat.esa.int
-.. _ASAR: http://envisat.esa.int/handbooks/asar
+.. _ENVISAT: https://envisat.esa.int
+.. _ASAR: https://earth.esa.int/handbooks/asar/CNTR.html
 .. _IPython: http://ipython.org
 .. _matplotlib: http://matplotlib.org
-.. _`free sample`: http://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz
-.. _ESA: http://earth.esa.int
+.. _`free sample`: https://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz
+.. _ESA: https://earth.esa.int
 
 
 :mod:`epr` module and classes
@@ -69,10 +69,10 @@ available classes and functions::
         in a product file.
 
         .. _PyEPR: http://avalentino.github.io/pyepr
-        .. _Python: http://www.python.org
+        .. _Python: https://www.python.org
         .. _`EPR API`: https://github.com/bcdev/epr-api
-        .. _ENVISAT: http://envisat.esa.int
-        .. _ESA: http://earth.esa.int
+        .. _ENVISAT: https://envisat.esa.int
+        .. _ESA: https://earth.esa.int
 
     In [3]: epr.__version__, epr.EPR_C_API_VERSION
     Out[3]: ('0.9.0', '2.3dev')
@@ -81,7 +81,7 @@ Docstrings are available for almost all classes, methods and functions in
 the :mod:`epr` and they can be displayed using the :func:`help` python_
 command or the ``?`` IPython_ shortcut as showed above.
 
-.. _python: http://www.python.org
+.. _python: https://www.python.org
 
 Also IPython_ provides a handy tab completion mechanism to automatically
 complete commands or to display available functions and classes::

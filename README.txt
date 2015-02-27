@@ -23,10 +23,10 @@ or on a raw data layer. The raw data access makes it possible to read
 any data field contained in a product file.
 
 .. _PyEPR: https://github.com/avalentino/pyepr
-.. _Python: http://www.python.org
+.. _Python: https://www.python.org
 .. _`EPR API`: https://github.com/bcdev/epr-api
-.. _ENVISAT: http://envisat.esa.int
-.. _ESA: http://earth.esa.int
+.. _ENVISAT: https://envisat.esa.int
+.. _ESA: https://earth.esa.int
 
 
 Requirements
