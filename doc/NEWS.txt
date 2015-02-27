@@ -2,8 +2,8 @@ Change history
 ==============
 
 
-PyEPR 0.9 (in development)
---------------------------
+PyEPR 0.9 (27/02/2015)
+----------------------
 
 * basic support for update mode: products can now be opened in update mode
   ('rb+') and it is possible to call :meth:`epr.Field.set_elem` and
