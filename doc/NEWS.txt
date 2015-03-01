@@ -5,6 +5,8 @@ Change history
 PyEPR 0.9.2 (in development)
 ----------------------------
 
+* Improved string representation of fields in case of :data:`E_TID_STRING`
+  data type. Now bytes are decoded and represented as Python strings.
 * Improved "Installation" and "Testing" sections of the user manual
 
 

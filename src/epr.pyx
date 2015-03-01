@@ -953,7 +953,7 @@ cdef class Field(EprObject):
         cdef int num_elems = 0
 
         if type_ == e_tid_string:
-            return '%s = "%s"' % (name, self.get_elem())
+            return '%s = "%s"' % (name, self.get_elem().decode('utf-8'))
         elif type_ == e_tid_time:
             days, seconds, microseconds = self.get_elem()
             return '%s = {d=%d, j=%d, m=%d}' % (name,
