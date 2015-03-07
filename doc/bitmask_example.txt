@@ -29,7 +29,6 @@ that also includes command line arguments handling:
 
 .. literalinclude:: examples/write_bitmask.py
    :language: python
-   :linenos:
 
 In order to use the Python_ EPR API the :mod:`epr` module is imported:
 

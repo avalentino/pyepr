@@ -27,7 +27,6 @@ The code have been kept very simple and it consists in a single function
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_ndvi.py
-   :linenos:
 
 The ENVISAT_ :class:`epr.Product` is opened using the :func:`epr.open`
 function.
