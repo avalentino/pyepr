@@ -1,6 +1,8 @@
 NDVI computation
 ----------------
 
+.. index:: NDVI, MERIS
+
 This tutorial shows how to use PyEPR_ to open a MERIS_ L1B product, compute
 the *Normalized Difference Vegetation Index* (NDVI) and store it into a flat
 binary file.
@@ -38,6 +40,9 @@ function.
 .. literalinclude:: examples/write_ndvi.py
    :lines: 49
 
+.. index:: context, open
+   pair: with; statement
+
 As usual in modern python programs the *with* statement has been used to
 ensure that the product is automatically closed as soon as the program exits
 the block.
@@ -70,6 +75,8 @@ method:
 *band1* and *band2* are used to read the calibrated radiances into the
 :class:`epr.Raster` objects that allow to access data matrices with the
 radiance values.
+
+.. index:: raster, memory
 
 Before reading data into the :class:`epr.Raster` objects they have to be
 instantiated specifying their size and data type in order to allow the library
@@ -188,3 +195,7 @@ used to write the NDVI of the pixel n the file in binary format.
 .. _Python: https://www.python.org
 .. _pythonic: http://www.cafepy.com/article/be_pythonic
 
+
+.. raw:: latex
+
+   \clearpage

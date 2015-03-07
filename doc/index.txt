@@ -37,6 +37,8 @@ ENVISAT Product Reader Python API
     .. _ENVISAT: https://envisat.esa.int
     .. _ESA: https://earth.esa.int
 
+    .. index:: ENVISAT, MERIS, AASTR, ASAR
+
 
     Documentation
     =============
@@ -68,6 +70,8 @@ ENVISAT Product Reader Python API
     * `0.6.1 <https://pyepr.readthedocs.org/en/v0.6.1/>`_
     * `0.6 <https://pyepr.readthedocs.org/en/v0.6/>`_
 
+
+.. index:: license
 
 License
 =======

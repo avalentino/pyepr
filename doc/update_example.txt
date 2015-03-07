@@ -3,6 +3,9 @@ Update :class:`Field` elements
 
 .. highlight:: ipython
 
+.. index:: update, field, read-only, EPR-API, MERIS
+   pair: open; mode
+
 The EPR C API has been designed to provide read-only features.
 
 PyEPR_ provides and extra capability consisting in the possibility to
@@ -24,6 +27,8 @@ instructions:
    :language: python
    :lines: 10-15
 
+.. index:: matplotlib
+
 The resulting histogram can be plot using Matplotlib_:
 
 .. raw:: latex
@@ -33,7 +38,6 @@ The resulting histogram can be plot using Matplotlib_:
 .. literalinclude:: examples/update_elements.py
    :language: python
    :lines: 17-21
-
 
 .. figure:: images/water_vapour_histogram_01.*
    :width: 60%
@@ -58,6 +62,8 @@ In particular :class:`Field`\ s `sf_wvapour` and  `off_wvapour` are used::
     off_wvapour = -0.100000
     spare_1 = <<unknown data type>>
 
+.. index:: band
+   pair: scaling; factor
 
 Now suppose that for some reason one needs to update the `sf_wvapour` scaling
 factor for the water vapour content.
@@ -86,7 +92,6 @@ compute and display the histogram of modified data in the `water_vapour`
 .. literalinclude:: examples/update_elements.py
    :language: python
    :lines: 34-48
-
 
 .. figure:: images/water_vapour_histogram_02.*
    :width: 60%
@@ -156,7 +161,6 @@ or not::
     In [60]: band.lines_mirrored
     Out[60]: True
 
-
 Finally the :class:`Product` can be re-opened to load and display the
 modified :class:`Band`:
 
@@ -184,3 +188,7 @@ The complete code of the example can be found at
 .. _ENVISAT: https://envisat.esa.int
 .. _Matplotlib: http://matplotlib.org
 
+
+.. raw:: latex
+
+   \clearpage

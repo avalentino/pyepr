@@ -4,6 +4,9 @@ API Reference
 .. module:: epr
    :synopsis: Python bindings for ENVISAT Product Reader C API
 
+.. index:: bindings, ENVISAT, ESA, EPR-API
+   pair: epr; module
+
 PyEPR_ provides Python_ bindings for the ENVISAT Product Reader C API
 (`EPR API`_) for reading satellite data from ENVISAT_ ESA_ (European
 Space Agency) mission.
@@ -266,6 +269,9 @@ Product
    * __enter__
    * __exit__
 
+   .. index:: __repr__, __str__, __enter__, __exit__
+      pair: special; methods
+
 
 Dataset
 ~~~~~~~
@@ -379,6 +385,9 @@ Dataset
    * __repr__
    * __str__
    * __iter__
+
+   .. index:: __repr__, __str__, __iter__
+      pair: special; methods
 
 
 Record
@@ -536,6 +545,9 @@ Record
    * __str__
    * __iter__
 
+   .. index:: __repr__, __str__, __iter__
+      pair: special; methods
+
 
 Field
 ~~~~~
@@ -691,6 +703,9 @@ Field
    * __ne__
    * __len__ [#]_
 
+   .. index:: __repr__, __str__, __eq__, __ne__, __len__
+      pair: special; methods
+
 .. rubric:: Footnotes
 
 .. [#] if the field is a :data:`E_TID_STRING` field then the
@@ -760,6 +775,9 @@ DSD
    * __repr__
    * __eq__
    * __ne__
+
+   .. index:: __repr__, __eq__, __ne__
+      pair: special; methods
 
 
 Band
@@ -1061,6 +1079,9 @@ Band
 
    * __repr__
 
+   .. index:: __repr__
+      pair: special; methods
+
 
 Raster
 ~~~~~~
@@ -1167,6 +1188,9 @@ Raster
 
    * __repr__
 
+   .. index:: __repr__
+      pair: special; methods
+
 
 EPRTime
 ~~~~~~~
@@ -1181,6 +1205,8 @@ EPRTime
    .. attribute:: seconds
    .. attribute:: microseconds
 
+
+.. index:: function
 
 Functions
 ---------
@@ -1301,6 +1327,8 @@ Functions
    .. seealso:: the description of :meth:`Band.create_compatible_raster`
 
 
+.. index:: exception, error
+
 Exceptions
 ----------
 
@@ -1364,6 +1392,9 @@ Data type identifiers
 .. data:: E_TID_TIME
 
 
+.. index::
+   pair: sample; model
+
 Sample Models
 ~~~~~~~~~~~~~
 
@@ -1373,6 +1404,9 @@ Sample Models
 .. data:: E_SMOD_3TOI
 .. data:: E_SMOD_2TOF
 
+
+.. index::
+   pair: scaling; method
 
 Scaling Methods
 ~~~~~~~~~~~~~~~
@@ -1386,8 +1420,11 @@ Scaling Methods
 
    Linear pixel scaling
 
+   .. index:: linear
+
 
 .. data:: E_SMID_LOG
 
    Logarithmic pixel scaling
 
+   .. index:: logarithmic

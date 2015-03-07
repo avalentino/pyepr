@@ -1,6 +1,8 @@
 Exporting bitmasks
 -------------------
 
+..index:: bitmask, ENVISAT
+
 This tutorial shows how to generate bit masks from ENVISAT_ flags information
 as "raw" image using PyEPR_.
 
@@ -19,7 +21,6 @@ The program is invoked as follows:
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _`write_bitmask.c`: https://github.com/bcdev/epr-api/blob/master/src/examples/write_bitmask.c
 
-
 The :download:`examples/write_bitmask.py` code consists in a single function
 that also includes command line arguments handling:
 
@@ -30,6 +31,9 @@ that also includes command line arguments handling:
 .. literalinclude:: examples/write_bitmask.py
    :language: python
 
+.. index:: EPR-API, module
+   pair: epr; module
+
 In order to use the Python_ EPR API the :mod:`epr` module is imported:
 
 .. raw:: latex
@@ -38,6 +42,9 @@ In order to use the Python_ EPR API the :mod:`epr` module is imported:
 
 .. literalinclude:: examples/write_bitmask.py
    :lines: 27
+
+.. index:: product, open
+   pair: with; statement
 
 As usual the ENVISAT_ product is opened using the :func:`epr.open` function
 that returns an :class:`epr.Product` instance.
@@ -52,6 +59,8 @@ program exits the ``with`` block.
 .. literalinclude:: examples/write_bitmask.py
    :language: python
    :lines: 51-52
+
+.. index:: product
 
 Scene size parameters are retrieved form the :class:`epr.Product` object
 using the :meth:`epr.Product.get_scene_width` and
@@ -97,6 +106,8 @@ The :meth:`epr.Product.read_bitmask_raster` method receives in input the
 of the bit-mask. In a bit-mask expression, any number of the flag-names
 (found in the DDDB) can be composed with “(”, ”)”, “NOT”, “AND”, “OR”.
 
+.. index:: AND, OR, NOT, DDDB
+
 Valid bit-mask expression are for example::
 
     flags.LAND OR flags.CLOUD
@@ -121,3 +132,8 @@ of the :class:`epr.Raster` objects that exposes data via the
 
 .. _Python: https://www.python.org
 .. _ENVISAT: https://envisat.esa.int
+
+
+.. raw:: latex
+
+   \clearpage

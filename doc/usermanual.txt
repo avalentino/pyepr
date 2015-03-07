@@ -1,6 +1,9 @@
 User Manual
 ===========
 
+.. index:: EPR-API, ENVISAT, MERIS, AASTR, ASAR, ESA
+   single: product; dataset; record; close
+   pair: epr; module
 
 Quick start
 -----------
@@ -16,7 +19,7 @@ or on a raw data layer. The raw data access makes it possible to read
 any data field contained in a product file.
 
 Full access to the Python EPR API is provided by the :mod:`epr` module that
-have to be imported by the client program e-g- as follows::
+have to be imported by the client program e.g. as follows::
 
     import epr
 
@@ -40,6 +43,9 @@ The user can open a product in update mode ('rb+') and call the
 
 .. seealso:: `Update support`_ and :doc:`update_example` tutorial for details.
 
+.. index::
+   pair: open; mode
+
 
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _Python: https://www.python.org
@@ -47,6 +53,8 @@ The user can open a product in update mode ('rb+') and call the
 .. _ENVISAT: https://envisat.esa.int
 .. _ESA: https://earth.esa.int
 
+
+.. index:: requirements, EPR-API, Python, numpy, cython, unittest2, gcc, extension
 
 Requirements
 ------------
@@ -79,6 +87,9 @@ correctly installed and configured:
 .. _unittest2: https://pypi.python.org/pypi/unittest2
 
 
+.. index:: download, PyPi, GitHub, project, git
+   pair: git; clone
+
 Download
 --------
 
@@ -102,6 +113,11 @@ To clone the git_ repository the following command can be used::
 .. _git: http://git-scm.com
 
 
+.. index:: install, pip
+   pair: install; user
+   pair: install; option
+   pair: install; prefix
+
 .. _installation:
 
 Installation
@@ -121,6 +137,13 @@ To install PyEPR_ in a non-standard path::
 
 just make sure that :file:`<TARGET_PATH>/lib/pythonX.Y/site-packages` is in
 the :envvar:`PYTHONPATH`.
+
+.. index::
+   single: sources; setup.py
+   pair: standalone; mode
+   pair: EPR-API; sources
+   pair: dynamic; library
+   pair: git; repository
 
 PyEPR_ can be installed from sources using the following command::
 
@@ -150,6 +173,10 @@ with the system `EPR API`_ C library::
 
 .. _pip: https://pypi.python.org/pypi/pip
 
+
+.. index:: test, setup.py, download
+   pair: test; suite
+   pair: sample; product
 
 Testing
 -------
@@ -181,6 +208,8 @@ if it is not already available in the :file:`tests` directory.
 __ https://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz
 
 
+.. index:: EPR-API
+
 Python vs C API
 ---------------
 
@@ -197,6 +226,9 @@ following sections.
 
 .. _`C API`: https://rawgithub.com/bcdev/epr-api/master/docs/epr_c_api/index.html
 
+
+.. index:: memory, product
+   pair: allocation; de-allocation
 
 Memory management
 -----------------
@@ -221,6 +253,8 @@ For example: the C `EPR_DatasetId` structure has a field (`product_id`)
 that points to the *product* descriptor `EPR_productId` to which it
 belongs to.
 
+..index:: dataset, record
+
 The reference to the parent product is used, for example, when one wants
 to read a record using the `epr_read_record` function:
 
@@ -241,12 +275,12 @@ object instance::
     dataset = product.get_dataset('MAIN_PROCESSING_PARAMS_ADS')
 
 and then forget about the *product* instance it depends on.
-Even if the *product* variable goes out of scope and it is no more directly
-accessible in the program the *dataset* object keeps staying valid since
-it holds an internal reference to the *product* instance it depends on.
+Even if the *product* variable goes out of :index:`scope` and it is no more
+directly accessible in the program the *dataset* object keeps staying valid
+since it holds an internal reference to the *product* instance it depends on.
 
 When *record* is destroyed automatically also the parent :class:`epr.Product`
-object is destroyed (assumed there is no other reference to it).
+object is destroyed (assumed there is no other :index:`reference` to it).
 
 The entire machinery is completely automatic and transparent to the user.
 
@@ -256,6 +290,10 @@ The entire machinery is completely automatic and transparent to the user.
     :meth:`epr.Product.close` any I/O operation on it and on other objects
     (bands, datasets, etc) associated to it is no more possible.
 
+    .. index:: close
+
+
+.. index:: array, numpy, raster
 
 Arrays
 ------
@@ -288,6 +326,11 @@ amount of data contained in ENVISAT_ products.
   It read a slice of data from the :class:`epr.Band` and returns it as a
   2D :class:`numpy.ndarray`.
 
+.. index:: read_as_aaray, data
+
+
+.. index:: enumeration
+   pair: module; constant
 
 Enumerators
 -----------
@@ -308,6 +351,8 @@ e_smid_log   E_SMID_LOG
 ============ ============
 
 
+.. index:: logging, error, exception, EPR-API
+
 Error handling and logging
 --------------------------
 
@@ -317,9 +362,12 @@ exposed to python.
 Internal library logging is completely silenced and errors are converted
 to Python_ exceptions.
 Where appropriate standard Python_ exception types are use in other cases
-custom exception types (e.g. :exc:`epr.EPRError`,
-:exc:`epr.EPRValueError`) are used.
+custom exception types (e.g. :exc:`epr.EPRError`, :exc:`epr.EPRValueError`) 
+are used.
 
+
+.. index:: library, module, APR-API
+   pair: library; initialization
 
 Library initialization
 ----------------------
@@ -328,6 +376,9 @@ Differently from the C API library initialization is not needed: it is
 performed internally the first time the :mod:`epr` module is imported
 in Python_.
 
+
+.. index:: API
+   pair: high-level; API
 
 High level API
 --------------
@@ -356,6 +407,9 @@ Another example::
         print(band)
 
 
+.. index:: __str__, __repr__, print_, 
+   pair: special; methods
+
 Special methods
 ---------------
 
@@ -382,6 +436,8 @@ giver the same result of::
 Of course the :meth:`epr.Record.print_` method is more efficient for writing
 to file.
 
+..index:: __iter__
+
 Also :class:`epr.Dataset` and :class:`epr.Record` classes implement the
 ``__iter__`` `special method`_ for iterating over records and fields
 respectively.
@@ -390,6 +446,8 @@ So it is possible to write code like the following::
     for record in dataset:
         for index, field in enumerate(record):
             print(index, field)
+
+.. index:: __eq__
 
 :class:`epr.DSD` and :class:`epr.Field` classes implement the ``__eq__``
 and ``__ne__`` methods for objects comparison::
@@ -400,6 +458,8 @@ and ``__ne__`` methods for objects comparison::
     else:
         print('field1:', field1)
         print('field2:', field2)
+
+.. index:: __len__
 
 :class:`epr.Field` object also implement the ``__len__`` special method
 that returns the number of elements in the field::
@@ -417,6 +477,10 @@ that returns the number of elements in the field::
     If the field contains a string then the string length is
     returned.
 
+.. index:: __enter__, __exit__, context, with
+   pair: context; manager
+   pair: with; statement
+
 Finally the :class:`epr.Product` class acts as a `context manager`_ (i.e. it
 implements the ``__enter__`` and ``__exit__`` methods).
 
@@ -428,6 +492,9 @@ This allows the user to write code like the following::
 that ensure that the product is closed as soon as the program exits the
 ``with`` block.
 
+
+.. index:: update, ENVISAT
+   pair: open; mode
 
 Update support
 --------------
@@ -465,7 +532,11 @@ or also update all elements ol the :class:`epr.Field` in one shot::
    For this reason the user may need to close and re-open the
    :class:`epr.Product` in order to have all changes effectively applied.
 
-   .. seealso:: :doc:`update_example`.
+   .. seealso:: :doc:`update_example`
+
+   .. index::
+      pair: scaling; factor
+
 
 .. _`special method`: https://docs.python.org/3/reference/datamodel.html
 .. _pythonic: http://www.cafepy.com/article/be_pythonic

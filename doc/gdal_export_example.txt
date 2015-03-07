@@ -1,6 +1,8 @@
 GDAL_ export example
 --------------------
 
+.. index:: GDAL, export, VRT, ENVISAT, offset
+
 This tutorial explains how to use PyEPR_ to generate a file in GDAL Virtual
 Format (VRT) that can be used to access data with the powerful and popular
 GDAL_ library.
@@ -66,6 +68,8 @@ The :mod:`export_gdalvrt` module also provides a :data:`epr_to_gdal_type`
 mapping between EPR and GDAL data type identifiers.
 
 
+.. index:: VRTRawRasterBand
+
 Generating *VRTRawRasterBand*\ s
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -85,6 +89,8 @@ rasters.
    :language: python
    :lines: 54-78
 
+.. index:: offset
+
 The fundamental part is the computation of the:
 
 **ImageOffset**:
@@ -92,7 +98,7 @@ The fundamental part is the computation of the:
     the offset in bytes to the beginning of the first pixel of data with
     respect to the beginning of the file.
 
-    In the example it is computed using 
+    In the example it is computed using
 
     * the :data:`epr.DSD.ds_offset` attribute, that represents the offset
       in bytes of the :class:`epr.Dataset` from the beginning of the file,
@@ -124,7 +130,6 @@ The fundamental part is the computation of the:
 
         pixel_offset = epr.get_data_type_size(field.get_type())
 
-
 The band size in lines and columns of the GDAL_ bands is fixed at GDAL_
 dataset level when it is created:
 
@@ -135,6 +140,8 @@ dataset level when it is created:
 .. literalinclude:: examples/export_gdalvrt.py
    :language: python
    :lines: 50-52
+
+.. index:: dataset, band
 
 Please note that in case of :class:`epr.Dataset`\ s storing complex values,
 like in `MDS1` :class:`epr.Dataset` of ASAR IMS :class:`epr.Product`\ s,
@@ -166,6 +173,8 @@ doubled and an additional offset (one pixel) must be added to the
    This case is not handled in the example.
 
 
+.. index:: metadata
+
 Metadata
 ~~~~~~~~
 
@@ -190,6 +199,8 @@ function:
 .. literalinclude:: examples/export_gdalvrt.py
    :language: python
    :lines: 119-126
+
+.. index:: MPH, SPH
 
 The  :func:`epr2gdal` function also stores the contents of the *MPH* and the
 *SPH* records as GDAL_ dataset matadata in custom domains:
@@ -218,3 +229,7 @@ Complete listing
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _ENVISAT: https://envisat.esa.int
 
+
+.. raw:: latex
+
+   \clearpage

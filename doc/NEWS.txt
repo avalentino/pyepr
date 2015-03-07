@@ -14,7 +14,7 @@ PyEPR 0.9.2 (in development)
 PyEPR 0.9.1 (27/02/2015)
 ------------------------
 
-* Fix source distribution (missing epr-api C sources)
+* Fix source distribution (missing EPR API C sources)
 
 
 PyEPR 0.9 (27/02/2015)
