@@ -1,7 +1,6 @@
 Change history
 ==============
 
-
 PyEPR 0.9.3 (in development)
 ----------------------------
 

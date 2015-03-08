@@ -72,10 +72,10 @@ ENVISAT Product Reader Python API
     * `0.6 <https://pyepr.readthedocs.org/en/v0.6/>`_
 
 
-.. index:: license
-
 License
 =======
+
+.. index:: license
 
 Copyright (C) 2011-2015 Antonio Valentino <antonio.valentino@tiscali.it>
 
