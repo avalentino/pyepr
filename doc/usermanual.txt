@@ -201,7 +201,7 @@ if it is not already available in the :file:`tests` directory.
    please note that, unless the user already have a copy of the specified
    sample product correctly installed, an **internet connection** is
    necessary the first time that the test suite is run.
-   
+
    After the first run the sample product remains in the :file:`tests`
    directory so the internet access is no longer necessary.
 
@@ -253,7 +253,7 @@ For example: the C `EPR_DatasetId` structure has a field (`product_id`)
 that points to the *product* descriptor `EPR_productId` to which it
 belongs to.
 
-..index:: dataset, record
+.. index:: dataset, record
 
 The reference to the parent product is used, for example, when one wants
 to read a record using the `epr_read_record` function:
@@ -362,7 +362,7 @@ exposed to python.
 Internal library logging is completely silenced and errors are converted
 to Python_ exceptions.
 Where appropriate standard Python_ exception types are use in other cases
-custom exception types (e.g. :exc:`epr.EPRError`, :exc:`epr.EPRValueError`) 
+custom exception types (e.g. :exc:`epr.EPRError`, :exc:`epr.EPRValueError`)
 are used.
 
 
@@ -407,7 +407,7 @@ Another example::
         print(band)
 
 
-.. index:: __str__, __repr__, print_, 
+.. index:: __str__, __repr__, print_,
    pair: special; methods
 
 Special methods
@@ -436,7 +436,7 @@ giver the same result of::
 Of course the :meth:`epr.Record.print_` method is more efficient for writing
 to file.
 
-..index:: __iter__
+.. index:: __iter__
 
 Also :class:`epr.Dataset` and :class:`epr.Record` classes implement the
 ``__iter__`` `special method`_ for iterating over records and fields

@@ -1,7 +1,7 @@
 Exporting bitmasks
 -------------------
 
-..index:: bitmask, ENVISAT
+.. index:: bitmask, ENVISAT
 
 This tutorial shows how to generate bit masks from ENVISAT_ flags information
 as "raw" image using PyEPR_.
