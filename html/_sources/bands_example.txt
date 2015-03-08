@@ -1,6 +1,8 @@
 Exporting band data
 -------------------
 
+.. index:: ENVISAT, band, raster
+
 This tutorial shows how to convert ENVISAT_ raster information from dataset
 and generate flat binary rasters using PyEPR_.
 
@@ -196,3 +198,7 @@ powerful :class:`numpy.ndarray` interface.
 
 .. _Python: https://www.python.org
 .. _pythonic: http://www.cafepy.com/article/be_pythonic
+
+.. raw:: latex
+
+   \clearpage0+++++

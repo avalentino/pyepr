@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>NDVI computation &mdash; PyEPR 0.9.1 documentation</title>
+    <title>NDVI computation &mdash; PyEPR 0.9.2 documentation</title>
     
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.1',
+        VERSION:     '0.9.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.9.1 documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.9.2 documentation" href="index.html" />
     <link rel="up" title="Tutorials" href="tutorials.html" />
     <link rel="next" title="Update Field elements" href="update_example.html" />
     <link rel="prev" title="Exporting bitmasks" href="bitmask_example.html" /> 
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="bitmask_example.html" title="Exporting bitmasks"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.9.1 documentation</a> &raquo;</li>
+        <li><a href="index.html">PyEPR 0.9.2 documentation</a> &raquo;</li>
           <li><a href="tutorials.html" accesskey="U">Tutorials</a> &raquo;</li> 
       </ul>
     </div>  
@@ -54,7 +54,7 @@
             
   <div class="section" id="ndvi-computation">
 <h1>NDVI computation<a class="headerlink" href="#ndvi-computation" title="Permalink to this headline">¶</a></h1>
-<p>This tutorial shows how to use <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> to open a <a class="reference external" href="https://earth.esa.int/handbooks/meris/CNTR.html">MERIS</a> L1B product, compute
+<p id="index-0">This tutorial shows how to use <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> to open a <a class="reference external" href="https://earth.esa.int/handbooks/meris/CNTR.html">MERIS</a> L1B product, compute
 the <em>Normalized Difference Vegetation Index</em> (NDVI) and store it into a flat
 binary file.</p>
 <p>The example code (<a class="reference download internal" href="_downloads/write_ndvi.py"><tt class="xref download docutils literal"><span class="pre">examples/write_ndvi.py</span></tt></a>) is a direct
@@ -66,105 +66,7 @@ EPR API distribution.</p>
 </div>
 <p>The code have been kept very simple and it consists in a single function
 (<tt class="xref py py-func docutils literal"><span class="pre">main()</span></tt>) that also performs a minimal command line arguments handling.</p>
-<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91
-92
-93
-94
-95
-96
-97
-98
-99</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/env python3</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python3</span>
 
 <span class="c"># This program is a direct translation of the sample program</span>
 <span class="c"># &quot;write_ndvi.c&quot; bundled with the EPR-API distribution.</span>
@@ -264,13 +166,13 @@ EPR API distribution.</p>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
-</td></tr></table></div>
+</div>
 <p>The <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> is opened using the <a class="reference internal" href="reference.html#epr.open" title="epr.open"><tt class="xref py py-func docutils literal"><span class="pre">epr.open()</span></tt></a>
 function.</p>
 <div class="highlight-python"><div class="highlight"><pre>    with epr.open(argv[1]) as product:
 </pre></div>
 </div>
-<p>As usual in modern python programs the <em>with</em> statement has been used to
+<p id="index-1">As usual in modern python programs the <em>with</em> statement has been used to
 ensure that the product is automatically closed as soon as the program exits
 the block.
 Of course it is possible to use a simple assignment form:</p>
@@ -300,7 +202,7 @@ method:</p>
 <p><em>band1</em> and <em>band2</em> are used to read the calibrated radiances into the
 <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> objects that allow to access data matrices with the
 radiance values.</p>
-<p>Before reading data into the <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> objects they have to be
+<p id="index-2">Before reading data into the <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> objects they have to be
 instantiated specifying their size and data type in order to allow the library
 to allocate the correct amount of memory.</p>
 <p>For sake of simplicity <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><tt class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></tt></a> object are created with the same
@@ -463,13 +365,13 @@ vectorized expressions:</p>
         <li class="right" >
           <a href="bitmask_example.html" title="Exporting bitmasks"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.9.1 documentation</a> &raquo;</li>
+        <li><a href="index.html">PyEPR 0.9.2 documentation</a> &raquo;</li>
           <li><a href="tutorials.html" >Tutorials</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011-2015, Antonio Valentino.
-      Last updated on Feb 27, 2015.
+      Last updated on Mar 08, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

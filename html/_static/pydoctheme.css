@@ -94,31 +94,31 @@ div.body div.seealso {
 }
 
 div.body a {
-    color: #00608f;
+    color: #0072aa;
 }
 
 div.body a:visited {
-    color: #30306f;
+    color: #6363bb;
 }
 
 div.body a:hover {
     color: #00B0E4;
 }
 
-tt, pre {
+tt, code, pre {
     font-family: monospace, sans-serif;
     font-size: 96.5%;
 }
 
-div.body tt {
+div.body tt, div.body code {
     border-radius: 3px;
 }
 
-div.body tt.descname {
+div.body tt.descname, div.body code.descname {
     font-size: 120%;
 }
 
-div.body tt.xref, div.body a tt {
+div.body tt.xref, div.body a tt, div.body code.xref, div.body a code {
     font-weight: normal;
 }
 
@@ -167,4 +167,12 @@ div.footer {
 
 div.footer a:hover {
     color: #0095C4;
+}
+
+.refcount {
+    color: #060;
+}
+
+.stableabi {
+    color: #229;
 }

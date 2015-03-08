@@ -1,0 +1,536 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GDAL export example &mdash; PyEPR 0.9.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <link rel="top" title="PyEPR 0.9.2 documentation" href="index.html" />
+    <link rel="up" title="Tutorials" href="tutorials.html" />
+    <link rel="next" title="API Reference" href="reference.html" />
+    <link rel="prev" title="Update Field elements" href="update_example.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="reference.html" title="API Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="update_example.html" title="Update Field elements"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyEPR 0.9.2 documentation</a> &raquo;</li>
+          <li><a href="tutorials.html" accesskey="U">Tutorials</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="gdal-export-example">
+<h1><a class="reference external" href="http://www.gdal.org">GDAL</a> export example<a class="headerlink" href="#gdal-export-example" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">This tutorial explains how to use <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> to generate a file in GDAL Virtual
+Format (VRT) that can be used to access data with the powerful and popular
+<a class="reference external" href="http://www.gdal.org">GDAL</a> library.
+<a class="reference external" href="http://www.gdal.org">GDAL</a> already has support for <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> products but this example is
+interesting for two reasons:</p>
+<ul class="simple">
+<li>it exploits some low level feature (like e.g. offset management) that are
+rarely used but that can be very useful in some cases</li>
+<li>the generated VRT file uses raw raster access and it can be opened in
+update mode to modify the <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> product data.
+This feature is not supported by the native <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> driver of the <a class="reference external" href="http://www.gdal.org">GDAL</a>
+library</li>
+</ul>
+<div class="section" id="export-gdalvrt-module">
+<h2>export_gdalvrt module<a class="headerlink" href="#export-gdalvrt-module" title="Permalink to this headline">¶</a></h2>
+<p>The complete code of the example is available in the
+<a class="reference download internal" href="_downloads/export_gdalvrt.py"><tt class="xref download docutils literal"><span class="pre">examples/export_gdalvrt.py</span></tt></a> file.
+It is organized so that it can also be imported as a module in any program.</p>
+<p>The <a class="reference internal" href="#module-export_gdalvrt" title="export_gdalvrt"><tt class="xref py py-mod docutils literal"><span class="pre">export_gdalvrt</span></tt></a> module provides two functions:</p>
+<span class="target" id="module-export_gdalvrt"></span><dl class="function">
+<dt id="export_gdalvrt.epr2gdal_band">
+<tt class="descclassname">export_gdalvrt.</tt><tt class="descname">epr2gdal_band</tt><big>(</big><em>band</em>, <em>vrt</em><big>)</big><a class="headerlink" href="#export_gdalvrt.epr2gdal_band" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes in input an <a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">epr.Band</span></tt></a> object and a VRT dataset
+and add a <a class="reference external" href="http://www.gdal.org">GDAL</a> band to the VRT dataset</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="export_gdalvrt.epr2gdal">
+<tt class="descclassname">export_gdalvrt.</tt><tt class="descname">epr2gdal</tt><big>(</big><em>product</em>, <em>vrt</em>, <em>overwrite_existing=False</em><big>)</big><a class="headerlink" href="#export_gdalvrt.epr2gdal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes in input a <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> <tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt> (or a filename) and the
+file name of the output VRT file and generates the VRT file itself
+containing a band for each <a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">epr.Band</span></tt></a> present in the original
+<a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> and also associated metadata.</p>
+</dd></dl>
+
+<p>The <a class="reference internal" href="#export_gdalvrt.epr2gdal" title="export_gdalvrt.epr2gdal"><tt class="xref py py-func docutils literal"><span class="pre">epr2gdal()</span></tt></a> function first creates the VRT dataset</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">product</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">product</span>
+        <span class="n">product</span> <span class="o">=</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="n">ysize</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_scene_height</span><span class="p">()</span>
+    <span class="n">xsize</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_scene_width</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">vrt</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite_existing</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;unable to create &quot;{0}&quot;. Already exists&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vrt</span><span class="p">))</span>
+
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s">&#39;VRT&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">driver</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;unable to get driver &quot;VRT&quot;&#39;</span><span class="p">)</span>
+
+    <span class="n">gdal_ds</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">vrt</span><span class="p">,</span> <span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">gdal_ds</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;unable to create &quot;{}&quot; dataset&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vrt</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>and then loops on all <a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">epr.Band</span></tt></a>s of the <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a>
+calling the <a class="reference internal" href="#export_gdalvrt.epr2gdal_band" title="export_gdalvrt.epr2gdal_band"><tt class="xref py py-func docutils literal"><span class="pre">epr2gdal_band()</span></tt></a> function on each of them:</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="k">for</span> <span class="n">band</span> <span class="ow">in</span> <span class="n">product</span><span class="o">.</span><span class="n">bands</span><span class="p">():</span>
+        <span class="n">epr2gdal_band</span><span class="p">(</span><span class="n">band</span><span class="p">,</span> <span class="n">gdal_ds</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#module-export_gdalvrt" title="export_gdalvrt"><tt class="xref py py-mod docutils literal"><span class="pre">export_gdalvrt</span></tt></a> module also provides a <tt class="xref py py-data docutils literal"><span class="pre">epr_to_gdal_type</span></tt>
+mapping between EPR and GDAL data type identifiers.</p>
+</div>
+<div class="section" id="generating-vrtrawrasterbands">
+<span id="index-1"></span><h2>Generating <em>VRTRawRasterBand</em>s<a class="headerlink" href="#generating-vrtrawrasterbands" title="Permalink to this headline">¶</a></h2>
+<p>The core of the example is the part of the code in the <a class="reference internal" href="#export_gdalvrt.epr2gdal_band" title="export_gdalvrt.epr2gdal_band"><tt class="xref py py-func docutils literal"><span class="pre">epr2gdal_band()</span></tt></a>
+function that generates the <a class="reference external" href="http://www.gdal.org">GDAL</a> <em>VRTRawRasterBand</em>.
+It is a description of a raster file that the <a class="reference external" href="http://www.gdal.org">GDAL</a> library uses for low level
+data access.
+Of course the entire machinery works because data in <a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">epr.Band</span></tt></a>s and
+<a class="reference internal" href="reference.html#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">epr.Dataset</span></tt></a>s of <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> products are stored as contiguous
+rasters.</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">pathsep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">file_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">))</span>  <span class="c"># denormalize</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">get_dsd</span><span class="p">()</span><span class="o">.</span><span class="n">ds_offset</span> <span class="o">+</span> <span class="n">field</span><span class="o">.</span><span class="n">get_offset</span><span class="p">()</span>
+    <span class="n">line_offset</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">tot_size</span>
+    <span class="n">pixel_offset</span> <span class="o">=</span> <span class="n">epr</span><span class="o">.</span><span class="n">get_data_type_size</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get_type</span><span class="p">())</span>
+
+    <span class="k">if</span> <span class="n">band</span><span class="o">.</span><span class="n">sample_model</span> <span class="o">==</span> <span class="n">epr</span><span class="o">.</span><span class="n">E_SMOD_1OF2</span><span class="p">:</span>
+        <span class="n">pixel_offset</span> <span class="o">*=</span> <span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">band</span><span class="o">.</span><span class="n">sample_model</span> <span class="o">==</span> <span class="n">epr</span><span class="o">.</span><span class="n">E_SMOD_2OF2</span><span class="p">:</span>
+        <span class="n">offset</span> <span class="o">+=</span> <span class="n">pixel_offset</span>
+        <span class="n">pixel_offset</span> <span class="o">*=</span> <span class="mi">2</span>
+
+    <span class="n">options</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s">&#39;subClass=VRTRawRasterBand&#39;</span><span class="p">,</span>
+        <span class="s">&#39;SourceFilename={}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span>
+        <span class="s">&#39;ImageOffset={}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">offset</span><span class="p">),</span>
+        <span class="s">&#39;LineOffset={}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line_offset</span><span class="p">),</span>
+        <span class="s">&#39;PixelOffset={}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pixel_offset</span><span class="p">),</span>
+        <span class="s">&#39;ByteOrder=MSB&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">gtype</span> <span class="o">=</span> <span class="n">epr_to_gdal_type</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">get_type</span><span class="p">()]</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">gdal_ds</span><span class="o">.</span><span class="n">AddBand</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ret</span> <span class="o">!=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">CE_None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="s">&#39;unable to add VRTRawRasterBand to &quot;{}&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vrt</span><span class="p">))</span>
+</pre></div>
+</div>
+<p id="index-2">The fundamental part is the computation of the:</p>
+<p><strong>ImageOffset</strong>:</p>
+<blockquote>
+<div><p>the offset in bytes to the beginning of the first pixel of data with
+respect to the beginning of the file.</p>
+<p>In the example it is computed using</p>
+<ul class="simple">
+<li>the <a class="reference internal" href="reference.html#epr.DSD.ds_offset" title="epr.DSD.ds_offset"><tt class="xref py py-data docutils literal"><span class="pre">epr.DSD.ds_offset</span></tt></a> attribute, that represents the offset
+in bytes of the <a class="reference internal" href="reference.html#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">epr.Dataset</span></tt></a> from the beginning of the file,
+and</li>
+<li>the <a class="reference internal" href="reference.html#epr.Field.get_offset" title="epr.Field.get_offset"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Field.get_offset()</span></tt></a> method that returns the offset in
+bytes of the <a class="reference internal" href="reference.html#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">epr.Field</span></tt></a> containing <a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">epr.Band</span></tt></a> data from
+the beginning of the <a class="reference internal" href="reference.html#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">epr.Record</span></tt></a></li>
+</ul>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="n">offset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">get_dsd</span><span class="p">()</span><span class="o">.</span><span class="n">ds_offset</span> <span class="o">+</span> <span class="n">field</span><span class="o">.</span><span class="n">get_offset</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div></blockquote>
+<p><strong>LineOffset</strong>:</p>
+<blockquote>
+<div><p>the offset in bytes from the beginning of one <em>scanline</em> of data and the
+next scanline of data.
+In the example it is set to the <a class="reference internal" href="reference.html#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">epr.Record</span></tt></a> size in bytes using
+the <a class="reference internal" href="reference.html#epr.Record.tot_size" title="epr.Record.tot_size"><tt class="xref py py-attr docutils literal"><span class="pre">epr.Record.tot_size</span></tt></a> attribute:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">line_offset</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">tot_size</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>PixelOffset</strong>:</p>
+<blockquote>
+<div><p>the offset in bytes from the beginning of one pixel and the next on
+the same line. Usually it corresponds to the size in bytes of the
+elementary data type.
+It is set using the <a class="reference internal" href="reference.html#epr.Field.get_type" title="epr.Field.get_type"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Field.get_type()</span></tt></a> method and the
+<a class="reference internal" href="reference.html#epr.get_data_type_size" title="epr.get_data_type_size"><tt class="xref py py-func docutils literal"><span class="pre">epr.get_data_type_size()</span></tt></a> function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pixel_offset</span> <span class="o">=</span> <span class="n">epr</span><span class="o">.</span><span class="n">get_data_type_size</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get_type</span><span class="p">())</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The band size in lines and columns of the <a class="reference external" href="http://www.gdal.org">GDAL</a> bands is fixed at <a class="reference external" href="http://www.gdal.org">GDAL</a>
+dataset level when it is created:</p>
+<div class="highlight-python"><div class="highlight"><pre>        <span class="n">gdal_ds</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">vrt</span><span class="p">,</span> <span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">gdal_ds</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;unable to create &quot;{}&quot; dataset&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vrt</span><span class="p">))</span>
+</pre></div>
+</div>
+<p id="index-3">Please note that in case of <a class="reference internal" href="reference.html#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">epr.Dataset</span></tt></a>s storing complex values,
+like in <cite>MDS1</cite> <a class="reference internal" href="reference.html#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">epr.Dataset</span></tt></a> of ASAR IMS <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a>s,
+pixels of real and imaginary parts are interleaved, so to represent
+<a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">epr.Band</span></tt></a>s of the two components the pixel offset have to be
+doubled and an additional offset (one pixel) must be added to the
+<em>ImageOffset</em> of the <a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">epr.Band</span></tt></a> representing the imaginary part:</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="k">if</span> <span class="n">band</span><span class="o">.</span><span class="n">sample_model</span> <span class="o">==</span> <span class="n">epr</span><span class="o">.</span><span class="n">E_SMOD_1OF2</span><span class="p">:</span>
+        <span class="n">pixel_offset</span> <span class="o">*=</span> <span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">band</span><span class="o">.</span><span class="n">sample_model</span> <span class="o">==</span> <span class="n">epr</span><span class="o">.</span><span class="n">E_SMOD_2OF2</span><span class="p">:</span>
+        <span class="n">offset</span> <span class="o">+=</span> <span class="n">pixel_offset</span>
+        <span class="n">pixel_offset</span> <span class="o">*=</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>the <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> API does not supports complex <tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt>s.
+<a class="reference internal" href="reference.html#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">epr.Dataset</span></tt></a>s containing complex data, like the <cite>MDS1</cite>
+<a class="reference internal" href="reference.html#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">epr.Dataset</span></tt></a> of ASAR IMS <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a>s, are associated
+to two distinct <a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">epr.Band</span></tt></a>s containing the real (I) and the
+imaginary (Q) component respectively.</p>
+<p><a class="reference external" href="http://www.gdal.org">GDAL</a>, instead, supports complex data types, so it is possible to map a
+complex <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> <a class="reference internal" href="reference.html#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">epr.Dataset</span></tt></a> onto a single <a class="reference external" href="http://www.gdal.org">GDAL</a> bands with
+complex data type.</p>
+<p class="last">This case is not handled in the example.</p>
+</div>
+</div>
+<div class="section" id="metadata">
+<span id="index-4"></span><h2>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#export_gdalvrt.epr2gdal_band" title="export_gdalvrt.epr2gdal_band"><tt class="xref py py-func docutils literal"><span class="pre">epr2gdal_band()</span></tt></a> function also stores a small set of metadata for
+each <a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><tt class="xref py py-class docutils literal"><span class="pre">epr.Band</span></tt></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="n">gdal_band</span> <span class="o">=</span> <span class="n">gdal_ds</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">gdal_ds</span><span class="o">.</span><span class="n">RasterCount</span><span class="p">)</span>
+    <span class="n">gdal_band</span><span class="o">.</span><span class="n">SetDescription</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="n">band</span><span class="o">.</span><span class="n">get_name</span><span class="p">(),</span>
+        <span class="s">&#39;dataset_name&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">get_name</span><span class="p">(),</span>
+        <span class="s">&#39;dataset_description&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+        <span class="s">&#39;lines_mirrored&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">lines_mirrored</span><span class="p">),</span>
+        <span class="s">&#39;sample_model&#39;</span><span class="p">:</span> <span class="n">epr</span><span class="o">.</span><span class="n">get_sample_model_name</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">sample_model</span><span class="p">),</span>
+        <span class="s">&#39;scaling_factor&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">scaling_factor</span><span class="p">),</span>
+        <span class="s">&#39;scaling_offset&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">scaling_offset</span><span class="p">),</span>
+        <span class="s">&#39;scaling_method&#39;</span><span class="p">:</span> <span class="n">epr</span><span class="o">.</span><span class="n">get_scaling_method_name</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">scaling_method</span><span class="p">),</span>
+        <span class="s">&#39;spectr_band_index&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">spectr_band_index</span><span class="p">),</span>
+        <span class="s">&#39;unit&#39;</span><span class="p">:</span> <span class="n">band</span><span class="o">.</span><span class="n">unit</span> <span class="k">if</span> <span class="n">band</span><span class="o">.</span><span class="n">unit</span> <span class="k">else</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+        <span class="s">&#39;bm_expr&#39;</span><span class="p">:</span> <span class="n">band</span><span class="o">.</span><span class="n">bm_expr</span> <span class="k">if</span> <span class="n">band</span><span class="o">.</span><span class="n">bm_expr</span> <span class="k">else</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">gdal_band</span><span class="o">.</span><span class="n">SetMetadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Metadata are also stored at <a class="reference external" href="http://www.gdal.org">GDAL</a> dataset level by the <a class="reference internal" href="#export_gdalvrt.epr2gdal" title="export_gdalvrt.epr2gdal"><tt class="xref py py-func docutils literal"><span class="pre">epr2gdal()</span></tt></a>
+function:</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;id_string&#39;</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">id_string</span><span class="p">,</span>
+        <span class="s">&#39;meris_iodd_version&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">meris_iodd_version</span><span class="p">),</span>
+        <span class="s">&#39;dataset_names&#39;</span><span class="p">:</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">get_dataset_names</span><span class="p">()),</span>
+        <span class="s">&#39;num_datasets&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">get_num_datasets</span><span class="p">()),</span>
+        <span class="s">&#39;num_dsds&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">get_num_dsds</span><span class="p">()),</span>
+    <span class="p">}</span>
+    <span class="n">gdal_ds</span><span class="o">.</span><span class="n">SetMetadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+</pre></div>
+</div>
+<p id="index-5">The  <a class="reference internal" href="#export_gdalvrt.epr2gdal" title="export_gdalvrt.epr2gdal"><tt class="xref py py-func docutils literal"><span class="pre">epr2gdal()</span></tt></a> function also stores the contents of the <em>MPH</em> and the
+<em>SPH</em> records as <a class="reference external" href="http://www.gdal.org">GDAL</a> dataset matadata in custom domains:</p>
+<div class="highlight-python"><div class="highlight"><pre>    <span class="n">mph</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_mph</span><span class="p">()</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">mph</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39; = &#39;</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="n">gdal_ds</span><span class="o">.</span><span class="n">SetMetadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="s">&#39;MPH&#39;</span><span class="p">)</span>
+
+    <span class="n">sph</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_sph</span><span class="p">()</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">sph</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39; = &#39;</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="n">gdal_ds</span><span class="o">.</span><span class="n">SetMetadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="s">&#39;SPH&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="complete-listing">
+<h2>Complete listing<a class="headerlink" href="#complete-listing" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">epr</span>
+<span class="kn">from</span> <span class="nn">osgeo</span> <span class="kn">import</span> <span class="n">gdal</span>
+
+
+<span class="n">epr_to_gdal_type</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">epr</span><span class="o">.</span><span class="n">E_TID_UNKNOWN</span><span class="p">:</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Unknown</span><span class="p">,</span>
+    <span class="n">epr</span><span class="o">.</span><span class="n">E_TID_UCHAR</span><span class="p">:</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Byte</span><span class="p">,</span>
+    <span class="n">epr</span><span class="o">.</span><span class="n">E_TID_CHAR</span><span class="p">:</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Byte</span><span class="p">,</span>
+    <span class="n">epr</span><span class="o">.</span><span class="n">E_TID_USHORT</span><span class="p">:</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_UInt16</span><span class="p">,</span>
+    <span class="n">epr</span><span class="o">.</span><span class="n">E_TID_SHORT</span><span class="p">:</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Int16</span><span class="p">,</span>
+    <span class="n">epr</span><span class="o">.</span><span class="n">E_TID_UINT</span><span class="p">:</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_UInt32</span><span class="p">,</span>
+    <span class="n">epr</span><span class="o">.</span><span class="n">E_TID_INT</span><span class="p">:</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Int32</span><span class="p">,</span>
+    <span class="n">epr</span><span class="o">.</span><span class="n">E_TID_FLOAT</span><span class="p">:</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Float32</span><span class="p">,</span>
+    <span class="n">epr</span><span class="o">.</span><span class="n">E_TID_DOUBLE</span><span class="p">:</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Float64</span><span class="p">,</span>
+    <span class="c">#epr.E_TID_STRING: gdal.GDT_Unknown,</span>
+    <span class="c">#epr.E_TID_SPARE: gdal.GDT_Unknown,</span>
+    <span class="c">#epr.E_TID_TIME: gdal.GDT_Unknown,</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">epr2gdal_band</span><span class="p">(</span><span class="n">band</span><span class="p">,</span> <span class="n">vrt</span><span class="p">):</span>
+    <span class="n">product</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">product</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">dataset</span>
+    <span class="n">record</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">read_record</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">field</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">get_field_at</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">_field_index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">ysize</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_scene_height</span><span class="p">()</span>
+    <span class="n">xsize</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_scene_width</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vrt</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Dataset</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">vrt</span><span class="o">.</span><span class="n">RasterYSize</span><span class="p">,</span> <span class="n">vrt</span><span class="o">.</span><span class="n">RasterXSize</span><span class="p">)</span> <span class="o">!=</span> <span class="p">(</span><span class="n">ysize</span><span class="p">,</span> <span class="n">xsize</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;dataset size do not match&#39;</span><span class="p">)</span>
+        <span class="n">gdal_ds</span> <span class="o">=</span> <span class="n">vrt</span>
+    <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">vrt</span><span class="p">):</span>
+        <span class="n">gdal_ds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">vrt</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GA_Update</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">gdal_ds</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;unable to open &quot;{}&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vrt</span><span class="p">))</span>
+        <span class="n">driver</span> <span class="o">=</span> <span class="n">gdal_ds</span><span class="o">.</span><span class="n">GetDriver</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">driver</span><span class="o">.</span><span class="n">ShortName</span> <span class="o">!=</span> <span class="s">&#39;VRT&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;unexpected GDAL driver ({}). &#39;</span>
+                            <span class="s">&#39;VRT driver expected&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">driver</span><span class="o">.</span><span class="n">ShortName</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">driver</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s">&#39;VRT&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">driver</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;unable to get driver &quot;VRT&quot;&#39;</span><span class="p">)</span>
+
+        <span class="n">gdal_ds</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">vrt</span><span class="p">,</span> <span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">gdal_ds</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;unable to create &quot;{}&quot; dataset&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vrt</span><span class="p">))</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">pathsep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">file_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">))</span>  <span class="c"># denormalize</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">get_dsd</span><span class="p">()</span><span class="o">.</span><span class="n">ds_offset</span> <span class="o">+</span> <span class="n">field</span><span class="o">.</span><span class="n">get_offset</span><span class="p">()</span>
+    <span class="n">line_offset</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">tot_size</span>
+    <span class="n">pixel_offset</span> <span class="o">=</span> <span class="n">epr</span><span class="o">.</span><span class="n">get_data_type_size</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get_type</span><span class="p">())</span>
+
+    <span class="k">if</span> <span class="n">band</span><span class="o">.</span><span class="n">sample_model</span> <span class="o">==</span> <span class="n">epr</span><span class="o">.</span><span class="n">E_SMOD_1OF2</span><span class="p">:</span>
+        <span class="n">pixel_offset</span> <span class="o">*=</span> <span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">band</span><span class="o">.</span><span class="n">sample_model</span> <span class="o">==</span> <span class="n">epr</span><span class="o">.</span><span class="n">E_SMOD_2OF2</span><span class="p">:</span>
+        <span class="n">offset</span> <span class="o">+=</span> <span class="n">pixel_offset</span>
+        <span class="n">pixel_offset</span> <span class="o">*=</span> <span class="mi">2</span>
+
+    <span class="n">options</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s">&#39;subClass=VRTRawRasterBand&#39;</span><span class="p">,</span>
+        <span class="s">&#39;SourceFilename={}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span>
+        <span class="s">&#39;ImageOffset={}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">offset</span><span class="p">),</span>
+        <span class="s">&#39;LineOffset={}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line_offset</span><span class="p">),</span>
+        <span class="s">&#39;PixelOffset={}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pixel_offset</span><span class="p">),</span>
+        <span class="s">&#39;ByteOrder=MSB&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">gtype</span> <span class="o">=</span> <span class="n">epr_to_gdal_type</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">get_type</span><span class="p">()]</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">gdal_ds</span><span class="o">.</span><span class="n">AddBand</span><span class="p">(</span><span class="n">gtype</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ret</span> <span class="o">!=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">CE_None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="s">&#39;unable to add VRTRawRasterBand to &quot;{}&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vrt</span><span class="p">))</span>
+
+    <span class="n">gdal_band</span> <span class="o">=</span> <span class="n">gdal_ds</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">gdal_ds</span><span class="o">.</span><span class="n">RasterCount</span><span class="p">)</span>
+    <span class="n">gdal_band</span><span class="o">.</span><span class="n">SetDescription</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="n">band</span><span class="o">.</span><span class="n">get_name</span><span class="p">(),</span>
+        <span class="s">&#39;dataset_name&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">get_name</span><span class="p">(),</span>
+        <span class="s">&#39;dataset_description&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+        <span class="s">&#39;lines_mirrored&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">lines_mirrored</span><span class="p">),</span>
+        <span class="s">&#39;sample_model&#39;</span><span class="p">:</span> <span class="n">epr</span><span class="o">.</span><span class="n">get_sample_model_name</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">sample_model</span><span class="p">),</span>
+        <span class="s">&#39;scaling_factor&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">scaling_factor</span><span class="p">),</span>
+        <span class="s">&#39;scaling_offset&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">scaling_offset</span><span class="p">),</span>
+        <span class="s">&#39;scaling_method&#39;</span><span class="p">:</span> <span class="n">epr</span><span class="o">.</span><span class="n">get_scaling_method_name</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">scaling_method</span><span class="p">),</span>
+        <span class="s">&#39;spectr_band_index&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">spectr_band_index</span><span class="p">),</span>
+        <span class="s">&#39;unit&#39;</span><span class="p">:</span> <span class="n">band</span><span class="o">.</span><span class="n">unit</span> <span class="k">if</span> <span class="n">band</span><span class="o">.</span><span class="n">unit</span> <span class="k">else</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+        <span class="s">&#39;bm_expr&#39;</span><span class="p">:</span> <span class="n">band</span><span class="o">.</span><span class="n">bm_expr</span> <span class="k">if</span> <span class="n">band</span><span class="o">.</span><span class="n">bm_expr</span> <span class="k">else</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">gdal_band</span><span class="o">.</span><span class="n">SetMetadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">gdal_ds</span>
+
+
+<span class="k">def</span> <span class="nf">epr2gdal</span><span class="p">(</span><span class="n">product</span><span class="p">,</span> <span class="n">vrt</span><span class="p">,</span> <span class="n">overwrite_existing</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">product</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">product</span>
+        <span class="n">product</span> <span class="o">=</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="n">ysize</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_scene_height</span><span class="p">()</span>
+    <span class="n">xsize</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_scene_width</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">vrt</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite_existing</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;unable to create &quot;{0}&quot;. Already exists&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vrt</span><span class="p">))</span>
+
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s">&#39;VRT&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">driver</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;unable to get driver &quot;VRT&quot;&#39;</span><span class="p">)</span>
+
+    <span class="n">gdal_ds</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">vrt</span><span class="p">,</span> <span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">gdal_ds</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;unable to create &quot;{}&quot; dataset&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vrt</span><span class="p">))</span>
+
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;id_string&#39;</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">id_string</span><span class="p">,</span>
+        <span class="s">&#39;meris_iodd_version&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">meris_iodd_version</span><span class="p">),</span>
+        <span class="s">&#39;dataset_names&#39;</span><span class="p">:</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">get_dataset_names</span><span class="p">()),</span>
+        <span class="s">&#39;num_datasets&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">get_num_datasets</span><span class="p">()),</span>
+        <span class="s">&#39;num_dsds&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">get_num_dsds</span><span class="p">()),</span>
+    <span class="p">}</span>
+    <span class="n">gdal_ds</span><span class="o">.</span><span class="n">SetMetadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+
+    <span class="n">mph</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_mph</span><span class="p">()</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">mph</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39; = &#39;</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="n">gdal_ds</span><span class="o">.</span><span class="n">SetMetadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="s">&#39;MPH&#39;</span><span class="p">)</span>
+
+    <span class="n">sph</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_sph</span><span class="p">()</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">sph</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39; = &#39;</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="n">gdal_ds</span><span class="o">.</span><span class="n">SetMetadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="s">&#39;SPH&#39;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">band</span> <span class="ow">in</span> <span class="n">product</span><span class="o">.</span><span class="n">bands</span><span class="p">():</span>
+        <span class="n">epr2gdal_band</span><span class="p">(</span><span class="n">band</span><span class="p">,</span> <span class="n">gdal_ds</span><span class="p">)</span>
+
+    <span class="c"># @TODO: set geographic info</span>
+
+    <span class="k">return</span> <span class="n">gdal_ds</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1&#39;</span>
+    <span class="n">vrtfilename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;.vrt&#39;</span>
+
+    <span class="n">gdal_ds</span> <span class="o">=</span> <span class="n">epr2gdal</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">vrtfilename</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">product</span><span class="p">:</span>
+        <span class="n">band_index</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_band_names</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&#39;water_vapour&#39;</span><span class="p">)</span>
+        <span class="n">band</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="s">&#39;water_vapour&#39;</span><span class="p">)</span>
+        <span class="n">eprdata</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">read_as_array</span><span class="p">()</span>
+        <span class="n">unit</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">unit</span>
+        <span class="n">lines_mirrored</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">lines_mirrored</span>
+        <span class="n">scaling_offset</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">scaling_offset</span>
+        <span class="n">scaling_factor</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">scaling_factor</span>
+
+    <span class="n">gdal_band</span> <span class="o">=</span> <span class="n">gdal_ds</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">band_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">vrtdata</span> <span class="o">=</span> <span class="n">gdal_band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">lines_mirrored</span><span class="p">:</span>
+        <span class="n">vrtdata</span> <span class="o">=</span> <span class="n">vrtdata</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">vrtdata</span> <span class="o">=</span> <span class="n">vrtdata</span> <span class="o">*</span> <span class="n">scaling_factor</span> <span class="o">+</span> <span class="n">scaling_offset</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;Max absolute error:&#39;</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">vrtdata</span> <span class="o">-</span> <span class="n">eprdata</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
+    <span class="c"># plot</span>
+    <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">eprdata</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">cb</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+    <span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">unit</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;EPR data&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">vrtdata</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">cb</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+    <span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">unit</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;VRT data&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">GDAL export example</a><ul>
+<li><a class="reference internal" href="#export-gdalvrt-module">export_gdalvrt module</a></li>
+<li><a class="reference internal" href="#generating-vrtrawrasterbands">Generating <em>VRTRawRasterBand</em>s</a></li>
+<li><a class="reference internal" href="#metadata">Metadata</a></li>
+<li><a class="reference internal" href="#complete-listing">Complete listing</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="update_example.html"
+                        title="previous chapter">Update <tt class="docutils literal"><span class="pre">Field</span></tt> elements</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="reference.html"
+                        title="next chapter">API Reference</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/gdal_export_example.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="reference.html" title="API Reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="update_example.html" title="Update Field elements"
+             >previous</a> |</li>
+        <li><a href="index.html">PyEPR 0.9.2 documentation</a> &raquo;</li>
+          <li><a href="tutorials.html" >Tutorials</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011-2015, Antonio Valentino.
+      Last updated on Mar 08, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Update Field elements &mdash; PyEPR 0.9.1 documentation</title>
+    <title>Update Field elements &mdash; PyEPR 0.9.2 documentation</title>
     
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.1',
+        VERSION:     '0.9.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.9.1 documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.9.2 documentation" href="index.html" />
     <link rel="up" title="Tutorials" href="tutorials.html" />
-    <link rel="next" title="API Reference" href="reference.html" />
+    <link rel="next" title="GDAL export example" href="gdal_export_example.html" />
     <link rel="prev" title="NDVI computation" href="ndvi_example.html" /> 
   </head>
   <body>
@@ -37,12 +37,12 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="reference.html" title="API Reference"
+          <a href="gdal_export_example.html" title="GDAL export example"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="ndvi_example.html" title="NDVI computation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.9.1 documentation</a> &raquo;</li>
+        <li><a href="index.html">PyEPR 0.9.2 documentation</a> &raquo;</li>
           <li><a href="tutorials.html" accesskey="U">Tutorials</a> &raquo;</li> 
       </ul>
     </div>  
@@ -54,7 +54,7 @@
             
   <div class="section" id="update-field-elements">
 <h1>Update <tt class="xref py py-class docutils literal"><span class="pre">Field</span></tt> elements<a class="headerlink" href="#update-field-elements" title="Permalink to this headline">¶</a></h1>
-<p>The EPR C API has been designed to provide read-only features.</p>
+<p id="index-0">The EPR C API has been designed to provide read-only features.</p>
 <p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> provides and extra capability consisting in the possibility to
 modify (<em>update</em>) an existing <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> <tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt>.</p>
 <p>Lets consider a MERIS Level 2 low resolution product (
@@ -71,7 +71,7 @@ instructions:</p>
     <span class="n">wv_orig_histogram</span><span class="p">,</span> <span class="n">orig_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">read_as_array</span><span class="p">()</span><span class="o">.</span><span class="n">flat</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The resulting histogram can be plot using <a class="reference external" href="http://matplotlib.org">Matplotlib</a>:</p>
+<p id="index-1">The resulting histogram can be plot using <a class="reference external" href="http://matplotlib.org">Matplotlib</a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># plot water vapour histogram</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">orig_bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">wv_orig_histogram</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&#39;original&#39;</span><span class="p">)</span>
@@ -101,7 +101,7 @@ In particular <tt class="xref py py-class docutils literal"><span class="pre">Fi
 <span class="go">spare_1 = &lt;&lt;unknown data type&gt;&gt;</span>
 </pre></div>
 </div>
-<p>Now suppose that for some reason one needs to update the <cite>sf_wvapour</cite> scaling
+<p id="index-2">Now suppose that for some reason one needs to update the <cite>sf_wvapour</cite> scaling
 factor for the water vapour content.
 Changing the scaling factor, of course, will change all values in the
 <cite>water_vapour</cite> <tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt>.</p>
@@ -238,8 +238,8 @@ associated to <cite>water_vapour</cite> <tt class="xref py py-class docutils lit
   <p class="topless"><a href="ndvi_example.html"
                         title="previous chapter">NDVI computation</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="reference.html"
-                        title="next chapter">API Reference</a></p>
+  <p class="topless"><a href="gdal_export_example.html"
+                        title="next chapter">GDAL export example</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/update_example.txt"
@@ -269,18 +269,18 @@ associated to <cite>water_vapour</cite> <tt class="xref py py-class docutils lit
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="reference.html" title="API Reference"
+          <a href="gdal_export_example.html" title="GDAL export example"
              >next</a> |</li>
         <li class="right" >
           <a href="ndvi_example.html" title="NDVI computation"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.9.1 documentation</a> &raquo;</li>
+        <li><a href="index.html">PyEPR 0.9.2 documentation</a> &raquo;</li>
           <li><a href="tutorials.html" >Tutorials</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011-2015, Antonio Valentino.
-      Last updated on Feb 27, 2015.
+      Last updated on Mar 08, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
