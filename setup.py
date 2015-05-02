@@ -129,6 +129,8 @@ class PyEprExtension(Extension, object):
                 else:
                     self.setup_requires_cython = True
                     sources.append(src)
+            else:
+                sources.append(src)
 
         if not self.setup_requires_cython:
             self.sources = sources
