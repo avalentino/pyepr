@@ -1,10 +1,12 @@
 Change history
 ==============
 
-PyEPR 0.9.3 (in development)
-----------------------------
+PyEPR 0.9.3 (02/05/2015)
+------------------------
 
-@TBW
+* updated internal epr-api version
+* the epr.c C extension has been re-generated with a newer version of
+  cython (0.21.1). This should hopefully fix :issue:`11`.
 
 
 PyEPR 0.9.2 (08/03/2015)
