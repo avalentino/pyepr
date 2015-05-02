@@ -41,7 +41,6 @@ def get_use_setuptools():
     use_setuptools = os.environ.get('USE_SETUPTOOLS', True)
     if str(use_setuptools).lower() in ('false', 'off', 'n', 'no', '0'):
         use_setuptools = False
-        print('USE_SETUPTOOLS: {}'.format(use_setuptools))
     else:
         use_setuptools = True
 
