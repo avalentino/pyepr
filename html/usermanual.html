@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>User Manual &mdash; PyEPR 0.9.2 documentation</title>
+    <title>User Manual &mdash; PyEPR 0.9.3.dev0 documentation</title>
     
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.2',
+        VERSION:     '0.9.3.dev0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.9.2 documentation" href="index.html" />
+    <link rel="top" title="PyEPR 0.9.3.dev0 documentation" href="index.html" />
     <link rel="next" title="Tutorials" href="tutorials.html" />
     <link rel="prev" title="ENVISAT Product Reader Python API" href="index.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="index.html" title="ENVISAT Product Reader Python API"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.9.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.9.3.dev0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -227,8 +227,7 @@ the correct order structures have to be freed.</p>
 <p>For example: the C <cite>EPR_DatasetId</cite> structure has a field (<cite>product_id</cite>)
 that points to the <em>product</em> descriptor <cite>EPR_productId</cite> to which it
 belongs to.</p>
-<p>..index:: dataset, record</p>
-<p>The reference to the parent product is used, for example, when one wants
+<p id="index-10">The reference to the parent product is used, for example, when one wants
 to read a record using the <cite>epr_read_record</cite> function:</p>
 <div class="highlight-c"><div class="highlight"><pre><span class="n">EPR_SRecord</span><span class="o">*</span> <span class="nf">epr_read_record</span><span class="p">(</span><span class="n">EPR_SDatasetId</span><span class="o">*</span> <span class="n">dataset_id</span><span class="p">,</span> <span class="p">...);</span>
 </pre></div>
@@ -244,21 +243,21 @@ object instance:</p>
 </pre></div>
 </div>
 <p>and then forget about the <em>product</em> instance it depends on.
-Even if the <em>product</em> variable goes out of <span class="target" id="index-10"></span>scope and it is no more
+Even if the <em>product</em> variable goes out of <span class="target" id="index-11"></span>scope and it is no more
 directly accessible in the program the <em>dataset</em> object keeps staying valid
 since it holds an internal reference to the <em>product</em> instance it depends on.</p>
 <p>When <em>record</em> is destroyed automatically also the parent <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a>
-object is destroyed (assumed there is no other <span class="target" id="index-11"></span>reference to it).</p>
+object is destroyed (assumed there is no other <span class="target" id="index-12"></span>reference to it).</p>
 <p>The entire machinery is completely automatic and transparent to the user.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">of course when a <em>product</em> object is explicitly closed using the
 <a class="reference internal" href="reference.html#epr.Product.close" title="epr.Product.close"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Product.close()</span></tt></a> any I/O operation on it and on other objects
 (bands, datasets, etc) associated to it is no more possible.</p>
-<span class="target" id="index-12"></span></div>
+<span class="target" id="index-13"></span></div>
 </div>
 <div class="section" id="arrays">
-<span id="index-13"></span><h2>Arrays<a class="headerlink" href="#arrays" title="Permalink to this headline">¶</a></h2>
+<span id="index-14"></span><h2>Arrays<a class="headerlink" href="#arrays" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> uses <a class="reference external" href="http://www.numpy.org">numpy</a> in order to manage efficiently the potentially large
 amount of data contained in <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> products.</p>
 <ul>
@@ -290,9 +289,9 @@ It read a slice of data from the <a class="reference internal" href="reference.h
 2D <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.9)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a>.</p>
 </li>
 </ul>
-<span class="target" id="index-14"></span></div>
+<span class="target" id="index-15"></span></div>
 <div class="section" id="enumerators">
-<span id="index-15"></span><h2>Enumerators<a class="headerlink" href="#enumerators" title="Permalink to this headline">¶</a></h2>
+<span id="index-16"></span><h2>Enumerators<a class="headerlink" href="#enumerators" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://www.python.org">Python</a> does not have <em>enumerators</em> at language level (at least this is true
 for <a class="reference external" href="https://www.python.org">Python</a> &lt; 3.4).
 Enumerations are simply mapped as module constants that have the same
@@ -322,7 +321,7 @@ name of the C enumerate but are spelled all in capital letters.</p>
 </table>
 </div>
 <div class="section" id="error-handling-and-logging">
-<span id="index-16"></span><h2>Error handling and logging<a class="headerlink" href="#error-handling-and-logging" title="Permalink to this headline">¶</a></h2>
+<span id="index-17"></span><h2>Error handling and logging<a class="headerlink" href="#error-handling-and-logging" title="Permalink to this headline">¶</a></h2>
 <p>Currently error handling and logging functions of the EPR C API are not
 exposed to python.</p>
 <p>Internal library logging is completely silenced and errors are converted
@@ -332,13 +331,13 @@ custom exception types (e.g. <a class="reference internal" href="reference.html#
 are used.</p>
 </div>
 <div class="section" id="library-initialization">
-<span id="index-17"></span><h2>Library initialization<a class="headerlink" href="#library-initialization" title="Permalink to this headline">¶</a></h2>
+<span id="index-18"></span><h2>Library initialization<a class="headerlink" href="#library-initialization" title="Permalink to this headline">¶</a></h2>
 <p>Differently from the C API library initialization is not needed: it is
 performed internally the first time the <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><tt class="xref py py-mod docutils literal"><span class="pre">epr</span></tt></a> module is imported
 in <a class="reference external" href="https://www.python.org">Python</a>.</p>
 </div>
 <div class="section" id="high-level-api">
-<span id="index-18"></span><h2>High level API<a class="headerlink" href="#high-level-api" title="Permalink to this headline">¶</a></h2>
+<span id="index-19"></span><h2>High level API<a class="headerlink" href="#high-level-api" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> provides some utility method that has no correspondent in the C API:</p>
 <ul class="simple">
 <li><a class="reference internal" href="reference.html#epr.Record.fields" title="epr.Record.fields"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Record.fields()</span></tt></a></li>
@@ -364,7 +363,7 @@ in <a class="reference external" href="https://www.python.org">Python</a>.</p>
 </div>
 </div>
 <div class="section" id="special-methods">
-<span id="index-19"></span><h2>Special methods<a class="headerlink" href="#special-methods" title="Permalink to this headline">¶</a></h2>
+<span id="index-20"></span><h2>Special methods<a class="headerlink" href="#special-methods" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference external" href="https://www.python.org">Python</a> EPR API also implements some <a class="reference external" href="https://docs.python.org/3/reference/datamodel.html">special method</a> in order to make
 EPR programming even handy and, in short, <a class="reference external" href="http://www.cafepy.com/article/be_pythonic">pythonic</a>.</p>
 <p>The <tt class="docutils literal"><span class="pre">__repr__</span></tt> methods have been overridden to provide a little more
@@ -384,8 +383,7 @@ So writing:</p>
 </div>
 <p>Of course the <a class="reference internal" href="reference.html#epr.Record.print_" title="epr.Record.print_"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Record.print_()</span></tt></a> method is more efficient for writing
 to file.</p>
-<p>..index:: __iter__</p>
-<p>Also <a class="reference internal" href="reference.html#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">epr.Dataset</span></tt></a> and <a class="reference internal" href="reference.html#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">epr.Record</span></tt></a> classes implement the
+<p id="index-21">Also <a class="reference internal" href="reference.html#epr.Dataset" title="epr.Dataset"><tt class="xref py py-class docutils literal"><span class="pre">epr.Dataset</span></tt></a> and <a class="reference internal" href="reference.html#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">epr.Record</span></tt></a> classes implement the
 <tt class="docutils literal"><span class="pre">__iter__</span></tt> <a class="reference external" href="https://docs.python.org/3/reference/datamodel.html">special method</a> for iterating over records and fields
 respectively.
 So it is possible to write code like the following:</p>
@@ -394,7 +392,7 @@ So it is possible to write code like the following:</p>
         <span class="k">print</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
 </pre></div>
 </div>
-<p id="index-20"><a class="reference internal" href="reference.html#epr.DSD" title="epr.DSD"><tt class="xref py py-class docutils literal"><span class="pre">epr.DSD</span></tt></a> and <a class="reference internal" href="reference.html#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">epr.Field</span></tt></a> classes implement the <tt class="docutils literal"><span class="pre">__eq__</span></tt>
+<p id="index-22"><a class="reference internal" href="reference.html#epr.DSD" title="epr.DSD"><tt class="xref py py-class docutils literal"><span class="pre">epr.DSD</span></tt></a> and <a class="reference internal" href="reference.html#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">epr.Field</span></tt></a> classes implement the <tt class="docutils literal"><span class="pre">__eq__</span></tt>
 and <tt class="docutils literal"><span class="pre">__ne__</span></tt> methods for objects comparison:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">filed1</span> <span class="o">==</span> <span class="n">field2</span><span class="p">:</span>
     <span class="k">print</span><span class="p">(</span><span class="s">&#39;field 1 and field2 are equal&#39;</span><span class="p">)</span>
@@ -404,7 +402,7 @@ and <tt class="docutils literal"><span class="pre">__ne__</span></tt> methods fo
     <span class="k">print</span><span class="p">(</span><span class="s">&#39;field2:&#39;</span><span class="p">,</span> <span class="n">field2</span><span class="p">)</span>
 </pre></div>
 </div>
-<p id="index-21"><a class="reference internal" href="reference.html#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">epr.Field</span></tt></a> object also implement the <tt class="docutils literal"><span class="pre">__len__</span></tt> special method
+<p id="index-23"><a class="reference internal" href="reference.html#epr.Field" title="epr.Field"><tt class="xref py py-class docutils literal"><span class="pre">epr.Field</span></tt></a> object also implement the <tt class="docutils literal"><span class="pre">__len__</span></tt> special method
 that returns the number of elements in the field:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">get_type</span><span class="p">()</span> <span class="o">!=</span> <span class="n">epr</span><span class="o">.</span><span class="n">E_TID_STRING</span><span class="p">:</span>
     <span class="k">assert</span> <span class="n">field</span><span class="o">.</span><span class="n">get_num_elems</span><span class="p">()</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
@@ -420,7 +418,7 @@ type is not <a class="reference internal" href="reference.html#epr.E_TID_STRING"
 If the field contains a string then the string length is
 returned.</p>
 </div>
-<p id="index-22">Finally the <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> class acts as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#context-manager-types">context manager</a> (i.e. it
+<p id="index-24">Finally the <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> class acts as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#context-manager-types">context manager</a> (i.e. it
 implements the <tt class="docutils literal"><span class="pre">__enter__</span></tt> and <tt class="docutils literal"><span class="pre">__exit__</span></tt> methods).</p>
 <p>This allows the user to write code like the following:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">with</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&#39;ASA_IMS_ ... _4650.N1&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">product</span><span class="p">:</span>
@@ -431,7 +429,7 @@ implements the <tt class="docutils literal"><span class="pre">__enter__</span></
 <tt class="docutils literal"><span class="pre">with</span></tt> block.</p>
 </div>
 <div class="section" id="update-support">
-<span id="index-23"></span><h2>Update support<a class="headerlink" href="#update-support" title="Permalink to this headline">¶</a></h2>
+<span id="index-25"></span><h2>Update support<a class="headerlink" href="#update-support" title="Permalink to this headline">¶</a></h2>
 <p>It is not possible to create new <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> products for scratch with the
 EPR API. Indeed EPR means &#8220;<strong>E</strong>NVISAT <strong>P</strong>roduct <strong>R</strong>eaeder&#8221;.
 Anyway, since version 0.9, <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> also include basic <em>update</em> features.
@@ -538,13 +536,13 @@ For this reason the user may need to close and re-open the
         <li class="right" >
           <a href="index.html" title="ENVISAT Product Reader Python API"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.9.2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">PyEPR 0.9.3.dev0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011-2015, Antonio Valentino.
-      Last updated on Mar 08, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on May 02, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

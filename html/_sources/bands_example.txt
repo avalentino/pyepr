@@ -201,4 +201,4 @@ powerful :class:`numpy.ndarray` interface.
 
 .. raw:: latex
 
-   \clearpage0+++++
+   \clearpage
