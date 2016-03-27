@@ -1492,8 +1492,8 @@ cdef class Raster(EprObject):
 
         '''
 
-        if (x < 0 or x >= self._ptr.raster_width or
-            y < 0  or y >= self._ptr.raster_height):
+        if (x < 0 or <uint>x >= self._ptr.raster_width or
+            y < 0  or <uint>y >= self._ptr.raster_height):
             raise ValueError('index out of range: x=%d, y=%d' % (x, y))
 
         cdef EPR_EDataTypeId dtype = self._ptr.data_type
@@ -1932,8 +1932,8 @@ cdef class Band(EprObject):
         '''
 
         cdef EPR_SRaster* raster_ptr = NULL
-        cdef int scene_width
-        cdef int scene_height
+        cdef uint scene_width
+        cdef uint scene_height
 
         self.check_closed_product()
 
@@ -2007,8 +2007,8 @@ cdef class Band(EprObject):
         '''
 
         cdef int ret
-        cdef int scene_width
-        cdef int scene_height
+        cdef uint scene_width
+        cdef uint scene_height
 
         self.check_closed_product()
 
@@ -2078,8 +2078,8 @@ cdef class Band(EprObject):
 
         '''
 
-        cdef int w
-        cdef int h
+        cdef uint w
+        cdef uint h
         cdef EPR_ProductId* product_id
 
         self.check_closed_product()
