@@ -83,7 +83,7 @@ or::
 
     $ pip install -U --prefix=<TARGET DIRECTORY>
 
-PyEPR_ can be installed from the source tar.ball using the following
+PyEPR_ can be installed from the source tar-ball using the following
 command::
 
     $ python setup.py install
