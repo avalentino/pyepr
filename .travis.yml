@@ -12,8 +12,8 @@ python:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq libepr-api2-dev
-  - pip install -r requirements.txt --use-mirrors
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install -U unittest2 --use-mirrors; fi
+  - pip install -r requirements.txt
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install -U unittest2; fi
 
 install: python setup.py build_ext --inplace
 
