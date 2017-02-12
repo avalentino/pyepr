@@ -26,7 +26,7 @@ TEST_DATSET = tests/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.
 EPRAPIROOT = ../epr-api
 
 .PHONY: default ext cythonize sdist eprsrc fullsdist doc clean distclean \
-        check debug data upload manylinux
+        check debug data upload manylinux coverage ext-coverage
 
 default: ext
 
@@ -71,6 +71,9 @@ clean:
 	$(MAKE) -C doc clean
 	$(RM) -r doc/_build
 	find . -name '*~' -delete
+	$(RM) *.c *.o *.html .coverage coverage.xml
+	$(RM) src/epr.html
+	$(RM) -r htmlcov
 
 distclean: clean
 	$(RM) $(TEST_DATSET)
@@ -78,8 +81,22 @@ distclean: clean
 	$(RM) -r LICENSES epr-api-src
 	$(MAKE) -C tests -f checksetup.mak distclean
 
-check: ext $(TEST_DATSET)
+check: ext data
 	env PYTHONPATH=. $(PYTHON) tests/test_all.py --verbose
+
+ext-coverage: src/epr.pyx
+	env PYEPR_COVERAGE=TRUE $(PYTHON) setup.py build_ext --inplace
+
+coverage: clean ext-coverage data
+	env PYEPR_COVERAGE=TRUE PYTHONPATH=. \
+		$(PYTHON) -m coverage run --branch --source=epr setup.py test
+	env PYTHONPATH=. $(PYTHON) -m coverage xml -i
+	env PYTHONPATH=. $(PYTHON) -m cython -E CYTHON_TRACE_NOGIL=1 \
+		-X linetrace=True -X language_level=3str \
+		--annotate-coverage coverage.xml src/epr.pyx
+	env PYTHONPATH=. $(PYTHON) -m coverage html -i
+	cp src/epr.html htmlcov
+	env PYTHONPATH=. $(PYTHON) -m coverage report
 
 debug:
 	$(PYTHON) setup.py build_ext --inplace --debug

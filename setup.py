@@ -26,6 +26,9 @@ import sys
 import glob
 
 
+PYEPR_COVERAGE = False
+
+
 def get_version(filename):
     with open(filename) as fd:
         data = fd.read()
@@ -179,9 +182,20 @@ def get_extension():
             language_level = '2'
         print('CYTHON_LANGUAGE_LEVEL: {0}'.format(language_level))
 
-        extlist = cythonize(
-            [ext], compiler_directives=dict(language_level=language_level))
+        compiler_directives = dict(
+            language_level=language_level,
+        )
+
+        if PYEPR_COVERAGE:
+            compiler_directives['linetrace'] = True
+
+        extlist = cythonize([ext], compiler_directives=compiler_directives)
         ext = extlist[0]
+
+        if PYEPR_COVERAGE:
+            ext.define_macros.extend([
+                ('CYTHON_TRACE_NOGIL', '1'),
+            ])
     else:
         ext.convert_pyx_sources_to_lang()
 
@@ -267,4 +281,11 @@ def setup_package():
 
 
 if __name__ == '__main__':
+    if '--coverage' in sys.argv or 'PYEPR_COVERAGE' in os.environ:
+        PYEPR_COVERAGE = True
+        if '--coverage' in sys.argv:
+            sys.argv.remove('--coverage')
+
+    print('PYEPR_COVERAGE:', PYEPR_COVERAGE)
+
     setup_package()
