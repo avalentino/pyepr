@@ -84,7 +84,7 @@ correctly installed and configured:
 .. _numpy: http://www.numpy.org
 .. _gcc: http://gcc.gnu.org
 .. _Cython: http://cython.org
-.. _unittest2: https://pypi.python.org/pypi/unittest2
+.. _unittest2: https://pypi.org/project/unittest2
 
 
 .. index:: download, PyPi, GitHub, project, git
@@ -97,7 +97,7 @@ Download
 
 Official source tar-balls can be downloaded form PyPi_:
 
-    https://pypi.python.org/pypi/pyepr
+    https://pypi.org/project/pyepr
 
 The source code of the development versions is available on the GitHub_
 project page
@@ -108,9 +108,9 @@ To clone the git_ repository the following command can be used::
 
     $ git clone https://github.com/avalentino/pyepr.git
 
-.. _PyPi: https://pypi.python.org/pypi
+.. _PyPi: https://pypi.org
 .. _GitHub: https://github.com
-.. _git: http://git-scm.com
+.. _git: https://git-scm.com
 
 
 .. index:: install, pip
@@ -171,7 +171,7 @@ with the system `EPR API`_ C library::
 
     $ python setup.py install --epr-api-src=None
 
-.. _pip: https://pypi.python.org/pypi/pip
+.. _pip: https://pypi.org/project/pip
 
 
 .. index:: test, setup.py, download
@@ -224,7 +224,7 @@ API,
 Of course there are also some differences that are illustrated in the
 following sections.
 
-.. _`C API`: https://rawgithub.com/bcdev/epr-api/master/docs/epr_c_api/index.html
+.. _`C API`: https://rawgit.com/bcdev/epr-api/master/docs/epr_c_api/index.html
 
 
 .. index:: memory, product

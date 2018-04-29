@@ -21,7 +21,7 @@ ESA_ web site.
 .. _ENVISAT: https://envisat.esa.int
 .. _ASAR: https://earth.esa.int/handbooks/asar/CNTR.html
 .. _Jupyter: http://jupyter.org/
-.. _matplotlib: http://matplotlib.org
+.. _matplotlib: https://matplotlib.org
 .. _`free sample`: https://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz
 .. _ESA: https://earth.esa.int
 
@@ -313,7 +313,7 @@ Dealing with image data is simple as well::
    Image data read from the "proc_data" band
 
 
-.. _iterable: http://docs.python.org/glossary.html#term-iterable
+.. _iterable: https://docs.python.org/3/glossary.html#term-iterable
 
 
 .. index:: close, product
