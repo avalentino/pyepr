@@ -234,12 +234,10 @@ cdef pyepr_null_ptr_error(msg='null pointer'):
     cdef str eprmsg = _to_str(<char*>epr_get_last_err_message(), 'ascii')
 
     code = epr_get_last_err_code()
-    if not code:
-        code = None
 
     epr_clear_err()
 
-    raise EPRValueError('%s: %s' % (msg, eprmsg), code=code)
+    raise EPRValueError('%s: %s' % (msg, eprmsg), code=code if code else None)
 
 
 cdef FILE* pyepr_get_file_stream(object ostream) except NULL:
@@ -533,7 +531,7 @@ cdef class Field(EprObject):
     cdef inline _check_write_mode(self):
         self._parent._check_write_mode()
 
-    cdef long _get_offset(self, bint absolute=0):
+    cdef long _get_offset(self, bint absolute=0) except -1:
         cdef bint found = 0
         cdef int i = 0
         cdef int num_fields_in_record = 0
@@ -556,7 +554,7 @@ cdef class Field(EprObject):
             offset += info.tot_size
 
         if not found:
-            offset = None
+            raise EPRError('inable to compute field offset')
         elif absolute:
             offset += self._parent._get_offset(absolute)
 

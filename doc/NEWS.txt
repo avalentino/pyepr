@@ -4,7 +4,7 @@ Change history
 PyEPR 0.9.4 (in development)
 ----------------------------
 
-@TBW
+* Fix compatibility with cython_ >= 0.28
 
 
 PyEPR 0.9.3 (02/05/2015)
