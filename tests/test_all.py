@@ -2208,8 +2208,8 @@ class TestFieldWrite(unittest.TestCase):
         self.assertNotEqual(data, orig_data)
 
         dtype = epr.get_numpy_dtype(self.FIELD_TYPE)
-        data = np.fromstring(data, dtype)
-        orig_data = np.fromstring(orig_data, dtype)
+        data = np.frombuffer(data, dtype)
+        orig_data = np.frombuffer(orig_data, dtype).copy()
         orig_data[0] = value
         npt.assert_array_equal(data, orig_data)
 
@@ -2269,8 +2269,8 @@ class TestFieldWrite(unittest.TestCase):
         self.assertNotEqual(data, orig_data)
 
         dtype = epr.get_numpy_dtype(self.FIELD_TYPE)
-        data = np.fromstring(data, dtype)
-        orig_data = np.fromstring(orig_data, dtype)
+        data = np.frombuffer(data, dtype)
+        orig_data = np.frombuffer(orig_data, dtype).copy()
         orig_data[0] = value
         npt.assert_array_equal(data, orig_data)
 
@@ -2330,8 +2330,8 @@ class TestFieldWrite(unittest.TestCase):
         self.assertNotEqual(data, orig_data)
 
         dtype = epr.get_numpy_dtype(self.FIELD_TYPE)
-        data = np.fromstring(data, dtype)
-        orig_data = np.fromstring(orig_data, dtype)
+        data = np.frombuffer(data, dtype)
+        orig_data = np.frombuffer(orig_data, dtype).copy()
         orig_data[20] = value
         npt.assert_array_equal(data, orig_data)
 
@@ -2386,8 +2386,8 @@ class TestFieldWrite(unittest.TestCase):
         self.assertNotEqual(data, orig_data)
 
         dtype = epr.get_numpy_dtype(self.FIELD_TYPE)
-        data = np.fromstring(data, dtype)
-        orig_data = np.fromstring(orig_data, dtype)
+        data = np.frombuffer(data, dtype)
+        orig_data = np.frombuffer(orig_data, dtype).copy()
         orig_data += 1
         npt.assert_array_equal(data, orig_data)
 
