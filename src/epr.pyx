@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# cython: language_level=3
 
 # PyEPR - Python bindings for ENVISAT Product Reader API
 #
