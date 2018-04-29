@@ -2954,5 +2954,6 @@ class TestMemoryLeaks(unittest.TestCase):
 if __name__ == '__main__':
     print('PyEPR: %s' % epr.__version__)
     print('EPR API: %s' % epr.EPR_C_API_VERSION)
+    print('Numpy: %s' % np.__version__)
     print('Python: %s' % sys.version)
     unittest.main()
