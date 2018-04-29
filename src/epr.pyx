@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# cython: language_level=3
 
 # PyEPR - Python bindings for ENVISAT Product Reader API
 #
@@ -249,8 +250,8 @@ cdef FILE* pyepr_get_file_stream(object ostream) except NULL:
 
     try:
         ostream.flush()
-    except AttributeError, e:
-        raise TypeError(str(e))
+    except AttributeError as exc:
+        raise TypeError(str(exc))
     else:
         fileno = PyObject_AsFileDescriptor(ostream)
         if fileno == -1:
