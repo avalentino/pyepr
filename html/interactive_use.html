@@ -1,36 +1,34 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Interactive use of PyEPR &mdash; PyEPR 0.9.3 documentation</title>
-    
+    <title>Interactive use of PyEPR &#8212; PyEPR 0.9.4 documentation</title>
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.3',
+        VERSION:     '0.9.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.9.3 documentation" href="index.html" />
-    <link rel="up" title="Tutorials" href="tutorials.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Exporting band data" href="bands_example.html" />
     <link rel="prev" title="Tutorials" href="tutorials.html" /> 
   </head>
   <body>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -42,44 +40,43 @@
         <li class="right" >
           <a href="tutorials.html" title="Tutorials"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.9.3 documentation</a> &raquo;</li>
-          <li><a href="tutorials.html" accesskey="U">Tutorials</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="tutorials.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="interactive-use-of-pyepr">
 <h1>Interactive use of <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a><a class="headerlink" href="#interactive-use-of-pyepr" title="Permalink to this headline">¶</a></h1>
 <p id="index-0">In this tutorial it is showed an example of how to use <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> interactively
 to open, browse and display data of an <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> <a class="reference external" href="https://earth.esa.int/handbooks/asar/CNTR.html">ASAR</a> product.</p>
-<p>For the interactive session it is used the <a class="reference external" href="http://ipython.org">IPython</a> interactive shell an
-started with the <em class="xref std std-option">ipython -pylab</em> option to enable interactive
-plotting provided by the <a class="reference external" href="http://matplotlib.org">matplotlib</a> package.</p>
+<p>For the interactive session it is used the <a class="reference external" href="http://jupyter.org/">Jupyter</a> console started
+with the <cite>–pylab</cite> option to enable the interactive plotting features provided
+by the <a class="reference external" href="https://matplotlib.org">matplotlib</a> package.</p>
 <p>The <a class="reference external" href="https://earth.esa.int/handbooks/asar/CNTR.html">ASAR</a> product used in this example is a <a class="reference external" href="https://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz">free sample</a> available at the
 <a class="reference external" href="https://earth.esa.int">ESA</a> web site.</p>
 <div class="section" id="epr-module-and-classes">
-<span id="index-1"></span><h2><a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><tt class="xref py py-mod docutils literal"><span class="pre">epr</span></tt></a> module and classes<a class="headerlink" href="#epr-module-and-classes" title="Permalink to this headline">¶</a></h2>
-<p>After starting the ipython shell with the following command:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>ipython -pylab
+<span id="index-1"></span><h2><a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><code class="xref py py-mod docutils literal"><span class="pre">epr</span></code></a> module and classes<a class="headerlink" href="#epr-module-and-classes" title="Permalink to this headline">¶</a></h2>
+<p>After starting the jupyter console with the following command:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>$ jupyter console -- --pylab
 </pre></div>
 </div>
-<p>one can import the <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><tt class="xref py py-mod docutils literal"><span class="pre">epr</span></tt></a> module and start start taking confidence with
+<p>one can import the <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><code class="xref py py-mod docutils literal"><span class="pre">epr</span></code></a> module and start start taking confidence with
 available classes and functions:</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="go">Python 2.6.6 (r266:84292, Sep 15 2010, 16:22:56)</span>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="go">Jupyter console 5.2.0</span>
+
+<span class="go">Python 3.6.5 (default, Apr  1 2018, 05:46:30)</span>
 <span class="go">Type &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span>
 
-<span class="go">IPython 0.10 -- An enhanced Interactive Python.</span>
+<span class="go">IPython 5.5.0 -- An enhanced Interactive Python.</span>
 <span class="go">?         -&gt; Introduction and overview of IPython&#39;s features.</span>
 <span class="go">%quickref -&gt; Quick reference.</span>
 <span class="go">help      -&gt; Python&#39;s own help system.</span>
-<span class="go">object?   -&gt; Details about &#39;object&#39;. ?object also works, ?? prints more.</span>
-
-<span class="go">  Welcome to pylab, a matplotlib-based Python environment.</span>
-<span class="go">  For more information, type &#39;help(pylab)&#39;.</span>
+<span class="go">object?   -&gt; Details about &#39;object&#39;, use &#39;object??&#39; for extra details.</span>
 
 <span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">epr</span>
 
@@ -110,15 +107,15 @@ available classes and functions:</p>
 <span class="go">    .. _ESA: https://earth.esa.int</span>
 
 <span class="gp">In [3]: </span><span class="n">epr</span><span class="o">.</span><span class="n">__version__</span><span class="p">,</span> <span class="n">epr</span><span class="o">.</span><span class="n">EPR_C_API_VERSION</span>
-<span class="gr">Out[3]: </span><span class="p">(</span><span class="s">&#39;0.9.1&#39;</span><span class="p">,</span> <span class="s">&#39;2.3dev&#39;</span><span class="p">)</span>
+<span class="gr">Out[3]: </span><span class="p">(</span><span class="s1">&#39;0.9.1&#39;</span><span class="p">,</span> <span class="s1">&#39;2.3dev&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p id="index-2">Docstrings are available for almost all classes, methods and functions in
-the <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><tt class="xref py py-mod docutils literal"><span class="pre">epr</span></tt></a> and they can be displayed using the <a class="reference external" href="https://docs.python.org/3/library/functions.html#help" title="(in Python v3.4)"><tt class="xref py py-func docutils literal"><span class="pre">help()</span></tt></a> <a class="reference external" href="https://www.python.org">python</a>
-command or the <tt class="docutils literal"><span class="pre">?</span></tt> <a class="reference external" href="http://ipython.org">IPython</a> shortcut as showed above.</p>
-<p>Also <a class="reference external" href="http://ipython.org">IPython</a> provides a handy tab completion mechanism to automatically
+the <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><code class="xref py py-mod docutils literal"><span class="pre">epr</span></code></a> and they can be displayed using the <a class="reference external" href="https://docs.python.org/3/library/functions.html#help" title="(in Python v3.6)"><code class="xref py py-func docutils literal"><span class="pre">help()</span></code></a> <a class="reference external" href="https://www.python.org">python</a>
+command or the <code class="docutils literal"><span class="pre">?</span></code> <a class="reference external" href="http://jupyter.org/">Jupyter</a> shortcut as showed above.</p>
+<p>Also <a class="reference external" href="http://jupyter.org/">Jupyter</a> provides a handy tab completion mechanism to automatically
 complete commands or to display available functions and classes:</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [4]: </span><span class="n">product</span> <span class="o">=</span> <span class="n">epr</span><span class="o">.</span> <span class="p">[</span><span class="n">TAB</span><span class="p">]</span>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">product</span> <span class="o">=</span> <span class="n">epr</span><span class="o">.</span> <span class="p">[</span><span class="n">TAB</span><span class="p">]</span>
 <span class="go">epr.Band                     epr.E_TID_STRING</span>
 <span class="go">epr.DSD                      epr.E_TID_TIME</span>
 <span class="go">epr.Dataset                  epr.E_TID_UCHAR</span>
@@ -144,10 +141,10 @@ complete commands or to display available functions and classes:</p>
 </div>
 </div>
 <div class="section" id="epr-product-navigation">
-<span id="index-3"></span><h2><a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> navigation<a class="headerlink" href="#epr-product-navigation" title="Permalink to this headline">¶</a></h2>
-<p>The first thing to do is to use the <a class="reference internal" href="reference.html#epr.open" title="epr.open"><tt class="xref py py-func docutils literal"><span class="pre">epr.open()</span></tt></a> function to get an
-instance of the desired <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a>:</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [4]: </span><span class="n">product</span> <span class="o">=</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>\
+<span id="index-3"></span><h2><a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><code class="xref py py-class docutils literal"><span class="pre">epr.Product</span></code></a> navigation<a class="headerlink" href="#epr-product-navigation" title="Permalink to this headline">¶</a></h2>
+<p>The first thing to do is to use the <a class="reference internal" href="reference.html#epr.open" title="epr.open"><code class="xref py py-func docutils literal"><span class="pre">epr.open()</span></code></a> function to get an
+instance of the desired <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><code class="xref py py-class docutils literal"><span class="pre">epr.Product</span></code></a>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">product</span> <span class="o">=</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>\
 <span class="go">&#39;ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1&#39;)</span>
 
 <span class="gp">In [4]: </span><span class="n">product</span><span class="o">.</span>
@@ -186,10 +183,10 @@ instance of the desired <a class="reference external" href="https://envisat.esa.
 </pre></div>
 </div>
 <p>A short summary of product contents can be displayed simply printing the
-<a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> object as showed above.
+<a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><code class="xref py py-class docutils literal"><span class="pre">epr.Product</span></code></a> object as showed above.
 Being able to display contents of each object it is easy to keep browsing and
 get all desired information from the product:</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [7]: </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_dataset</span><span class="p">(</span><span class="s">&#39;MAIN_PROCESSING_PARAMS_ADS&#39;</span><span class="p">)</span>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_dataset</span><span class="p">(</span><span class="s1">&#39;MAIN_PROCESSING_PARAMS_ADS&#39;</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">dataset</span>
 <span class="gr">Out[8]: </span><span class="n">epr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">MAIN_PROCESSING_PARAMS_ADS</span><span class="p">)</span> <span class="mi">1</span> <span class="n">records</span>
@@ -227,7 +224,7 @@ get all desired information from the product:</p>
 <span class="go"> &#39;dop_amb_flag&#39;,</span>
 <span class="go"> &#39;range_spread_comp_flag&#39;]</span>
 
-<span class="gp">In [12]: </span><span class="n">field</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s">&#39;range_spacing&#39;</span><span class="p">)</span>
+<span class="gp">In [12]: </span><span class="n">field</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;range_spacing&#39;</span><span class="p">)</span>
 
 <span class="gp">In [13]: </span><span class="n">field</span><span class="o">.</span><span class="n">get</span> <span class="p">[</span><span class="n">TAB</span><span class="p">]</span>
 <span class="go">field.get_description  field.get_name         field.get_unit</span>
@@ -235,16 +232,16 @@ get all desired information from the product:</p>
 <span class="go">field.get_elems        field.get_type</span>
 
 <span class="gp">In [13]: </span><span class="n">field</span><span class="o">.</span><span class="n">get_description</span><span class="p">()</span>
-<span class="gr">Out[13]: </span><span class="s">&#39;Range sample spacing&#39;</span>
+<span class="gr">Out[13]: </span><span class="s1">&#39;Range sample spacing&#39;</span>
 
 <span class="gp">In [14]: </span><span class="n">epr</span><span class="o">.</span><span class="n">data_type_id_to_str</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">get_type</span><span class="p">())</span>
-<span class="gr">Out[14]: </span><span class="s">&#39;float&#39;</span>
+<span class="gr">Out[14]: </span><span class="s1">&#39;float&#39;</span>
 
 <span class="gp">In [15]: </span><span class="n">field</span><span class="o">.</span><span class="n">get_num_elems</span><span class="p">()</span>
 <span class="gr">Out[15]: </span><span class="mi">1</span>
 
 <span class="gp">In [16]: </span><span class="n">field</span><span class="o">.</span><span class="n">get_unit</span><span class="p">()</span>
-<span class="gr">Out[16]: </span><span class="s">&#39;m&#39;</span>
+<span class="gr">Out[16]: </span><span class="s1">&#39;m&#39;</span>
 
 <span class="gp">In [17]: </span><span class="k">print</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
 <span class="go">range_spacing = 12.500000</span>
@@ -252,10 +249,10 @@ get all desired information from the product:</p>
 </div>
 </div>
 <div class="section" id="iterating-over-epr-objects">
-<span id="index-4"></span><h2>Iterating over <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><tt class="xref py py-mod docutils literal"><span class="pre">epr</span></tt></a> objects<a class="headerlink" href="#iterating-over-epr-objects" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="reference.html#epr.Record" title="epr.Record"><tt class="xref py py-class docutils literal"><span class="pre">epr.Record</span></tt></a> objects are also <a class="reference external" href="http://docs.python.org/glossary.html#term-iterable">iterable</a> so one can write code like
+<span id="index-4"></span><h2>Iterating over <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><code class="xref py py-mod docutils literal"><span class="pre">epr</span></code></a> objects<a class="headerlink" href="#iterating-over-epr-objects" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="reference.html#epr.Record" title="epr.Record"><code class="xref py py-class docutils literal"><span class="pre">epr.Record</span></code></a> objects are also <a class="reference external" href="https://docs.python.org/3/glossary.html#term-iterable">iterable</a> so one can write code like
 the following:</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [18]: </span><span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">record</span><span class="p">:</span>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [18]: </span><span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">record</span><span class="p">:</span>
 <span class="go">             if field.get_num_elems() == 4:</span>
 <span class="go">                 print(&#39;%s: %d elements&#39; % (field.get_name(), len(field)))</span>
 
@@ -278,14 +275,14 @@ the following:</p>
 <div class="section" id="image-data">
 <span id="index-5"></span><h2>Image data<a class="headerlink" href="#image-data" title="Permalink to this headline">¶</a></h2>
 <p>Dealing with image data is simple as well:</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [19]: </span><span class="n">product</span><span class="o">.</span><span class="n">get_band_names</span><span class="p">()</span>
-<span class="gr">Out[19]: </span><span class="p">[</span><span class="s">&#39;slant_range_time&#39;</span><span class="p">,</span>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [19]: </span><span class="n">product</span><span class="o">.</span><span class="n">get_band_names</span><span class="p">()</span>
+<span class="gr">Out[19]: </span><span class="p">[</span><span class="s1">&#39;slant_range_time&#39;</span><span class="p">,</span>
 <span class="go">          &#39;incident_angle&#39;,</span>
 <span class="go">          &#39;latitude&#39;,</span>
 <span class="go">          &#39;longitude&#39;,</span>
 <span class="go">          &#39;proc_data&#39;]</span>
 
-<span class="gp">In [19]: </span><span class="n">band</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="s">&#39;proc_data&#39;</span><span class="p">)</span>
+<span class="gp">In [19]: </span><span class="n">band</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="s1">&#39;proc_data&#39;</span><span class="p">)</span>
 
 <span class="gp">In [20]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span> <span class="p">[</span><span class="n">TAB</span><span class="p">]</span>
 <span class="go">band.bm_expr                   band.read_raster</span>
@@ -323,21 +320,21 @@ the following:</p>
 <span class="gr">Out[25]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">Colorbar</span> <span class="n">instance</span> <span class="n">at</span> <span class="mh">0x6b18cb0</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<div class="figure">
+<div class="figure" id="id1">
 <a class="reference internal image-reference" href="_images/ASA_IMP_crop.png"><img alt="_images/ASA_IMP_crop.png" src="_images/ASA_IMP_crop.png" style="width: 100%;" /></a>
-<p class="caption">Image data read from the &#8220;proc_data&#8221; band</p>
+<p class="caption"><span class="caption-text">Image data read from the “proc_data” band</span></p>
 </div>
 </div>
 <div class="section" id="closing-the-epr-product">
 <span id="index-6"></span><h2>Closing the epr.Product<a class="headerlink" href="#closing-the-epr-product" title="Permalink to this headline">¶</a></h2>
-<p>Finally the <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> can be closed using the
-<a class="reference internal" href="reference.html#epr.Product.close" title="epr.Product.close"><tt class="xref py py-meth docutils literal"><span class="pre">epr.Product.close()</span></tt></a> method:</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [26]: </span><span class="n">product</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<p>Finally the <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><code class="xref py py-class docutils literal"><span class="pre">epr.Product</span></code></a> can be closed using the
+<a class="reference internal" href="reference.html#epr.Product.close" title="epr.Product.close"><code class="xref py py-meth docutils literal"><span class="pre">epr.Product.close()</span></code></a> method:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [26]: </span><span class="n">product</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>After a product is closed no more I/O operations can be performed on it.
-Any attempt to do it will raise a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.4)"><tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt></a>:</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [27]: </span><span class="n">product</span><span class="o">.</span><span class="n">tot_size</span> <span class="o">/</span> <span class="mf">1024.</span><span class="o">**</span><span class="mi">2</span>
+Any attempt to do it will raise a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [27]: </span><span class="n">product</span><span class="o">.</span><span class="n">tot_size</span> <span class="o">/</span> <span class="mf">1024.</span><span class="o">**</span><span class="mi">2</span>
 <span class="go">-------------------------------------------------------------------------</span>
 <span class="go">ValueError                              Traceback (most recent call last)</span>
 <span class="go">&lt;ipython-input-13-6420c80534dc&gt; in &lt;module&gt;()</span>
@@ -350,9 +347,9 @@ Any attempt to do it will raise a <a class="reference external" href="https://do
 <span class="go">ValueError: I/O operation on closed file</span>
 </pre></div>
 </div>
-<p>At any time the user can check whenever a <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><tt class="xref py py-class docutils literal"><span class="pre">epr.Product</span></tt></a> is closed or
-not using the <a class="reference internal" href="reference.html#epr.Product.closed" title="epr.Product.closed"><tt class="xref py py-attr docutils literal"><span class="pre">epr.Product.closed</span></tt></a> property:</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [28]: </span><span class="n">product</span><span class="o">.</span><span class="n">closed</span>
+<p>At any time the user can check whenever a <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><code class="xref py py-class docutils literal"><span class="pre">epr.Product</span></code></a> is closed or
+not using the <a class="reference internal" href="reference.html#epr.Product.closed" title="epr.Product.closed"><code class="xref py py-attr docutils literal"><span class="pre">epr.Product.closed</span></code></a> property:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [28]: </span><span class="n">product</span><span class="o">.</span><span class="n">closed</span>
 <span class="gr">Out[28]: </span><span class="bp">True</span>
 </pre></div>
 </div>
@@ -363,14 +360,14 @@ not using the <a class="reference internal" href="reference.html#epr.Product.clo
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Interactive use of PyEPR</a><ul>
-<li><a class="reference internal" href="#epr-module-and-classes"><tt class="docutils literal"><span class="pre">epr</span></tt> module and classes</a></li>
-<li><a class="reference internal" href="#epr-product-navigation"><tt class="docutils literal"><span class="pre">epr.Product</span></tt> navigation</a></li>
-<li><a class="reference internal" href="#iterating-over-epr-objects">Iterating over <tt class="docutils literal"><span class="pre">epr</span></tt> objects</a></li>
+<li><a class="reference internal" href="#epr-module-and-classes"><code class="docutils literal"><span class="pre">epr</span></code> module and classes</a></li>
+<li><a class="reference internal" href="#epr-product-navigation"><code class="docutils literal"><span class="pre">epr.Product</span></code> navigation</a></li>
+<li><a class="reference internal" href="#iterating-over-epr-objects">Iterating over <code class="docutils literal"><span class="pre">epr</span></code> objects</a></li>
 <li><a class="reference internal" href="#image-data">Image data</a></li>
 <li><a class="reference internal" href="#closing-the-epr-product">Closing the epr.Product</a></li>
 </ul>
@@ -383,29 +380,28 @@ not using the <a class="reference internal" href="reference.html#epr.Product.clo
   <h4>Next topic</h4>
   <p class="topless"><a href="bands_example.html"
                         title="next chapter">Exporting band data</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/interactive_use.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/interactive_use.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -417,14 +413,14 @@ not using the <a class="reference internal" href="reference.html#epr.Product.clo
         <li class="right" >
           <a href="tutorials.html" title="Tutorials"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.9.3 documentation</a> &raquo;</li>
-          <li><a href="tutorials.html" >Tutorials</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="tutorials.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2011-2015, Antonio Valentino.
-      Last updated on May 02, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011-2018, Antonio Valentino.
+      Last updated on Apr 29, 2018.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
     </div>
   </body>
 </html>

@@ -1,36 +1,34 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Update Field elements &mdash; PyEPR 0.9.3 documentation</title>
-    
+    <title>Update Field elements &#8212; PyEPR 0.9.4 documentation</title>
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.3',
+        VERSION:     '0.9.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
-    <link rel="top" title="PyEPR 0.9.3 documentation" href="index.html" />
-    <link rel="up" title="Tutorials" href="tutorials.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="GDAL export example" href="gdal_export_example.html" />
     <link rel="prev" title="NDVI computation" href="ndvi_example.html" /> 
   </head>
   <body>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -42,52 +40,52 @@
         <li class="right" >
           <a href="ndvi_example.html" title="NDVI computation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.9.3 documentation</a> &raquo;</li>
-          <li><a href="tutorials.html" accesskey="U">Tutorials</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="tutorials.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="update-field-elements">
-<h1>Update <tt class="xref py py-class docutils literal"><span class="pre">Field</span></tt> elements<a class="headerlink" href="#update-field-elements" title="Permalink to this headline">¶</a></h1>
+<h1>Update <code class="xref py py-class docutils literal"><span class="pre">Field</span></code> elements<a class="headerlink" href="#update-field-elements" title="Permalink to this headline">¶</a></h1>
 <p id="index-0">The EPR C API has been designed to provide read-only features.</p>
 <p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> provides and extra capability consisting in the possibility to
-modify (<em>update</em>) an existing <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> <tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt>.</p>
+modify (<em>update</em>) an existing <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> <code class="xref py py-class docutils literal"><span class="pre">Product</span></code>.</p>
 <p>Lets consider a MERIS Level 2 low resolution product (
 <cite>MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1</cite>).
-It has a <tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt> named <cite>water_vapour</cite> containing the water vapour
+It has a <code class="xref py py-class docutils literal"><span class="pre">Band</span></code> named <cite>water_vapour</cite> containing the water vapour
 content at a specific position.</p>
 <p>One can load water vapour and compute an histogram using the following
 instructions:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">FILENAME</span> <span class="o">=</span> <span class="s">&#39;MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">FILENAME</span> <span class="o">=</span> <span class="s1">&#39;MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1&#39;</span>
 
-<span class="c"># load original data</span>
+<span class="c1"># load original data</span>
 <span class="k">with</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">)</span> <span class="k">as</span> <span class="n">product</span><span class="p">:</span>
-    <span class="n">band</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="s">&#39;water_vapour&#39;</span><span class="p">)</span>
+    <span class="n">band</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="s1">&#39;water_vapour&#39;</span><span class="p">)</span>
     <span class="n">wv_orig_histogram</span><span class="p">,</span> <span class="n">orig_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">band</span><span class="o">.</span><span class="n">read_as_array</span><span class="p">()</span><span class="o">.</span><span class="n">flat</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
 </pre></div>
 </div>
-<p id="index-1">The resulting histogram can be plot using <a class="reference external" href="http://matplotlib.org">Matplotlib</a>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># plot water vapour histogram</span>
+<p id="index-1">The resulting histogram can be plot using <a class="reference external" href="https://matplotlib.org">Matplotlib</a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># plot water vapour histogram</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">orig_bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">wv_orig_histogram</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&#39;original&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">orig_bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">wv_orig_histogram</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;original&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Water Vapour Histogram&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Water Vapour Histogram&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="figure">
+<div class="figure" id="id1">
 <a class="reference internal image-reference" href="_images/water_vapour_histogram_01.png"><img alt="_images/water_vapour_histogram_01.png" src="_images/water_vapour_histogram_01.png" style="width: 60%;" /></a>
-<p class="caption">Histogram of the original water vapour content</p>
+<p class="caption"><span class="caption-text">Histogram of the original water vapour content</span></p>
 </div>
-<p>The actual values of the water vapour content <tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt> are computed
-starting form data stored in the <cite>Vapour_Content</cite> <tt class="xref py py-class docutils literal"><span class="pre">Dataset</span></tt> using
-scaling factors contained in the <cite>Scaling_Factor_GADS</cite> <tt class="xref py py-class docutils literal"><span class="pre">Dataset</span></tt>.
-In particular <tt class="xref py py-class docutils literal"><span class="pre">Field</span></tt>s <cite>sf_wvapour</cite> and  <cite>off_wvapour</cite> are used:</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [21]: </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_dataset</span><span class="p">(</span><span class="s">&#39;Scaling_Factor_GADS&#39;</span><span class="p">)</span>
+<p>The actual values of the water vapour content <code class="xref py py-class docutils literal"><span class="pre">Band</span></code> are computed
+starting form data stored in the <cite>Vapour_Content</cite> <code class="xref py py-class docutils literal"><span class="pre">Dataset</span></code> using
+scaling factors contained in the <cite>Scaling_Factor_GADS</cite> <code class="xref py py-class docutils literal"><span class="pre">Dataset</span></code>.
+In particular <code class="xref py py-class docutils literal"><span class="pre">Field</span></code>s <cite>sf_wvapour</cite> and  <cite>off_wvapour</cite> are used:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [21]: </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_dataset</span><span class="p">(</span><span class="s1">&#39;Scaling_Factor_GADS&#39;</span><span class="p">)</span>
 
 <span class="gp">In [22]: </span><span class="k">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 <span class="go">epr.Dataset(Scaling_Factor_GADS) 1 records</span>
@@ -104,15 +102,15 @@ In particular <tt class="xref py py-class docutils literal"><span class="pre">Fi
 <p id="index-2">Now suppose that for some reason one needs to update the <cite>sf_wvapour</cite> scaling
 factor for the water vapour content.
 Changing the scaling factor, of course, will change all values in the
-<cite>water_vapour</cite> <tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt>.</p>
-<p>The change can be performed using the <tt class="xref py py-meth docutils literal"><span class="pre">Field.set_elem()</span></tt> and
-<tt class="xref py py-meth docutils literal"><span class="pre">Field.set_elems()</span></tt> methods of <tt class="xref py py-class docutils literal"><span class="pre">Field</span></tt> objects:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># modily scaling facotrs</span>
-<span class="k">with</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="s">&#39;rb+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">product</span><span class="p">:</span>
-    <span class="n">dataset</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_dataset</span><span class="p">(</span><span class="s">&#39;Scaling_Factor_GADS&#39;</span><span class="p">)</span>
+<cite>water_vapour</cite> <code class="xref py py-class docutils literal"><span class="pre">Band</span></code>.</p>
+<p>The change can be performed using the <code class="xref py py-meth docutils literal"><span class="pre">Field.set_elem()</span></code> and
+<code class="xref py py-meth docutils literal"><span class="pre">Field.set_elems()</span></code> methods of <code class="xref py py-class docutils literal"><span class="pre">Field</span></code> objects:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># modily scaling facotrs</span>
+<span class="k">with</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="s1">&#39;rb+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">product</span><span class="p">:</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_dataset</span><span class="p">(</span><span class="s1">&#39;Scaling_Factor_GADS&#39;</span><span class="p">)</span>
     <span class="n">record</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">read_record</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
-    <span class="n">field</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s">&#39;sf_wvapour&#39;</span><span class="p">)</span>
+    <span class="n">field</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;sf_wvapour&#39;</span><span class="p">)</span>
     <span class="n">scaling</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get_elem</span><span class="p">()</span>
     <span class="n">scaling</span> <span class="o">*=</span> <span class="mf">1.1</span>
     <span class="n">field</span><span class="o">.</span><span class="n">set_elem</span><span class="p">(</span><span class="n">scaling</span><span class="p">)</span>
@@ -120,70 +118,70 @@ Changing the scaling factor, of course, will change all values in the
 </div>
 <p>Now the <cite>sf_wvapour</cite> scaling factor has been changed and it is possible to
 compute and display the histogram of modified data in the <cite>water_vapour</cite>
-<tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># re-open the product and load modified data</span>
+<code class="xref py py-class docutils literal"><span class="pre">Band</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># re-open the product and load modified data</span>
 <span class="k">with</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">)</span> <span class="k">as</span> <span class="n">product</span><span class="p">:</span>
-    <span class="n">band</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="s">&#39;water_vapour&#39;</span><span class="p">)</span>
+    <span class="n">band</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="s1">&#39;water_vapour&#39;</span><span class="p">)</span>
     <span class="n">unit</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">unit</span>
     <span class="n">new_data</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">read_as_array</span><span class="p">()</span>
     <span class="n">wv_new_histogram</span><span class="p">,</span> <span class="n">new_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">new_data</span><span class="o">.</span><span class="n">flat</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
 
-<span class="c"># plot histogram of modified data</span>
+<span class="c1"># plot histogram of modified data</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">orig_bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">wv_orig_histogram</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&#39;original&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">orig_bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">wv_orig_histogram</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;original&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Water Vapour Histogram&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Water Vapour Histogram&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">new_bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">wv_new_histogram</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&#39;new&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">new_bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">wv_new_histogram</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;new&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="figure">
+<div class="figure" id="id2">
 <a class="reference internal image-reference" href="_images/water_vapour_histogram_02.png"><img alt="_images/water_vapour_histogram_02.png" src="_images/water_vapour_histogram_02.png" style="width: 60%;" /></a>
-<p class="caption">Histogram of the water vapour content (original and modified)</p>
+<p class="caption"><span class="caption-text">Histogram of the water vapour content (original and modified)</span></p>
 </div>
 <p>Figure above shows the two different histograms, original data in blue and
 modified data in red, demonstrating the effect of the change of the scaling
 factor.</p>
 <p>The new map of water vapour is showed in the following picture:</p>
-<div class="figure">
+<div class="figure" id="id3">
 <img alt="_images/modified_water_vapour.png" src="_images/modified_water_vapour.png" />
-<p class="caption">Modified water vapour content map</p>
+<p class="caption"><span class="caption-text">Modified water vapour content map</span></p>
 </div>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
 <p>it is important to stress that it is necessary to close and re-open the
-<tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt> in order to see changes in the scaling factors applied
-to the <cite>water_vapour</cite><tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt> data.</p>
+<code class="xref py py-class docutils literal"><span class="pre">Product</span></code> in order to see changes in the scaling factors applied
+to the <cite>water_vapour</cite><code class="xref py py-class docutils literal"><span class="pre">Band</span></code> data.</p>
 <p class="last">This is a limitation of the current implementation that could be removed
 in future versions of the <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> package.</p>
 </div>
 <p>It has been showed that changing the <cite>sf_wvapour</cite> scaling factor modifies
-all values of the <cite>water_vapour</cite> <tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt>.</p>
+all values of the <cite>water_vapour</cite> <code class="xref py py-class docutils literal"><span class="pre">Band</span></code>.</p>
 <p>Now suppose that one needs to modify only a specific area.
-It can be done changing the contents of the <cite>Vapour_Content</cite> <tt class="xref py py-class docutils literal"><span class="pre">Dataset</span></tt>.</p>
-<p>The <tt class="xref py py-class docutils literal"><span class="pre">Dataset</span></tt> size can be read form the <tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt>:</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [44]: </span><span class="n">product</span><span class="o">.</span><span class="n">get_scene_height</span><span class="p">(),</span> <span class="n">product</span><span class="o">.</span><span class="n">get_scene_width</span><span class="p">()</span>
+It can be done changing the contents of the <cite>Vapour_Content</cite> <code class="xref py py-class docutils literal"><span class="pre">Dataset</span></code>.</p>
+<p>The <code class="xref py py-class docutils literal"><span class="pre">Dataset</span></code> size can be read form the <code class="xref py py-class docutils literal"><span class="pre">Product</span></code>:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [44]: </span><span class="n">product</span><span class="o">.</span><span class="n">get_scene_height</span><span class="p">(),</span> <span class="n">product</span><span class="o">.</span><span class="n">get_scene_width</span><span class="p">()</span>
 <span class="gr">Out[44]: </span><span class="p">(</span><span class="mi">149</span><span class="p">,</span> <span class="mi">281</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>while information about the fields in each record can be retrieved
-introspecting the <tt class="xref py py-class docutils literal"><span class="pre">Record</span></tt> object:</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [49]: </span><span class="n">record</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">read_record</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+introspecting the <code class="xref py py-class docutils literal"><span class="pre">Record</span></code> object:</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [49]: </span><span class="n">record</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">read_record</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="gp">In [50]: </span><span class="n">record</span><span class="o">.</span><span class="n">get_field_names</span><span class="p">()</span>
-<span class="gr">Out[50]: </span><span class="p">[</span><span class="s">&#39;dsr_time&#39;</span><span class="p">,</span> <span class="s">&#39;quality_flag&#39;</span><span class="p">,</span> <span class="s">&#39;wvapour_cont_pix&#39;</span><span class="p">]</span>
+<span class="gr">Out[50]: </span><span class="p">[</span><span class="s1">&#39;dsr_time&#39;</span><span class="p">,</span> <span class="s1">&#39;quality_flag&#39;</span><span class="p">,</span> <span class="s1">&#39;wvapour_cont_pix&#39;</span><span class="p">]</span>
 
-<span class="gp">In [51]: </span><span class="n">record</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s">&#39;wvapour_cont_pix&#39;</span><span class="p">)</span>
-<span class="gr">Out[51]: </span><span class="n">epr</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="s">&quot;wvapour_cont_pix&quot;</span><span class="p">)</span> <span class="mi">281</span> <span class="n">uchar</span> <span class="n">elements</span>
+<span class="gp">In [51]: </span><span class="n">record</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;wvapour_cont_pix&#39;</span><span class="p">)</span>
+<span class="gr">Out[51]: </span><span class="n">epr</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="s2">&quot;wvapour_cont_pix&quot;</span><span class="p">)</span> <span class="mi">281</span> <span class="n">uchar</span> <span class="n">elements</span>
 </pre></div>
 </div>
-<p>So the name of the <tt class="xref py py-class docutils literal"><span class="pre">Field</span></tt> we need to change is the <cite>wvapour_cont_pix</cite>,
+<p>So the name of the <code class="xref py py-class docutils literal"><span class="pre">Field</span></code> we need to change is the <cite>wvapour_cont_pix</cite>,
 and its index is <cite>2</cite>.</p>
-<p>It is possible to change a small box inside the <tt class="xref py py-class docutils literal"><span class="pre">Dataset</span></tt> as follows:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># modify the &quot;Vapour_Content&quot; dataset</span>
-<span class="k">with</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="s">&#39;rb+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">product</span><span class="p">:</span>
-    <span class="n">dataset</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_dataset</span><span class="p">(</span><span class="s">&#39;Vapour_Content&#39;</span><span class="p">)</span>
+<p>It is possible to change a small box inside the <code class="xref py py-class docutils literal"><span class="pre">Dataset</span></code> as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># modify the &quot;Vapour_Content&quot; dataset</span>
+<span class="k">with</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="s1">&#39;rb+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">product</span><span class="p">:</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_dataset</span><span class="p">(</span><span class="s1">&#39;Vapour_Content&#39;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="mi">100</span><span class="p">):</span>
         <span class="n">record</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">read_record</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
         <span class="n">field</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">get_field_at</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -192,47 +190,47 @@ and its index is <cite>2</cite>.</p>
         <span class="n">field</span><span class="o">.</span><span class="n">set_elems</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Please note that when one modifies the content of a <tt class="xref py py-class docutils literal"><span class="pre">Dataset</span></tt> he/she
+<p>Please note that when one modifies the content of a <code class="xref py py-class docutils literal"><span class="pre">Dataset</span></code> he/she
 should also take into account id the corresponding band has lines mirrored
 or not:</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [59]: </span><span class="n">band</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="s">&#39;water_vapour&#39;</span><span class="p">)</span>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="gp">In [59]: </span><span class="n">band</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="s1">&#39;water_vapour&#39;</span><span class="p">)</span>
 
 <span class="gp">In [60]: </span><span class="n">band</span><span class="o">.</span><span class="n">lines_mirrored</span>
 <span class="gr">Out[60]: </span><span class="bp">True</span>
 </pre></div>
 </div>
-<p>Finally the <tt class="xref py py-class docutils literal"><span class="pre">Product</span></tt> can be re-opened to load and display the
-modified <tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">with</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">)</span> <span class="k">as</span> <span class="n">product</span><span class="p">:</span>
-    <span class="n">band</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="s">&#39;water_vapour&#39;</span><span class="p">)</span>
+<p>Finally the <code class="xref py py-class docutils literal"><span class="pre">Product</span></code> can be re-opened to load and display the
+modified <code class="xref py py-class docutils literal"><span class="pre">Band</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">epr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">)</span> <span class="k">as</span> <span class="n">product</span><span class="p">:</span>
+    <span class="n">band</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_band</span><span class="p">(</span><span class="s1">&#39;water_vapour&#39;</span><span class="p">)</span>
     <span class="n">unit</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">unit</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">read_as_array</span><span class="p">()</span>
 
-<span class="c"># plot the water vapour map</span>
+<span class="c1"># plot the water vapour map</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Water Vapour with box&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Water Vapour with box&#39;</span><span class="p">)</span>
 <span class="n">cb</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
-<span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;[{}]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unit</span><span class="p">))</span>
+<span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;[{}]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unit</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="figure">
+<div class="figure" id="id4">
 <img alt="_images/modified_water_vapour_with_box.png" src="_images/modified_water_vapour_with_box.png" />
-<p class="caption">Modified water vapour content map with zeroed box</p>
+<p class="caption"><span class="caption-text">Modified water vapour content map with zeroed box</span></p>
 </div>
-<p>Of course values in the box that has been set to zero in the <tt class="xref py py-class docutils literal"><span class="pre">Dataset</span></tt>
+<p>Of course values in the box that has been set to zero in the <code class="xref py py-class docutils literal"><span class="pre">Dataset</span></code>
 are transformed according to the scaling factor and offset parameters
-associated to <cite>water_vapour</cite> <tt class="xref py py-class docutils literal"><span class="pre">Band</span></tt>.</p>
+associated to <cite>water_vapour</cite> <code class="xref py py-class docutils literal"><span class="pre">Band</span></code>.</p>
 <p>The complete code of the example can be found at
-<a class="reference download internal" href="_downloads/update_elements.py"><tt class="xref download docutils literal"><span class="pre">examples/update_elements.py</span></tt></a>.</p>
+<a class="reference download internal" href="_downloads/update_elements.py" download=""><code class="xref download docutils literal"><span class="pre">examples/update_elements.py</span></code></a>.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="ndvi_example.html"
@@ -240,29 +238,28 @@ associated to <cite>water_vapour</cite> <tt class="xref py py-class docutils lit
   <h4>Next topic</h4>
   <p class="topless"><a href="gdal_export_example.html"
                         title="next chapter">GDAL export example</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/update_example.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/update_example.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -274,14 +271,14 @@ associated to <cite>water_vapour</cite> <tt class="xref py py-class docutils lit
         <li class="right" >
           <a href="ndvi_example.html" title="NDVI computation"
              >previous</a> |</li>
-        <li><a href="index.html">PyEPR 0.9.3 documentation</a> &raquo;</li>
-          <li><a href="tutorials.html" >Tutorials</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="tutorials.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2011-2015, Antonio Valentino.
-      Last updated on May 02, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011-2018, Antonio Valentino.
+      Last updated on Apr 29, 2018.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
     </div>
   </body>
 </html>
