@@ -211,7 +211,7 @@ PyEPR 0.7 (04/08/2013)
   This features also makes it easier to install PyEPR using pip_.
 
   The user can still guild PyEPR against a system version of the ERP-API
-  library simply using the :option:`--epr-api-src` option of the
+  library simply using the `--epr-api-src` option of the
   :file:`setup.py` script with "None"" as value.
 
   The ERP C API included in the source tar-ball is version *2.3dev-pyepr062*,
@@ -230,7 +230,7 @@ PyEPR 0.6.1 (26/04/2012)
 ------------------------
 
 * fix compatibility with cython_ 0.16
-* added a new option to the setup script (:option:`--epr-api-src`) to build
+* added a new option to the setup script (`--epr-api-src`) to build
   PyEPR using the EPR-API C sources
 
 

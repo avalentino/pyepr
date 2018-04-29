@@ -10,9 +10,9 @@ Interactive use of PyEPR_
 In this tutorial it is showed an example of how to use PyEPR_ interactively
 to open, browse and display data of an ENVISAT_ ASAR_ product.
 
-For the interactive session it is used the IPython_ interactive shell an
-started with the :option:`ipython -pylab` option to enable interactive
-plotting provided by the matplotlib_ package.
+For the interactive session it is used the IPython_ interactive shell started
+with the `-pylab` option to enable the interactive plotting features provided
+by the matplotlib_ package.
 
 The ASAR_ product used in this example is a `free sample`_ available at the
 ESA_ web site.
