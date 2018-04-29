@@ -14,7 +14,7 @@ python:
 
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -qq libepr-api2-dev
+  - sudo apt-get install -qq libepr-api-dev
 
 install:
   - pip install -r requirements.txt
