@@ -5,6 +5,10 @@ PyEPR 0.9.4 (in development)
 ----------------------------
 
 * Fix compatibility with cython_ >= 0.28
+* PyEPR has been successfully tested with PyPy_
+
+
+.. _PyPy: https://pypy.org
 
 
 PyEPR 0.9.3 (02/05/2015)
