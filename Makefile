@@ -54,8 +54,8 @@ eprsrc: epr-api-src LICENSES/epr-api.txt
 fullsdist: doc cythonize eprsrc
 	$(PYTHON) setup.py sdist
 
-upload: doc cythonize eprsrc
-	$(PYTHON) setup.py sdist upload -s -i 24B76CFE
+upload: fullsdist
+	twine upload dist/pyepr-*.tar.gz
 
 doc:
 	$(MAKE) -C doc html
