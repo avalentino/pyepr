@@ -59,6 +59,8 @@ upload: fullsdist
 
 doc:
 	$(MAKE) -C doc html
+	$(RM) -r doc/html
+	mv doc/_build/html doc/html
 
 clean:
 	$(PYTHON) setup.py clean --all
