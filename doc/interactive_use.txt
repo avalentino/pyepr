@@ -3,15 +3,15 @@ Interactive use of PyEPR_
 
 .. highlight:: ipython
 
-.. index:: ipython, interactive, ENVISAT, ASAR, ESA, pylab, matplotlib
+.. index:: jupyter, ipython, interactive, ENVISAT, ASAR, ESA, pylab, matplotlib
    pair: interactive; shell
    pair: sample; dataset
 
 In this tutorial it is showed an example of how to use PyEPR_ interactively
 to open, browse and display data of an ENVISAT_ ASAR_ product.
 
-For the interactive session it is used the IPython_ interactive shell started
-with the `-pylab` option to enable the interactive plotting features provided
+For the interactive session it is used the Jupyter_ console started
+with the `--pylab` option to enable the interactive plotting features provided
 by the matplotlib_ package.
 
 The ASAR_ product used in this example is a `free sample`_ available at the
@@ -20,7 +20,7 @@ ESA_ web site.
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _ENVISAT: https://envisat.esa.int
 .. _ASAR: https://earth.esa.int/handbooks/asar/CNTR.html
-.. _IPython: http://ipython.org
+.. _Jupyter: http://jupyter.org/
 .. _matplotlib: http://matplotlib.org
 .. _`free sample`: https://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz
 .. _ESA: https://earth.esa.int
@@ -32,26 +32,25 @@ ESA_ web site.
 :mod:`epr` module and classes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-After starting the ipython shell with the following command:
+After starting the jupyter console with the following command:
 
 .. code-block:: sh
 
-    $ ipython -pylab
+    $ jupyter console -- --pylab
 
 one can import the :mod:`epr` module and start start taking confidence with
 available classes and functions::
 
-    Python 2.6.6 (r266:84292, Sep 15 2010, 16:22:56)
+    Jupyter console 5.2.0
+
+    Python 3.6.5 (default, Apr  1 2018, 05:46:30) 
     Type "copyright", "credits" or "license" for more information.
 
-    IPython 0.10 -- An enhanced Interactive Python.
+    IPython 5.5.0 -- An enhanced Interactive Python.
     ?         -> Introduction and overview of IPython's features.
     %quickref -> Quick reference.
     help      -> Python's own help system.
-    object?   -> Details about 'object'. ?object also works, ?? prints more.
-
-      Welcome to pylab, a matplotlib-based Python environment.
-      For more information, type 'help(pylab)'.
+    object?   -> Details about 'object', use 'object??' for extra details.
 
     In [1]: import epr
 
@@ -88,11 +87,11 @@ available classes and functions::
 
 Docstrings are available for almost all classes, methods and functions in
 the :mod:`epr` and they can be displayed using the :func:`help` python_
-command or the ``?`` IPython_ shortcut as showed above.
+command or the ``?`` Jupyter_ shortcut as showed above.
 
 .. _python: https://www.python.org
 
-Also IPython_ provides a handy tab completion mechanism to automatically
+Also Jupyter_ provides a handy tab completion mechanism to automatically
 complete commands or to display available functions and classes::
 
     In [4]: product = epr. [TAB]
