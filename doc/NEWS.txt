@@ -1,8 +1,8 @@
 Change history
 ==============
 
-PyEPR 0.9.4 (in development)
-----------------------------
+PyEPR 0.9.4 (29/04/2018)
+------------------------
 
 * Fix compatibility with cython_ >= 0.28
 * PyEPR has been successfully tested with PyPy_

@@ -6,7 +6,7 @@ ENVISAT Product Reader Python API
 :Author:    Antonio Valentino
 :Contact:   antonio.valentino@tiscali.it
 :Copyright: 2011-2018, Antonio Valentino <antonio.valentino@tiscali.it>
-:Version:   0.9.3
+:Version:   0.9.4
 
 
 Introduction
@@ -35,7 +35,7 @@ Requirements
 In order to use PyEPR it is needed that the following software are
 correctly installed and configured:
 
-* Python2_ >= 2.6 or Python3_ >= 3.1
+* Python2_ >= 2.6 or Python3_ >= 3.1 (including PyPy_)
 * numpy_ >= 1.5.0
 * `EPR API`_ >= 2.2 (optional, since PyEPR 0.7 the source tar-ball comes
   with a copy of the PER C API sources)
@@ -45,6 +45,7 @@ correctly installed and configured:
 
 .. _Python2: Python_
 .. _Python3: Python_
+.. _PyPy: http://pypy.orgv
 .. _numpy: http://www.numpy.org
 .. _gcc: http://gcc.gnu.org
 .. _Cython: http://cython.org
