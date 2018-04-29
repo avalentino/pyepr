@@ -20,7 +20,7 @@
 # along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
 
-'''Python bindings for ENVISAT Product Reader C API
+"""Python bindings for ENVISAT Product Reader C API.
 
 PyEPR_ provides Python_ bindings for the ENVISAT Product Reader C API
 (`EPR API`_) for reading satellite data from ENVISAT_ ESA_ (European
@@ -39,7 +39,7 @@ in a product file.
 .. _ENVISAT: http://envisat.esa.int
 .. _ESA: http://earth.esa.int
 
-'''
+"""
 
 __version__ = '0.9.4.dev0'
 
@@ -196,10 +196,10 @@ _MODEL_MAP = {
 
 
 class EPRError(Exception):
-    '''EPR API error'''
+    """EPR API error."""
 
     def __init__(self, message='', code=None, *args, **kargs):
-        '''__init__(self, message='', code=None, *args, **kargs)'''
+        """__init__(self, message='', code=None, *args, **kargs)"""
 
         super(EPRError, self).__init__(message, code, *args, **kargs)
 
@@ -265,11 +265,11 @@ cdef FILE* pyepr_get_file_stream(object ostream) except NULL:
 
 
 cdef class _CLib:
-    '''Library object to handle C API initialization/finalization
+    """Library object to handle C API initialization/finalization.
 
     .. warning:: this is meant for internal use only. **Do not use it**.
 
-    '''
+    """
 
     def __cinit__(self, *args, **kwargs):
         cdef bytes msg
@@ -313,11 +313,11 @@ cdef class EprObject:
 
 
 cpdef get_numpy_dtype(EPR_EDataTypeId type_id):
-    '''get_numpy_dtype(epr_type)
+    """get_numpy_dtype(epr_type)
 
-    Return the numpy datatype specified EPR type ID
+    Return the numpy datatype specified EPR type ID.
 
-    '''
+    """
 
     try:
         return _DTYPE_MAP[type_id]
@@ -326,21 +326,21 @@ cpdef get_numpy_dtype(EPR_EDataTypeId type_id):
 
 
 cpdef uint get_data_type_size(EPR_EDataTypeId type_id):
-    '''get_data_type_size(type_id)
+    """get_data_type_size(type_id)
 
-    Gets the size in bytes for an element of the given data type
+    Gets the size in bytes for an element of the given data type.
 
-    '''
+    """
 
     return epr_get_data_type_size(type_id)
 
 
 cpdef str data_type_id_to_str(EPR_EDataTypeId type_id):
-    '''data_type_id_to_str(type_id)
+    """data_type_id_to_str(type_id)
 
-    Gets the 'C' data type string for the given data type
+    Gets the 'C' data type string for the given data type.
 
-    '''
+    """
 
     cdef char* type_id_str = <char*>epr_data_type_id_to_str(type_id)
 
@@ -348,11 +348,11 @@ cpdef str data_type_id_to_str(EPR_EDataTypeId type_id):
 
 
 cpdef str get_scaling_method_name(EPR_ScalingMethod method):
-    '''get_scaling_method_name(method)
+    """get_scaling_method_name(method)
 
-    Return the name of the specified scaling method
+    Return the name of the specified scaling method.
 
-    '''
+    """
 
     try:
         return _METHOD_MAP[method]
@@ -361,11 +361,11 @@ cpdef str get_scaling_method_name(EPR_ScalingMethod method):
 
 
 cpdef str get_sample_model_name(EPR_SampleModel model):
-    '''get_sample_model_name(model)
+    """get_sample_model_name(model)
 
-    Return the name of the specified sample model
+    Return the name of the specified sample model.
 
-    '''
+    """
 
     try:
         return _MODEL_MAP[model]
@@ -374,12 +374,12 @@ cpdef str get_sample_model_name(EPR_SampleModel model):
 
 
 cdef class DSD(EprObject):
-    '''Dataset descriptor
+    """Dataset descriptor.
 
     The DSD class contains information about the properties of a
-    dataset and its location within an ENVISAT product file
+    dataset and its location within an ENVISAT product file.
 
-    '''
+    """
 
     cdef EPR_SDSD* _ptr
     cdef object _parent     # Dataset or Product
@@ -392,56 +392,56 @@ cdef class DSD(EprObject):
             (<Product>self._parent).check_closed_product()
 
     property index:
-        '''The index of this DSD (zero-based)'''
+        """The index of this DSD (zero-based)."""
 
         def __get__(self):
             self.check_closed_product()
             return self._ptr.index
 
     property ds_name:
-        '''The dataset name'''
+        """The dataset name."""
 
         def __get__(self):
             self.check_closed_product()
             return _to_str(self._ptr.ds_name, 'ascii')
 
     property ds_type:
-        '''The dataset type descriptor'''
+        """The dataset type descriptor."""
 
         def __get__(self):
             self.check_closed_product()
             return _to_str(self._ptr.ds_type, 'ascii')
 
     property filename:
-        '''The filename in the DDDB with the description of this dataset'''
+        """The filename in the DDDB with the description of this dataset."""
 
         def __get__(self):
             self.check_closed_product()
             return _to_str(self._ptr.filename, 'ascii')
 
     property ds_offset:
-        '''The offset of dataset-information the product file'''
+        """The offset of dataset-information the product file."""
 
         def __get__(self):
             self.check_closed_product()
             return self._ptr.ds_offset
 
     property ds_size:
-        '''The size of dataset-information in dataset product file'''
+        """The size of dataset-information in dataset product file."""
 
         def __get__(self):
             self.check_closed_product()
             return self._ptr.ds_size
 
     property num_dsr:
-        '''The number of dataset records for the given dataset name'''
+        """The number of dataset records for the given dataset name."""
 
         def __get__(self):
             self.check_closed_product()
             return self._ptr.num_dsr
 
     property dsr_size:
-        '''The size of dataset record for the given dataset name'''
+        """The size of dataset record for the given dataset name."""
 
         def __get__(self):
             self.check_closed_product()
@@ -493,7 +493,7 @@ cdef class DSD(EprObject):
 
     # --- low level interface -------------------------------------------------
     property _magic:
-        '''The magic number for internal C structure'''
+        """The magic number for internal C structure."""
 
         def __get__(self):
             self.check_closed_product()
@@ -513,14 +513,14 @@ cdef new_dsd(EPR_SDSD* ptr, object parent=None):
 
 
 cdef class Field(EprObject):
-    '''Represents a field within a record
+    """Represents a field within a record.
 
     A field is composed of one or more data elements of one of the
     types defined in the internal ``field_info`` structure.
 
     .. seealso:: :class:`Record`
 
-    '''
+    """
 
     cdef EPR_SField* _ptr
     cdef Record _parent
@@ -562,13 +562,13 @@ cdef class Field(EprObject):
 
 
     def print_(self, ostream=None):
-        '''print_(self, ostream=None)
+        """print_(self, ostream=None)
 
-        Write the field to specified file (default: :data:`sys.stdout`)
+        Write the field to specified file (default: :data:`sys.stdout`).
 
         This method writes formatted contents of the field to
         specified *ostream* text file or (default) the ASCII output
-        is be printed to standard output (:data:`sys.stdout`)
+        is be printed to standard output (:data:`sys.stdout`).
 
         :param ostream:
             the (opened) output file object
@@ -577,7 +577,7 @@ cdef class Field(EprObject):
                   a generic stream object like
                   :class:`StringIO.StringIO` instances
 
-        '''
+        """
 
         cdef FILE* fstream = pyepr_get_file_stream(ostream)
 
@@ -594,11 +594,11 @@ cdef class Field(EprObject):
     #    pyepr_check_errors()
 
     def get_unit(self):
-        '''get_unit(self)
+        """get_unit(self)
 
-        Gets the unit of the field
+        Gets the unit of the field.
 
-        '''
+        """
 
         cdef const char* unit = NULL
 
@@ -612,11 +612,11 @@ cdef class Field(EprObject):
             return _to_str(<char*>unit, 'ascii')
 
     def get_description(self):
-        '''get_description(self)
+        """get_description(self)
 
-        Gets the description of the field
+        Gets the description of the field.
 
-        '''
+        """
 
         cdef char* description = NULL
 
@@ -627,22 +627,22 @@ cdef class Field(EprObject):
         return _to_str(description, 'ascii')
 
     def get_num_elems(self):
-        '''get_num_elems(self)
+        """get_num_elems(self)
 
-        Gets the number of elements of the field
+        Gets the number of elements of the field.
 
-        '''
+        """
 
         self.check_closed_product()
 
         return epr_get_field_num_elems(self._ptr)
 
     def get_name(self):
-        '''get_name(self)
+        """get_name(self)
 
-        Gets the name of the field
+        Gets the name of the field.
 
-        '''
+        """
 
         cdef char* name = NULL
 
@@ -653,20 +653,20 @@ cdef class Field(EprObject):
         return _to_str(name, 'ascii')
 
     def get_type(self):
-        '''get_type(self)
+        """get_type(self)
 
-        Gets the type of the field
+        Gets the type of the field.
 
-        '''
+        """
 
         self.check_closed_product()
 
         return epr_get_field_type(self._ptr)
 
     def get_elem(self, uint index=0):
-        '''get_elem(self, index=0)
+        """get_elem(self, index=0)
 
-        Field single element access
+        Field single element access.
 
         This function is for getting the elements of a field.
 
@@ -676,7 +676,7 @@ cdef class Field(EprObject):
         :returns:
             the typed value from given field
 
-        '''
+        """
 
         cdef EPR_STime* eprtime
 
@@ -720,9 +720,9 @@ cdef class Field(EprObject):
         return val
 
     def get_elems(self):
-        '''get_elems(self)
+        """get_elems(self)
 
-        Field array element access
+        Field array element access.
 
         This function is for getting an array of field elements of the
         field.
@@ -731,7 +731,7 @@ cdef class Field(EprObject):
             the data array (:class:`numpy.ndarray`) having the type of
             the field
 
-        '''
+        """
 
         cdef void* buf = NULL
         cdef int nd = 1
@@ -868,9 +868,9 @@ cdef class Field(EprObject):
                 'write error: %d of %d bytes written' % (ret, datasize))
 
     def set_elem(self, elem, uint index=0):
-        '''set_elem(self, elem, index=0)
+        """set_elem(self, elem, index=0)
 
-        Set Field array element
+        Set Field array element.
 
         This function is for setting an array of field element of the
         field.
@@ -881,7 +881,7 @@ cdef class Field(EprObject):
             the zero-based index of element to be set, must not be
             negative. Default: 0.
 
-        '''
+        """
 
         self.check_closed_product()
         self._check_write_mode()
@@ -898,9 +898,9 @@ cdef class Field(EprObject):
         self._set_elems(elem, index)
 
     def set_elems(self, elems):
-        '''set_elems(self, elems)
+        """set_elems(self, elems)
 
-        Set Field array elements
+        Set Field array elements.
 
         This function is for setting an array of field elements of the
         field.
@@ -908,7 +908,7 @@ cdef class Field(EprObject):
         :param elems:
             np.ndarray of elements to set
 
-        '''
+        """
 
         cdef uint nelems
 
@@ -928,12 +928,12 @@ cdef class Field(EprObject):
         self._set_elems(elems)
 
     property tot_size:
-        '''The total size in bytes of all data elements of a field.
+        """The total size in bytes of all data elements of a field.
 
         *tot_size* is a derived variable, it is computed at runtime and
         not stored in the DSD-DB.
 
-        '''
+        """
 
         def __get__(self):
             cdef EPR_FieldInfo* info = <EPR_FieldInfo*>self._ptr.info
@@ -1076,14 +1076,14 @@ cdef class Field(EprObject):
 
     # --- low level interface -------------------------------------------------
     property _magic:
-        '''The magic number for internal C structure'''
+        """The magic number for internal C structure."""
 
         def __get__(self):
             self.check_closed_product()
             return self._ptr.magic
 
     def get_offset(self):
-        '''Field offset in bytes within the Record'''
+        """Field offset in bytes within the Record."""
 
         self.check_closed_product()
         return self._get_offset()
@@ -1102,13 +1102,13 @@ cdef new_field(EPR_SField* ptr, Record parent=None):
 
 
 cdef class Record(EprObject):
-    '''Represents a record read from an ENVISAT dataset
+    """Represents a record read from an ENVISAT dataset.
 
     A record is composed of multiple fields.
 
     .. seealso:: :class:`Field`
 
-    '''
+    """
 
     cdef EPR_SRecord* _ptr
     cdef object _parent     # Dataset or Product
@@ -1149,22 +1149,22 @@ cdef class Record(EprObject):
         return offset
 
     def get_num_fields(self):
-        '''get_num_fields(self)
+        """get_num_fields(self)
 
-        Gets the number of fields contained in the record
+        Gets the number of fields contained in the record.
 
-        '''
+        """
 
         return epr_get_num_fields(self._ptr)
 
     def print_(self, ostream=None):
-        '''print_(self, ostream=None)
+        """print_(self, ostream=None)
 
-        Write the record to specified file
+        Write the record to specified file.
 
         This method writes formatted contents of the record to
         specified *ostream* text file or (default) the ASCII output
-        is be printed to standard output (:data:`sys.stdout`)
+        is be printed to standard output (:data:`sys.stdout`).
 
         :param ostream:
             the (opened) output file object
@@ -1173,7 +1173,7 @@ cdef class Record(EprObject):
                   a generic stream object like
                   :class:`StringIO.StringIO` instances
 
-        '''
+        """
 
         cdef FILE* fstream = pyepr_get_file_stream(ostream)
 
@@ -1187,13 +1187,13 @@ cdef class Record(EprObject):
 
     def print_element(self, uint field_index, uint element_index,
                       ostream=None):
-        '''print_element(self, field_index, element_index, ostream=None)
+        """print_element(self, field_index, element_index, ostream=None)
 
-        Write the specified field element to file
+        Write the specified field element to file.
 
         This method writes formatted contents of the specified field
         element to the *ostream* text file or (default) the ASCII output
-        will be printed to standard output (:data:`sys.stdout`)
+        will be printed to standard output (:data:`sys.stdout`).
 
         :param field_index:
             the index of field in the record
@@ -1204,9 +1204,9 @@ cdef class Record(EprObject):
 
         .. note:: the *ostream* parameter have to be a *real* file not
                   a generic stream object like
-                  :class:`StringIO.StringIO` instances
+                  :class:`StringIO.StringIO` instances.
 
-        '''
+        """
 
         cdef FILE* fstream = pyepr_get_file_stream(ostream)
 
@@ -1219,9 +1219,9 @@ cdef class Record(EprObject):
         pyepr_check_errors()
 
     def get_field(self, name):
-        '''get_field(self, name)
+        """get_field(self, name)
 
-        Gets a field specified by name
+        Gets a field specified by name.
 
         The field is here identified through the given name.
         It contains the field info and all corresponding values.
@@ -1232,7 +1232,7 @@ cdef class Record(EprObject):
             the specified :class:`Field` or raises an exception
             (:exc:`EPRValueError`) if an error occurred
 
-        '''
+        """
 
         cdef EPR_SField* field_ptr
         cdef bytes cname = _to_bytes(name)
@@ -1246,9 +1246,9 @@ cdef class Record(EprObject):
         return new_field(field_ptr, self)
 
     def get_field_at(self, uint index):
-        '''get_field_at(self, index)
+        """get_field_at(self, index)
 
-        Gets a field at the specified position within the record
+        Gets a field at the specified position within the record.
 
         :param index:
             the zero-based index (position within record) of the field
@@ -1256,7 +1256,7 @@ cdef class Record(EprObject):
             the field or raises and exception (:exc:`EPRValueError`)
             if an error occurred
 
-        '''
+        """
 
         cdef EPR_SField* field_ptr
 
@@ -1269,7 +1269,7 @@ cdef class Record(EprObject):
         return new_field(field_ptr, self)
 
     property dataset_name:
-        '''The name of the dataset to which this record belongs to'''
+        """The name of the dataset to which this record belongs to."""
 
         def __get__(self):
             self.check_closed_product()
@@ -1280,7 +1280,7 @@ cdef class Record(EprObject):
                 return _to_str(info.dataset_name)
 
     property tot_size:
-        '''The total size in bytes of the record
+        """The total size in bytes of the record.
 
         It includes all data elements of all fields of a record in a
         product file.
@@ -1288,7 +1288,7 @@ cdef class Record(EprObject):
         *tot_size* is a derived variable, it is computed at runtime
         and not stored in the DSD-DB.
 
-        '''
+        """
 
         def __get__(self):
             self.check_closed_product()
@@ -1296,7 +1296,7 @@ cdef class Record(EprObject):
             return info.tot_size
 
     property index:
-        '''Index of the record within the dataset
+        """Index of the record within the dataset.
 
         It is *None* for empty records (created with
         :meth:`Dataset.create_record` but still not read) and for *MPH*
@@ -1305,20 +1305,20 @@ cdef class Record(EprObject):
 
         .. seealso:: :meth:`epr.Dataset.read_record`
 
-        '''
+        """
 
         def __get__(self):
             return self._index if self._index >= 0 else None
 
     # --- high level interface ------------------------------------------------
     def get_field_names(self):
-        '''get_field_names(self)
+        """get_field_names(self)
 
-        Return the list of names of the fields in the product
+        Return the list of names of the fields in the product.
 
-        .. note:: this method has no correspondent in the C API
+        .. note:: this method has no correspondent in the C API.
 
-        '''
+        """
 
         cdef EPR_SField* field_ptr
         cdef int idx
@@ -1337,11 +1337,11 @@ cdef class Record(EprObject):
         return names
 
     def fields(self):
-        '''fields(self)
+        """fields(self)
 
-        Return the list of fields contained in the record
+        Return the list of fields contained in the record.
 
-        '''
+        """
 
         return list(self)
 
@@ -1366,14 +1366,14 @@ cdef class Record(EprObject):
 
     # --- low level interface -------------------------------------------------
     property _magic:
-        '''The magic number for internal C structure'''
+        """The magic number for internal C structure."""
 
         def __get__(self):
             self.check_closed_product()
             return self._ptr.magic
 
     def get_offset(self):
-        '''Record offset in bytes within the Dataset'''
+        """Record offset in bytes within the Dataset."""
 
         if self._index >= 0:
             self.check_closed_product()
@@ -1397,11 +1397,11 @@ cdef new_record(EPR_SRecord* ptr, object parent=None, bint dealloc=False):
 
 
 cdef class Raster(EprObject):
-    '''Represents a raster in which data will be stored
+    """Represents a raster in which data will be stored.
 
     All 'size' parameter are in PIXEL.
 
-    '''
+    """
 
     cdef EPR_SRaster* _ptr
     cdef Band _parent
@@ -1412,74 +1412,74 @@ cdef class Raster(EprObject):
             epr_free_raster(self._ptr)
 
     property data_type:
-        '''The data type of the band's pixels
+        """The data type of the band's pixels.
 
-        All ``E_TID_*`` types are possible
+        All ``E_TID_*`` types are possible.
 
-        '''
+        """
 
         def __get__(self):
             return self._ptr.data_type
 
     property source_width:
-        '''The width of the source'''
+        """The width of the source."""
 
         def __get__(self):
             return self._ptr.source_width
 
     property source_height:
-        '''The height of the source'''
+        """The height of the source."""
 
         def __get__(self):
             return self._ptr.source_height
 
     property source_step_x:
-        '''The sub-sampling for the across-track direction in pixel'''
+        """The sub-sampling for the across-track direction in pixel."""
 
         def __get__(self):
             return self._ptr.source_step_x
 
     property source_step_y:
-        '''The sub-sampling for the along-track direction in pixel'''
+        """The sub-sampling for the along-track direction in pixel."""
 
         def __get__(self):
             return self._ptr.source_step_y
 
     def get_width(self):
-        '''get_width(self)
+        """get_width(self)
 
-        Gets the raster's width in pixels
+        Gets the raster's width in pixels.
 
-        '''
+        """
 
         return epr_get_raster_width(self._ptr)
 
     def get_height(self):
-        '''get_height(self)
+        """get_height(self)
 
-        Gets the raster's height in pixels
+        Gets the raster's height in pixels.
 
-        '''
+        """
 
         return epr_get_raster_height(self._ptr)
 
     def get_elem_size(self):
-        '''get_elem_size(self)
+        """get_elem_size(self)
 
         The size in byte of a single element (sample) of this
-        raster's buffer
+        raster's buffer.
 
-        '''
+        """
 
         return epr_get_raster_elem_size(self._ptr)
 
     def get_pixel(self, int x, int y):
-        '''get_pixel(x, y)
+        """get_pixel(x, y)
 
-        Single pixel access
+        Single pixel access.
 
         This function is for getting the values of the elements of a
-        raster (i.e. pixel)
+        raster (i.e. pixel).
 
         :param x:
             the (zero-based) X coordinate of the pixel
@@ -1488,7 +1488,7 @@ cdef class Raster(EprObject):
         :returns:
             the typed value at the given co-ordinate
 
-        '''
+        """
 
         if (x < 0 or <uint>x >= self._ptr.raster_width or
             y < 0  or <uint>y >= self._ptr.raster_height):
@@ -1533,13 +1533,13 @@ cdef class Raster(EprObject):
         return result
 
     property data:
-        '''Raster data exposed as :class:`numpy.ndarray` object
+        """Raster data exposed as :class:`numpy.ndarray` object.
 
         .. note:: this property shares the data buffer with the
                   :class:`Raster` object so any change in its contents
-                  is also reflected to the :class:`Raster` object
+                  is also reflected to the :class:`Raster` object.
 
-        '''
+        """
 
         def __get__(self):
             cdef object data
@@ -1564,7 +1564,7 @@ cdef class Raster(EprObject):
 
     # --- low level interface -------------------------------------------------
     property _magic:
-        '''The magic number for internal C structure'''
+        """The magic number for internal C structure."""
 
         def __get__(self):
             return self._ptr.magic
@@ -1585,9 +1585,9 @@ cdef new_raster(EPR_SRaster* ptr, Band parent=None):
 
 def create_raster(EPR_EDataTypeId data_type, uint src_width, uint src_height,
                   uint xstep=1, uint ystep=1):
-    '''create_raster(data_type, src_width, src_height, xstep=1, ystep=1)
+    """create_raster(data_type, src_width, src_height, xstep=1, ystep=1)
 
-    Creates a raster of the specified data type
+    Creates a raster of the specified data type.
 
     This function can be used to create any type of raster, e.g. for
     later use as a bit-mask.
@@ -1614,7 +1614,7 @@ def create_raster(EPR_EDataTypeId data_type, uint src_width, uint src_height,
 
     .. seealso:: description of :meth:`Band.create_compatible_raster`
 
-    '''
+    """
 
     if xstep == 0 or ystep == 0:
         raise ValueError('invalid step: xspet=%d, ystep=%d' % (xstep, ystep))
@@ -1630,9 +1630,9 @@ def create_raster(EPR_EDataTypeId data_type, uint src_width, uint src_height,
 
 def create_bitmask_raster(uint src_width, uint src_height,
                           uint xstep=1, uint ystep=1):
-    '''create_bitmask_raster(src_width, src_height, xstep=1, ystep=1)
+    """create_bitmask_raster(src_width, src_height, xstep=1, ystep=1)
 
-    Creates a raster to be used for reading bitmasks
+    Creates a raster to be used for reading bitmasks.
 
     The raster returned always is of type ``byte``.
 
@@ -1655,7 +1655,7 @@ def create_bitmask_raster(uint src_width, uint src_height,
     .. seealso:: the description of
                  :meth:`Band.create_compatible_raster`
 
-    '''
+    """
 
     if xstep == 0 or ystep == 0:
         raise ValueError('invalid step: xspet=%d, ystep=%d' % (xstep, ystep))
@@ -1669,7 +1669,7 @@ def create_bitmask_raster(uint src_width, uint src_height,
 
 
 cdef class Band(EprObject):
-    '''The band of an ENVISAT product
+    """The band of an ENVISAT product.
 
     The Band class contains information about a band within an ENVISAT
     product file which has been opened with the :func:`open` function.
@@ -1677,7 +1677,7 @@ cdef class Band(EprObject):
     A new Band instance can be obtained with the
     :meth:`Product.get_band` method.
 
-    '''
+    """
 
     cdef EPR_SBandId* _ptr
     cdef Product _parent
@@ -1686,24 +1686,24 @@ cdef class Band(EprObject):
         self._parent.check_closed_product()
 
     property product:
-        '''The :class:`Product` instance to which this band belongs to'''
+        """The :class:`Product` instance to which this band belongs to."""
 
         def __get__(self):
             return self._parent
 
     property spectr_band_index:
-        '''The (zero-based) spectral band index
+        """The (zero-based) spectral band index.
 
-        -1 if this is not a spectral band
+        -1 if this is not a spectral band.
 
-        '''
+        """
 
         def __get__(self):
             self.check_closed_product()
             return self._ptr.spectr_band_index
 
     property sample_model:
-        '''The sample model operation
+        """The sample model operation.
 
         The sample model operation applied to the source dataset for
         getting the correct samples from the MDS (for example MERIS
@@ -1716,13 +1716,13 @@ cdef class Band(EprObject):
         * ``2OF2``  --> second byte of 2-byte interleaved MDS
         * ``0123``  --> combine 3-bytes interleaved to 4-byte integer
 
-        '''
+        """
 
         def __get__(self):
             return self._ptr.sample_model
 
     property data_type:
-        '''The data type of the band's pixels
+        """The data type of the band's pixels.
 
         Possible values are:
 
@@ -1731,13 +1731,13 @@ cdef class Band(EprObject):
         * ``uint32_t``  --> 32-bit unsigned integer
         * ``Float``     --> 32-bit IEEE floating point
 
-        '''
+        """
 
         def __get__(self):
             return self._ptr.data_type
 
     property scaling_method:
-        '''Scaling method
+        """Scaling method.
 
         The scaling method which must be applied to the raw source data
         in order to get the 'real' pixel values in geo-physical units.
@@ -1753,13 +1753,13 @@ cdef class Band(EprObject):
 
             y = log10(offset + scale * x)
 
-        '''
+        """
 
         def __get__(self):
             return self._ptr.scaling_method
 
     property scaling_offset:
-        '''The scaling offset
+        """The scaling offset.
 
         Possible values are:
 
@@ -1770,13 +1770,13 @@ cdef class Band(EprObject):
           Optionally a second element index for multiple-element fields
           can be given too
 
-        '''
+        """
 
         def __get__(self):
             return self._ptr.scaling_offset
 
     property scaling_factor:
-        '''The scaling factor
+        """The scaling factor.
 
         Possible values are:
 
@@ -1787,17 +1787,17 @@ cdef class Band(EprObject):
           Optionally a second element index for multiple-element fields
           can be given too
 
-        '''
+        """
 
         def __get__(self):
             return self._ptr.scaling_factor
 
     property bm_expr:
-        '''A bit-mask expression used to filter valid pixels
+        """A bit-mask expression used to filter valid pixels.
 
-        All others are set to zero
+        All others are set to zero.
 
-        '''
+        """
 
         def __get__(self):
             if self._ptr.bm_expr is NULL:
@@ -1806,7 +1806,7 @@ cdef class Band(EprObject):
                 return _to_str(self._ptr.bm_expr, 'ascii')
 
     property unit:
-        '''The geophysical unit for the band's pixel values'''
+        """The geophysical unit for the band's pixel values."""
 
         def __get__(self):
             if self._ptr.unit is NULL:
@@ -1815,7 +1815,7 @@ cdef class Band(EprObject):
                 return _to_str(self._ptr.unit, 'ascii')
 
     property description:
-        '''A short description of the band's contents'''
+        """A short description of the band's contents."""
 
         def __get__(self):
             if self._ptr.description is NULL:
@@ -1824,24 +1824,24 @@ cdef class Band(EprObject):
                 return _to_str(self._ptr.description, 'ascii')
 
     property lines_mirrored:
-        '''Mirrored lines flag
+        """Mirrored lines flag.
 
         If true (=1) lines will be mirrored (flipped) after read into a
         raster in order to ensure a pixel ordering in raster X
         direction from WEST to EAST.
 
-        '''
+        """
 
         def __get__(self):
             return <bint>self._ptr.lines_mirrored
 
     property dataset:
-        '''The source dataset
+        """The source dataset.
 
         The source dataset containing the raw data used to create the
         band's pixel values.
 
-        '''
+        """
 
         def __get__(self):
             cdef EPR_SDatasetId* dataset_id = self._ptr.dataset_ref.dataset_id
@@ -1849,11 +1849,11 @@ cdef class Band(EprObject):
             return self.product.get_dataset(name)
 
     def get_name(self):
-        '''get_name(self)
+        """get_name(self)
 
-        Gets the name of the band
+        Gets the name of the band.
 
-        '''
+        """
 
         cdef char* name = NULL
 
@@ -1865,10 +1865,10 @@ cdef class Band(EprObject):
 
     def create_compatible_raster(self, uint src_width=0, uint src_height=0,
                                  uint xstep=1, uint ystep=1):
-        '''create_compatible_raster(self, src_width, src_height, xstep=1, ystep=1)
+        """create_compatible_raster(self, src_width, src_height, xstep=1, ystep=1)
 
         Creates a raster which is compatible with the data type of
-        the band
+        the band.
 
         The created raster is used to read the data in it (see
         :meth:`Band.read_raster`).
@@ -1927,7 +1927,7 @@ cdef class Band(EprObject):
 
                 raster_size = src_size // step
 
-        '''
+        """
 
         cdef EPR_SRaster* raster_ptr = NULL
         cdef uint scene_width
@@ -1971,10 +1971,10 @@ cdef class Band(EprObject):
         return new_raster(raster_ptr, self)
 
     cpdef read_raster(self, int xoffset=0, int yoffset=0, Raster raster=None):
-        '''read_raster(self, xoffset=0, yoffset=0, Raster raster=None)
+        """read_raster(self, xoffset=0, yoffset=0, Raster raster=None)
 
         Reads (geo-)physical values of the band of the specified
-        source-region
+        source-region.
 
         The source-region is a defined part of the whole ENVISAT
         product image, which shall be read into a raster.
@@ -2002,7 +2002,7 @@ cdef class Band(EprObject):
         .. seealso:: :meth:`Band.create_compatible_raster` and
                      :func:`create_raster`
 
-        '''
+        """
 
         cdef int ret
         cdef uint scene_width
@@ -2036,9 +2036,9 @@ cdef class Band(EprObject):
     def read_as_array(self, width=None, height=None,
                       uint xoffset=0, uint yoffset=0,
                       uint xstep=1, uint ystep=1):
-        '''read_as_array(self, width=None, height=None, xoffset=0, yoffset=0, xstep=1, ystep=1):
+        """read_as_array(self, width=None, height=None, xoffset=0, yoffset=0, xstep=1, ystep=1):
 
-        Reads the specified source region as an :class:`numpy.ndarray`
+        Reads the specified source region as an :class:`numpy.ndarray`.
 
         The source-region is a defined part of the whole ENVISAT
         product image, which shall be read into a raster.
@@ -2074,7 +2074,7 @@ cdef class Band(EprObject):
         .. seealso:: :meth:`Band.create_compatible_raster`,
                      :func:`create_raster` and :meth:`Band.read_raster`
 
-        '''
+        """
 
         cdef uint w
         cdef uint h
@@ -2108,7 +2108,7 @@ cdef class Band(EprObject):
 
     # --- low level interface -------------------------------------------------
     property _magic:
-        '''The magic number for internal C structure'''
+        """The magic number for internal C structure."""
 
         def __get__(self):
             self.check_closed_product()
@@ -2116,23 +2116,23 @@ cdef class Band(EprObject):
 
 
     property _field_index:
-        '''Index or the field (within the dataset) containing the raw
+        """Index or the field (within the dataset) containing the raw
         data used to create the band's pixel values.
 
-        It is set to -1 if not used
+        It is set to -1 if not used.
 
-        '''
+        """
 
         def __get__(self):
             return self._ptr.dataset_ref.field_index
 
     property _elem_index:
-        '''Index or the element (within the dataset field) containing
+        """Index or the element (within the dataset field) containing
         the raw data used to create the band's pixel values.
 
-        It is set to -1 if not used
+        It is set to -1 if not used.
 
-        '''
+        """
 
         def __get__(self):
             return self._ptr.dataset_ref.elem_index
@@ -2151,7 +2151,7 @@ cdef new_band(EPR_SBandId* ptr, Product parent=None):
 
 
 cdef class Dataset(EprObject):
-    '''ENVISAT dataset
+    """ENVISAT dataset.
 
     The Dataset class contains information about a dataset within an
     ENVISAT product file which has been opened with the :func:`open`
@@ -2161,7 +2161,7 @@ cdef class Dataset(EprObject):
     :meth:`Product.get_dataset` or :meth:`Product.get_dataset_at`
     methods.
 
-    '''
+    """
 
     cdef EPR_SDatasetId* _ptr
     cdef Product _parent
@@ -2177,13 +2177,13 @@ cdef class Dataset(EprObject):
         return dsd.ds_offset
 
     property product:
-        '''The :class:`Product` instance to which this dataset belongs to'''
+        """The :class:`Product` instance to which this dataset belongs to."""
 
         def __get__(self):
             return self._parent
 
     property description:
-        '''A short description of the band's contents'''
+        """A short description of the band's contents."""
 
         def __get__(self):
             if self._ptr is not NULL:
@@ -2193,11 +2193,11 @@ cdef class Dataset(EprObject):
             return ''
 
     def get_name(self):
-        '''get_name(self)
+        """get_name(self)
 
-        Gets the name of the dataset
+        Gets the name of the dataset.
 
-        '''
+        """
 
         cdef char* name
 
@@ -2208,11 +2208,11 @@ cdef class Dataset(EprObject):
         return ''
 
     def get_dsd_name(self):
-        '''get_dsd_name(self)
+        """get_dsd_name(self)
 
-        Gets the name of the DSD (dataset descriptor)
+        Gets the name of the DSD (dataset descriptor).
 
-        '''
+        """
 
         cdef char* name
 
@@ -2223,11 +2223,11 @@ cdef class Dataset(EprObject):
         return ''
 
     def get_num_records(self):
-        '''get_num_records(self)
+        """get_num_records(self)
 
-        Gets the number of records of the dataset
+        Gets the number of records of the dataset.
 
-        '''
+        """
 
         if self._ptr is not NULL:
             self.check_closed_product()
@@ -2235,20 +2235,20 @@ cdef class Dataset(EprObject):
         return 0
 
     def get_dsd(self):
-        '''get_dsd(self)
+        """get_dsd(self)
 
-        Gets the dataset descriptor (DSD)
+        Gets the dataset descriptor (DSD).
 
-        '''
+        """
 
         self.check_closed_product()
 
         return new_dsd(<EPR_SDSD*>epr_get_dsd(self._ptr), self)
 
     def create_record(self):
-        '''create_record(self)
+        """create_record(self)
 
-        Creates a new record
+        Creates a new record.
 
         Creates a new, empty record with a structure compatible with
         the dataset. Such a record is typically used in subsequent
@@ -2257,16 +2257,16 @@ cdef class Dataset(EprObject):
         :returns:
             the new record instance
 
-        '''
+        """
 
         self.check_closed_product()
 
         return new_record(epr_create_record(self._ptr), self, True)
 
     def read_record(self, uint index=0, Record record=None):
-        '''read_record(self, index, record=None)
+        """read_record(self, index, record=None)
 
-        Reads specified record of the dataset
+        Reads specified record of the dataset.
 
         The record is identified through the given zero-based record
         index. In order to reduce memory reallocation, a record
@@ -2294,7 +2294,7 @@ cdef class Dataset(EprObject):
 
            The *index* parameter now defaults to zero
 
-        '''
+        """
 
         cdef EPR_SRecord* record_ptr = NULL
 
@@ -2318,11 +2318,11 @@ cdef class Dataset(EprObject):
 
     # --- high level interface ------------------------------------------------
     def records(self):
-        '''records(self)
+        """records(self)
 
-        Return the list of records contained in the dataset
+        Return the list of records contained in the dataset.
 
-        '''
+        """
 
         return list(self)
 
@@ -2343,7 +2343,7 @@ cdef class Dataset(EprObject):
 
     # --- low level interface -------------------------------------------------
     property _magic:
-        '''The magic number for internal C structure'''
+        """The magic number for internal C structure."""
 
         def __get__(self):
             self.check_closed_product()
@@ -2363,14 +2363,14 @@ cdef new_dataset(EPR_SDatasetId* ptr, Product parent=None):
 
 
 cdef class Product(EprObject):
-    '''ENVISAT product
+    """ENVISAT product.
 
     The Product class provides methods and properties to get
     information about an ENVISAT product file.
 
     .. seealso:: :func:`open`
 
-    '''
+    """
 
     cdef EPR_SProductId* _ptr
     cdef str _mode
@@ -2433,9 +2433,9 @@ cdef class Product(EprObject):
         pass
 
     def close(self):
-        '''close(self)
+        """close(self)
 
-        Closes the ENVISAT :class:`epr.Product` product
+        Closes the ENVISAT :class:`epr.Product` product.
 
         Closes the :class:`epr.Product` product and free the underlying
         file descriptor.
@@ -2447,7 +2447,7 @@ cdef class Product(EprObject):
         As a convenience, it is allowed to call this method more than
         once; only the first call, however, will have an effect.
 
-        '''
+        """
 
         if self._ptr is not NULL:
             #if '+' in self.mode:
@@ -2457,7 +2457,7 @@ cdef class Product(EprObject):
             self._ptr = NULL
 
     def flush(self):
-        '''Flush the file stream'''
+        """Flush the file stream."""
 
         cdef int ret
         if '+' in self.mode:
@@ -2467,7 +2467,7 @@ cdef class Product(EprObject):
                 raise IOError('flush error')
 
     property file_path:
-        '''The file's path including the file name'''
+        """The file's path including the file name."""
 
         def __get__(self):
             self.check_closed_product()
@@ -2477,11 +2477,11 @@ cdef class Product(EprObject):
                 return _to_str(self._ptr.file_path, 'ascii')
 
     property _fileno:
-        '''The fileno of the :class:`epr.Product` input stream
+        """The fileno of the :class:`epr.Product` input stream.
 
         To be used with care.
 
-        '''
+        """
 
         def __get__(self):
             if self._ptr.istream is NULL:
@@ -2491,32 +2491,32 @@ cdef class Product(EprObject):
 
     property mode:
         def __get__(self):
-            '''String that specifies the mode in which the file is opened
+            """String that specifies the mode in which the file is opened.
 
             Possible values: 'rb' for read-only mode, 'rb+' for read-write
             mode.
 
-            '''
+            """
 
             return self._mode
 
     property tot_size:
-        '''The total size in bytes of the product file'''
+        """The total size in bytes of the product file."""
 
         def __get__(self):
             self.check_closed_product()
             return self._ptr.tot_size
 
     property id_string:
-        '''The product identifier string obtained from the MPH
-        parameter 'PRODUCT'
+        """The product identifier string obtained from the MPH
+        parameter 'PRODUCT'.
 
         The first 10 characters of this string identify the product
         type, e.g. "MER_1P__FR" for a MERIS Level 1b full resolution
         product.
         The rest of the string decodes product instance properties.
 
-        '''
+        """
 
         def __get__(self):
             self.check_closed_product()
@@ -2526,69 +2526,69 @@ cdef class Product(EprObject):
                 return _to_str(self._ptr.id_string, 'ascii')
 
     property meris_iodd_version:
-        '''For MERIS L1b and RR and FR to provide backward compatibility'''
+        """For MERIS L1b and RR and FR to provide backward compatibility."""
 
         def __get__(self):
             self.check_closed_product()
             return self._ptr.meris_iodd_version
 
     def get_scene_width(self):
-        '''get_scene_width(self)
+        """get_scene_width(self)
 
-        Gets the product's scene width in pixels
+        Gets the product's scene width in pixels.
 
-        '''
+        """
 
         self.check_closed_product()
         return epr_get_scene_width(self._ptr)
 
     def get_scene_height(self):
-        '''get_scene_height(self)
+        """get_scene_height(self)
 
-        Gets the product's scene height in pixels
+        Gets the product's scene height in pixels.
 
-        '''
+        """
 
         self.check_closed_product()
         return epr_get_scene_height(self._ptr)
 
     def get_num_datasets(self):
-        '''get_num_datasets(self)
+        """get_num_datasets(self)
 
-        Gets the number of all datasets contained in a product
+        Gets the number of all datasets contained in a product.
 
-        '''
+        """
 
         self.check_closed_product()
         return epr_get_num_datasets(self._ptr)
 
     def get_num_dsds(self):
-        '''get_num_dsds(self)
+        """get_num_dsds(self)
 
-        Gets the number of all :class:`DSD`\ s
+        Gets the number of all :class:`DSD`\ s.
 
         Gets the number of all :class:`DSD`\ s (dataset descriptors)
-        contained in the product
+        contained in the product.
 
-        '''
+        """
 
         self.check_closed_product()
         return epr_get_num_dsds(self._ptr)
 
     def get_num_bands(self):
-        '''get_num_bands(self)
+        """get_num_bands(self)
 
-        Gets the number of all bands contained in a product
+        Gets the number of all bands contained in a product.
 
-        '''
+        """
 
         self.check_closed_product()
         return epr_get_num_bands(self._ptr)
 
     def get_dataset_at(self, uint index):
-        '''get_dataset_at(self, index)
+        """get_dataset_at(self, index)
 
-        Gets the dataset at the specified position within the product
+        Gets the dataset at the specified position within the product.
 
         :param index:
             the index identifying the position of the dataset, starting
@@ -2596,7 +2596,7 @@ cdef class Product(EprObject):
         :returns:
             the requested :class:`Dataset`
 
-        '''
+        """
 
         cdef EPR_SDatasetId* dataset_id
         dataset_id = epr_get_dataset_id_at(self._ptr, index)
@@ -2606,16 +2606,16 @@ cdef class Product(EprObject):
         return new_dataset(dataset_id, self)
 
     def get_dataset(self, name):
-        '''get_dataset(self, name)
+        """get_dataset(self, name)
 
-        Gets the dataset corresponding to the specified dataset name
+        Gets the dataset corresponding to the specified dataset name.
 
         :param name:
             the dataset name
         :returns:
             the requested :class:`Dataset` instance
 
-        '''
+        """
 
         cdef EPR_SDatasetId* dataset_id
         cdef bytes cname = _to_bytes(name)
@@ -2626,9 +2626,9 @@ cdef class Product(EprObject):
         return new_dataset(dataset_id, self)
 
     def get_dsd_at(self, uint index):
-        '''get_dsd_at(self, index)
+        """get_dsd_at(self, index)
 
-        Gets the :class:`DSD` at the specified position
+        Gets the :class:`DSD` at the specified position.
 
         Gets the :class:`DSD` (dataset descriptor) at the specified
         position within the product.
@@ -2639,7 +2639,7 @@ cdef class Product(EprObject):
         :returns:
             the requested :class:`DSD` instance
 
-        '''
+        """
 
         cdef EPR_SDSD* dsd_ptr
 
@@ -2652,11 +2652,11 @@ cdef class Product(EprObject):
         return new_dsd(dsd_ptr, self)
 
     def get_mph(self):
-        '''get_mph(self)
+        """get_mph(self)
 
-        The main product header (MPH) :class:`Record`
+        The main product header (MPH) :class:`Record`.
 
-        '''
+        """
 
         cdef EPR_SRecord* record_ptr
         record_ptr = epr_get_mph(self._ptr)
@@ -2666,11 +2666,11 @@ cdef class Product(EprObject):
         return new_record(record_ptr, self, False)
 
     def get_sph(self):
-        '''get_sph(self)
+        """get_sph(self)
 
-        The specific product header (SPH) :class:`Record`
+        The specific product header (SPH) :class:`Record`.
 
-        '''
+        """
 
         cdef EPR_SRecord* record_ptr
         record_ptr = epr_get_sph(self._ptr)
@@ -2680,7 +2680,7 @@ cdef class Product(EprObject):
         return new_record(record_ptr, self, False)
 
     def get_band(self, name):
-        '''get_band(self, name)
+        """get_band(self, name)
 
         Gets the band corresponding to the specified name.
 
@@ -2690,7 +2690,7 @@ cdef class Product(EprObject):
             the requested :class:`Band` instance, or raises a
             :exc:`EPRValueError` if not found
 
-        '''
+        """
 
         cdef EPR_SBandId* band_id
         cdef bytes cname = _to_bytes(name)
@@ -2701,9 +2701,9 @@ cdef class Product(EprObject):
         return new_band(band_id, self)
 
     def get_band_at(self, uint index):
-        '''get_band_at(self, index)
+        """get_band_at(self, index)
 
-        Gets the band at the specified position within the product
+        Gets the band at the specified position within the product.
 
         :param index:
             the index identifying the position of the band, starting
@@ -2712,7 +2712,7 @@ cdef class Product(EprObject):
             the requested :class:`Band` instance, or raises a
             :exc:`EPRValueError` if not found
 
-        '''
+        """
 
         cdef EPR_SBandId* band_id
         band_id = epr_get_band_id_at(self._ptr, index)
@@ -2723,9 +2723,9 @@ cdef class Product(EprObject):
 
     def read_bitmask_raster(self, bm_expr, int xoffset, int yoffset,
                             Raster raster not None):
-        '''read_bitmask_raster(self, bm_expr, xoffset, yoffset, raster)
+        """read_bitmask_raster(self, bm_expr, xoffset, yoffset, raster)
 
-        Calculates a bit-mask raster
+        Calculates a bit-mask raster.
 
         Calculates a bit-mask, composed of flags of the given product
         and combined as described in the given bit-mask expression, for
@@ -2754,7 +2754,7 @@ cdef class Product(EprObject):
 
         .. seealso:: :func:`epr.create_bitmask_raster`
 
-        '''
+        """
 
         cdef bytes c_bm_expr = _to_bytes(bm_expr)
         cdef int ret = 0
@@ -2777,13 +2777,13 @@ cdef class Product(EprObject):
             return self._ptr is NULL
 
     def get_dataset_names(self):
-        '''get_dataset_names(self)
+        """get_dataset_names(self)
 
-        Return the list of names of the datasets in the product
+        Return the list of names of the datasets in the product.
 
         .. note:: this method has no correspondent in the C API
 
-        '''
+        """
 
         cdef EPR_SDatasetId* dataset_ptr
         cdef int idx
@@ -2803,13 +2803,13 @@ cdef class Product(EprObject):
         return names
 
     def get_band_names(self):
-        '''get_band_names(self)
+        """get_band_names(self)
 
-        Return the list of names of the bands in the product
+        Return the list of names of the bands in the product.
 
         .. note:: this method has no correspondent in the C API
 
-        '''
+        """
 
         cdef EPR_SBandId* band_ptr
         cdef int idx
@@ -2829,11 +2829,11 @@ cdef class Product(EprObject):
         return names
 
     def datasets(self):
-        '''datasets(self)
+        """datasets(self)
 
-        Return the list of dataset in the product
+        Return the list of dataset in the product.
 
-        '''
+        """
 
         cdef int idx
         cdef int num_datasets
@@ -2845,11 +2845,11 @@ cdef class Product(EprObject):
         return [self.get_dataset_at(idx) for idx in range(num_datasets)]
 
     def bands(self):
-        '''bands(self)
+        """bands(self)
 
-        Return the list of bands in the product
+        Return the list of bands in the product.
 
-        '''
+        """
 
         cdef int num_bands
 
@@ -2882,7 +2882,7 @@ cdef class Product(EprObject):
 
     # --- low level interface -------------------------------------------------
     property _magic:
-        '''The magic number for internal C structure'''
+        """The magic number for internal C structure."""
 
         def __get__(self):
             self.check_closed_product()
@@ -2890,9 +2890,9 @@ cdef class Product(EprObject):
 
 
 def open(filename, mode='rb'):
-    '''open(filename)
+    """open(filename)
 
-    Opens the ENVISAT product
+    Open the ENVISAT product.
 
     Opens the ENVISAT product file with the given file path, reads MPH,
     SPH and all DSDs, organized the table with parameter of line length
@@ -2911,7 +2911,7 @@ def open(filename, mode='rb'):
 
     .. seealso :class:`Product`
 
-    '''
+    """
 
     return Product(filename, mode)
 
