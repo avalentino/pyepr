@@ -7,6 +7,7 @@ PyEPR 0.9.5 (in development)
 * Fix compatibility with numpy >= 1.14: :func:`np.fromstring`
   is deprecated.
 * Update the pypi sidebar in the documentation
+* Use `.rst` extension for doc source files
 
 
 PyEPR 0.9.4 (29/04/2018)
