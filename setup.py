@@ -74,9 +74,11 @@ class PyEprExtension(Extension, object):
         self._include_dirs = []
         eprsrcdir = kwargs.pop('eprsrcdir', None)
 
-        super(PyEprExtension, self).__init__(*args, **kwargs)
+        Extension.__init__(self, *args, **kwargs)
 
-        self.sources.extend(self._extra_sources(eprsrcdir))
+        if not any('epr_' in src for src in self.sources):
+            self.sources.extend(self._extra_sources(eprsrcdir))
+
         self.setup_requires_cython = False
 
     def _extra_sources(self, eprsrcdir=None):
@@ -84,7 +86,7 @@ class PyEprExtension(Extension, object):
 
         # check for local epr-api sources
         if eprsrcdir is None:
-            default_eprapisrc = os.path.join('epr-api-src')
+            default_eprapisrc = 'epr-api-src'
             if os.path.isdir(default_eprapisrc):
                 eprsrcdir = default_eprapisrc
 
