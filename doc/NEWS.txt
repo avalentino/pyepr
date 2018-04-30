@@ -4,7 +4,8 @@ Change history
 PyEPR 0.9.5 (in development)
 ----------------------------
 
-* TBW
+* Fix compatibility with numpy >= 1.14: :func:`np.fromstring`
+  is deprecated.
 
 
 PyEPR 0.9.4 (29/04/2018)
