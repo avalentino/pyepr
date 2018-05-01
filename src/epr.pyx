@@ -1682,8 +1682,15 @@ cdef class Band(EprObject):
     cdef EPR_SBandId* _ptr
     cdef Product _parent
 
-    cdef inline check_closed_product(self):
-        self._parent.check_closed_product()
+    cdef inline int check_closed_product(self) except -1:
+        if self._ptr is NULL:
+            raise ValueError('I/O operation on closed file')
+
+        elif self._parent.check_closed_product() == -1:
+            self._ptr = NULL
+            raise
+
+        return 0
 
     property product:
         """The :class:`Product` instance to which this band belongs to."""
@@ -1719,6 +1726,7 @@ cdef class Band(EprObject):
         """
 
         def __get__(self):
+            self.check_closed_product()
             return self._ptr.sample_model
 
     property data_type:
@@ -1734,6 +1742,7 @@ cdef class Band(EprObject):
         """
 
         def __get__(self):
+            self.check_closed_product()
             return self._ptr.data_type
 
     property scaling_method:
@@ -1756,6 +1765,7 @@ cdef class Band(EprObject):
         """
 
         def __get__(self):
+            self.check_closed_product()
             return self._ptr.scaling_method
 
     property scaling_offset:
@@ -1773,6 +1783,7 @@ cdef class Band(EprObject):
         """
 
         def __get__(self):
+            self.check_closed_product()
             return self._ptr.scaling_offset
 
     property scaling_factor:
@@ -1790,6 +1801,7 @@ cdef class Band(EprObject):
         """
 
         def __get__(self):
+            self.check_closed_product()
             return self._ptr.scaling_factor
 
     property bm_expr:
@@ -1800,6 +1812,7 @@ cdef class Band(EprObject):
         """
 
         def __get__(self):
+            self.check_closed_product()
             if self._ptr.bm_expr is NULL:
                 return None
             else:
@@ -1809,6 +1822,7 @@ cdef class Band(EprObject):
         """The geophysical unit for the band's pixel values."""
 
         def __get__(self):
+            self.check_closed_product()
             if self._ptr.unit is NULL:
                 return None
             else:
@@ -1818,6 +1832,7 @@ cdef class Band(EprObject):
         """A short description of the band's contents."""
 
         def __get__(self):
+            self.check_closed_product()
             if self._ptr.description is NULL:
                 return None
             else:
@@ -1833,6 +1848,7 @@ cdef class Band(EprObject):
         """
 
         def __get__(self):
+            self.check_closed_product()
             return <bint>self._ptr.lines_mirrored
 
     property dataset:
@@ -1844,6 +1860,7 @@ cdef class Band(EprObject):
         """
 
         def __get__(self):
+            self.check_closed_product()
             cdef EPR_SDatasetId* dataset_id = self._ptr.dataset_ref.dataset_id
             cdef const char* name = epr_get_dataset_name(dataset_id)
             return self.product.get_dataset(name)
@@ -2124,6 +2141,7 @@ cdef class Band(EprObject):
         """
 
         def __get__(self):
+            self.check_closed_product()
             return self._ptr.dataset_ref.field_index
 
     property _elem_index:
@@ -2135,6 +2153,7 @@ cdef class Band(EprObject):
         """
 
         def __get__(self):
+            self.check_closed_product()
             return self._ptr.dataset_ref.elem_index
 
 
@@ -2418,9 +2437,10 @@ cdef class Product(EprObject):
             pyepr_check_errors()
             self._ptr = NULL
 
-    cdef inline check_closed_product(self):
+    cdef inline int check_closed_product(self) except -1:
         if self._ptr is NULL:
             raise ValueError('I/O operation on closed file')
+        return 0
 
     cdef inline _check_write_mode(self):
         if '+' not in self._mode:

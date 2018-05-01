@@ -38,11 +38,13 @@ except ImportError:
     resource = None
 
 try:
-    from unittest import skipIf
+    from unittest import skipIf as _skipIf, TestCase as _TestCase
+    if not hasattr(_TestCase, 'subTest'):
+        raise ImportError
 except ImportError:
     import unittest2 as unittest
 else:
-    del skipIf
+    del _skipIf, _TestCase
     import unittest
 
 try:
@@ -1375,38 +1377,21 @@ class TestBandOnClosedProduct(unittest.TestCase):
         self.assertTrue(isinstance(self.band.product, epr.Product))
 
     def test_properties(self):
-        # 'sample_model', 'data_type', 'scaling_method', 'scaling_offset',
-        # 'scaling_factor', 'bm_expr', 'unit', 'description', 'lines_mirrored'
-        for name in ('spectr_band_index',):
-            self.assertRaises(ValueError, getattr, self.band, name)
-
-    def test_sample_model_property(self):
-        self.assertEqual(self.band.sample_model, 0)
-
-    def test_data_type_property(self):
-        self.assertEqual(self.band.data_type, 0)
-
-    def test_scaling_method_property(self):
-        self.assertEqual(self.band.scaling_method, epr.E_SMID_LIN)
-
-    def test_scaling_offset_property(self):
-        self.assertEqual(self.band.scaling_offset, 0)
-
-    def test_scaling_factor_property(self):
-        self.assertEqual(self.band.scaling_factor, 0)
-        self.assertTrue(isinstance(self.band.scaling_factor, float))
-
-    def test_bm_expr_property(self):
-        self.assertEqual(self.band.bm_expr, None)
-
-    def test_unit_property(self):
-        self.assertEqual(self.band.unit, None)
-
-    def test_description_property(self):
-        self.assertEqual(self.band.description, None)
-
-    def test_lines_mirrored_property(self):
-        self.assertTrue(isinstance(self.band.lines_mirrored, bool))
+        fields = (
+            'spectr_band_index',
+            'sample_model',
+            'data_type',
+            'scaling_method',
+            'scaling_offset',
+            'scaling_factor',
+            'bm_expr',
+            'unit',
+            'description',
+            'lines_mirrored',
+        )
+        for name in fields:
+            with self.subTest(field=name):
+                self.assertRaises(ValueError, getattr, self.band, name)
 
     def test_get_name(self):
         self.assertRaises(ValueError, self.product.get_band_at, 0)
@@ -2830,11 +2815,9 @@ class TestDataypeFunctions(unittest.TestCase):
 
     def test_epr_to_numpy_dtype(self):
         for epr_type in self.TYPE_MAP:
-            #with self.subTest(epr_type=epr_type): # TODO: update (new in 3.4)
-            #    self.assertEqual(
-            #        epr.get_numpy_dtype(epr_type), self.TYPE_MAP[epr_type])
-            self.assertEqual(
-                epr.get_numpy_dtype(epr_type), self.TYPE_MAP[epr_type])
+            with self.subTest(epr_type=epr_type):
+                self.assertEqual(
+                    epr.get_numpy_dtype(epr_type), self.TYPE_MAP[epr_type])
 
 
 class TestScalingMethodFunctions(unittest.TestCase):
