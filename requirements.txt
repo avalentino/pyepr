@@ -1,2 +1,3 @@
 numpy>=1.5
 cython>=0.19
+# unittest2  # Python < 3.4
