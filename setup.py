@@ -223,12 +223,20 @@ any data field contained in a product file.
 )
 
 
+def get_collector():
+    import unittest
+    if hasattr(unittest.TestCase, 'subTest'):
+        return 'tests'
+    else:
+        return 'unittest2.collector'
+
+
 def setup_package():
     ext = get_extension()
     config['ext_modules'] = [ext]
 
     if HAVE_SETUPTOOLS:
-        config['test_suite'] = 'tests'
+        config['test_suite'] = get_collector()
         config.setdefault('setup_requires', []).append('numpy>=1.5')
         config.setdefault('install_requires', []).append('numpy>=1.5')
         if ext.setup_requires_cython:
