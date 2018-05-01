@@ -19,7 +19,6 @@
 # along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import io
 import os
 import re
 import sys
@@ -59,7 +58,7 @@ import epr
 
 
 EPR_TO_NUMPY_TYPE = {
-    #epr.E_TID_UNKNOWN:  np.NPY_NOTYPE,
+    # epr.E_TID_UNKNOWN:  np.NPY_NOTYPE,
     epr.E_TID_UCHAR:    np.ubyte,
     epr.E_TID_CHAR:     np.byte,
     epr.E_TID_USHORT:   np.ushort,
@@ -69,8 +68,8 @@ EPR_TO_NUMPY_TYPE = {
     epr.E_TID_FLOAT:    np.float32,
     epr.E_TID_DOUBLE:   np.double,
     epr.E_TID_STRING:   np.str,
-    #epr.E_TID_SPARE   = e_tid_spare,
-    #epr.E_TID_TIME    = e_tid_time,
+    # epr.E_TID_SPARE   = e_tid_spare,
+    # epr.E_TID_TIME    = e_tid_time,
 }
 
 
@@ -98,7 +97,7 @@ def quiet(func):
         try:
             # using '/dev/null' doesn't work in python 3 because the file
             # object coannot be converted into a C FILE*
-            #with file(os.devnull) as fd:
+            # with file(os.devnull) as fd:
             with tempfile.TemporaryFile('w+') as fd:
                 sys.stdout = fd
                 sys.stderr = fd
@@ -517,8 +516,8 @@ class TestProductHighLevelAPI(unittest.TestCase):
             self.assertEqual(band.get_name(), ref_band.get_name())
 
     # @TODO: not implemented
-    #def test_iter(self):
-    #    pass
+    # def test_iter(self):
+    #     pass
 
     def test_repr(self):
         pattern = ('epr\.Product\((?P<name>\w+)\) '
@@ -1924,14 +1923,14 @@ class TestRecordOnClosedProduct(unittest.TestCase):
         product = epr.Product(self.PRODUCT_FILE)
         dataset = product.get_dataset(self.DATASET_NAME)
         self.record = dataset.read_record(0)
-        #self.mph = product.get_mph()
+        # self.mph = product.get_mph()
         product.close()
 
     def test_get_num_fields(self):
         self.assertEqual(self.record.get_num_fields(), self.NUM_FIELD)
 
-    #def test_get_num_fields_mph(self):
-    #    self.assertEqual(self.mph.get_num_fields(), 34)
+    # def test_get_num_fields_mph(self):
+    #     self.assertEqual(self.mph.get_num_fields(), 34)
 
     def test_print_(self):
         self.assertRaises(ValueError, self.record.print_)
@@ -1973,7 +1972,7 @@ class TestField(unittest.TestCase):
     FIELD_NUM_ELEMS = 1
     FIELD_VALUES = (81,)
     FIELD_UNIT = '%'
-    #FIELD_OFFSET = 13
+    # FIELD_OFFSET = 13
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE, self.OPEN_MODE)
@@ -2511,11 +2510,11 @@ class TestFieldHighLevelAPI2(unittest.TestCase):
         self.assertEqual(len(field), field.get_num_elems())
 
     # @TODO: no e_tid_string field available
-    #def test_len_e_tid_string(self):
-    #    dataset = self.product.get_dataset_at(0)
-    #    record = dataset.read_record(0)
-    #    field = record.get_field('???')
-    #    self.assertEqual(len(field), len(field.get_elem()))
+    # def test_len_e_tid_string(self):
+    #     dataset = self.product.get_dataset_at(0)
+    #     record = dataset.read_record(0)
+    #     field = record.get_field('???')
+    #     self.assertEqual(len(field), len(field.get_elem()))
 
 
 class TestFieldLowLevelAPI(unittest.TestCase):
@@ -2702,7 +2701,7 @@ class TestDsdLowLevelAPI(unittest.TestCase):
         self.product.close()
 
     def test_magic(self):
-        #self.assertEqual(self.dsd._magic, epr._EPR_MAGIC_DSD_ID)
+        # self.assertEqual(self.dsd._magic, epr._EPR_MAGIC_DSD_ID)
         self.assertTrue(isinstance(self.dsd._magic, int))
 
 
