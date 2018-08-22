@@ -8,6 +8,12 @@ PyEPR 0.9.5 (in development)
   is deprecated.
 * Update the pypi sidebar in the documentation
 * Use `.rst` extension for doc source files
+* Fix setup script to not use system libs if epr-api sources are available
+* Do not access fields of bands after that the product has been closed
+  (fix a segmentation fault on windows)
+* `unittest2`_ is now required for Python < 3.4
+
+.. _unittest2: https://pypi.org/project/unittest2
 
 
 PyEPR 0.9.4 (29/04/2018)
