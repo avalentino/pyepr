@@ -46,6 +46,13 @@ environment:
     - PYTHON_VERSION: "3.6"
       PYTHON_ARCH: "64"
 
+    - platform: x86
+      PYTHON_VERSION: "3.7"
+      PYTHON_ARCH: "32"
+
+    - PYTHON_VERSION: "3.7"
+      PYTHON_ARCH: "64"
+
 install:
     # conda
     - "git clone git://github.com/astropy/ci-helpers.git"
