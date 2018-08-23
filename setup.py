@@ -221,6 +221,7 @@ any data field contained in a product file.
     platforms=['any'],
     license='GPL3',
     requires=['numpy'],     # XXX: check
+    python_requires='>=2.6, !=3.0.*, !=3.1.*, <4',
 )
 
 
