@@ -26,7 +26,7 @@ TEST_DATSET = tests/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.
 EPRAPIROOT = ../epr-api
 
 .PHONY: default ext cythonize sdist eprsrc fullsdist doc clean distclean \
-        check debug data upload
+        check debug data upload manylinux
 
 default: ext
 
@@ -89,3 +89,8 @@ data: $(TEST_DATSET)
 $(TEST_DATSET):
 	wget -P tests $(TEST_DATSET_URL)
 	gunzip $@
+
+manylinux:
+	# make fullsdist
+	# docker pull quay.io/pypa/manylinux1_x86_64
+	docker run --rm -v $(shell pwd):/io quay.io/pypa/manylinux1_x86_64 sh /io/build-manylinux-wheels.sh
