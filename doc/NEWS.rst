@@ -1,8 +1,8 @@
 Change history
 ==============
 
-PyEPR 0.9.5
------------
+PyEPR 0.9.5 (23/08/2018)
+------------------------
 
 * Fix compatibility with numpy >= 1.14: :func:`np.fromstring`
   is deprecated.
