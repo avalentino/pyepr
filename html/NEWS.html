@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Change history &#8212; PyEPR 0.9.4 documentation</title>
+    <title>Change history &#8212; PyEPR 0.9.5 documentation</title>
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.4',
+        VERSION:     '0.9.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="reference.html" title="API Reference"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.5 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -47,6 +47,19 @@
             
   <div class="section" id="change-history">
 <h1>Change history<a class="headerlink" href="#change-history" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="pyepr-0-9-5-23-08-2018">
+<h2>PyEPR 0.9.5 (23/08/2018)<a class="headerlink" href="#pyepr-0-9-5-23-08-2018" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fix compatibility with numpy &gt;= 1.14: <code class="xref py py-func docutils literal"><span class="pre">np.fromstring()</span></code>
+is deprecated.</li>
+<li>Update the pypi sidebar in the documentation</li>
+<li>Use <cite>.rst</cite> extension for doc source files</li>
+<li>Fix setup script to not use system libs if epr-api sources are available</li>
+<li>Do not access fields of bands after that the product has been closed
+(fix a segmentation fault on windows)</li>
+<li><a class="reference external" href="https://pypi.org/project/unittest2">unittest2</a> is now required for Python &lt; 3.4</li>
+</ul>
+</div>
 <div class="section" id="pyepr-0-9-4-29-04-2018">
 <h2>PyEPR 0.9.4 (29/04/2018)<a class="headerlink" href="#pyepr-0-9-4-29-04-2018" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -375,6 +388,7 @@ have a more <em>pythonic</em>  API</li>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Change history</a><ul>
+<li><a class="reference internal" href="#pyepr-0-9-5-23-08-2018">PyEPR 0.9.5 (23/08/2018)</a></li>
 <li><a class="reference internal" href="#pyepr-0-9-4-29-04-2018">PyEPR 0.9.4 (29/04/2018)</a></li>
 <li><a class="reference internal" href="#pyepr-0-9-3-02-05-2015">PyEPR 0.9.3 (02/05/2015)</a></li>
 <li><a class="reference internal" href="#pyepr-0-9-2-08-03-2015">PyEPR 0.9.2 (08/03/2015)</a></li>
@@ -402,7 +416,7 @@ have a more <em>pythonic</em>  API</li>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/NEWS.txt"
+      <li><a href="_sources/NEWS.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -429,12 +443,12 @@ have a more <em>pythonic</em>  API</li>
         <li class="right" >
           <a href="reference.html" title="API Reference"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.5 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2011-2018, Antonio Valentino.
-      Last updated on Apr 29, 2018.
+      Last updated on Aug 23, 2018.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
     </div>
   </body>

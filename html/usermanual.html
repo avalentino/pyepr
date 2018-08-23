@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>User Manual &#8212; PyEPR 0.9.4 documentation</title>
+    <title>User Manual &#8212; PyEPR 0.9.5 documentation</title>
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.4',
+        VERSION:     '0.9.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="index.html" title="ENVISAT Product Reader Python API"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.5 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -93,13 +93,13 @@ The user can open a product in update mode (‘rb+’) and call the
 <p>In order to use PyEPR it is needed that the following software are
 correctly installed and configured:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://www.python.org">Python2</a> &gt;= 2.6 or <a class="reference external" href="https://www.python.org">Python3</a> &gt;= 3.1</li>
+<li><a class="reference external" href="https://www.python.org">Python2</a> &gt;= 2.6 or <a class="reference external" href="https://www.python.org">Python3</a> &gt;= 3.1 (including <a class="reference external" href="http://pypy.org">PyPy</a>)</li>
 <li><a class="reference external" href="http://www.numpy.org">numpy</a> &gt;= 1.5.0</li>
 <li><a class="reference external" href="https://github.com/bcdev/epr-api">EPR API</a> &gt;= 2.2 (optional, since PyEPR 0.7 the source tar-ball comes
 with a copy of the EPR C API sources)</li>
 <li>a reasonably updated C compiler <a class="footnote-reference" href="#id3" id="id1">[1]</a> (build only)</li>
 <li><a class="reference external" href="http://cython.org">Cython</a> &gt;= 0.19 <a class="footnote-reference" href="#id4" id="id2">[2]</a> (optional and build only)</li>
-<li><a class="reference external" href="https://pypi.org/project/unittest2">unittest2</a> (only required for Python &lt; 2.7)</li>
+<li><a class="reference external" href="https://pypi.org/project/unittest2">unittest2</a> (only required for Python &lt; 3.4)</li>
 </ul>
 <table class="docutils footnote" frame="void" id="id3" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
@@ -148,7 +148,7 @@ project page</p>
 </pre></div>
 </div>
 <p>just make sure that <code class="file docutils literal"><span class="pre">&lt;TARGET_PATH&gt;/lib/pythonX.Y/site-packages</span></code> is in
-the <span class="target" id="index-5"></span><a class="reference external" href="https://docs.python.org/3/using/cmdline.html#envvar-PYTHONPATH" title="(in Python v3.6)"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONPATH</span></code></a>.</p>
+the <span class="target" id="index-5"></span><a class="reference external" href="https://docs.python.org/3/using/cmdline.html#envvar-PYTHONPATH" title="(in Python v3.7)"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONPATH</span></code></a>.</p>
 <p id="index-6"><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> can be installed from sources using the following command:</p>
 <div class="highlight-sh"><div class="highlight"><pre><span></span>$ python setup.py install
 </pre></div>
@@ -264,7 +264,7 @@ amount of data contained in <a class="reference external" href="https://envisat.
 the field</p>
 </li>
 <li><p class="first">the <cite>Raster.data</cite> property is a 2D array exposes data contained in the
-<a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><code class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></code></a> object in form of <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a></p>
+<a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><code class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></code></a> object in form of <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p><a class="reference internal" href="reference.html#epr.Raster.data" title="epr.Raster.data"><code class="xref py py-attr docutils literal"><span class="pre">epr.Raster.data</span></code></a> directly exposes <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><code class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></code></a>
@@ -285,7 +285,7 @@ the <a class="reference external" href="https://www.python.org">Python</a> EPR A
 C API). It is mainly a facility method that allows users to get access
 to band data without creating an intermediate <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><code class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></code></a> object.
 It read a slice of data from the <a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><code class="xref py py-class docutils literal"><span class="pre">epr.Band</span></code></a> and returns it as a
-2D <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a>.</p>
+2D <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a>.</p>
 </li>
 </ul>
 <span class="target" id="index-15"></span></div>
@@ -504,7 +504,7 @@ For this reason the user may need to close and re-open the
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/usermanual.txt"
+      <li><a href="_sources/usermanual.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -534,12 +534,12 @@ For this reason the user may need to close and re-open the
         <li class="right" >
           <a href="index.html" title="ENVISAT Product Reader Python API"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.5 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2011-2018, Antonio Valentino.
-      Last updated on Apr 29, 2018.
+      Last updated on Aug 23, 2018.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
     </div>
   </body>

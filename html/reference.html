@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>API Reference &#8212; PyEPR 0.9.4 documentation</title>
+    <title>API Reference &#8212; PyEPR 0.9.5 documentation</title>
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.4',
+        VERSION:     '0.9.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="gdal_export_example.html" title="GDAL export example"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.5 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -288,7 +288,7 @@ must be either <a class="reference internal" href="#epr.E_TID_UCHAR" title="epr.
 file descriptor.</p>
 <p>This method has no effect if the <a class="reference internal" href="#epr.Product" title="epr.Product"><code class="xref py py-class docutils literal"><span class="pre">Product</span></code></a> is already
 closed. Once the <a class="reference internal" href="#epr.Product" title="epr.Product"><code class="xref py py-class docutils literal"><span class="pre">Product</span></code></a> is closed, any operation on
-it will raise a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.6)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a>.</p>
+it will raise a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a>.</p>
 <p>As a convenience, it is allowed to call this method more than
 once; only the first call, however, will have an effect.</p>
 </dd></dl>
@@ -576,10 +576,10 @@ if an error occurred</td>
 <dl class="method">
 <dt id="epr.Record.print_">
 <code class="descname">print_</code><span class="sig-paren">(</span><span class="optional">[</span><em>ostream</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#epr.Record.print_" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write the <a class="reference internal" href="#epr.Record" title="epr.Record"><code class="xref py py-class docutils literal"><span class="pre">Record</span></code></a> to specified file (default: <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.6)"><code class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></code></a>).</p>
+<dd><p>Write the <a class="reference internal" href="#epr.Record" title="epr.Record"><code class="xref py py-class docutils literal"><span class="pre">Record</span></code></a> to specified file (default: <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></code></a>).</p>
 <p>This method writes formatted contents of the <a class="reference internal" href="#epr.Record" title="epr.Record"><code class="xref py py-class docutils literal"><span class="pre">Record</span></code></a> to
 specified <em>ostream</em> text file or (default) the ASCII output
-is be printed to standard output (<a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.6)"><code class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></code></a>).</p>
+is be printed to standard output (<a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></code></a>).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -599,10 +599,10 @@ instances.</p>
 <dl class="method">
 <dt id="epr.Record.print_element">
 <code class="descname">print_element</code><span class="sig-paren">(</span><em>field_index</em>, <em>element_index</em><span class="optional">[</span>, <em>ostream</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#epr.Record.print_element" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write the specified field element to file (default: <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.6)"><code class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></code></a>).</p>
+<dd><p>Write the specified field element to file (default: <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></code></a>).</p>
 <p>This method writes formatted contents of the specified <a class="reference internal" href="#epr.Field" title="epr.Field"><code class="xref py py-class docutils literal"><span class="pre">Field</span></code></a>
 element to the <em>ostream</em> text file or (default) the ASCII output
-will be printed to standard output (<a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.6)"><code class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></code></a>).</p>
+will be printed to standard output (<a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></code></a>).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -746,13 +746,13 @@ negative. Default: 0.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the data array (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a>) having the type of
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the data array (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a>) having the type of
 the <a class="reference internal" href="#epr.Field" title="epr.Field"><code class="xref py py-class docutils literal"><span class="pre">Field</span></code></a></td>
 </tr>
 </tbody>
 </table>
 <div class="versionchanged">
-<p><span class="versionmodified">Changed in version 0.9: </span>the returned <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a> shares the data buffer with
+<p><span class="versionmodified">Changed in version 0.9: </span>the returned <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a> shares the data buffer with
 the C <code class="xref c c-type docutils literal"><span class="pre">Field</span></code> structure so any change in its contents is
 also reflected to the <code class="xref py py-class docutils literal"><span class="pre">Filed</span></code> object</p>
 </div>
@@ -812,10 +812,10 @@ the <a class="reference internal" href="#epr.Field" title="epr.Field"><code clas
 <dl class="method">
 <dt id="epr.Field.print_">
 <code class="descname">print_</code><span class="sig-paren">(</span><span class="optional">[</span><em>ostream</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#epr.Field.print_" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write the <a class="reference internal" href="#epr.Field" title="epr.Field"><code class="xref py py-class docutils literal"><span class="pre">Field</span></code></a> to specified file (default: <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.6)"><code class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></code></a>).</p>
+<dd><p>Write the <a class="reference internal" href="#epr.Field" title="epr.Field"><code class="xref py py-class docutils literal"><span class="pre">Field</span></code></a> to specified file (default: <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></code></a>).</p>
 <p>This method writes formatted contents of the <a class="reference internal" href="#epr.Field" title="epr.Field"><code class="xref py py-class docutils literal"><span class="pre">Field</span></code></a> to
 specified <em>ostream</em> text file or (default) the ASCII output
-is be printed to standard output (<a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.6)"><code class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></code></a>).</p>
+is be printed to standard output (<a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stdout" title="(in Python v3.7)"><code class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></code></a>).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1201,7 +1201,7 @@ do not have any corresponding function in the C API.</p>
 <dl class="method">
 <dt id="epr.Band.read_as_array">
 <code class="descname">read_as_array</code><span class="sig-paren">(</span><span class="optional">[</span><em>width</em>, <em>height</em>, <em>xoffset</em>, <em>yoffset</em>, <em>xstep</em>, <em>ystep</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#epr.Band.read_as_array" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads the specified source region as an <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a>.</p>
+<dd><p>Reads the specified source region as an <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a>.</p>
 <p>The source-region is a defined part of the whole ENVISAT
 <a class="reference internal" href="#epr.Product" title="epr.Product"><code class="xref py py-class docutils literal"><span class="pre">Product</span></code></a> image, which shall be read into a <a class="reference internal" href="#epr.Raster" title="epr.Raster"><code class="xref py py-class docutils literal"><span class="pre">Raster</span></code></a>.
 In this routine the co-ordinates are specified, where the
@@ -1232,7 +1232,7 @@ reading into the <a class="reference internal" href="#epr.Raster" title="epr.Ras
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a> instance in which data are read</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a> instance in which data are read</p>
 </td>
 </tr>
 </tbody>
@@ -1303,7 +1303,7 @@ do not have a counterpart in the C API.</p>
 <dl class="attribute">
 <dt id="epr.Raster.data">
 <code class="descname">data</code><a class="headerlink" href="#epr.Raster.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Raster data exposed as <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a> object.</p>
+<dd><p>Raster data exposed as <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a> object.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">this property shares the data buffer with the <a class="reference internal" href="#epr.Raster" title="epr.Raster"><code class="xref py py-class docutils literal"><span class="pre">Raster</span></code></a>
@@ -1763,7 +1763,7 @@ into the <a class="reference internal" href="#epr.Raster" title="epr.Raster"><co
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/reference.txt"
+      <li><a href="_sources/reference.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -1793,12 +1793,12 @@ into the <a class="reference internal" href="#epr.Raster" title="epr.Raster"><co
         <li class="right" >
           <a href="gdal_export_example.html" title="GDAL export example"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.5 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2011-2018, Antonio Valentino.
-      Last updated on Apr 29, 2018.
+      Last updated on Aug 23, 2018.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
     </div>
   </body>

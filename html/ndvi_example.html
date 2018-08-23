@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>NDVI computation &#8212; PyEPR 0.9.4 documentation</title>
+    <title>NDVI computation &#8212; PyEPR 0.9.5 documentation</title>
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.4',
+        VERSION:     '0.9.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="bitmask_example.html" title="Exporting bitmasks"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="tutorials.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -285,7 +285,7 @@ following formula:</p>
 </div>
 <p>and uses the <a class="reference internal" href="reference.html#epr.Raster.get_pixel" title="epr.Raster.get_pixel"><code class="xref py py-meth docutils literal"><span class="pre">epr.Raster.get_pixel()</span></code></a> method to access pixel values and
 perform computation.</p>
-<p>The <a class="reference external" href="https://www.python.org">Python</a> <a class="reference external" href="https://docs.python.org/3/library/struct.html#struct.pack" title="(in Python v3.6)"><code class="xref py py-func docutils literal"><span class="pre">struct.pack()</span></code></a> function together with <code class="xref py py-meth docutils literal"><span class="pre">file.write()</span></code> is
+<p>The <a class="reference external" href="https://www.python.org">Python</a> <a class="reference external" href="https://docs.python.org/3/library/struct.html#struct.pack" title="(in Python v3.7)"><code class="xref py py-func docutils literal"><span class="pre">struct.pack()</span></code></a> function together with <code class="xref py py-meth docutils literal"><span class="pre">file.write()</span></code> is
 used to write the NDVI of the pixel n the file in binary format.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>                    <span class="n">out_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="n">ndvi</span><span class="p">))</span>
 </pre></div>
@@ -293,7 +293,7 @@ used to write the NDVI of the pixel n the file in binary format.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>the entire solution is quite not <a class="reference external" href="http://www.cafepy.com/article/be_pythonic">pythonic</a>. As an alternative
-implementation it could be used the <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a> interface of
+implementation it could be used the <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></a> interface of
 <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><code class="xref py py-class docutils literal"><span class="pre">epr.Raster</span></code></a> objects available via the <a class="reference internal" href="reference.html#epr.Raster.data" title="epr.Raster.data"><code class="xref py py-data docutils literal"><span class="pre">epr.Raster.data</span></code></a>
 property. The NDVI index is computed on all pixels altogether using
 vectorized expressions:</p>
@@ -310,7 +310,7 @@ vectorized expressions:</p>
 </pre></div>
 </div>
 <p>Finally data can be saved to file simply using the
-<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.tofile.html#numpy.ndarray.tofile" title="(in NumPy v1.14)"><code class="xref py py-meth docutils literal"><span class="pre">numpy.ndarray.tofile()</span></code></a> method:</p>
+<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.tofile.html#numpy.ndarray.tofile" title="(in NumPy v1.15)"><code class="xref py py-meth docutils literal"><span class="pre">numpy.ndarray.tofile()</span></code></a> method:</p>
 <div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ndvi</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">out_stream</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -332,7 +332,7 @@ vectorized expressions:</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/ndvi_example.txt"
+      <li><a href="_sources/ndvi_example.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -362,13 +362,13 @@ vectorized expressions:</p>
         <li class="right" >
           <a href="bitmask_example.html" title="Exporting bitmasks"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="tutorials.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2011-2018, Antonio Valentino.
-      Last updated on Apr 29, 2018.
+      Last updated on Aug 23, 2018.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
     </div>
   </body>

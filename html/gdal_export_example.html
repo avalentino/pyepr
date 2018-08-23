@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>GDAL export example &#8212; PyEPR 0.9.4 documentation</title>
+    <title>GDAL export example &#8212; PyEPR 0.9.5 documentation</title>
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.4',
+        VERSION:     '0.9.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="update_example.html" title="Update Field elements"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="tutorials.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -51,18 +51,18 @@
           <div class="body" role="main">
             
   <div class="section" id="gdal-export-example">
-<h1><a class="reference external" href="http://www.gdal.org">GDAL</a> export example<a class="headerlink" href="#gdal-export-example" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference external" href="https://www.gdal.org">GDAL</a> export example<a class="headerlink" href="#gdal-export-example" title="Permalink to this headline">¶</a></h1>
 <p id="index-0">This tutorial explains how to use <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> to generate a file in GDAL Virtual
 Format (VRT) that can be used to access data with the powerful and popular
-<a class="reference external" href="http://www.gdal.org">GDAL</a> library.
-<a class="reference external" href="http://www.gdal.org">GDAL</a> already has support for <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> products but this example is
+<a class="reference external" href="https://www.gdal.org">GDAL</a> library.
+<a class="reference external" href="https://www.gdal.org">GDAL</a> already has support for <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> products but this example is
 interesting for two reasons:</p>
 <ul class="simple">
 <li>it exploits some low level feature (like e.g. offset management) that are
 rarely used but that can be very useful in some cases</li>
 <li>the generated VRT file uses raw raster access and it can be opened in
 update mode to modify the <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> product data.
-This feature is not supported by the native <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> driver of the <a class="reference external" href="http://www.gdal.org">GDAL</a>
+This feature is not supported by the native <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> driver of the <a class="reference external" href="https://www.gdal.org">GDAL</a>
 library</li>
 </ul>
 <div class="section" id="export-gdalvrt-module">
@@ -75,7 +75,7 @@ It is organized so that it can also be imported as a module in any program.</p>
 <dt id="export_gdalvrt.epr2gdal_band">
 <code class="descclassname">export_gdalvrt.</code><code class="descname">epr2gdal_band</code><span class="sig-paren">(</span><em>band</em>, <em>vrt</em><span class="sig-paren">)</span><a class="headerlink" href="#export_gdalvrt.epr2gdal_band" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes in input an <a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><code class="xref py py-class docutils literal"><span class="pre">epr.Band</span></code></a> object and a VRT dataset
-and add a <a class="reference external" href="http://www.gdal.org">GDAL</a> band to the VRT dataset</p>
+and add a <a class="reference external" href="https://www.gdal.org">GDAL</a> band to the VRT dataset</p>
 </dd></dl>
 
 <dl class="function">
@@ -119,8 +119,8 @@ mapping between EPR and GDAL data type identifiers.</p>
 <div class="section" id="generating-vrtrawrasterbands">
 <span id="index-1"></span><h2>Generating <em>VRTRawRasterBand</em>s<a class="headerlink" href="#generating-vrtrawrasterbands" title="Permalink to this headline">¶</a></h2>
 <p>The core of the example is the part of the code in the <a class="reference internal" href="#export_gdalvrt.epr2gdal_band" title="export_gdalvrt.epr2gdal_band"><code class="xref py py-func docutils literal"><span class="pre">epr2gdal_band()</span></code></a>
-function that generates the <a class="reference external" href="http://www.gdal.org">GDAL</a> <em>VRTRawRasterBand</em>.
-It is a description of a raster file that the <a class="reference external" href="http://www.gdal.org">GDAL</a> library uses for low level
+function that generates the <a class="reference external" href="https://www.gdal.org">GDAL</a> <em>VRTRawRasterBand</em>.
+It is a description of a raster file that the <a class="reference external" href="https://www.gdal.org">GDAL</a> library uses for low level
 data access.
 Of course the entire machinery works because data in <a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><code class="xref py py-class docutils literal"><span class="pre">epr.Band</span></code></a>s and
 <a class="reference internal" href="reference.html#epr.Dataset" title="epr.Dataset"><code class="xref py py-class docutils literal"><span class="pre">epr.Dataset</span></code></a>s of <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> products are stored as contiguous
@@ -193,7 +193,7 @@ It is set using the <a class="reference internal" href="reference.html#epr.Field
 </pre></div>
 </div>
 </div></blockquote>
-<p>The band size in lines and columns of the <a class="reference external" href="http://www.gdal.org">GDAL</a> bands is fixed at <a class="reference external" href="http://www.gdal.org">GDAL</a>
+<p>The band size in lines and columns of the <a class="reference external" href="https://www.gdal.org">GDAL</a> bands is fixed at <a class="reference external" href="https://www.gdal.org">GDAL</a>
 dataset level when it is created:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>        <span class="n">gdal_ds</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">vrt</span><span class="p">,</span> <span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">gdal_ds</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -220,8 +220,8 @@ doubled and an additional offset (one pixel) must be added to the
 <a class="reference internal" href="reference.html#epr.Dataset" title="epr.Dataset"><code class="xref py py-class docutils literal"><span class="pre">epr.Dataset</span></code></a> of ASAR IMS <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><code class="xref py py-class docutils literal"><span class="pre">epr.Product</span></code></a>s, are associated
 to two distinct <a class="reference internal" href="reference.html#epr.Band" title="epr.Band"><code class="xref py py-class docutils literal"><span class="pre">epr.Band</span></code></a>s containing the real (I) and the
 imaginary (Q) component respectively.</p>
-<p><a class="reference external" href="http://www.gdal.org">GDAL</a>, instead, supports complex data types, so it is possible to map a
-complex <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> <a class="reference internal" href="reference.html#epr.Dataset" title="epr.Dataset"><code class="xref py py-class docutils literal"><span class="pre">epr.Dataset</span></code></a> onto a single <a class="reference external" href="http://www.gdal.org">GDAL</a> bands with
+<p><a class="reference external" href="https://www.gdal.org">GDAL</a>, instead, supports complex data types, so it is possible to map a
+complex <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> <a class="reference internal" href="reference.html#epr.Dataset" title="epr.Dataset"><code class="xref py py-class docutils literal"><span class="pre">epr.Dataset</span></code></a> onto a single <a class="reference external" href="https://www.gdal.org">GDAL</a> bands with
 complex data type.</p>
 <p class="last">This case is not handled in the example.</p>
 </div>
@@ -248,7 +248,7 @@ each <a class="reference internal" href="reference.html#epr.Band" title="epr.Ban
     <span class="n">gdal_band</span><span class="o">.</span><span class="n">SetMetadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Metadata are also stored at <a class="reference external" href="http://www.gdal.org">GDAL</a> dataset level by the <a class="reference internal" href="#export_gdalvrt.epr2gdal" title="export_gdalvrt.epr2gdal"><code class="xref py py-func docutils literal"><span class="pre">epr2gdal()</span></code></a>
+<p>Metadata are also stored at <a class="reference external" href="https://www.gdal.org">GDAL</a> dataset level by the <a class="reference internal" href="#export_gdalvrt.epr2gdal" title="export_gdalvrt.epr2gdal"><code class="xref py py-func docutils literal"><span class="pre">epr2gdal()</span></code></a>
 function:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;id_string&#39;</span><span class="p">:</span> <span class="n">product</span><span class="o">.</span><span class="n">id_string</span><span class="p">,</span>
@@ -261,7 +261,7 @@ function:</p>
 </pre></div>
 </div>
 <p id="index-5">The  <a class="reference internal" href="#export_gdalvrt.epr2gdal" title="export_gdalvrt.epr2gdal"><code class="xref py py-func docutils literal"><span class="pre">epr2gdal()</span></code></a> function also stores the contents of the <em>MPH</em> and the
-<em>SPH</em> records as <a class="reference external" href="http://www.gdal.org">GDAL</a> dataset matadata in custom domains:</p>
+<em>SPH</em> records as <a class="reference external" href="https://www.gdal.org">GDAL</a> dataset matadata in custom domains:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>    <span class="n">mph</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_mph</span><span class="p">()</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">mph</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; = &#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
     <span class="n">gdal_ds</span><span class="o">.</span><span class="n">SetMetadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="s1">&#39;MPH&#39;</span><span class="p">)</span>
@@ -490,7 +490,7 @@ function:</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/gdal_export_example.txt"
+      <li><a href="_sources/gdal_export_example.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -520,13 +520,13 @@ function:</p>
         <li class="right" >
           <a href="update_example.html" title="Update Field elements"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 0.9.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="tutorials.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2011-2018, Antonio Valentino.
-      Last updated on Apr 29, 2018.
+      Last updated on Aug 23, 2018.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
     </div>
   </body>
