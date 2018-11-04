@@ -195,6 +195,48 @@ _MODEL_MAP = {
 }
 
 
+ctypedef fused T:
+    np.uint8_t
+    np.int8_t
+    np.uint16_t
+    np.int16_t
+    np.uint32_t
+    np.int32_t
+    np.float32_t
+    np.float64_t
+    np.npy_byte
+
+
+cdef const void* _view_to_ptr(T[:] a):
+    return &a[0]
+
+
+cdef const void* _to_ptr(np.ndarray a, EPR_DataTypeId etype):
+    cdef const void *p = NULL
+    if etype == e_tid_uchar:
+        p = _view_to_ptr[np.uint8_t](a)
+    elif etype == e_tid_char:
+        p = _view_to_ptr[np.int8_t](a)
+    elif etype == e_tid_ushort:
+        p =  _view_to_ptr[np.uint16_t](a)
+    elif etype == e_tid_short:
+        p = _view_to_ptr[np.int16_t](a)
+    elif etype == e_tid_uint:
+        p = _view_to_ptr[np.uint32_t](a)
+    elif etype == e_tid_int:
+        p = _view_to_ptr[np.int32_t](a)
+    elif etype == e_tid_float:
+        p = _view_to_ptr[np.float32_t](a)
+    elif etype == e_tid_double:
+        p = _view_to_ptr[np.float64_t](a)
+    elif etype == e_tid_string:
+        p = _view_to_ptr[np.npy_byte](a)
+    else:
+        raise ValueError('unexpected type ID: %d' % etype)
+
+    return p
+
+
 class EPRError(Exception):
     """EPR API error."""
 
@@ -837,10 +879,11 @@ cdef class Field(EprObject):
         cdef long field_offset
         cdef char* buf
         cdef EPR_DataTypeId etype = epr_get_field_type(self._ptr)
+        cdef const void* p = NULL
 
         dtype = _DTYPE_MAP[etype]
 
-        elems = elems.astype(dtype)
+        elems = np.ascontiguousarray(elems, dtype=dtype)
 
         record = self._parent
         dataset = record._parent
@@ -853,16 +896,18 @@ cdef class Field(EprObject):
         field_offset = index * elemsize
         file_offset = self._get_offset(absolute=1)
         buf = <char*>self._ptr.elems + field_offset
+        p = _to_ptr(elems, etype)
 
-        cstring.memcpy(<void*>buf, <const void*>elems.data, datasize)
+        with nogil:
+            cstring.memcpy(<void*>buf, p, datasize)
 
         if SWAP_BYTES:
             elems = elems.byteswap()
+            p = _to_ptr(elems, etype)
 
         with nogil:
             stdio.fseek(istream, file_offset + field_offset, stdio.SEEK_SET)
-            ret = stdio.fwrite(elems.data, elemsize, nelems,
-                               product._ptr.istream)
+            ret = stdio.fwrite(p, elemsize, nelems, product._ptr.istream)
         if ret != nelems:
             raise IOError(
                 'write error: %d of %d bytes written' % (ret, datasize))

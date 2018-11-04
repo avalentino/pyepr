@@ -4,7 +4,7 @@ Change history
 PyEPR 0.9.6 (in development)
 ----------------------------
 
-* TBW
+* Do not use deprecated numpy API
 
 
 PyEPR 0.9.5 (23/08/2018)

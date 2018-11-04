@@ -155,13 +155,14 @@ def get_extension():
         'epr',
         sources=[os.path.join('src', 'epr.pyx')],
         # libraries=['m'],
-        # define_macros=[('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION'),],
+        define_macros=[('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION'),],
         eprsrcdir=eprsrcdir,
     )
 
     # @NOTE: uses the HAVE_CYTHON global variable
     if HAVE_CYTHON:
-        extlist = cythonize([ext])
+        extlist = cythonize(
+            [ext], compiler_directives=dict(language_level='2'))
         ext = extlist[0]
     else:
         ext.convert_pyx_sources_to_lang()
