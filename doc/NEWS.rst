@@ -4,14 +4,16 @@ Change history
 PyEPR 0.9.6 (in development)
 ----------------------------
 
-* Do not use deprecated numpy API
+* Do not use deprecated numpy_ API
+* Set cython_ 'language_level` explicitly: to '2' if cython_ < v0.29,
+  to '3str' otherwise
 
 
 PyEPR 0.9.5 (23/08/2018)
 ------------------------
 
-* Fix compatibility with numpy >= 1.14: :func:`np.fromstring`
-  is deprecated.
+* Fix compatibility with numpy_ >= 1.14: :func:`np.fromstring`
+  is deprecated
 * Update the pypi sidebar in the documentation
 * Use `.rst` extension for doc source files
 * Fix setup script to not use system libs if epr-api sources are available

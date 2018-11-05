@@ -57,15 +57,19 @@ except ImportError:
     from distutils.core import setup
     from distutils.extension import Extension
     HAVE_SETUPTOOLS = False
-print('HAVE_SETUPTOOLS: {0}'.format(HAVE_SETUPTOOLS))
+print('HAVE_SETUPTOOLS: {}'.format(HAVE_SETUPTOOLS))
 
 
 try:
     from Cython.Build import cythonize
+    from Cython import __version__ as CYTHON_VERSION
     HAVE_CYTHON = True
 except ImportError:
     HAVE_CYTHON = False
-print('HAVE_CYTHON: {0}'.format(HAVE_CYTHON))
+    CYTHON_VERSION = None
+print('HAVE_CYTHON: {}'.format(HAVE_CYTHON))
+if HAVE_CYTHON:
+    print('CYTHON_VERSION: {}'.format(CYTHON_VERSION))
 
 
 # @COMPATIBILITY: Extension is an old style class in Python 2
@@ -151,18 +155,33 @@ def get_extension():
             sys.argv.remove(arg)
             break
 
+    define_macros = []
+
+    # @NOTE: uses the CYTHON_VERSION global variable
+    if CYTHON_VERSION >= '0.29':
+        define_macros.append(
+            ('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION'),
+        )
+
     ext = PyEprExtension(
         'epr',
         sources=[os.path.join('src', 'epr.pyx')],
         # libraries=['m'],
-        define_macros=[('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION'),],
+        define_macros=define_macros,
         eprsrcdir=eprsrcdir,
     )
+
+    # @NOTE: uses the CYTHON_VERSION global variable
+    if CYTHON_VERSION >= '0.29':
+        language_level = '3str'
+    else:
+        language_level = '2'
+    print('CYTHON_LANGUAGE_LEVEL: {}'.format(language_level))
 
     # @NOTE: uses the HAVE_CYTHON global variable
     if HAVE_CYTHON:
         extlist = cythonize(
-            [ext], compiler_directives=dict(language_level='2'))
+            [ext], compiler_directives=dict(language_level=language_level))
         ext = extlist[0]
     else:
         ext.convert_pyx_sources_to_lang()
