@@ -69,6 +69,7 @@ np.import_array()
 
 import os
 import sys
+import atexit
 from collections import namedtuple
 
 import numpy as np
@@ -218,7 +219,7 @@ cdef const void* _to_ptr(np.ndarray a, EPR_DataTypeId etype):
     elif etype == e_tid_char:
         p = _view_to_ptr[np.int8_t](a)
     elif etype == e_tid_ushort:
-        p =  _view_to_ptr[np.uint16_t](a)
+        p = _view_to_ptr[np.uint16_t](a)
     elif etype == e_tid_short:
         p = _view_to_ptr[np.int16_t](a)
     elif etype == e_tid_uint:
@@ -317,11 +318,11 @@ cdef class _CLib:
         cdef bytes msg
 
         # @TODO: check
-        #if EPR_C_API_VERSION != '2.2':
-        #    raise ImportError('C library version not supported: "%s"' %
-        #                                                    EPR_C_API_VERSION)
+        # if EPR_C_API_VERSION != '2.2':
+        #     raise ImportError(
+        #         'C library version not supported: "%s"' % EPR_C_API_VERSION)
 
-        #if epr_init_api(e_log_warning, epr_log_message, NULL):
+        # if epr_init_api(e_log_warning, epr_log_message, NULL):
         if epr_init_api(e_log_warning, NULL, NULL):
             msg = <char*>epr_get_last_err_message()
             epr_clear_err()
@@ -430,7 +431,7 @@ cdef class DSD(EprObject):
         if isinstance(self, Dataset):
             (<Dataset>self._parent).check_closed_product()
         else:
-            #elif isinstance(self, Product):
+            # elif isinstance(self, Product):
             (<Product>self._parent).check_closed_product()
 
     property index:
@@ -602,7 +603,6 @@ cdef class Field(EprObject):
 
         return offset
 
-
     def print_(self, ostream=None):
         """print_(self, ostream=None)
 
@@ -631,9 +631,9 @@ cdef class Field(EprObject):
 
         pyepr_check_errors()
 
-    #def dump_field(self):
-    #    epr_dump_field(self._ptr)
-    #    pyepr_check_errors()
+    # def dump_field(self):
+    #     epr_dump_field(self._ptr)
+    #     pyepr_check_errors()
 
     def get_unit(self):
         """get_unit(self)
@@ -746,8 +746,8 @@ cdef class Field(EprObject):
             if index != 0:
                 raise ValueError('invalid index: %d' % index)
             val = <char*>epr_get_field_elem_as_str(self._ptr)
-        #elif etype == e_tid_spare:
-        #    val = epr_get_field_elem_as_str(self._ptr)
+        # elif etype == e_tid_spare:
+        #     val = epr_get_field_elem_as_str(self._ptr)
         elif etype == e_tid_time:
             if index != 0:
                 raise ValueError('invalid index: %d' % index)
@@ -852,15 +852,15 @@ cdef class Field(EprObject):
             buf = <char*>epr_get_field_elem_as_str(self._ptr)
             if buf is NULL:
                 pyepr_null_ptr_error(msg)
-        #elif etype == e_tid_unknown:
-        #    pass
-        #elif etype = e_tid_spare:
-        #    pass
+        # elif etype == e_tid_unknown:
+        #     pass
+        # elif etype = e_tid_spare:
+        #     pass
         else:
             raise ValueError('invalid field type')
 
         out = np.PyArray_SimpleNewFromData(nd, shape, dtype, <void*>buf)
-        #np.PyArray_CLEARFLAG(out, NPY_ARRAY_WRITEABLE)  # new in numpy 1.7
+        # np.PyArray_CLEARFLAG(out, NPY_ARRAY_WRITEABLE)  # new in numpy 1.7
         # Make the ndarray keep a reference to this object
         np.set_array_base(out, self)
 
@@ -984,7 +984,6 @@ cdef class Field(EprObject):
             cdef EPR_FieldInfo* info = <EPR_FieldInfo*>self._ptr.info
             return info.tot_size
 
-
     # --- high level interface ------------------------------------------------
     def __repr__(self):
         return 'epr.Field("%s") %d %s elements' % (self.get_name(),
@@ -1066,7 +1065,7 @@ cdef class Field(EprObject):
                 n = epr_get_data_type_size(epr_get_field_type(p1))
                 if n != 0:
                     n *= epr_get_field_num_elems(p1)
-                #pyepr_check_errors()
+                # pyepr_check_errors()
                 if n <= 0:
                     # @TODO: check
                     return True
@@ -1098,7 +1097,7 @@ cdef class Field(EprObject):
                 n = epr_get_data_type_size(epr_get_field_type(p1))
                 if n != 0:
                     n *= epr_get_field_num_elems(p1)
-                #pyepr_check_errors()
+                # pyepr_check_errors()
                 if n <= 0:
                     # @TODO: check
                     return False
@@ -1172,14 +1171,14 @@ cdef class Record(EprObject):
         if isinstance(self._parent, Dataset):
             (<Dataset>self._parent).check_closed_product()
         else:
-            #elif isinstance(self._parent, Product):
+            # elif isinstance(self._parent, Product):
             (<Product>self._parent).check_closed_product()
 
     cdef inline _check_write_mode(self):
         if isinstance(self._parent, Dataset):
             (<Dataset>self._parent)._check_write_mode()
         else:
-            #elif isinstance(self._parent, Product):
+            # elif isinstance(self._parent, Product):
             (<Product>self._parent)._check_write_mode()
 
     cdef inline uint _get_offset(self, bint absolure=0):
@@ -1536,7 +1535,7 @@ cdef class Raster(EprObject):
         """
 
         if (x < 0 or <uint>x >= self._ptr.raster_width or
-            y < 0  or <uint>y >= self._ptr.raster_height):
+            y < 0 or <uint>y >= self._ptr.raster_height):
             raise ValueError('index out of range: x=%d, y=%d' % (x, y))
 
         cdef EPR_EDataTypeId dtype = self._ptr.data_type
@@ -2176,7 +2175,6 @@ cdef class Band(EprObject):
             self.check_closed_product()
             return self._ptr.magic
 
-
     property _field_index:
         """Index or the field (within the dataset) containing the raw
         data used to create the band's pixel values.
@@ -2515,8 +2513,8 @@ cdef class Product(EprObject):
         """
 
         if self._ptr is not NULL:
-            #if '+' in self.mode:
-            #    stdio.fflush(self._ptr.istream)
+            # if '+' in self.mode:
+            #     stdio.fflush(self._ptr.istream)
             epr_close_product(self._ptr)
             pyepr_check_errors()
             self._ptr = NULL
@@ -2925,8 +2923,8 @@ cdef class Product(EprObject):
         return [self.get_band_at(idx) for idx in range(num_bands)]
 
     # @TODO: iter on both datasets and bands (??)
-    #def __iter__(self):
-    #    return itertools.chain((self.datasets(), self.bands()))
+    # def __iter__(self):
+    #     return itertools.chain((self.datasets(), self.bands()))
 
     def __repr__(self):
         return 'epr.Product(%s) %d datasets, %d bands' % (self.id_string,
@@ -2983,9 +2981,6 @@ def open(filename, mode='rb'):
 
 # library initialization/finalization
 _EPR_C_LIB = _CLib.__new__(_CLib)
-
-
-import atexit
 
 
 @atexit.register
