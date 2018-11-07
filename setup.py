@@ -158,7 +158,7 @@ def get_extension():
     define_macros = []
 
     # @NOTE: uses the CYTHON_VERSION global variable
-    if CYTHON_VERSION >= '0.29':
+    if HAVE_CYTHON and CYTHON_VERSION >= '0.29':
         define_macros.append(
             ('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION'),
         )
@@ -171,15 +171,14 @@ def get_extension():
         eprsrcdir=eprsrcdir,
     )
 
-    # @NOTE: uses the CYTHON_VERSION global variable
-    if CYTHON_VERSION >= '0.29':
-        language_level = '3str'
-    else:
-        language_level = '2'
-    print('CYTHON_LANGUAGE_LEVEL: {0}'.format(language_level))
-
-    # @NOTE: uses the HAVE_CYTHON global variable
+    # @NOTE: uses the HAVE_CYTHON and CYTHON_VERSION global variables
     if HAVE_CYTHON:
+        if CYTHON_VERSION >= '0.29':
+            language_level = '3str'
+        else:
+            language_level = '2'
+        print('CYTHON_LANGUAGE_LEVEL: {0}'.format(language_level))
+
         extlist = cythonize(
             [ext], compiler_directives=dict(language_level=language_level))
         ext = extlist[0]
