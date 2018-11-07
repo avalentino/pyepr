@@ -26,6 +26,7 @@ import gzip
 import shutil
 import numbers
 import operator
+import platform
 import tempfile
 import functools
 import contextlib
@@ -2915,6 +2916,9 @@ class TestLibVersion(unittest.TestCase):
         self.assertTrue(isinstance(epr.EPR_C_API_VERSION, str))
 
 
+# only PyPy 3 seems to be affected
+@unittest.skipIf(platform.python_implementation() == 'PyPy',
+                 'skip memory leak check on PyPy')
 @unittest.skipIf(resource is None, '"resource" module not available')
 class TestMemoryLeaks(unittest.TestCase):
     # See gh-10 (https://github.com/avalentino/pyepr/issues/10)
