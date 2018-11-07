@@ -57,7 +57,7 @@ except ImportError:
     from distutils.core import setup
     from distutils.extension import Extension
     HAVE_SETUPTOOLS = False
-print('HAVE_SETUPTOOLS: {}'.format(HAVE_SETUPTOOLS))
+print('HAVE_SETUPTOOLS: {0}'.format(HAVE_SETUPTOOLS))
 
 
 try:
@@ -67,9 +67,9 @@ try:
 except ImportError:
     HAVE_CYTHON = False
     CYTHON_VERSION = None
-print('HAVE_CYTHON: {}'.format(HAVE_CYTHON))
+print('HAVE_CYTHON: {0}'.format(HAVE_CYTHON))
 if HAVE_CYTHON:
-    print('CYTHON_VERSION: {}'.format(CYTHON_VERSION))
+    print('CYTHON_VERSION: {0}'.format(CYTHON_VERSION))
 
 
 # @COMPATIBILITY: Extension is an old style class in Python 2
@@ -176,7 +176,7 @@ def get_extension():
         language_level = '3str'
     else:
         language_level = '2'
-    print('CYTHON_LANGUAGE_LEVEL: {}'.format(language_level))
+    print('CYTHON_LANGUAGE_LEVEL: {0}'.format(language_level))
 
     # @NOTE: uses the HAVE_CYTHON global variable
     if HAVE_CYTHON:
