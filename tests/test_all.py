@@ -521,9 +521,9 @@ class TestProductHighLevelAPI(unittest.TestCase):
     #     pass
 
     def test_repr(self):
-        pattern = ('epr\.Product\((?P<name>\w+)\) '
-                   '(?P<n_datasets>\d+) datasets, '
-                   '(?P<n_bands>\d+) bands')
+        pattern = (r'epr\.Product\((?P<name>\w+)\) '
+                   r'(?P<n_datasets>\d+) datasets, '
+                   r'(?P<n_bands>\d+) bands')
 
         mobj = re.match(pattern, repr(self.product))
         self.assertNotEqual(mobj, None)
@@ -749,7 +749,7 @@ class TestDatasetHighLevelAPI(unittest.TestCase):
         self.assertEqual(index, self.dataset.get_num_records())
 
     def test_repr(self):
-        pattern = 'epr\.Dataset\((?P<name>\w+)\) (?P<num>\d+) records'
+        pattern = r'epr\.Dataset\((?P<name>\w+)\) (?P<num>\d+) records'
         mobj = re.match(pattern, repr(self.dataset))
         self.assertNotEqual(mobj, None)
         self.assertEqual(mobj.group('name'), self.dataset.get_name())
@@ -1322,8 +1322,8 @@ class TestBandHighLevelAPI(unittest.TestCase):
         self.product.close()
 
     def test_repr(self):
-        pattern = ('epr.Band\((?P<name>\w+)\) of '
-                   'epr.Product\((?P<product_id>\w+)\)')
+        pattern = (r'epr.Band\((?P<name>\w+)\) of '
+                   r'epr.Product\((?P<product_id>\w+)\)')
         for band in self.product.bands():
             mobj = re.match(pattern, repr(band))
             self.assertNotEqual(mobj, None)
@@ -1643,8 +1643,8 @@ class TestRasterHighLevelAPI(unittest.TestCase):
                                         self.RASTER_WIDTH, self.RASTER_HEIGHT)
 
     def test_repr(self):
-        pattern = ('<epr.Raster object at 0x\w+> (?P<data_type>\w+) '
-                   '\((?P<lines>\d+)L x (?P<pixels>\d+)P\)')
+        pattern = (r'<epr.Raster object at 0x\w+> (?P<data_type>\w+) '
+                   r'\((?P<lines>\d+)L x (?P<pixels>\d+)P\)')
         mobj = re.match(pattern, repr(self.raster))
         self.assertNotEqual(mobj, None)
         self.assertEqual(mobj.group('data_type'),
@@ -1866,7 +1866,7 @@ class TestMultipleRecordsHighLevelAPI(unittest.TestCase):
         self.product.close()
 
     def test_repr(self):
-        pattern = '<epr\.Record object at 0x\w+> (?P<num>\d+) fields'
+        pattern = r'<epr\.Record object at 0x\w+> (?P<num>\d+) fields'
         for record in self.dataset:
             mobj = re.match(pattern, repr(record))
             self.assertNotEqual(mobj, None)
@@ -2430,8 +2430,8 @@ class TestFieldHighLevelAPI(unittest.TestCase):
         self.record = dataset.read_record(0)
 
     def test_repr(self):
-        pattern = ('epr\.Field\("(?P<name>.+)"\) (?P<num>\d+) '
-                   '(?P<type>\w+) elements')
+        pattern = (r'epr\.Field\("(?P<name>.+)"\) (?P<num>\d+) '
+                   r'(?P<type>\w+) elements')
         for field in self.record:
             mobj = re.match(pattern, repr(field))
             self.assertNotEqual(mobj, None)
@@ -2679,7 +2679,7 @@ class TestDsdHighLevelAPI(unittest.TestCase):
         self.dsd = product.get_dsd_at(0)
 
     def test_repr(self):
-        pattern = 'epr\.DSD\("(?P<name>.+)"\)'
+        pattern = r'epr\.DSD\("(?P<name>.+)"\)'
         mobj = re.match(pattern, repr(self.dsd))
         self.assertNotEqual(mobj, None)
         self.assertEqual(mobj.group('name'), self.dsd.ds_name)
