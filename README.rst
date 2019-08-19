@@ -38,9 +38,9 @@ correctly installed and configured:
 * Python2_ >= 2.6 or Python3_ >= 3.1 (including PyPy_)
 * numpy_ >= 1.5.0
 * `EPR API`_ >= 2.2 (optional, since PyEPR 0.7 the source tar-ball comes
-  with a copy of the PER C API sources)
+  with a copy of the EPR C API sources)
 * a reasonably updated C compiler (build only)
-* Cython_ >= 0.15 (build only)
+* Cython_ >= 0.19 (build only)
 * unittest2_ (only required for Python < 3.4)
 
 .. _Python2: Python_
@@ -49,15 +49,15 @@ correctly installed and configured:
 .. _numpy: https://www.numpy.org
 .. _gcc: http://gcc.gnu.org
 .. _Cython: https://cython.org
-.. _unittest2: https://pypi.python.org/pypi/unittest2
+.. _unittest2: https://pypi.org/project/unittest2
 
 
 Download
 ========
 
-Official source tarballs can be downloaded form PyPi_:
+Official source tar-balls can be downloaded form PyPi_:
 
-    https://pypi.python.org/pypi/pyepr
+    https://pypi.org/project/pyepr
 
 The source code of the development versions is available on the GitHub_
 project page
@@ -68,9 +68,9 @@ To clone the git_ repository the following command can be used::
 
     $ git clone https://github.com/avalentino/pyepr.git
 
-.. _PyPi: https://pypi.python.org/pypi
+.. _PyPi: https://pypi.org
 .. _GitHub: https://github.com
-.. _git: http://git-scm.com
+.. _git: https://git-scm.com
 
 
 Installation
