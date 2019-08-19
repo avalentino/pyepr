@@ -225,7 +225,7 @@ Complete listing
    :language: python
 
 
-.. _GDAL: https://www.gdal.org
+.. _GDAL: https://gdal.org
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _ENVISAT: https://envisat.esa.int
 

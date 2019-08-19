@@ -135,8 +135,8 @@ PyEPR 0.9 (27/02/2015)
 
 .. _pip: https://pip.pypa.io
 .. _setuptools: https://bitbucket.org/pypa/setuptools
-.. _numpy: http://www.numpy.org
-.. _Windows: http://windows.microsoft.com
+.. _numpy: https://www.numpy.org
+.. _Windows: https://windows.microsoft.com
 .. _AppVeyor: https://www.appveyor.com
 .. _PyPI: https://pypi.org/project/pyepr
 
@@ -290,7 +290,7 @@ PyEPR 0.5 (25/04/2011)
 
 .. _`Python 3`: https://docs.python.org/3
 .. _intersphinx: http://www.sphinx-doc.org/en/master/ext/intersphinx.html
-.. _cython: http://cython.org
+.. _cython: https://cython.org
 
 
 PyEPR 0.4 (10/04/2011)

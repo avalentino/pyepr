@@ -20,7 +20,7 @@ ESA_ web site.
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _ENVISAT: https://envisat.esa.int
 .. _ASAR: https://earth.esa.int/handbooks/asar/CNTR.html
-.. _Jupyter: http://jupyter.org/
+.. _Jupyter: https://jupyter.org/
 .. _matplotlib: https://matplotlib.org
 .. _`free sample`: https://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz
 .. _ESA: https://earth.esa.int
@@ -43,7 +43,7 @@ available classes and functions::
 
     Jupyter console 5.2.0
 
-    Python 3.6.5 (default, Apr  1 2018, 05:46:30) 
+    Python 3.6.5 (default, Apr  1 2018, 05:46:30)
     Type "copyright", "credits" or "license" for more information.
 
     IPython 5.5.0 -- An enhanced Interactive Python.

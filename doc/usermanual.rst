@@ -82,9 +82,9 @@ correctly installed and configured:
 .. _Python2: Python_
 .. _Python3: Python_
 .. _PyPy: http://pypy.org
-.. _numpy: http://www.numpy.org
+.. _numpy: https://www.numpy.org
 .. _gcc: http://gcc.gnu.org
-.. _Cython: http://cython.org
+.. _Cython: https://cython.org
 .. _unittest2: https://pypi.org/project/unittest2
 
 
