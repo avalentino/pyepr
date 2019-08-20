@@ -17,10 +17,14 @@ environment:
     # NUMPY_VERSION: "stable"
 
   matrix:
-      - PYTHON_VERSION: "2.7"
-      - PYTHON_VERSION: "3.5"
-      - PYTHON_VERSION: "3.6"
-      - PYTHON_VERSION: "3.7"
+    - PYTHON: "C:\\Miniconda-x64"
+      PYTHON_VERSION: "2.7"
+
+    - PYTHON: "C:\\Miniconda36-x64"
+      PYTHON_VERSION: "3.6"
+
+    - PYTHON: "C:\\Miniconda37-x64"
+      PYTHON_VERSION: "3.7"
 
 platform:
     -x64
