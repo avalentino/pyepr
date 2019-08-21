@@ -74,6 +74,7 @@ clean:
 	$(RM) *.c *.o *.html .coverage coverage.xml
 	$(RM) src/epr.html
 	$(RM) -r htmlcov
+	$(RM) epr.p*        # workaround for Cython.Coverage bug #1985
 
 distclean: clean
 	$(RM) $(TEST_DATSET)
@@ -88,6 +89,7 @@ ext-coverage: src/epr.pyx
 	env PYEPR_COVERAGE=TRUE $(PYTHON) setup.py build_ext --inplace
 
 coverage: clean ext-coverage data
+	ln -s src/epr.p* .  # workaround for Cython.Coverage bug #1985
 	env PYEPR_COVERAGE=TRUE PYTHONPATH=. \
 		$(PYTHON) -m coverage run --branch --source=epr setup.py test
 	env PYTHONPATH=. $(PYTHON) -m coverage xml -i
