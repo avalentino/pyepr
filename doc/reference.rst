@@ -192,7 +192,6 @@ Product
             "(", ")", "NOT", "AND", "OR". Valid bit-mask expression are
             for example ``flags.LAND OR flags.CLOUD`` or
             ``NOT flags.WATER AND flags.TURBID_S``
-
       :param xoffset:
             across-track co-ordinate in pixel co-ordinates (zero-based)
             of the upper right corner of the source-region
@@ -206,9 +205,9 @@ Product
             zero for success, an error code otherwise
 
       .. seealso:: :func:`create_bitmask_raster`.
+      
 
-
-    .. method:: close
+   .. method:: close
 
        Closes the :class:`Product` product and free the underlying
        file descriptor.
@@ -221,7 +220,7 @@ Product
        once; only the first call, however, will have an effect.
 
 
-    .. method:: flush()
+   .. method:: flush()
 
        Flush the file stream.
 
