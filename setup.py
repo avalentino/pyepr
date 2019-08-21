@@ -258,8 +258,8 @@ def setup_package():
 
     if HAVE_SETUPTOOLS:
         config['test_suite'] = get_collector()
-        config.setdefault('setup_requires', []).append('numpy>=1.5')
-        config.setdefault('install_requires', []).append('numpy>=1.5')
+        config.setdefault('setup_requires', []).append('numpy>=1.7')
+        config.setdefault('install_requires', []).append('numpy>=1.7')
         if ext.setup_requires_cython:
             config['setup_requires'].append('cython>=0.19')
 
