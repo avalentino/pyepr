@@ -205,7 +205,7 @@ Product
             zero for success, an error code otherwise
 
       .. seealso:: :func:`create_bitmask_raster`.
-      
+
 
    .. method:: close
 
@@ -1349,7 +1349,7 @@ EPRError
 
       :param message:
             error message
-      :pram code:
+      :param code:
             EPR error code
 
 
