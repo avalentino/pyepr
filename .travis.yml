@@ -23,7 +23,8 @@ install:
   - pip install sphinx coverage codecov
   - if [[ $TRAVIS_PYTHON_VERSION < '3.4' ]]; then pip install -U unittest2; fi
 
-script: make PYTHON=python coverage
+script:
+  - if [[ $TRAVIS_PYTHON_VERSION = '3.7' ]]; then make PYTHON=python coverage; else make PYTHON=python check; fi
 
 after_success:
-  - codecov
+  - if [[ $TRAVIS_PYTHON_VERSION = '3.7' ]]; codecov; fi
