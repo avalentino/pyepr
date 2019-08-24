@@ -140,6 +140,7 @@ html_sidebars = {
         'pypi.html',
         'travis-ci.html',
         'appveyor.html',
+        'readthedocs.html',
     ],
 }
 
