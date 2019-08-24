@@ -26,7 +26,7 @@ TEST_DATSET = tests/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.
 EPRAPIROOT = ../epr-api
 
 .PHONY: default ext cythonize sdist eprsrc fullsdist doc clean distclean \
-        check debug data upload manylinux coverage ext-coverage
+        check debug data upload manylinux coverage ext-coverage coverage-report
 
 default: ext
 
@@ -91,14 +91,16 @@ ext-coverage: src/epr.pyx
 coverage: clean ext-coverage data
 	ln -s src/epr.p* .  # workaround for Cython.Coverage bug #1985
 	env PYEPR_COVERAGE=TRUE PYTHONPATH=. \
-		$(PYTHON) -m coverage run --branch --source=epr setup.py test
+		$(PYTHON) -m coverage run --branch --source=src setup.py test
+	env PYTHONPATH=. $(PYTHON) -m coverage report
+
+coverage-report: coverage
 	env PYTHONPATH=. $(PYTHON) -m coverage xml -i
 	env PYTHONPATH=. $(PYTHON) -m cython -E CYTHON_TRACE_NOGIL=1 \
 		-X linetrace=True -X language_level=3str \
 		--annotate-coverage coverage.xml src/epr.pyx
 	env PYTHONPATH=. $(PYTHON) -m coverage html -i
 	cp src/epr.html htmlcov
-	env PYTHONPATH=. $(PYTHON) -m coverage report
 
 debug:
 	$(PYTHON) setup.py build_ext --inplace --debug
