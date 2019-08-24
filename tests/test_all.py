@@ -41,6 +41,8 @@ try:
     from unittest import skipIf as _skipIf, TestCase as _TestCase
     if not hasattr(_TestCase, 'subTest'):
         raise ImportError
+    if not hasattr(_TestCase, 'assertRaisesRegex'):
+        raise ImportError
 except ImportError:
     import unittest2 as unittest
 else:
@@ -2854,34 +2856,6 @@ class TestSampleModelFunctions(unittest.TestCase):
 
 class TestDirectInstantiation(unittest.TestCase):
     MSG_PATTERN = '"%s" class cannot be instantiated from Python'
-
-    if sys.version_info[:2] >= (3, 2):
-        # @COMPATIBILITY: python >= 3.2
-        pass
-    elif sys.version_info[:2] in ((2, 7), (3, 1)):
-        # @COMPATIBILITY: unittest2, python2.7, python3.1
-        assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
-    else:
-
-        # @COMPATIBILITY: python < 2.7
-        def assertRaisesRegex(self, expected_exception, expected_regexp,
-                              callable_obj=None, *args, **kwargs):
-            try:
-                callable_obj(*args, **kwargs)
-            except expected_exception as exc_value:
-                import types
-                if isinstance(expected_regexp, types.StringTypes):
-                    expected_regexp = re.compile(expected_regexp)
-                if not expected_regexp.search(str(exc_value)):
-                    raise self.failureException(
-                        '"%s" does not match "%s"' % (expected_regexp.pattern,
-                                                      str(exc_value)))
-            else:
-                if hasattr(expected_exception, '__name__'):
-                    excName = expected_exception.__name__
-                else:
-                    excName = str(expected_exception)
-                raise self.failureException("%s not raised" % excName)
 
     def test_direct_dsd_instantiation(self):
         pattern = self.MSG_PATTERN % epr.DSD.__name__
