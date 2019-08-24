@@ -141,6 +141,7 @@ html_sidebars = {
         'travis-ci.html',
         'appveyor.html',
         'readthedocs.html',
+        'codecov.html',
     ],
 }
 

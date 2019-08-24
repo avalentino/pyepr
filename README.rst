@@ -36,6 +36,10 @@ ENVISAT Product Reader Python API
     :alt: Documentation Status
     :target: https://pyepr.readthedocs.io/en/latest
 
+.. image:: https://codecov.io/gh/avalentino/pyepr/branch/master/graph/badge.svg
+    :alt: Coverage Status
+    :target: https://codecov.io/gh/avalentino/pyepr
+
 
 Introduction
 ============
