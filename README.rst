@@ -8,6 +8,34 @@ ENVISAT Product Reader Python API
 :Copyright: 2011-2019, Antonio Valentino <antonio.valentino@tiscali.it>
 :Version:   0.9.6
 
+.. image:: https://travis-ci.org/avalentino/pyepr.svg?branch=master
+    :alt: Travis-CI status page
+    :target: https://travis-ci.org/avalentino/pyepr
+
+.. image:: https://ci.appveyor.com/api/projects/status/github/avalentino/pyepr?branch=master&svg=true
+    :alt: AppVeyor status page
+    :target: https://ci.appveyor.com/project/avalentino/pyepr
+
+.. image:: https://img.shields.io/pypi/v/pyepr
+    :alt: Latest Version
+    :target: https://pypi.org/project/pyepr
+
+.. image:: https://img.shields.io/pypi/pyversions/pyepr
+    :alt: Supported Python versions
+    :target: https://pypi.org/project/pyepr
+
+.. image:: https://img.shields.io/pypi/l/pyepr
+    :alt: License
+    :target: https://pypi.org/project/pyepr
+
+.. image:: https://img.shields.io/pypi/wheel/pyepr
+    :alt: Wheel Status
+    :target: https://pypi.org/project/pyepr
+
+.. image:: https://readthedocs.org/projects/pyepr/badge
+    :alt: Documentation Status
+    :target: https://pyepr.readthedocs.io/en/latest
+
 
 Introduction
 ============
