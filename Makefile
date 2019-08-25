@@ -113,5 +113,5 @@ $(TEST_DATSET):
 
 manylinux:
 	# make fullsdist
-	# docker pull quay.io/pypa/manylinux1_x86_64
-	docker run --rm -v $(shell pwd):/io quay.io/pypa/manylinux1_x86_64 sh /io/build-manylinux-wheels.sh
+	# docker pull quay.io/pypa/manylinux2010_x86_64
+	docker run --rm -v $(shell pwd):/io quay.io/pypa/manylinux2010_x86_64 sh /io/build-manylinux-wheels.sh
