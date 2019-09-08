@@ -34,7 +34,7 @@ def get_version(filename):
         data = fd.read()
 
     mobj = re.search(
-        '''^__version__\s*=\s*(?P<q>['"])(?P<version>\d+(\.\d+)*.*)(?P=q)''',
+        r'''^__version__\s*=\s*(?P<q>['"])(?P<version>\d+(\.\d+)*.*)(?P=q)''',
         data, re.MULTILINE)
 
     return mobj.group('version')
