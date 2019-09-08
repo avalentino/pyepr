@@ -8,7 +8,7 @@ PyEPR 0.9.6 (in development)
 * Minimal numpy_ version is now v1.7
 * Set cython_ 'language_level` explicitly to '3str' if cython_ >= v0.29,
   to '2' otherwise
-* Python v2.6, v3.2 and v3.3 are now deprecated.
+* Python v2.6, v3.2, v3.3 and v3.4 are now deprecated.
   Support for the deprecated Python version will be removed in future
   releases of PyEPR
 
