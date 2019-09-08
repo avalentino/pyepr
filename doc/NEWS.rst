@@ -1,8 +1,8 @@
 Change history
 ==============
 
-PyEPR 0.9.6 (in development)
-----------------------------
+PyEPR 1.0.0 (08/09/2019)
+------------------------
 
 * Do not use deprecated numpy_ API (requires Cython_ >= 0.29)
 * Minimal numpy_ version is now v1.7

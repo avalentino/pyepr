@@ -81,7 +81,7 @@ available classes and functions::
         .. _ESA: https://earth.esa.int
 
     In [3]: epr.__version__, epr.EPR_C_API_VERSION
-    Out[3]: ('0.9.1', '2.3dev')
+    Out[3]: ('1.0.0', '2.3dev')
 
 .. index:: __version__
 

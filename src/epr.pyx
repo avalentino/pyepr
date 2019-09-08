@@ -41,7 +41,7 @@ in a product file.
 
 """
 
-__version__ = '0.9.6.dev1'
+__version__ = '1.0.0'
 
 from libc cimport errno
 from libc cimport stdio

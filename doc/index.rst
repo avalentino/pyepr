@@ -60,7 +60,8 @@ ENVISAT Product Reader Python API
     Online documentation for other PyEpr_ versions:
 
     * `latest <https://pyepr.readthedocs.io/en/latest/>`_ development
-    * `0.9.5 <https://pyepr.readthedocs.io/en/v0.9.5/>`_ (latest stable)
+    * `1.0.0 <https://pyepr.readthedocs.io/en/v1.0.0/>`_ (latest stable)
+    * `0.9.5 <https://pyepr.readthedocs.io/en/v0.9.5/>`_
     * `0.9.4 <https://pyepr.readthedocs.io/en/v0.9.4/>`_
     * `0.9.3 <https://pyepr.readthedocs.io/en/v0.9.3/>`_
     * `0.9.2 <https://pyepr.readthedocs.io/en/v0.9.2/>`_
