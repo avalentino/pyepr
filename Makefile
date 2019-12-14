@@ -20,6 +20,9 @@
 
 PYTHON = python3
 CYTHON = cython3
+DOWNLOAD = wget -c
+# DOWNLOAD = curl -C - -O
+
 TEST_DATSET_URL = "http://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz"
 TEST_DATSET = tests/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1
 
@@ -108,7 +111,8 @@ debug:
 data: $(TEST_DATSET)
 
 $(TEST_DATSET):
-	wget -P tests $(TEST_DATSET_URL)
+	$(DOWNLOAD) $(TEST_DATSET_URL)
+	mv $(shell basename $(TEST_DATSET_URL)) tests
 	gunzip $@
 
 manylinux:
