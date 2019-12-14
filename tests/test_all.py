@@ -446,10 +446,13 @@ class TestProduct(unittest.TestCase):
         self.assertTrue(isinstance(self.product._fileno, int))
 
     def test_fileno_read(self):
-        os.lseek(self.product._fileno, 0, os.SEEK_SET)
-        data = os.read(self.product._fileno, 7)
-        self.assertEqual(data, b'PRODUCT')
-
+        pos = os.lseek(self.product._fileno, 0, os.SEEK_CUR)
+        try:
+            os.lseek(self.product._fileno, 0, os.SEEK_SET)
+            data = os.read(self.product._fileno, 7)
+            self.assertEqual(data, b'PRODUCT')
+        finally:
+            os.lseek(self.product._fileno, pos, os.SEEK_SET)
 
 class TestProductRW(TestProduct):
     OPEN_MODE = 'rb+'

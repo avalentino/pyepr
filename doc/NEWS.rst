@@ -4,7 +4,10 @@ Change history
 PyEPR 1.0.1 (in development)
 ----------------------------
 
-* TBW
+* Fixed a problem in the test using the :data:`epr.Product._fileno`
+  (only impacting MacOS-X).
+  Also some advice about the correct use of :data:`epr.Product._fileno`
+  has been added to the documentation.
 
 
 PyEPR 1.0.0 (08/09/2019)

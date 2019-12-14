@@ -2544,6 +2544,11 @@ cdef class Product(EprObject):
 
         To be used with care.
 
+        .. important::
+
+            on MacOS-X after using the file descriptor its position
+            shall be reset to the original one.
+
         """
 
         def __get__(self):
