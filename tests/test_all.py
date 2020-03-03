@@ -18,7 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
-
 import os
 import re
 import sys
@@ -150,24 +149,24 @@ class TestOpenProduct(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
 
     def test_open(self):
-        product = epr.open(self.PRODUCT_FILE)
-        self.assertTrue(isinstance(product, epr.Product))
-        self.assertEqual(product.mode, 'rb')
+        with epr.open(self.PRODUCT_FILE) as product:
+            self.assertTrue(isinstance(product, epr.Product))
+            self.assertEqual(product.mode, 'rb')
 
     def test_open_rb(self):
-        product = epr.open(self.PRODUCT_FILE, 'rb')
-        self.assertTrue(isinstance(product, epr.Product))
-        self.assertEqual(product.mode, 'rb')
+        with epr.open(self.PRODUCT_FILE, 'rb') as product:
+            self.assertTrue(isinstance(product, epr.Product))
+            self.assertEqual(product.mode, 'rb')
 
     def test_open_rwb_01(self):
-        product = epr.open(self.PRODUCT_FILE, 'r+b')
-        self.assertTrue(isinstance(product, epr.Product))
-        self.assertTrue(product.mode in ('r+b', 'rb+'))
+        with epr.open(self.PRODUCT_FILE, 'r+b') as product:
+            self.assertTrue(isinstance(product, epr.Product))
+            self.assertTrue(product.mode in ('r+b', 'rb+'))
 
     def test_open_rwb_02(self):
-        product = epr.open(self.PRODUCT_FILE, 'rb+')
-        self.assertTrue(isinstance(product, epr.Product))
-        self.assertTrue(product.mode in ('r+b', 'rb+'))
+        with epr.open(self.PRODUCT_FILE, 'rb+') as product:
+            self.assertTrue(isinstance(product, epr.Product))
+            self.assertTrue(product.mode in ('r+b', 'rb+'))
 
     def test_open_invalid_mode_01(self):
         self.assertRaises(ValueError, epr.open, self.PRODUCT_FILE, '')
@@ -182,20 +181,20 @@ class TestOpenProduct(unittest.TestCase):
 
         def test_open_unicode(self):
             filename = unicode(self.PRODUCT_FILE)
-            product = epr.open(filename)
-            self.assertTrue(isinstance(product, epr.Product))
+            with epr.open(filename) as product:
+                self.assertTrue(isinstance(product, epr.Product))
 
     else:
 
         def test_open_bytes(self):
             filename = self.PRODUCT_FILE.encode('UTF-8')
-            product = epr.open(filename)
-            self.assertTrue(isinstance(filename, bytes))
-            self.assertTrue(isinstance(product, epr.Product))
+            with epr.open(filename) as product:
+                self.assertTrue(isinstance(filename, bytes))
+                self.assertTrue(isinstance(product, epr.Product))
 
     def test_product_constructor(self):
-        product = epr.Product(self.PRODUCT_FILE)
-        self.assertTrue(isinstance(product, epr.Product))
+        with epr.Product(self.PRODUCT_FILE) as product:
+            self.assertTrue(isinstance(product, epr.Product))
 
     def test_open_failure(self):
         self.assertRaises(epr.EPRError, epr.open, '')
@@ -248,7 +247,7 @@ class TestProduct(unittest.TestCase):
         self.product.close()
 
     def test_flush(self):
-        self.product.close()
+        self.product.flush()
 
     def test_double_close(self):
         self.product.close()
@@ -2430,9 +2429,12 @@ class TestFieldHighLevelAPI(unittest.TestCase):
     DATASET_NAME = TestProduct.DATASET_NAME
 
     def setUp(self):
-        product = epr.Product(self.PRODUCT_FILE)
-        dataset = product.get_dataset(self.DATASET_NAME)
+        self.product = epr.Product(self.PRODUCT_FILE)
+        dataset = self.product.get_dataset(self.DATASET_NAME)
         self.record = dataset.read_record(0)
+
+    def tearDown(self):
+        self.product.close()
 
     def test_repr(self):
         pattern = (r'epr\.Field\("(?P<name>.+)"\) (?P<num>\d+) '
@@ -2496,6 +2498,9 @@ class TestFieldHighLevelAPI2(unittest.TestCase):
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
+
+    def tearDown(self):
+        self.product.close()
 
     def test_len_1(self):
         dataset = self.product.get_dataset_at(0)
@@ -2680,8 +2685,11 @@ class TestDsdHighLevelAPI(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
 
     def setUp(self):
-        product = epr.Product(self.PRODUCT_FILE)
-        self.dsd = product.get_dsd_at(0)
+        self.product = epr.Product(self.PRODUCT_FILE)
+        self.dsd = self.product.get_dsd_at(0)
+
+    def tearDown(self):
+        self.product.close()
 
     def test_repr(self):
         pattern = r'epr\.DSD\("(?P<name>.+)"\)'
