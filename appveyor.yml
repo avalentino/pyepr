@@ -25,7 +25,7 @@ install:
   # epr-api
   - "git clone -b pyepr https://github.com/avalentino/epr-api.git"
 
-build: off
+build: false
 
 test_script:
   # Put your test command here.
