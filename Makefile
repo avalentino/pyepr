@@ -22,6 +22,7 @@ PYTHON = python3
 CYTHON = cython3
 DOWNLOAD = wget -c
 # DOWNLOAD = curl -C - -O
+CYTHONFLAGS=$(shell $(CYTHON) --help | grep -o -- '--3str')
 
 TEST_DATSET_URL = "http://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz"
 TEST_DATSET = tests/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1
@@ -39,7 +40,7 @@ ext: src/epr.pyx
 cythonize: src/epr.c
 
 src/epr.c: src/epr.pyx
-	$(CYTHON) src/epr.pyx
+	$(CYTHON) $(CYTHONFLAGS) src/epr.pyx
 
 sdist: doc cythonize
 	$(PYTHON) setup.py sdist
