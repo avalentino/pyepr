@@ -6,6 +6,7 @@ PyEPR 1.1.0 (under development)
 
 * Old Python versions are no longer officially supported.
   Now PyEPR require Python >= 3.5.
+* setuptools_ is now always used in the `setup.py` script.
 
 
 PyEPR 1.0.1 (07/03/2020)
@@ -153,7 +154,7 @@ PyEPR 0.9 (27/02/2015)
 
 
 .. _pip: https://pip.pypa.io
-.. _setuptools: https://bitbucket.org/pypa/setuptools
+.. _setuptools: https://github.com/pypa/setuptools
 .. _numpy: https://www.numpy.org
 .. _Windows: https://windows.microsoft.com
 .. _AppVeyor: https://www.appveyor.com

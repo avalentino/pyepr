@@ -23,6 +23,8 @@ import re
 import sys
 import glob
 
+from setuptools import setup, Extension
+
 
 PYEPR_COVERAGE = False
 
@@ -43,29 +45,6 @@ def get_version(filename, strip_extra=False):
         return '.'.join(map(str, version.version[:3]))
     else:
         return version.vstring
-
-
-def get_use_setuptools():
-    use_setuptools = os.environ.get('USE_SETUPTOOLS', True)
-    if str(use_setuptools).lower() in ('false', 'off', 'n', 'no', '0'):
-        use_setuptools = False
-    else:
-        use_setuptools = True
-
-    return use_setuptools
-
-
-try:
-    if not get_use_setuptools():
-        raise ImportError
-
-    from setuptools import setup, Extension
-    HAVE_SETUPTOOLS = True
-except ImportError:
-    from distutils.core import setup
-    from distutils.extension import Extension
-    HAVE_SETUPTOOLS = False
-print('HAVE_SETUPTOOLS: {0}'.format(HAVE_SETUPTOOLS))
 
 
 try:
@@ -210,9 +189,6 @@ def get_extension():
 config = dict(
     name='pyepr',
     version=get_version(os.path.join('src', 'epr.pyx')),
-    author='Antonio Valentino',
-    author_email='antonio.valentino@tiscali.it',
-    url='http://avalentino.github.com/pyepr',
     description='Python ENVISAT Product Reader API',
     long_description='''PyEPR provides Python_ bindings for the ENVISAT
 Product Reader C API (`EPR API`_) for reading satellite data from ENVISAT_
@@ -229,7 +205,12 @@ any data field contained in a product file.
 .. _ENVISAT: https://envisat.esa.int
 .. _ESA: https://earth.esa.int
 ''',
+    long_description_content_type='text/x-rst',
+    url='http://avalentino.github.com/pyepr',
     download_url='http://pypi.python.org/pypi/pyepr',
+    author='Antonio Valentino',
+    author_email='antonio.valentino@tiscali.it',
+    license='GPL3',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Other Environment',
@@ -251,22 +232,24 @@ any data field contained in a product file.
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: GIS',
     ],
-    platforms=['any'],
-    license='GPL3',
-    requires=['numpy'],
+    keywords='satellite reader envisat',
+    project_urls={
+        'Documentation': 'http://avalentino.github.io/pyepr/html/index.html',
+        'Source': 'https://github.com/avalentino/pyepr/',
+        'Tracker': 'https://github.com/avalentino/pyepr/issues',
+    },
+    ext_modules=[get_extension()],
+    setup_requires=['numpy>=1.7'],
+    install_requires=['numpy>=1.7'],
     python_requires='>=3.5, <4',
+    zip_safe=False,
 )
 
 
 def setup_package():
-    ext = get_extension()
-    config['ext_modules'] = [ext]
-
-    if HAVE_SETUPTOOLS:
-        config.setdefault('setup_requires', []).append('numpy>=1.7')
-        config.setdefault('install_requires', []).append('numpy>=1.7')
-        if ext.setup_requires_cython:
-            config['setup_requires'].append('cython>=0.19')
+    ext = config['ext_modules'][0]
+    if ext.setup_requires_cython:
+        config.setdefault('setup_requires', []).append('cython>=0.19')
 
     setup(**config)
 

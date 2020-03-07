@@ -104,7 +104,7 @@ To clone the git_ repository the following command can be used::
 Installation
 ============
 
-The easier way to install PyEPR_ is using tools like pip_ or easy_install_::
+The easier way to install PyEPR_ is using tools like pip_::
 
     $ pip install pyepr
 
@@ -122,7 +122,6 @@ To install PyEPR_ in a non-standard path::
     $ python setup.py install --prefix=<TARGET_PATH>
 
 .. _pip: https://pypi.python.org/pypi/pip
-.. _easy_install: https://pypi.python.org/pypi/setuptools#using-setuptools-and-easyinstall
 
 
 License
