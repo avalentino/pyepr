@@ -1,8 +1,8 @@
 Change history
 ==============
 
-PyEPR 1.0.1 (in development)
-----------------------------
+PyEPR 1.0.1 (07/03/2020)
+------------------------
 
 * Fixed a problem in the test using the :data:`epr.Product._fileno`
   (only impacting MacOS-X).
