@@ -6,7 +6,7 @@ ENVISAT Product Reader Python API
 :Author:    Antonio Valentino
 :Contact:   antonio.valentino@tiscali.it
 :Copyright: 2011-2020, Antonio Valentino <antonio.valentino@tiscali.it>
-:Version:   1.0.1
+:Version:   1.1.0
 
 .. image:: https://travis-ci.org/avalentino/pyepr.svg?branch=master
     :alt: Travis-CI status page
