@@ -1,22 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Exporting bitmasks &#8212; PyEPR 1.0.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>Exporting bitmasks &#8212; PyEPR 1.0.1 documentation</title>
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     
-    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <script src="_static/sidebar.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -35,7 +33,7 @@
         <li class="right" >
           <a href="bands_example.html" title="Exporting band data"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="tutorials.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -49,7 +47,7 @@
 <h1>Exporting bitmasks<a class="headerlink" href="#exporting-bitmasks" title="Permalink to this headline">¶</a></h1>
 <p id="index-0">This tutorial shows how to generate bit masks from <a class="reference external" href="https://envisat.esa.int">ENVISAT</a> flags information
 as “raw” image using <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a>.</p>
-<p>The example code (<a class="reference download internal" download="" href="_downloads/06c90f2f701a5f35136c10c7deed31d3/write_bitmask.py"><code class="xref download docutils literal notranslate"><span class="pre">examples/write_bitmask.py</span></code></a>) is a direct
+<p>The example code (<a class="reference download internal" download="" href="_downloads/143953107c8f994ad3f15dfd1c8cfb7e/write_bitmask.py"><code class="xref download docutils literal notranslate"><span class="pre">examples/write_bitmask.py</span></code></a>) is a direct
 translation of the C sample program <a class="reference external" href="https://github.com/bcdev/epr-api/blob/master/src/examples/write_bitmask.c">write_bitmask.c</a> bundled with the
 EPR API distribution.</p>
 <p>The program is invoked as follows:</p>
@@ -57,7 +55,7 @@ EPR API distribution.</p>
 &lt;output-file&gt;
 </pre></div>
 </div>
-<p>The <a class="reference download internal" download="" href="_downloads/06c90f2f701a5f35136c10c7deed31d3/write_bitmask.py"><code class="xref download docutils literal notranslate"><span class="pre">examples/write_bitmask.py</span></code></a> code consists in a single function
+<p>The <a class="reference download internal" download="" href="_downloads/143953107c8f994ad3f15dfd1c8cfb7e/write_bitmask.py"><code class="xref download docutils literal notranslate"><span class="pre">examples/write_bitmask.py</span></code></a> code consists in a single function
 that also includes command line arguments handling:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
 
@@ -93,16 +91,16 @@ that also includes command line arguments handling:</p>
         <span class="n">argv</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Usage: write_bitmask &lt;envisat-product&gt; &lt;bitmask-expression&gt; &#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Usage: write_bitmask &lt;envisat-product&gt; &lt;bitmask-expression&gt; &#39;</span>
               <span class="s1">&#39;&lt;output-file&gt;&#39;</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;  where envisat-product is the input filename&#39;</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;  and bitmask-expression is a string containing the bitmask &#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  where envisat-product is the input filename&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  and bitmask-expression is a string containing the bitmask &#39;</span>
               <span class="s1">&#39;logic&#39;</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;  and output-file is the output filename.&#39;</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Example:&#39;</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;  MER_RR__2P_TEST.N1 &#39;l2_flags.LAND and not l2_flags.BRIGHT&#39; &quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  and output-file is the output filename.&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Example:&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  MER_RR__2P_TEST.N1 &#39;l2_flags.LAND and not l2_flags.BRIGHT&#39; &quot;</span>
               <span class="s2">&quot;my_flags.raw&quot;</span><span class="p">)</span>
-        <span class="k">print</span>
+        <span class="nb">print</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="n">product_file_path</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -126,8 +124,8 @@ that also includes command line arguments handling:</p>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">image_file_path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_stream</span><span class="p">:</span>
             <span class="n">bm_raster</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">out_stream</span><span class="p">)</span>
 
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Raw image data successfully written to &quot;</span><span class="si">%s</span><span class="s1">&quot;.&#39;</span> <span class="o">%</span> <span class="n">image_file_path</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Data type is &quot;byte&quot;, size is </span><span class="si">%d</span><span class="s1"> x </span><span class="si">%d</span><span class="s1"> pixels.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">source_width</span><span class="p">,</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Raw image data successfully written to &quot;</span><span class="si">%s</span><span class="s1">&quot;.&#39;</span> <span class="o">%</span> <span class="n">image_file_path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data type is &quot;byte&quot;, size is </span><span class="si">%d</span><span class="s1"> x </span><span class="si">%d</span><span class="s1"> pixels.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">source_width</span><span class="p">,</span>
                                                             <span class="n">source_height</span><span class="p">))</span>
 
 
@@ -159,8 +157,8 @@ using the <a class="reference internal" href="reference.html#epr.Product.get_sce
 the function <a class="reference internal" href="reference.html#epr.create_bitmask_raster" title="epr.create_bitmask_raster"><code class="xref py py-func docutils literal notranslate"><span class="pre">epr.create_bitmask_raster()</span></code></a>, specific for bitmasks, is used
 to create a <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><code class="xref py py-class docutils literal notranslate"><span class="pre">epr.Raster</span></code></a> instance.</p>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="reference.html#epr.create_raster" title="epr.create_raster"><code class="xref py py-func docutils literal notranslate"><span class="pre">epr.create_raster()</span></code></a></p>
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="reference.html#epr.create_raster" title="epr.create_raster"><code class="xref py py-func docutils literal notranslate"><span class="pre">epr.create_raster()</span></code></a></p>
 </div>
 <p>Data are actually read using the <a class="reference internal" href="reference.html#epr.Product.read_bitmask_raster" title="epr.Product.read_bitmask_raster"><code class="xref py py-meth docutils literal notranslate"><span class="pre">epr.Product.read_bitmask_raster()</span></code></a>
 method of the <a class="reference internal" href="reference.html#epr.Product" title="epr.Product"><code class="xref py py-class docutils literal notranslate"><span class="pre">epr.Product</span></code></a> class:</p>
@@ -213,17 +211,15 @@ of the <a class="reference internal" href="reference.html#epr.Raster" title="epr
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -240,14 +236,14 @@ of the <a class="reference internal" href="reference.html#epr.Raster" title="epr
         <li class="right" >
           <a href="bands_example.html" title="Exporting band data"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="tutorials.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2011-2019, Antonio Valentino.
-      Last updated on Sep 08, 2019.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+        &#169; Copyright 2011-2020, Antonio Valentino.
+      Last updated on Mar 07, 2020.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
     </div>
   </body>
 </html>

@@ -1,22 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Interactive use of PyEPR &#8212; PyEPR 1.0.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>Interactive use of PyEPR &#8212; PyEPR 1.0.1 documentation</title>
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     
-    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <script src="_static/sidebar.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -35,7 +33,7 @@
         <li class="right" >
           <a href="tutorials.html" title="Tutorials"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="tutorials.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -106,7 +104,7 @@ available classes and functions:</p>
 </pre></div>
 </div>
 <p id="index-2">Docstrings are available for almost all classes, methods and functions in
-the <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><code class="xref py py-mod docutils literal notranslate"><span class="pre">epr</span></code></a> and they can be displayed using the <a class="reference external" href="https://docs.python.org/3/library/functions.html#help" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">help()</span></code></a> <a class="reference external" href="https://www.python.org">python</a>
+the <a class="reference internal" href="reference.html#module-epr" title="epr: Python bindings for ENVISAT Product Reader C API"><code class="xref py py-mod docutils literal notranslate"><span class="pre">epr</span></code></a> and they can be displayed using the <a class="reference external" href="https://docs.python.org/3/library/functions.html#help" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">help()</span></code></a> <a class="reference external" href="https://www.python.org">python</a>
 command or the <code class="docutils literal notranslate"><span class="pre">?</span></code> <a class="reference external" href="https://jupyter.org/">Jupyter</a> shortcut as showed above.</p>
 <p>Also <a class="reference external" href="https://jupyter.org/">Jupyter</a> provides a handy tab completion mechanism to automatically
 complete commands or to display available functions and classes:</p>
@@ -159,7 +157,7 @@ instance of the desired <a class="reference external" href="https://envisat.esa.
 <span class="gp">In [5]: </span><span class="n">product</span><span class="o">.</span><span class="n">tot_size</span> <span class="o">/</span> <span class="mf">1024.</span><span class="o">**</span><span class="mi">2</span>
 <span class="gh">Out[5]: </span><span class="go">132.01041889190674</span>
 
-<span class="gp">In [6]: </span><span class="k">print</span><span class="p">(</span><span class="n">product</span><span class="p">)</span>
+<span class="gp">In [6]: </span><span class="nb">print</span><span class="p">(</span><span class="n">product</span><span class="p">)</span>
 <span class="go">epr.Product(ASA_IMP_1PNUPA20060202_ ...) 7 datasets, 5 bands</span>
 
 <span class="go">epr.Dataset(MDS1_SQ_ADS) 1 records</span>
@@ -238,7 +236,7 @@ get all desired information from the product:</p>
 <span class="gp">In [16]: </span><span class="n">field</span><span class="o">.</span><span class="n">get_unit</span><span class="p">()</span>
 <span class="gh">Out[16]: </span><span class="go">&#39;m&#39;</span>
 
-<span class="gp">In [17]: </span><span class="k">print</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+<span class="gp">In [17]: </span><span class="nb">print</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
 <span class="go">range_spacing = 12.500000</span>
 </pre></div>
 </div>
@@ -315,9 +313,9 @@ the following:</p>
 <span class="gh">Out[25]: </span><span class="go">&lt;matplotlib.colorbar.Colorbar instance at 0x6b18cb0&gt;</span>
 </pre></div>
 </div>
-<div class="figure" id="id1">
+<div class="figure align-default" id="id1">
 <a class="reference internal image-reference" href="_images/ASA_IMP_crop.png"><img alt="_images/ASA_IMP_crop.png" src="_images/ASA_IMP_crop.png" style="width: 100%;" /></a>
-<p class="caption"><span class="caption-text">Image data read from the “proc_data” band</span></p>
+<p class="caption"><span class="caption-text">Image data read from the “proc_data” band</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 </div>
 <div class="section" id="closing-the-epr-product">
@@ -328,7 +326,7 @@ the following:</p>
 </pre></div>
 </div>
 <p>After a product is closed no more I/O operations can be performed on it.
-Any attempt to do it will raise a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a>:</p>
+Any attempt to do it will raise a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a>:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [27]: </span><span class="n">product</span><span class="o">.</span><span class="n">tot_size</span> <span class="o">/</span> <span class="mf">1024.</span><span class="o">**</span><span class="mi">2</span>
 <span class="gt">-------------------------------------------------------------------------</span>
 <span class="ne">ValueError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
@@ -360,9 +358,9 @@ not using the <a class="reference internal" href="reference.html#epr.Product.clo
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Interactive use of PyEPR</a><ul>
-<li><a class="reference internal" href="#epr-module-and-classes"><code class="docutils literal notranslate"><span class="pre">epr</span></code> module and classes</a></li>
-<li><a class="reference internal" href="#epr-product-navigation"><code class="docutils literal notranslate"><span class="pre">epr.Product</span></code> navigation</a></li>
-<li><a class="reference internal" href="#iterating-over-epr-objects">Iterating over <code class="docutils literal notranslate"><span class="pre">epr</span></code> objects</a></li>
+<li><a class="reference internal" href="#epr-module-and-classes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">epr</span></code> module and classes</a></li>
+<li><a class="reference internal" href="#epr-product-navigation"><code class="xref py py-class docutils literal notranslate"><span class="pre">epr.Product</span></code> navigation</a></li>
+<li><a class="reference internal" href="#iterating-over-epr-objects">Iterating over <code class="xref py py-mod docutils literal notranslate"><span class="pre">epr</span></code> objects</a></li>
 <li><a class="reference internal" href="#image-data">Image data</a></li>
 <li><a class="reference internal" href="#closing-the-epr-product">Closing the epr.Product</a></li>
 </ul>
@@ -383,17 +381,15 @@ not using the <a class="reference internal" href="reference.html#epr.Product.clo
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -410,14 +406,14 @@ not using the <a class="reference internal" href="reference.html#epr.Product.clo
         <li class="right" >
           <a href="tutorials.html" title="Tutorials"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="tutorials.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2011-2019, Antonio Valentino.
-      Last updated on Sep 08, 2019.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+        &#169; Copyright 2011-2020, Antonio Valentino.
+      Last updated on Mar 07, 2020.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
     </div>
   </body>
 </html>

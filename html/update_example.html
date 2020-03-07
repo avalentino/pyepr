@@ -1,22 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Update Field elements &#8212; PyEPR 1.0.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>Update Field elements &#8212; PyEPR 1.0.1 documentation</title>
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     
-    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <script src="_static/sidebar.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -35,7 +33,7 @@
         <li class="right" >
           <a href="ndvi_example.html" title="NDVI computation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="tutorials.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -68,13 +66,13 @@ instructions:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot water vapour histogram</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">orig_bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">wv_orig_histogram</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;original&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Water Vapour Histogram&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="figure" id="id1">
+<div class="figure align-default" id="id1">
 <a class="reference internal image-reference" href="_images/water_vapour_histogram_01.png"><img alt="_images/water_vapour_histogram_01.png" src="_images/water_vapour_histogram_01.png" style="width: 60%;" /></a>
-<p class="caption"><span class="caption-text">Histogram of the original water vapour content</span></p>
+<p class="caption"><span class="caption-text">Histogram of the original water vapour content</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 <p>The actual values of the water vapour content <code class="xref py py-class docutils literal notranslate"><span class="pre">Band</span></code> are computed
 starting form data stored in the <cite>Vapour_Content</cite> <code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code> using
@@ -82,7 +80,7 @@ scaling factors contained in the <cite>Scaling_Factor_GADS</cite> <code class="x
 In particular <code class="xref py py-class docutils literal notranslate"><span class="pre">Field</span></code>s <cite>sf_wvapour</cite> and  <cite>off_wvapour</cite> are used:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [21]: </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">get_dataset</span><span class="p">(</span><span class="s1">&#39;Scaling_Factor_GADS&#39;</span><span class="p">)</span>
 
-<span class="gp">In [22]: </span><span class="k">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="gp">In [22]: </span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 <span class="go">epr.Dataset(Scaling_Factor_GADS) 1 records</span>
 
 <span class="go">sf_cl_opt_thick = 1.000000</span>
@@ -124,31 +122,31 @@ compute and display the histogram of modified data in the <cite>water_vapour</ci
 <span class="c1"># plot histogram of modified data</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">orig_bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">wv_orig_histogram</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;original&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Water Vapour Histogram&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">new_bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">wv_new_histogram</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;new&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="figure" id="id2">
+<div class="figure align-default" id="id2">
 <a class="reference internal image-reference" href="_images/water_vapour_histogram_02.png"><img alt="_images/water_vapour_histogram_02.png" src="_images/water_vapour_histogram_02.png" style="width: 60%;" /></a>
-<p class="caption"><span class="caption-text">Histogram of the water vapour content (original and modified)</span></p>
+<p class="caption"><span class="caption-text">Histogram of the water vapour content (original and modified)</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
 <p>Figure above shows the two different histograms, original data in blue and
 modified data in red, demonstrating the effect of the change of the scaling
 factor.</p>
 <p>The new map of water vapour is showed in the following picture:</p>
-<div class="figure" id="id3">
+<div class="figure align-default" id="id3">
 <img alt="_images/modified_water_vapour.png" src="_images/modified_water_vapour.png" />
-<p class="caption"><span class="caption-text">Modified water vapour content map</span></p>
+<p class="caption"><span class="caption-text">Modified water vapour content map</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
 </div>
 <div class="admonition important">
-<p class="first admonition-title">Important</p>
+<p class="admonition-title">Important</p>
 <p>it is important to stress that it is necessary to close and re-open the
 <code class="xref py py-class docutils literal notranslate"><span class="pre">Product</span></code> in order to see changes in the scaling factors applied
 to the <cite>water_vapour</cite><code class="xref py py-class docutils literal notranslate"><span class="pre">Band</span></code> data.</p>
-<p class="last">This is a limitation of the current implementation that could be removed
+<p>This is a limitation of the current implementation that could be removed
 in future versions of the <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> package.</p>
 </div>
 <p>It has been showed that changing the <cite>sf_wvapour</cite> scaling factor modifies
@@ -204,21 +202,21 @@ modified <code class="xref py py-class docutils literal notranslate"><span class
 <span class="c1"># plot the water vapour map</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Water Vapour with box&#39;</span><span class="p">)</span>
 <span class="n">cb</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
-<span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;[{}]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unit</span><span class="p">))</span>
+<span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;[</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unit</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="figure" id="id4">
+<div class="figure align-default" id="id4">
 <img alt="_images/modified_water_vapour_with_box.png" src="_images/modified_water_vapour_with_box.png" />
-<p class="caption"><span class="caption-text">Modified water vapour content map with zeroed box</span></p>
+<p class="caption"><span class="caption-text">Modified water vapour content map with zeroed box</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
 </div>
 <p>Of course values in the box that has been set to zero in the <code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code>
 are transformed according to the scaling factor and offset parameters
 associated to <cite>water_vapour</cite> <code class="xref py py-class docutils literal notranslate"><span class="pre">Band</span></code>.</p>
 <p>The complete code of the example can be found at
-<a class="reference download internal" download="" href="_downloads/68002521e64afe95b61fe355225aed7d/update_elements.py"><code class="xref download docutils literal notranslate"><span class="pre">examples/update_elements.py</span></code></a>.</p>
+<a class="reference download internal" download="" href="_downloads/91aae89c1bd5f677b66010c1b0fd194a/update_elements.py"><code class="xref download docutils literal notranslate"><span class="pre">examples/update_elements.py</span></code></a>.</p>
 </div>
 
 
@@ -241,17 +239,15 @@ associated to <cite>water_vapour</cite> <code class="xref py py-class docutils l
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -268,14 +264,14 @@ associated to <cite>water_vapour</cite> <code class="xref py py-class docutils l
         <li class="right" >
           <a href="ndvi_example.html" title="NDVI computation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="tutorials.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2011-2019, Antonio Valentino.
-      Last updated on Sep 08, 2019.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+        &#169; Copyright 2011-2020, Antonio Valentino.
+      Last updated on Mar 07, 2020.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
     </div>
   </body>
 </html>

@@ -1,22 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>NDVI computation &#8212; PyEPR 1.0.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>NDVI computation &#8212; PyEPR 1.0.1 documentation</title>
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     
-    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <script src="_static/sidebar.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -35,7 +33,7 @@
         <li class="right" >
           <a href="bitmask_example.html" title="Exporting bitmasks"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="tutorials.html" accesskey="U">Tutorials</a> &#187;</li> 
       </ul>
     </div>  
@@ -50,7 +48,7 @@
 <p id="index-0">This tutorial shows how to use <a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> to open a <a class="reference external" href="https://earth.esa.int/handbooks/meris/CNTR.html">MERIS</a> L1B product, compute
 the <em>Normalized Difference Vegetation Index</em> (NDVI) and store it into a flat
 binary file.</p>
-<p>The example code (<a class="reference download internal" download="" href="_downloads/1b38b94cb12df58a6f2ac0b7a369e8ae/write_ndvi.py"><code class="xref download docutils literal notranslate"><span class="pre">examples/write_ndvi.py</span></code></a>) is a direct
+<p>The example code (<a class="reference download internal" download="" href="_downloads/c95196158db213ead7ffd827b6209c2c/write_ndvi.py"><code class="xref download docutils literal notranslate"><span class="pre">examples/write_ndvi.py</span></code></a>) is a direct
 translation of the C sample program <a class="reference external" href="https://github.com/bcdev/epr-api/blob/master/src/examples/write_ndvi.c">write_ndvi.c</a> bundled with the
 EPR API distribution.</p>
 <p>The program is invoked as follows:</p>
@@ -85,7 +83,7 @@ EPR API distribution.</p>
 
 <span class="sd">&#39;&#39;&#39;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">pront_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">pront_function</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">struct</span>
@@ -230,8 +228,8 @@ specified offset):</p>
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">in this simplified example it is assumed that there is enough system
+<p class="admonition-title">Note</p>
+<p>in this simplified example it is assumed that there is enough system
 memory to hold the two <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><code class="xref py py-class docutils literal notranslate"><span class="pre">epr.Raster</span></code></a> objects.</p>
 </div>
 <p>After opening (in binary mode) the stream for the output</p>
@@ -243,7 +241,7 @@ memory to hold the two <a class="reference internal" href="reference.html#epr.Ra
 <p>the program simply loops over all pixel and calculate the NDVI with the
 following formula:</p>
 <div class="math">
-<p><img src="_images/math/89b7eab99e02c572d28b2176dfed2a53dd756d0e.png" alt="NDVI = \frac{radiance_{10} - radiance_8}{radiance_{10} + radiance_8}"/></p>
+<p><img src="_images/math/0f8e25b0420deeb53bf259e934cf28f998b60104.png" alt="NDVI = \frac{radiance_{10} - radiance_8}{radiance_{10} + radiance_8}"/></p>
 </div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>            <span class="c1"># Loop over all pixel and calculate the NDVI.</span>
             <span class="c1">#</span>
             <span class="c1"># @NOTE: looping over data matrices is not the best soluton.</span>
@@ -280,13 +278,13 @@ following formula:</p>
 </div>
 <p>and uses the <a class="reference internal" href="reference.html#epr.Raster.get_pixel" title="epr.Raster.get_pixel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">epr.Raster.get_pixel()</span></code></a> method to access pixel values and
 perform computation.</p>
-<p>The <a class="reference external" href="https://www.python.org">Python</a> <a class="reference external" href="https://docs.python.org/3/library/struct.html#struct.pack" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">struct.pack()</span></code></a> function together with <code class="xref py py-meth docutils literal notranslate"><span class="pre">file.write()</span></code> is
+<p>The <a class="reference external" href="https://www.python.org">Python</a> <a class="reference external" href="https://docs.python.org/3/library/struct.html#struct.pack" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">struct.pack()</span></code></a> function together with <code class="xref py py-meth docutils literal notranslate"><span class="pre">file.write()</span></code> is
 used to write the NDVI of the pixel n the file in binary format.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                    <span class="n">out_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="n">ndvi</span><span class="p">))</span>
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>the entire solution is quite not <a class="reference external" href="http://www.cafepy.com/article/be_pythonic">pythonic</a>. As an alternative
 implementation it could be used the <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> interface of
 <a class="reference internal" href="reference.html#epr.Raster" title="epr.Raster"><code class="xref py py-class docutils literal notranslate"><span class="pre">epr.Raster</span></code></a> objects available via the <a class="reference internal" href="reference.html#epr.Raster.data" title="epr.Raster.data"><code class="xref py py-data docutils literal notranslate"><span class="pre">epr.Raster.data</span></code></a>
@@ -306,7 +304,7 @@ vectorized expressions:</p>
 </div>
 <p>Finally data can be saved to file simply using the
 <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.tofile.html#numpy.ndarray.tofile" title="(in NumPy v1.17)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">numpy.ndarray.tofile()</span></code></a> method:</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ndvi</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">out_stream</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ndvi</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">out_stream</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -323,7 +321,7 @@ vectorized expressions:</p>
                         title="previous chapter">Exporting bitmasks</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="update_example.html"
-                        title="next chapter">Update <code class="docutils literal notranslate"><span class="pre">Field</span></code> elements</a></p>
+                        title="next chapter">Update <code class="xref py py-class docutils literal notranslate"><span class="pre">Field</span></code> elements</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -332,17 +330,15 @@ vectorized expressions:</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -359,14 +355,14 @@ vectorized expressions:</p>
         <li class="right" >
           <a href="bitmask_example.html" title="Exporting bitmasks"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyEPR 1.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="tutorials.html" >Tutorials</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2011-2019, Antonio Valentino.
-      Last updated on Sep 08, 2019.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+        &#169; Copyright 2011-2020, Antonio Valentino.
+      Last updated on Mar 07, 2020.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
     </div>
   </body>
 </html>

@@ -1,22 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>ENVISAT Product Reader Python API &#8212; PyEPR 1.0.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>ENVISAT Product Reader Python API &#8212; PyEPR 1.0.1 documentation</title>
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     
-    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <script src="_static/sidebar.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -31,7 +29,7 @@
         <li class="right" >
           <a href="usermanual.html" title="User Manual"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">PyEPR 1.0.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">PyEPR 1.0.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -42,22 +40,23 @@
             
   <div class="section" id="envisat-product-reader-python-api">
 <h1>ENVISAT Product Reader Python API<a class="headerlink" href="#envisat-product-reader-python-api" title="Permalink to this headline">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">HomePage:</th><td class="field-body"><a class="reference external" href="http://avalentino.github.io/pyepr">http://avalentino.github.io/pyepr</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Antonio Valentino</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference external" href="mailto:antonio&#46;valentino&#37;&#52;&#48;tiscali&#46;it">antonio<span>&#46;</span>valentino<span>&#64;</span>tiscali<span>&#46;</span>it</a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Copyright:</th><td class="field-body">2011-2019, Antonio Valentino</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">1.0.0</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">HomePage</dt>
+<dd class="field-odd"><p><a class="reference external" href="http://avalentino.github.io/pyepr">http://avalentino.github.io/pyepr</a></p>
+</dd>
+<dt class="field-even">Author</dt>
+<dd class="field-even"><p>Antonio Valentino</p>
+</dd>
+<dt class="field-odd">Contact</dt>
+<dd class="field-odd"><p><a class="reference external" href="mailto:antonio&#46;valentino&#37;&#52;&#48;tiscali&#46;it">antonio<span>&#46;</span>valentino<span>&#64;</span>tiscali<span>&#46;</span>it</a></p>
+</dd>
+<dt class="field-even">Copyright</dt>
+<dd class="field-even"><p>2011-2020, Antonio Valentino</p>
+</dd>
+<dt class="field-odd">Version</dt>
+<dd class="field-odd"><p>1.0.1</p>
+</dd>
+</dl>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/avalentino/pyepr">PyEPR</a> provides <a class="reference external" href="https://www.python.org">Python</a> bindings for the ENVISAT Product Reader C API
@@ -96,7 +95,7 @@ any data field contained in a product file.</p>
 <li class="toctree-l2"><a class="reference internal" href="bands_example.html">Exporting band data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bitmask_example.html">Exporting bitmasks</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ndvi_example.html">NDVI computation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="update_example.html">Update <code class="docutils literal notranslate"><span class="pre">Field</span></code> elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="update_example.html">Update <code class="xref py py-class docutils literal notranslate"><span class="pre">Field</span></code> elements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gdal_export_example.html">GDAL export example</a></li>
 </ul>
 </li>
@@ -108,6 +107,7 @@ any data field contained in a product file.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="NEWS.html">Change history</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="NEWS.html#pyepr-1-0-1-07-03-2020">PyEPR 1.0.1 (07/03/2020)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="NEWS.html#pyepr-1-0-0-08-09-2019">PyEPR 1.0.0 (08/09/2019)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="NEWS.html#pyepr-0-9-5-23-08-2018">PyEPR 0.9.5 (23/08/2018)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="NEWS.html#pyepr-0-9-4-29-04-2018">PyEPR 0.9.4 (29/04/2018)</a></li>
@@ -135,26 +135,17 @@ any data field contained in a product file.</p>
 <h2>Other versions<a class="headerlink" href="#other-versions" title="Permalink to this headline">¶</a></h2>
 <p>Online documentation for other <a class="reference external" href="https://github.com/avalentino/pyepr">PyEpr</a> versions:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://pyepr.readthedocs.io/en/latest/">latest</a> development</li>
-<li><a class="reference external" href="https://pyepr.readthedocs.io/en/v1.0.0/">1.0.0</a> (latest stable)</li>
-<li><a class="reference external" href="https://pyepr.readthedocs.io/en/v0.9.5/">0.9.5</a></li>
-<li><a class="reference external" href="https://pyepr.readthedocs.io/en/v0.9.4/">0.9.4</a></li>
-<li><a class="reference external" href="https://pyepr.readthedocs.io/en/v0.9.3/">0.9.3</a></li>
-<li><a class="reference external" href="https://pyepr.readthedocs.io/en/v0.9.2/">0.9.2</a></li>
-<li><a class="reference external" href="https://pyepr.readthedocs.io/en/v0.9.1/">0.9.1</a></li>
-<li><a class="reference external" href="https://pyepr.readthedocs.io/en/v0.9/">0.9</a></li>
-<li><a class="reference external" href="https://pyepr.readthedocs.io/en/v0.8.2/">0.8.2</a></li>
-<li><a class="reference external" href="https://pyepr.readthedocs.io/en/v0.8.1/">0.8.1</a></li>
-<li><a class="reference external" href="https://pyepr.readthedocs.io/en/v0.8/">0.8</a></li>
-<li><a class="reference external" href="https://pyepr.readthedocs.io/en/v0.7.1/">0.7.1</a></li>
-<li><a class="reference external" href="https://pyepr.readthedocs.io/en/v0.7/">0.7</a></li>
-<li><a class="reference external" href="https://pyepr.readthedocs.io/en/v0.6.1/">0.6.1</a></li>
-<li><a class="reference external" href="https://pyepr.readthedocs.io/en/v0.6/">0.6</a></li>
+<li><p><a class="reference external" href="https://pyepr.readthedocs.io/en/v1.0.0/">1.0.1</a> (latest stable)</p></li>
+<li><p><a class="reference external" href="https://pyepr.readthedocs.io/en/v1.0.0/">1.0.0</a></p></li>
+<li><p><a class="reference external" href="https://pyepr.readthedocs.io/en/v0.9.5/">0.9.5</a></p></li>
+<li><p><a class="reference external" href="https://pyepr.readthedocs.io/en/v0.8.2/">0.8.2</a></p></li>
+<li><p><a class="reference external" href="https://pyepr.readthedocs.io/en/v0.7.1/">0.7.1</a></p></li>
+<li><p><a class="reference external" href="https://pyepr.readthedocs.io/en/v0.6.1/">0.6.1</a></p></li>
 </ul>
 </div>
 <div class="section" id="license">
 <h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
-<p id="index-1">Copyright (C) 2011-2019 Antonio Valentino &lt;<a class="reference external" href="mailto:antonio&#46;valentino&#37;&#52;&#48;tiscali&#46;it">antonio<span>&#46;</span>valentino<span>&#64;</span>tiscali<span>&#46;</span>it</a>&gt;</p>
+<p id="index-1">Copyright (C) 2011-2020 Antonio Valentino &lt;<a class="reference external" href="mailto:antonio&#46;valentino&#37;&#52;&#48;tiscali&#46;it">antonio<span>&#46;</span>valentino<span>&#64;</span>tiscali<span>&#46;</span>it</a>&gt;</p>
 <p>PyEPR is free software: you can redistribute it and/or modify
 it under the terms of the <a class="reference external" href="http://www.gnu.org/licenses/gpl-3.0.html">GNU General Public License</a> as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -193,17 +184,15 @@ along with PyEPR.  If not, see &lt;<a class="reference external" href="http://ww
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script><div>
+<script>$('#searchbox').show(0);</script><div>
   <script type="text/javascript" src="http://www.openhub.net/p/588314/widgets/project_thin_badge.js">
   </script>
 </div><div>
@@ -265,13 +254,13 @@ along with PyEPR.  If not, see &lt;<a class="reference external" href="http://ww
         <li class="right" >
           <a href="usermanual.html" title="User Manual"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">PyEPR 1.0.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">PyEPR 1.0.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2011-2019, Antonio Valentino.
-      Last updated on Sep 08, 2019.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+        &#169; Copyright 2011-2020, Antonio Valentino.
+      Last updated on Mar 07, 2020.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.0.
     </div>
   </body>
 </html>
