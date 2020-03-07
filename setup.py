@@ -27,15 +27,22 @@ import glob
 PYEPR_COVERAGE = False
 
 
-def get_version(filename):
+def get_version(filename, strip_extra=False):
+    import re
+    from distutils.version import LooseVersion
+
     with open(filename) as fd:
         data = fd.read()
 
     mobj = re.search(
-        r'''^__version__\s*=\s*(?P<q>['"])(?P<version>\d+(\.\d+)*.*)(?P=q)''',
+        r'''^__version__\s*=\s*(?P<quote>['"])(?P<version>.*)(?P=quote)''',
         data, re.MULTILINE)
+    version = LooseVersion(mobj.group('version'))
 
-    return mobj.group('version')
+    if strip_extra:
+        return '.'.join(map(str, version.version[:3]))
+    else:
+        return version.vstring
 
 
 def get_use_setuptools():
