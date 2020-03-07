@@ -19,7 +19,7 @@
 # along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
 PYTHON = python3
-CYTHON = cython3
+CYTHON = $(PYTHON) -m cython
 DOWNLOAD = wget -c
 # DOWNLOAD = curl -C - -O
 CYTHONFLAGS=$(shell $(CYTHON) --help | grep -o -- '--3str')
