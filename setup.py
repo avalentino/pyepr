@@ -62,6 +62,9 @@ def get_extension(eprsrcdir=None, coverage=False):
         include_dirs = []
         libraries = ['epr_api']
 
+    import numpy
+    include_dirs.append(numpy.get_include())
+
     define_macros = [('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION')]
     if coverage:
         define_macros.extend([('CYTHON_TRACE_NOGIL', '1')])
