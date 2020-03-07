@@ -62,18 +62,9 @@ ENVISAT Product Reader Python API
     * `latest <https://pyepr.readthedocs.io/en/latest/>`_ development
     * `1.0.0 <https://pyepr.readthedocs.io/en/v1.0.0/>`_ (latest stable)
     * `0.9.5 <https://pyepr.readthedocs.io/en/v0.9.5/>`_
-    * `0.9.4 <https://pyepr.readthedocs.io/en/v0.9.4/>`_
-    * `0.9.3 <https://pyepr.readthedocs.io/en/v0.9.3/>`_
-    * `0.9.2 <https://pyepr.readthedocs.io/en/v0.9.2/>`_
-    * `0.9.1 <https://pyepr.readthedocs.io/en/v0.9.1/>`_
-    * `0.9 <https://pyepr.readthedocs.io/en/v0.9/>`_
     * `0.8.2 <https://pyepr.readthedocs.io/en/v0.8.2/>`_
-    * `0.8.1 <https://pyepr.readthedocs.io/en/v0.8.1/>`_
-    * `0.8 <https://pyepr.readthedocs.io/en/v0.8/>`_
     * `0.7.1 <https://pyepr.readthedocs.io/en/v0.7.1/>`_
-    * `0.7 <https://pyepr.readthedocs.io/en/v0.7/>`_
     * `0.6.1 <https://pyepr.readthedocs.io/en/v0.6.1/>`_
-    * `0.6 <https://pyepr.readthedocs.io/en/v0.6/>`_
 
 
 License
