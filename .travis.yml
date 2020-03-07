@@ -1,14 +1,11 @@
 language: python
 
 python:
-  - "2.7"
-  - "3.4"
   - "3.5"
   - "3.6"
   - "3.7"
   - "3.8"
   - "nightly"
-  - "pypy"
   - "pypy3"
 
 matrix:
@@ -22,10 +19,9 @@ before_install:
 install:
   - pip install -r requirements.txt
   - pip install sphinx coverage codecov
-  - if [[ $TRAVIS_PYTHON_VERSION < '3.4' ]]; then pip install -U unittest2; fi
 
 script:
-  - if [[ $TRAVIS_PYTHON_VERSION = '3.7' ]]; then make PYTHON=python coverage; else make PYTHON=python check; fi
+  - if [[ $TRAVIS_PYTHON_VERSION = '3.8' ]]; then make PYTHON=python coverage; else make PYTHON=python check; fi
 
 after_success:
-  - if [[ $TRAVIS_PYTHON_VERSION = '3.7' ]]; then codecov; fi
+  - if [[ $TRAVIS_PYTHON_VERSION = '3.8' ]]; then codecov; fi
