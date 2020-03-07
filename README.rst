@@ -72,7 +72,7 @@ correctly installed and configured:
 * `EPR API`_ >= 2.2 (optional, since PyEPR 0.7 the source tar-ball comes
   with a copy of the EPR C API sources)
 * a reasonably updated C compiler (build only)
-* Cython_ >= 0.19 (build only)
+* Cython_ >= 0.29 (build only)
 
 .. _Python3: Python_
 .. _numpy: https://www.numpy.org

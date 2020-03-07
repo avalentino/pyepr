@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2011-2020, Antonio Valentino <antonio.valentino@tiscali.it>
@@ -19,14 +19,17 @@
 # along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import re
 import sys
 import glob
 
 from setuptools import setup, Extension
 
-
-PYEPR_COVERAGE = False
+try:
+    import Cython
+    print('CYTHON_VERSION: {}'.format(Cython.__version__))
+    del Cython
+except ImportError:
+    print('CYTHON not installed')
 
 
 def get_version(filename, strip_extra=False):
@@ -47,141 +50,38 @@ def get_version(filename, strip_extra=False):
         return version.vstring
 
 
-try:
-    from Cython.Build import cythonize
-    from Cython import __version__ as CYTHON_VERSION
-    HAVE_CYTHON = True
-except ImportError:
-    HAVE_CYTHON = False
-    CYTHON_VERSION = None
-print('HAVE_CYTHON: {0}'.format(HAVE_CYTHON))
-if HAVE_CYTHON:
-    print('CYTHON_VERSION: {0}'.format(CYTHON_VERSION))
+def get_extension(eprsrcdir=None, coverage=False):
+    if eprsrcdir:
+        print('EPR_API: using EPR C API sources at "{}"'.format(eprsrcdir))
+        extra_sources = glob.glob(f'{eprsrcdir}/epr_*.c')
+        include_dirs = [eprsrcdir]
+        libraries = []
+    else:
+        print('EPR_API: using pre-built dynamic library for EPR C API')
+        extra_sources = []
+        include_dirs = []
+        libraries = ['epr_api']
 
+    define_macros = [('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION')]
+    if coverage:
+        define_macros.extend([('CYTHON_TRACE_NOGIL', '1')])
 
-# @COMPATIBILITY: Extension is an old style class in Python 2
-class PyEprExtension(Extension, object):
-    def __init__(self, *args, **kwargs):
-        self._include_dirs = []
-        eprsrcdir = kwargs.pop('eprsrcdir', None)
-
-        Extension.__init__(self, *args, **kwargs)
-
-        if not any('epr_' in src for src in self.sources):
-            self.sources.extend(self._extra_sources(eprsrcdir))
-
-        self.setup_requires_cython = False
-
-    def _extra_sources(self, eprsrcdir=None):
-        sources = []
-
-        # check for local epr-api sources
-        if eprsrcdir is None:
-            default_eprapisrc = 'epr-api-src'
-            if os.path.isdir(default_eprapisrc):
-                eprsrcdir = default_eprapisrc
-
-        if eprsrcdir:
-            print('using EPR C API sources at "{0}"'.format(eprsrcdir))
-            self._include_dirs.append(eprsrcdir)
-            sources.extend(glob.glob(os.path.join(eprsrcdir, 'epr_*.c')))
-
-        else:
-            print('using pre-built dynamic libraray for EPR C API')
-            if 'epr_api' not in self.libraries:
-                self.libraries.append('epr_api')
-
-        sources = sorted(set(sources).difference(self.sources))
-
-        return sources
-
-    @property
-    def include_dirs(self):
-        from numpy.distutils.misc_util import get_numpy_include_dirs
-        includes = set(get_numpy_include_dirs()).difference(self._include_dirs)
-        return self._include_dirs + sorted(includes)
-
-    @include_dirs.setter
-    def include_dirs(self, value):
-        self._include_dirs = value
-
-    # disable setuptools automatic conversion
-    def _convert_pyx_sources_to_lang(self):
-        pass
-
-    def convert_pyx_sources_to_lang(self):
-        lang = self.language or ''
-        target_ext = '.cpp' if lang.lower() == 'c++' else '.c'
-
-        sources = []
-        for src in self.sources:
-            if src.endswith('.pyx'):
-                csrc = re.sub('.pyx$', target_ext, src)
-                if os.path.exists(csrc):
-                    sources.append(csrc)
-                else:
-                    self.setup_requires_cython = True
-                    sources.append(src)
-            else:
-                sources.append(src)
-
-        if not self.setup_requires_cython:
-            self.sources = sources
-
-        return self.setup_requires_cython
-
-
-def get_extension():
-    # command line arguments management
-    eprsrcdir = None
-    for arg in list(sys.argv):
-        if arg.startswith('--epr-api-src='):
-            eprsrcdir = os.path.expanduser(arg.split('=')[1])
-            if eprsrcdir.lower() == 'none':
-                eprsrcdir = False
-            sys.argv.remove(arg)
-            break
-
-    define_macros = []
-
-    # @NOTE: uses the CYTHON_VERSION global variable
-    if HAVE_CYTHON and CYTHON_VERSION >= '0.29':
-        define_macros.append(
-            ('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION'),
-        )
-
-    ext = PyEprExtension(
+    ext = Extension(
         'epr',
-        sources=[os.path.join('src', 'epr.pyx')],
-        # libraries=['m'],
+        sources=[os.path.join('src', 'epr.pyx')] + extra_sources,
+        include_dirs=include_dirs,
+        libraries=libraries,
+        language='c',
         define_macros=define_macros,
-        eprsrcdir=eprsrcdir,
     )
 
-    # @NOTE: uses the HAVE_CYTHON and CYTHON_VERSION global variables
-    if HAVE_CYTHON:
-        if CYTHON_VERSION >= '0.29':
-            language_level = '3str'
-        else:
-            language_level = '2'
-        print('CYTHON_LANGUAGE_LEVEL: {0}'.format(language_level))
+    # compiler directives
+    language_level = '3str'
+    ext.cython_directives = dict(language_level=language_level)
+    print('CYTHON_LANGUAGE_LEVEL: {}'.format(language_level))
 
-        compiler_directives = dict(
-            language_level=language_level,
-        )
-
-        if PYEPR_COVERAGE:
-            compiler_directives['linetrace'] = True
-
-        extlist = cythonize([ext], compiler_directives=compiler_directives)
-        ext = extlist[0]
-
-        if PYEPR_COVERAGE:
-            ext.define_macros.extend([
-                ('CYTHON_TRACE_NOGIL', '1'),
-            ])
-    else:
-        ext.convert_pyx_sources_to_lang()
+    if coverage:
+        ext.cython_directives['linetrace'] = True
 
     return ext
 
@@ -238,7 +138,7 @@ any data field contained in a product file.
         'Source': 'https://github.com/avalentino/pyepr/',
         'Tracker': 'https://github.com/avalentino/pyepr/issues',
     },
-    ext_modules=[get_extension()],
+    # ext_modules=[],
     setup_requires=['numpy>=1.7'],
     install_requires=['numpy>=1.7'],
     python_requires='>=3.5, <4',
@@ -246,20 +146,30 @@ any data field contained in a product file.
 )
 
 
-def setup_package():
-    ext = config['ext_modules'][0]
-    if ext.setup_requires_cython:
-        config.setdefault('setup_requires', []).append('cython>=0.19')
+def setup_package(config, eprsrcdir=None, coverage=False):
+    if not os.path.exists(os.path.join('src', 'eps.c')):
+        config.setdefault('setup_requires', []).append('cython>=0.29')
+
+    config['ext_modules'] = [get_extension(eprsrcdir, coverage)]
 
     setup(**config)
 
 
 if __name__ == '__main__':
-    if '--coverage' in sys.argv or 'PYEPR_COVERAGE' in os.environ:
-        PYEPR_COVERAGE = True
-        if '--coverage' in sys.argv:
-            sys.argv.remove('--coverage')
+    PYEPR_COVERAGE_STR = os.environ.get('PYEPR_COVERAGE', '').upper()
+    DEFAULT_COVERAGE = bool(
+        PYEPR_COVERAGE_STR in ('Y', 'YES', 'TRUE', 'OK', 'ON', '1'))
+    DEFAULT_EPRAPI_SRC = 'epr-api-src' if os.path.exists('epr-api-src') else ''
+    DEFAULT_EPRAPI_SRC = os.environ.get('PYEPR_EPRAPI_SRC', DEFAULT_EPRAPI_SRC)
 
-    print('PYEPR_COVERAGE:', PYEPR_COVERAGE)
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--coverage', action='store_true', default=DEFAULT_COVERAGE)
+    parser.add_argument('--epr-api-src', default=DEFAULT_EPRAPI_SRC)
+    extra_args, setup_argv = parser.parse_known_args(sys.argv)
+    sys.argv[:] = setup_argv
 
-    setup_package()
+    print('PYEPR_COVERAGE:', extra_args.coverage)
+
+    setup_package(config, extra_args.epr_api_src, extra_args.coverage)

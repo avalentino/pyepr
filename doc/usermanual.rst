@@ -67,7 +67,7 @@ correctly installed and configured:
 * `EPR API`_ >= 2.2 (optional, since PyEPR 0.7 the source tar-ball comes
   with a copy of the EPR C API sources)
 * a reasonably updated C compiler [#]_ (build only)
-* Cython_ >= 0.19 [#]_ (optional and build only)
+* Cython_ >= 0.29 [#]_ (optional and build only)
 
 
 .. [#] PyEPR_ has been developed and tested with gcc_ 4.
