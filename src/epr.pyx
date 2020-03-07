@@ -2546,8 +2546,8 @@ cdef class Product(EprObject):
 
         .. important::
 
-            on MacOS-X after using the file descriptor its position
-            shall be reset to the original one.
+            on MacOS-X the position of the file descriptor shall be
+            reset to the original one after its use.
 
         """
 
