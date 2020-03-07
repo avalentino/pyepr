@@ -60,7 +60,6 @@ ELSE:
 
 from epr cimport *
 
-from cpython.version cimport PY_MAJOR_VERSION
 from cpython.object cimport PyObject_AsFileDescriptor
 from cpython.weakref cimport PyWeakref_NewRef
 
@@ -74,7 +73,6 @@ from collections import namedtuple
 
 import numpy as np
 
-cdef bint PY3 = (PY_MAJOR_VERSION >= 3)
 cdef bint SWAP_BYTES = (sys.byteorder == 'little')
 
 # internal utils
@@ -89,10 +87,7 @@ cdef inline bytes _to_bytes(s, encoding='UTF-8'):
 
 
 cdef inline str _to_str(b, encoding='UTF-8'):
-    if PY3:
-        return b.decode(encoding)
-    else:
-        return b
+    return b.decode(encoding)
 
 
 # utils

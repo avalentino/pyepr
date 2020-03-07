@@ -27,8 +27,10 @@ import numbers
 import operator
 import platform
 import tempfile
+import unittest
 import functools
 import contextlib
+from urllib.request import urlopen
 from distutils.version import LooseVersion
 
 try:
@@ -36,22 +38,6 @@ try:
 except ImportError:
     resource = None
 
-try:
-    from unittest import skipIf as _skipIf, TestCase as _TestCase
-    if not hasattr(_TestCase, 'subTest'):
-        raise ImportError
-    if not hasattr(_TestCase, 'assertRaisesRegex'):
-        raise ImportError
-except ImportError:
-    import unittest2 as unittest
-else:
-    del _skipIf, _TestCase
-    import unittest
-
-try:
-    from urllib.request import urlopen
-except ImportError:
-    from urllib2 import urlopen
 
 import numpy as np
 import numpy.testing as npt

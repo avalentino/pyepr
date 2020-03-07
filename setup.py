@@ -18,8 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import print_function
-
 import os
 import re
 import sys
@@ -235,13 +233,7 @@ any data field contained in a product file.
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',    # deprecated
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',    # deprecated
-        'Programming Language :: Python :: 3.3',    # deprecated
-        'Programming Language :: Python :: 3.4',    # deprecated
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
@@ -254,17 +246,9 @@ any data field contained in a product file.
     ],
     platforms=['any'],
     license='GPL3',
-    requires=['numpy'],     # XXX: check
-    python_requires='>=2.6, !=3.0.*, !=3.1.*, <4',
+    requires=['numpy'],
+    python_requires='>=3.5, <4',
 )
-
-
-def get_collector():
-    import unittest
-    if hasattr(unittest.TestCase, 'subTest'):
-        return 'tests'
-    else:
-        return 'unittest2.collector'
 
 
 def setup_package():
@@ -272,7 +256,6 @@ def setup_package():
     config['ext_modules'] = [ext]
 
     if HAVE_SETUPTOOLS:
-        config['test_suite'] = get_collector()
         config.setdefault('setup_requires', []).append('numpy>=1.7')
         config.setdefault('install_requires', []).append('numpy>=1.7')
         if ext.setup_requires_cython:

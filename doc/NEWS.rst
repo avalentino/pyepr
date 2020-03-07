@@ -4,7 +4,8 @@ Change history
 PyEPR 1.1.0 (under development)
 -------------------------------
 
-* TBW
+* Old Python versions are no longer officially supported.
+  Now PyEPR require Python >= 3.5.
 
 
 PyEPR 1.0.1 (07/03/2020)
