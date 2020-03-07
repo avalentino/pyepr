@@ -26,7 +26,7 @@ PyEPR 1.0.0 (08/09/2019)
 
 * Do not use deprecated numpy_ API (requires Cython_ >= 0.29)
 * Minimal numpy_ version is now v1.7
-* Set cython_ 'language_level` explicitly to '3str' if cython_ >= v0.29,
+* Set Cython_ 'language_level` explicitly to '3str' if Cython_ >= v0.29,
   to '2' otherwise
 * Python v2.6, v3.2, v3.3 and v3.4 are now deprecated.
   Support for the deprecated Python version will be removed in future
@@ -51,7 +51,7 @@ PyEPR 0.9.5 (23/08/2018)
 PyEPR 0.9.4 (29/04/2018)
 ------------------------
 
-* Fix compatibility with cython_ >= 0.28
+* Fix compatibility with Cython_ >= 0.28
 * PyEPR has been successfully tested with PyPy_
 
 
@@ -130,8 +130,8 @@ PyEPR 0.9 (27/02/2015)
 * the deprecated `__revision__` variable has been removed
 * declarations of the EPR C API have been moved to the new :file:`epr.pyd`
 * the `const_char` and `const_void` definitions have been dropped,
-  no longer necessary with cython_ >= 0.19
-* minimum required version for cython_ is now 0.19
+  no longer necessary with Cython_ >= 0.19
+* minimum required version for Cython_ is now 0.19
 * the :file:`setup.py` script has been completely rewritten to be more
   "pip_ friendly".  The new script uses setuptools_ if available and
   functions that use numpy_ are evaluated lazily so to give a chance to
@@ -156,7 +156,7 @@ PyEPR 0.9 (27/02/2015)
 
 .. _pip: https://pip.pypa.io
 .. _setuptools: https://github.com/pypa/setuptools
-.. _numpy: https://www.numpy.org
+.. _numpy: https://numpy.org
 .. _Windows: https://windows.microsoft.com
 .. _AppVeyor: https://www.appveyor.com
 .. _PyPI: https://pypi.org/project/pyepr
@@ -280,7 +280,7 @@ PyEPR 0.7 (04/08/2013)
 PyEPR 0.6.1 (26/04/2012)
 ------------------------
 
-* fix compatibility with cython_ 0.16
+* fix compatibility with Cython_ 0.16
 * added a new option to the setup script (`--epr-api-src`) to build
   PyEPR using the EPR-API C sources
 
@@ -303,15 +303,15 @@ PyEPR 0.5 (25/04/2011)
 * code examples added to documentation
 * tutorials added to documentation
 * the LICENSE.txt file is now included in the source distribution
-* the cython_ construct ``with nogil`` is now used instead of calling
+* the Cython_ construct ``with nogil`` is now used instead of calling
   :c:func:`Py_BEGIN_ALLOW_THREADS` and :c:func:`Py_END_ALLOW_THREADS`
   directly
-* dropped old versions of cython_; now cython_ 0.14.1 or newer is required
+* dropped old versions of Cython_; now Cython_ 0.14.1 or newer is required
 * suppressed several constness related warnings
 
 .. _`Python 3`: https://docs.python.org/3
 .. _intersphinx: http://www.sphinx-doc.org/en/master/ext/intersphinx.html
-.. _cython: https://cython.org
+.. _Cython: https://cython.org
 
 
 PyEPR 0.4 (10/04/2011)

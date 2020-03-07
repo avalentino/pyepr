@@ -75,7 +75,7 @@ correctly installed and configured:
 * Cython_ >= 0.29 (build only)
 
 .. _Python3: Python_
-.. _numpy: https://www.numpy.org
+.. _numpy: https://numpy.org
 .. _gcc: https://gcc.gnu.org
 .. _Cython: https://cython.org
 
@@ -106,20 +106,20 @@ Installation
 
 The easier way to install PyEPR_ is using tools like pip_::
 
-    $ pip install pyepr
+    $ python3 -m pip install pyepr
 
 or::
 
-    $ pip install -U --prefix=<TARGET DIRECTORY>
+    $ python3 -m pip install -U --prefix=<TARGET DIRECTORY>
 
 PyEPR_ can be installed from the source tar-ball using the following
 command::
 
-    $ python setup.py install
+    $ python3 setup.py install
 
 To install PyEPR_ in a non-standard path::
 
-    $ python setup.py install --prefix=<TARGET_PATH>
+    $ python3 setup.py install --prefix=<TARGET_PATH>
 
 .. _pip: https://pypi.python.org/pypi/pip
 
@@ -142,4 +142,3 @@ You should have received a copy of the GNU General Public License
 along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
 .. _`GNU General Public License`: http://www.gnu.org/licenses/gpl-3.0.html
-

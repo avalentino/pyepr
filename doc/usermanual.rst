@@ -54,7 +54,7 @@ The user can open a product in update mode ('rb+') and call the
 .. _ESA: https://earth.esa.int
 
 
-.. index:: requirements, EPR-API, Python, numpy, cython, unittest2, gcc, extension
+.. index:: requirements, EPR-API, Python, numpy, cython, pytest, gcc, extension
 
 Requirements
 ------------
@@ -68,6 +68,7 @@ correctly installed and configured:
   with a copy of the EPR C API sources)
 * a reasonably updated C compiler [#]_ (build only)
 * Cython_ >= 0.29 [#]_ (optional and build only)
+* pytest_ (optional and only needed for testing)
 
 
 .. [#] PyEPR_ has been developed and tested with gcc_ 4.
@@ -81,9 +82,10 @@ correctly installed and configured:
 .. _Python2: Python_
 .. _Python3: Python_
 .. _PyPy: http://pypy.org
-.. _numpy: https://www.numpy.org
+.. _numpy: https://numpy.org
 .. _gcc: http://gcc.gnu.org
 .. _Cython: https://cython.org
+.. _pytest: https://pytest.org
 
 
 .. index:: download, PyPi, GitHub, project, git
@@ -124,15 +126,15 @@ Installation
 
 The easier way to install PyEPR_ is using tools like pip_::
 
-    $ pip install pyepr
+    $ python3 -m pip install pyepr
 
 For a user specific installation please use::
 
-    $ pip install --user pyepr
+    $ python3 -m pip install --user pyepr
 
 To install PyEPR_ in a non-standard path::
 
-    $ pip install --install-option="--prefix=<TARGET_PATH>" pyepr
+    $ python3 -m pip install --install-option="--prefix=<TARGET_PATH>" pyepr
 
 just make sure that :file:`<TARGET_PATH>/lib/pythonX.Y/site-packages` is in
 the :envvar:`PYTHONPATH`.
@@ -146,7 +148,7 @@ the :envvar:`PYTHONPATH`.
 
 PyEPR_ can be installed from sources using the following command::
 
-    $ python setup.py install
+    $ python3 setup.py install
 
 The :file:`setup.py` script by default checks for the availability of the
 EPR C API source code in the :file:`<package-root>/epr-api-src` directory
@@ -163,17 +165,17 @@ installed in the system (see the Requirements_ section).
 It is possible to control which `EPR API`_ C sources to use by means of the
 `--epr-api-src` option of the :file:`setup.py` script::
 
-    $ python setup.py install --epr-api-src=../epr-api/src
+    $ python3 setup.py install --epr-api-src=../epr-api/src
 
 Also it is possible to switch off the *standalone mode* and force the link
 with the system `EPR API`_ C library::
 
-    $ python setup.py install --epr-api-src=None
+    $ python3 setup.py install --epr-api-src=None
 
 .. _pip: https://pypi.org/project/pip
 
 
-.. index:: test, setup.py, download
+.. index:: test, setup.py, download, pytest
    pair: test; suite
    pair: sample; product
 
@@ -181,14 +183,16 @@ Testing
 -------
 
 PyEPR_ package comes with a complete test suite.
-The test suite can be run using the following command in the :file:`tests`
-directory::
+The test suite can be run from the package root directory using pytest_::
 
-    $ python test_all.py
+    $ python3 -m pytest tests
 
-or from the package root directory::
+or running the :file:`test_all.py` script directly::
 
-    $ python setup.py test
+    $ python3 test_all.py
+
+In the second case please make sure that the :mod:`epr` extension module
+is in the Python search path (see also :envvar:`PYTHONPATH`).
 
 The test script automatically downloads and decompresses the ENVISAT sample
 product necessary for testing,
@@ -413,7 +417,7 @@ Special methods
 ---------------
 
 The Python_ EPR API also implements some `special method`_ in order to make
-EPR programming even handy and, in short, pythonic_.
+EPR programming even handy and, in short, "pythonic_".
 
 The ``__repr__`` methods have been overridden to provide a little more
 information with respect to the standard implementation.
@@ -540,4 +544,3 @@ or also update all elements ol the :class:`epr.Field` in one shot::
 .. _`special method`: https://docs.python.org/3/reference/datamodel.html
 .. _pythonic: http://www.cafepy.com/article/be_pythonic
 .. _`context manager`: https://docs.python.org/3/library/stdtypes.html#context-manager-types
-
