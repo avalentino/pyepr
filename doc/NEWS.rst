@@ -8,6 +8,8 @@ PyEPR 1.0.1 (in development)
   (only impacting MacOS-X).
   Also some advice about the correct use of :data:`epr.Product._fileno`
   has been added to the documentation.
+* Always close the product object during tests.
+  Prevents errors during CI cleanup actions on Windows.
 
 
 PyEPR 1.0.0 (08/09/2019)
