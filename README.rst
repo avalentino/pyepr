@@ -67,7 +67,7 @@ Requirements
 In order to use PyEPR it is needed that the following software are
 correctly installed and configured:
 
-* Python3_ >= 3.5
+* Python3_ >= 3.5 (including PyPy3_)
 * numpy_ >= 1.7.0
 * `EPR API`_ >= 2.2 (optional, since PyEPR 0.7 the source tar-ball comes
   with a copy of the EPR C API sources)
@@ -75,6 +75,7 @@ correctly installed and configured:
 * Cython_ >= 0.29 (build only)
 
 .. _Python3: Python_
+.. _PyPy3: https://www.pypy.org
 .. _numpy: https://numpy.org
 .. _gcc: https://gcc.gnu.org
 .. _Cython: https://cython.org
