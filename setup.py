@@ -150,7 +150,7 @@ any data field contained in a product file.
 
 
 def setup_package(config, eprsrcdir=None, coverage=False):
-    if not os.path.exists(os.path.join('src', 'eps.c')):
+    if not os.path.exists(os.path.join('src', 'epr.c')):
         config.setdefault('setup_requires', []).append('cython>=0.29')
 
     config['ext_modules'] = [get_extension(eprsrcdir, coverage)]
