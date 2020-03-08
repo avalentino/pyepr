@@ -53,7 +53,7 @@ def get_version(filename, strip_extra=False):
 def get_extension(eprsrcdir=None, coverage=False):
     if eprsrcdir:
         print('EPR_API: using EPR C API sources at "{}"'.format(eprsrcdir))
-        extra_sources = glob.glob(f'{eprsrcdir}/epr_*.c')
+        extra_sources = glob.glob('{}/epr_*.c'.format(eprsrcdir))
         include_dirs = [eprsrcdir]
         libraries = []
     else:
