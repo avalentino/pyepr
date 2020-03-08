@@ -20,9 +20,8 @@
 
 import os
 import sys
-import glob
 
-from setuptools import setup, Extension
+import setuptools
 
 try:
     import Cython
@@ -51,7 +50,7 @@ def get_version(filename, strip_extra=False):
 
 
 # https://mail.python.org/pipermail/distutils-sig/2007-September/008253.html
-class NumpyExtension(Extension):
+class NumpyExtension(setuptools.Extension):
     """Extension type that adds the NumPy include directory to include_dirs."""
 
     @property
@@ -64,7 +63,9 @@ class NumpyExtension(Extension):
         self._include_dirs = include_dirs
 
 
-def get_extension(eprsrcdir=None, coverage=False):
+def setup_extension(eprsrcdir=None, coverage=False):
+    import glob
+
     if eprsrcdir:
         print('EPR_API: using EPR C API sources at "{}"'.format(eprsrcdir))
         extra_sources = glob.glob('{}/epr_*.c'.format(eprsrcdir))
@@ -100,7 +101,7 @@ def get_extension(eprsrcdir=None, coverage=False):
     return ext
 
 
-config = dict(
+BASE_CONFIG = dict(
     name='pyepr',
     version=get_version(os.path.join('src', 'epr.pyx')),
     description='Python ENVISAT Product Reader API',
@@ -160,16 +161,16 @@ any data field contained in a product file.
 )
 
 
-def setup_package(config, eprsrcdir=None, coverage=False):
+def make_config(eprsrcdir=None, coverage=False):
+    config = BASE_CONFIG.copy()
+    config['ext_modules'] = [setup_extension(eprsrcdir, coverage)]
     if not os.path.exists(os.path.join('src', 'epr.c')):
         config.setdefault('setup_requires', []).append('cython>=0.29')
 
-    config['ext_modules'] = [get_extension(eprsrcdir, coverage)]
-
-    setup(**config)
+    return config
 
 
-if __name__ == '__main__':
+def get_parser():
     PYEPR_COVERAGE_STR = os.environ.get('PYEPR_COVERAGE', '').upper()
     DEFAULT_COVERAGE = bool(
         PYEPR_COVERAGE_STR in ('Y', 'YES', 'TRUE', 'OK', 'ON', '1'))
@@ -181,9 +182,15 @@ if __name__ == '__main__':
     parser.add_argument(
         '--coverage', action='store_true', default=DEFAULT_COVERAGE)
     parser.add_argument('--epr-api-src', default=DEFAULT_EPRAPI_SRC)
+
+    return parser
+
+
+if __name__ == '__main__':
+    parser = get_parser()
     extra_args, setup_argv = parser.parse_known_args(sys.argv)
     sys.argv[:] = setup_argv
-
     print('PYEPR_COVERAGE:', extra_args.coverage)
 
-    setup_package(config, extra_args.epr_api_src, extra_args.coverage)
+    config = make_config(extra_args.epr_api_src, extra_args.coverage)
+    setuptools.setup(**config)
