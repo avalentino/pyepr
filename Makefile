@@ -77,7 +77,7 @@ clean:
 	find . -name '*~' -delete
 	$(RM) *.c *.o *.html .coverage coverage.xml
 	$(RM) src/epr.html
-	$(RM) -r htmlcov
+	$(RM) -r htmlcov .pytest_cache
 	$(RM) epr.p*        # workaround for Cython.Coverage bug #1985
 
 distclean: clean
@@ -85,6 +85,7 @@ distclean: clean
 	$(RM) -r doc/html
 	$(RM) -r LICENSES epr-api-src
 	$(MAKE) -C tests -f checksetup.mak distclean
+	$(RM) -r .eggs
 
 check: ext data
 	env PYTHONPATH=. $(PYTHON) tests/test_all.py --verbose
