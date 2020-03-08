@@ -68,7 +68,7 @@ doc:
 
 clean:
 	$(PYTHON) setup.py clean --all
-	$(RM) -r build dist pyepr.egg-info
+	$(RM) -r build dist pyepr.egg-info wheelhouse
 	$(RM) -r $$(find doc -name __pycache__) $$(find tests -name __pycache__)
 	$(RM) MANIFEST src/*.c src/*.o *.so
 	$(RM) tests/*.py[co] doc/sphinxext/*.py[co] README.html
