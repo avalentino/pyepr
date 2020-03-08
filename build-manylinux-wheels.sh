@@ -4,23 +4,25 @@
 # It is assumed that the docker image has been run as follows::
 #
 #   $ make fullsdist
-#   $ docker pull quay.io/pypa/manylinux1_x86_64
-#   $ docker run --rm -v $(pwd):/io quay.io/pypa/manylinux1_x86_64 /io/build-manylinux-wheels.sh
+#   $ docker pull quay.io/pypa/manylinux2010_x86_64
+#   $ docker run --rm -v $(pwd):/io quay.io/pypa/manylinux2010_x86_64 /io/build-manylinux-wheels.sh
 #
 # For interactive sessions please use::
 #
 #   $ make fullsdist
-#   $ docker pull quay.io/pypa/manylinux1_x86_64
-#   $ docker run -it -v $(pwd):/io quay.io/pypa/manylinux1_x86_64
+#   $ docker pull quay.io/pypa/manylinux2010_x86_64
+#   $ docker run -it -v $(pwd):/io quay.io/pypa/manylinux2010_x86_64
 #   $ cd /io
 #   $ sh build-manylinux-wheels.sh
 
 set -e -x
 
 PKG=pyepr
+# PYBINS=/opt/python/*/bin/
+PYBINS=/opt/python/cp3[5-9]*/bin
 
 # Compile wheels
-for PYBIN in /opt/python/*/bin; do
+for PYBIN in ${PYBINS}; do
     "${PYBIN}/pip" install -r /io/requirements.txt
     "${PYBIN}/pip" wheel /io/dist/${PKG}*.tar.gz -w wheelhouse/
 done
@@ -31,7 +33,7 @@ for whl in wheelhouse/${PKG}*.whl; do
 done
 
 # Install packages and test
-for PYBIN in /opt/python/*/bin/; do
+for PYBIN in ${PYBINS}; do
     "${PYBIN}/pip" install ${PKG} --no-index -f /io/wheelhouse
     "${PYBIN}/python" /io/tests/test_all.py -v
 done
