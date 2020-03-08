@@ -1,3 +1,2 @@
 numpy>=1.7
 cython>=0.19
-unittest2;python_version<"3.4"

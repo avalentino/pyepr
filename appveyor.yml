@@ -19,7 +19,7 @@ environment:
 
 install:
   # We need wheel installed to build wheels
-  - "%PYTHON%\\python.exe -m pip install wheel cython numpy unittest2"
+  - "%PYTHON%\\python.exe -m pip install wheel cython numpy"
 
   # epr-api
   - "git clone -b pyepr https://github.com/avalentino/epr-api.git"
