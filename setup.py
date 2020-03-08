@@ -50,6 +50,20 @@ def get_version(filename, strip_extra=False):
         return version.vstring
 
 
+# https://mail.python.org/pipermail/distutils-sig/2007-September/008253.html
+class NumpyExtension(Extension):
+    """Extension type that adds the NumPy include directory to include_dirs."""
+
+    @property
+    def include_dirs(self):
+        from numpy import get_include
+        return self._include_dirs + [get_include()]
+
+    @include_dirs.setter
+    def include_dirs(self, include_dirs):
+        self._include_dirs = include_dirs
+
+
 def get_extension(eprsrcdir=None, coverage=False):
     if eprsrcdir:
         print('EPR_API: using EPR C API sources at "{}"'.format(eprsrcdir))
@@ -62,14 +76,11 @@ def get_extension(eprsrcdir=None, coverage=False):
         include_dirs = []
         libraries = ['epr_api']
 
-    import numpy
-    include_dirs.append(numpy.get_include())
-
     define_macros = [('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION')]
     if coverage:
         define_macros.extend([('CYTHON_TRACE_NOGIL', '1')])
 
-    ext = Extension(
+    ext = NumpyExtension(
         'epr',
         sources=[os.path.join('src', 'epr.pyx')] + extra_sources,
         include_dirs=include_dirs,
