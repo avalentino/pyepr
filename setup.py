@@ -102,64 +102,7 @@ def setup_extension(eprsrcdir=None, coverage=False):
 
 
 BASE_CONFIG = dict(
-    name='pyepr',
-    # version=get_version(os.path.join('src', 'epr.pyx')),
-    description='Python ENVISAT Product Reader API',
-    long_description='''PyEPR provides Python_ bindings for the ENVISAT
-Product Reader C API (`EPR API`_) for reading satellite data from ENVISAT_
-ESA_ (European Space Agency) mission.
-
-PyEPR, as well as the `EPR API`_ for C, supports ENVISAT_ MERIS, AATSR
-Level 1B and Level 2 and also ASAR data products. It provides access to
-the data either on a geophysical (decoded, ready-to-use pixel samples)
-or on a raw data layer. The raw data access makes it possible to read
-any data field contained in a product file.
-
-.. _Python: https://www.python.org
-.. _`EPR API`: https://github.com/bcdev/epr-api
-.. _ENVISAT: https://envisat.esa.int
-.. _ESA: https://earth.esa.int''',
-    long_description_content_type='text/x-rst',
-    url='http://avalentino.github.com/pyepr',
-    download_url='http://pypi.python.org/pypi/pyepr',
-    author='Antonio Valentino',
-    author_email='antonio.valentino@tiscali.it',
-    license='GPL3',
-    classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Environment :: Other Environment',
-        'Intended Audience :: Developers',
-        'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: GNU General Public License (GPL)',
-        'Operating System :: MacOS :: MacOS X',
-        'Operating System :: Microsoft :: Windows',
-        'Operating System :: POSIX',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
-        'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: Implementation :: PyPy',
-        'Programming Language :: Cython',
-        'Topic :: Software Development :: Libraries',
-        'Topic :: Scientific/Engineering',
-        'Topic :: Scientific/Engineering :: GIS',
-    ],
-    keywords='satellite reader envisat',
-    platforms='any',
-    project_urls={
-        'Documentation': 'http://avalentino.github.io/pyepr/html/index.html',
-        'Source': 'https://github.com/avalentino/pyepr',
-        'Tracker': 'https://github.com/avalentino/pyepr/issues',
-    },
-    # ext_modules=[],
-    setup_requires=['numpy>=1.7'],
-    install_requires=['numpy>=1.7'],
-    python_requires='>=3.5, <4',
-    zip_safe=False,
+    version=get_version(os.path.join('src', 'epr.pyx')),
 )
 
 
