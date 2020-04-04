@@ -1,2 +1,4 @@
 numpy>=1.7
 cython>=0.29
+sphinx
+pytest
