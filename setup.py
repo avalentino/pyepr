@@ -103,7 +103,7 @@ def setup_extension(eprsrcdir=None, coverage=False):
 
 BASE_CONFIG = dict(
     name='pyepr',
-    version=get_version(os.path.join('src', 'epr.pyx')),
+    # version=get_version(os.path.join('src', 'epr.pyx')),
     description='Python ENVISAT Product Reader API',
     long_description='''PyEPR provides Python_ bindings for the ENVISAT
 Product Reader C API (`EPR API`_) for reading satellite data from ENVISAT_
@@ -118,8 +118,7 @@ any data field contained in a product file.
 .. _Python: https://www.python.org
 .. _`EPR API`: https://github.com/bcdev/epr-api
 .. _ENVISAT: https://envisat.esa.int
-.. _ESA: https://earth.esa.int
-''',
+.. _ESA: https://earth.esa.int''',
     long_description_content_type='text/x-rst',
     url='http://avalentino.github.com/pyepr',
     download_url='http://pypi.python.org/pypi/pyepr',
@@ -141,6 +140,7 @@ any data field contained in a product file.
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Programming Language :: Cython',
         'Topic :: Software Development :: Libraries',
@@ -148,9 +148,10 @@ any data field contained in a product file.
         'Topic :: Scientific/Engineering :: GIS',
     ],
     keywords='satellite reader envisat',
+    platforms='any',
     project_urls={
         'Documentation': 'http://avalentino.github.io/pyepr/html/index.html',
-        'Source': 'https://github.com/avalentino/pyepr/',
+        'Source': 'https://github.com/avalentino/pyepr',
         'Tracker': 'https://github.com/avalentino/pyepr/issues',
     },
     # ext_modules=[],
@@ -163,6 +164,7 @@ any data field contained in a product file.
 
 def make_config(eprsrcdir=None, coverage=False):
     config = BASE_CONFIG.copy()
+    config['version'] = get_version(os.path.join('src', 'epr.pyx'))
     config['ext_modules'] = [setup_extension(eprsrcdir, coverage)]
     if not os.path.exists(os.path.join('src', 'epr.c')):
         config.setdefault('setup_requires', []).append('cython>=0.29')
