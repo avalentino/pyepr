@@ -17,7 +17,7 @@ before_install:
   - sudo apt-get install -y libepr-api-dev
 
 install:
-  - pip install -r requirements.txt
+  - pip install -r requirements-dev.txt
   - pip install sphinx coverage codecov
   - if [[ $TRAVIS_PYTHON_VERSION = 'pypy3' ]]; then pip install -U numpy cython; fi
 
