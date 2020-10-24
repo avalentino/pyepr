@@ -27,7 +27,7 @@ CYTHONFLAGS=$(shell $(CYTHON) --help | grep -o -- '--3str')
 TEST_DATSET_URL = "http://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz"
 TEST_DATSET = tests/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1
 
-EPRAPIROOT = ../epr-api
+EPRAPIROOT = extern/epr-api
 
 .PHONY: default ext cythonize sdist eprsrc fullsdist doc clean distclean \
         check debug data upload manylinux coverage ext-coverage coverage-report
@@ -45,15 +45,11 @@ src/epr.c: src/epr.pyx
 sdist: doc cythonize
 	$(PYTHON) setup.py sdist
 
-epr-api-src:
-	mkdir -p epr-api-src
-	cp $(EPRAPIROOT)/src/*.[ch] epr-api-src
-
 LICENSES/epr-api.txt:
 	mkdir LICENSES
 	cp $(EPRAPIROOT)/LICENSE.txt LICENSES/epr-api.txt
 
-eprsrc: epr-api-src LICENSES/epr-api.txt
+eprsrc: LICENSES/epr-api.txt
 
 fullsdist: doc cythonize eprsrc
 	$(PYTHON) setup.py sdist
@@ -83,7 +79,7 @@ clean:
 distclean: clean
 	$(RM) $(TEST_DATSET)
 	$(RM) -r doc/html
-	$(RM) -r LICENSES epr-api-src
+	$(RM) -r LICENSES
 	$(MAKE) -C tests -f checksetup.mak distclean
 	$(RM) -r .eggs
 
