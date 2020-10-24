@@ -6,8 +6,10 @@ PyEPR 1.1.0 (under development)
 
 * Old Python versions are no longer officially supported.
   Now PyEPR require Python >= 3.5 and Cython_ >= v0.29.
+* Introduced the ``pyproject.toml`` file.
 * The `setup.py` scripts has been simplified and modernized,
-  now it always use setuptools_.
+  now it always use setuptools_ and ``setup.cfg``.
+* Now the EPR C API is handled using git submodule.
 
 
 PyEPR 1.0.1 (07/03/2020)
