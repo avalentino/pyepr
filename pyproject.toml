@@ -1,4 +1,9 @@
 # See: https://pip.pypa.io/en/stable/reference/pip/#pep-517-and-518-support
 [build-system]
-requires = ["setuptools >= 40.8.0", "wheel", "cython >= 0.29"]
+requires = [
+    "setuptools >= 40.8.0",
+    "wheel",
+    "cython >= 0.29",
+    "oldest-supported-numpy",
+]
 build-backend = "setuptools.build_meta"
