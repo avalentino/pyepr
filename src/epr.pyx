@@ -2,7 +2,7 @@
 
 # PyEPR - Python bindings for ENVISAT Product Reader API
 #
-# Copyright (C) 2011-2020, Antonio Valentino <antonio.valentino@tiscali.it>
+# Copyright (C) 2011-2021, Antonio Valentino <antonio.valentino@tiscali.it>
 #
 # This file is part of PyEPR.
 #
@@ -1653,7 +1653,7 @@ cdef class Band(EprObject):
         * ``1OF2``  --> first byte of 2-byte interleaved MDS
         * ``2OF2``  --> second byte of 2-byte interleaved MDS
         * ``0123``  --> combine 3-bytes interleaved to 4-byte integer
-        
+
         """
         def __get__(self):
             self.check_closed_product()

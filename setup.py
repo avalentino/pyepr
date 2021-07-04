@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2011-2020, Antonio Valentino <antonio.valentino@tiscali.it>
+# Copyright (C) 2011-2021, Antonio Valentino <antonio.valentino@tiscali.it>
 #
 # This file is part of PyEPR.
 #
