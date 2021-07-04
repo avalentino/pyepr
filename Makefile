@@ -24,8 +24,10 @@ DOWNLOAD = wget -c
 # DOWNLOAD = curl -C - -O
 CYTHONFLAGS=$(shell $(CYTHON) --help | grep -o -- '--3str')
 
-TEST_DATSET_URL = "http://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz"
-TEST_DATSET = tests/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1
+TEST_DATSET_URL = "http://www.brockmann-consult.de/beam/data/products/ASAR/ASA_APM_1PNPDE20091007_025628_000000432083_00118_39751_9244.zip"
+# TEST_DATSET_URL = "http://www.brockmann-consult.de/beam/data/products/MER_RR__2PNPDK20030809_100609_000022512018_00466_07534_3898.zip"
+TEST_DATSET_ARCH = $(shell basename $(TEST_DATSET_URL))
+TEST_DATSET = tests/$(shell basename $(TEST_DATSET_ARCH) .zip).N1
 
 EPRAPIROOT = extern/epr-api
 
@@ -77,7 +79,7 @@ clean:
 	$(RM) epr.p*        # workaround for Cython.Coverage bug #1985
 
 distclean: clean
-	$(RM) $(TEST_DATSET)
+	$(RM) $(TEST_DATSET) $(TEST_DATSET_ARCH)
 	$(RM) -r doc/html
 	$(RM) -r LICENSES
 	$(MAKE) -C tests -f checksetup.mak distclean
@@ -104,14 +106,15 @@ coverage-report: coverage
 	cp src/epr.html htmlcov
 
 debug:
-	$(PYTHON) setup.py build_ext --inplace --debug
+	$(PYTHON)d setup.py build_ext --inplace --debug
 
 data: $(TEST_DATSET)
 
-$(TEST_DATSET):
+$(TEST_DATSET_ARCH):
 	$(DOWNLOAD) $(TEST_DATSET_URL)
-	mv $(shell basename $(TEST_DATSET_URL)) tests
-	gunzip $@
+
+$(TEST_DATSET): $(TEST_DATSET_ARCH)
+	unzip -o -d tests $(TEST_DATSET_ARCH) $(shell basename $@)
 
 manylinux:
 	# make fullsdist

@@ -21,15 +21,14 @@
 import os
 import re
 import sys
-import gzip
 import shutil
 import numbers
+import zipfile
 import operator
 import platform
 import tempfile
 import unittest
 import functools
-import contextlib
 from urllib.request import urlopen
 from distutils.version import LooseVersion
 
@@ -74,8 +73,8 @@ EPR_C_BUG_BCEPR002 = EPR_C_BUG_PYEPR009
 
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
-TEST_PRODUCT = 'MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1'
-
+TEST_PRODUCT = 'ASA_APM_1PNPDE20091007_025628_000000432083_00118_39751_9244.N1'
+TEST_PRODUCT_BM_EXPR = None
 
 def quiet(func):
     @functools.wraps(func)
@@ -116,19 +115,18 @@ def equal_products(product1, product2):
 
 def setUpModule():
     filename = os.path.join(TESTDIR, TEST_PRODUCT)
-    url = 'http://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz'
+    baseurl = 'http://www.brockmann-consult.de/beam/data/products/ASAR'
+    url = baseurl + '/' + os.path.splitext(TEST_PRODUCT)[0] + '.zip'
     if not os.path.exists(filename):
-        with contextlib.closing(urlopen(url)) as src:
-            with open(filename + '.gz', 'wb') as dst:
+        with urlopen(url) as src:
+            with open(filename + '.zip', 'wb') as dst:
                 for data in src:
                     dst.write(data)
 
-        with contextlib.closing(gzip.GzipFile(filename + '.gz')) as src:
-            with open(filename, 'wb') as dst:
-                for data in src:
-                    dst.write(data)
+        with zipfile.ZipFile(filename + '.zip') as arch:
+            arch.extractall(TESTDIR)
 
-        os.remove(filename + '.gz')
+        os.remove(filename + '.zip')
 
 
 class TestOpenProduct(unittest.TestCase):
@@ -163,20 +161,11 @@ class TestOpenProduct(unittest.TestCase):
     def test_open_invalid_mode_03(self):
         self.assertRaises(TypeError, epr.open, self.PRODUCT_FILE, 0)
 
-    if 'unicode' in dir(__builtins__):
-
-        def test_open_unicode(self):
-            filename = unicode(self.PRODUCT_FILE)
-            with epr.open(filename) as product:
-                self.assertTrue(isinstance(product, epr.Product))
-
-    else:
-
-        def test_open_bytes(self):
-            filename = self.PRODUCT_FILE.encode('UTF-8')
-            with epr.open(filename) as product:
-                self.assertTrue(isinstance(filename, bytes))
-                self.assertTrue(isinstance(product, epr.Product))
+    def test_open_bytes(self):
+        filename = self.PRODUCT_FILE.encode('UTF-8')
+        with epr.open(filename) as product:
+            self.assertTrue(isinstance(filename, bytes))
+            self.assertTrue(isinstance(product, epr.Product))
 
     def test_product_constructor(self):
         with epr.Product(self.PRODUCT_FILE) as product:
@@ -201,30 +190,33 @@ class TestOpenProduct(unittest.TestCase):
 class TestProduct(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     OPEN_MODE = 'rb'
-    ID_STRING = 'MER_LRC_2PTGMV20000620_104318_00000104X000_00000'
-    TOT_SIZE = 407461
+    ID_STRING = 'ASA_APM_1PNPDE20091007_025628_000000432083_00118'
+    TOT_SIZE = 22903686
 
     DATASET_NAMES = [
-        'Quality_ADS',
-        'Scaling_Factor_GADS',
-        'Tie_points_ADS',
-        'Cloud_Type_OT',
-        'Cloud_Top_Pressure',
-        'Vapour_Content',
-        'Flags',
+        'MDS1_SQ_ADS',
+        'MDS2_SQ_ADS',
+        'MAIN_PROCESSING_PARAMS_ADS',
+        'DOP_CENTROID_COEFFS_ADS',
+        'SR_GR_ADS',
+        'CHIRP_PARAMS_ADS',
+        'GEOLOCATION_GRID_ADS',
+        'MDS1',
+        'MDS2',
     ]
-    DATASET_NAME = 'Vapour_Content'
-    DATASET_WIDTH = 281
-    DATASET_HEIGHT = 149
+    DATASET_NAME = 'MDS1'
+    DATASET_WIDTH = 1452
+    DATASET_HEIGHT = 3915
     DATASET_NDSDS = 18
-    DATASET_NBANDS = 19
+    DATASET_NBANDS = 6
 
-    BAND_NAME = 'water_vapour'
-    SPH_DESCRIPTOR = 'MER_LRC_2P SPECIFIC HEADER'
-    MERIS_IODD_VERSION = 7
+    BAND_NAME = 'proc_data_1'
+    SPH_DESCRIPTOR = 'AP Mode Medium Res. Image'
+    MERIS_IODD_VERSION = 0
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE, self.OPEN_MODE)
+        self.bm_expr = TEST_PRODUCT_BM_EXPR
 
     def tearDown(self):
         self.product.close()
@@ -280,19 +272,11 @@ class TestProduct(unittest.TestCase):
         dataset = self.product.get_dataset(self.DATASET_NAME)
         self.assertTrue(dataset)
 
-    if 'unicode' in dir(__builtins__):
-
-        def test_get_dataset_unicode(self):
-            dataset = self.product.get_dataset(unicode(self.DATASET_NAME))
-            self.assertTrue(dataset)
-
-    else:
-
-        def test_get_dataset_bytes(self):
-            filename = self.DATASET_NAME.encode('UTF-8')
-            dataset = self.product.get_dataset(filename)
-            self.assertTrue(isinstance(filename, bytes))
-            self.assertTrue(dataset)
+    def test_get_dataset_bytes(self):
+        filename = self.DATASET_NAME.encode('UTF-8')
+        dataset = self.product.get_dataset(filename)
+        self.assertTrue(isinstance(filename, bytes))
+        self.assertTrue(dataset)
 
     def test_datasets(self):
         datasets = [self.product.get_dataset_at(idx)
@@ -320,20 +304,11 @@ class TestProduct(unittest.TestCase):
         self.assertTrue(isinstance(self.product.get_band(self.BAND_NAME),
                                    epr.Band))
 
-    if 'unicode' in dir(__builtins__):
-
-        def test_get_band_id_unicode(self):
-            band_name = unicode(self.BAND_NAME)
-            self.assertTrue(isinstance(self.product.get_band(band_name),
-                                       epr.Band))
-
-    else:
-
-        def test_get_band_id_bytes(self):
-            band_name = self.BAND_NAME.encode('UTF-8')
-            self.assertTrue(isinstance(band_name, bytes))
-            self.assertTrue(isinstance(self.product.get_band(self.BAND_NAME),
-                                       epr.Band))
+    def test_get_band_id_bytes(self):
+        band_name = self.BAND_NAME.encode('UTF-8')
+        self.assertTrue(isinstance(band_name, bytes))
+        self.assertTrue(isinstance(self.product.get_band(self.BAND_NAME),
+                                    epr.Band))
 
     def test_get_band_id_invalid_name(self):
         self.assertRaises(ValueError, self.product.get_band, '')
@@ -345,8 +320,9 @@ class TestProduct(unittest.TestCase):
         self.assertRaises(ValueError, self.product.get_band_at,
                           self.product.get_num_bands())
 
+    @unittest.skipIf(TEST_PRODUCT_BM_EXPR is None, 'no flag band available')
     def test_read_bitmask_raster(self):
-        bm_expr = 'l2_flags.LAND AND !l2_flags.CLOUD'
+        bm_expr = self.bm_expr
 
         xoffset = self.DATASET_WIDTH // 2
         yoffset = self.DATASET_HEIGHT // 2
@@ -360,40 +336,23 @@ class TestProduct(unittest.TestCase):
         self.assertEqual(raster.get_width(), width)
         self.assertEqual(raster.get_height(), height)
 
-    if 'unicode' in dir(__builtins__):
+    @unittest.skipIf(TEST_PRODUCT_BM_EXPR is None, 'no flag band available')
+    def test_read_bitmask_raster_bytes(self):
+        bm_expr = self.bm_expr.encode('UTF-8')
 
-        def test_read_bitmask_raster_unicode(self):
-            bm_expr = unicode('l2_flags.LAND AND !l2_flags.CLOUD')
+        self.assertTrue(isinstance(bm_expr, bytes))
 
-            xoffset = self.DATASET_WIDTH // 2
-            yoffset = self.DATASET_HEIGHT // 2
-            width = self.DATASET_WIDTH // 2
-            height = self.DATASET_HEIGHT // 2
+        xoffset = self.DATASET_WIDTH // 2
+        yoffset = self.DATASET_HEIGHT // 2
+        width = self.DATASET_WIDTH // 2
+        height = self.DATASET_HEIGHT // 2
 
-            raster = epr.create_bitmask_raster(width, height)
-            raster = self.product.read_bitmask_raster(bm_expr,
-                                                      xoffset, yoffset, raster)
-            self.assertTrue(isinstance(raster, epr.Raster))
-            self.assertEqual(raster.get_width(), width)
-            self.assertEqual(raster.get_height(), height)
-
-    else:
-
-        def test_read_bitmask_raster_bytes(self):
-            bm_expr = 'l2_flags.LAND AND !l2_flags.CLOUD'.encode('UTF-8')
-            self.assertTrue(isinstance(bm_expr, bytes))
-
-            xoffset = self.DATASET_WIDTH // 2
-            yoffset = self.DATASET_HEIGHT // 2
-            width = self.DATASET_WIDTH // 2
-            height = self.DATASET_HEIGHT // 2
-
-            raster = epr.create_bitmask_raster(width, height)
-            raster = self.product.read_bitmask_raster(bm_expr,
-                                                      xoffset, yoffset, raster)
-            self.assertTrue(isinstance(raster, epr.Raster))
-            self.assertEqual(raster.get_width(), width)
-            self.assertEqual(raster.get_height(), height)
+        raster = epr.create_bitmask_raster(width, height)
+        raster = self.product.read_bitmask_raster(bm_expr, xoffset, yoffset,
+                                                  raster)
+        self.assertTrue(isinstance(raster, epr.Raster))
+        self.assertEqual(raster.get_width(), width)
+        self.assertEqual(raster.get_height(), height)
 
     def test_read_bitmask_raster_with_invalid_bm_expr(self):
         bm_expr = 'l5_flags.LAND AND !l2_flags.CLOUD'
@@ -439,6 +398,7 @@ class TestProduct(unittest.TestCase):
         finally:
             os.lseek(self.product._fileno, pos, os.SEEK_SET)
 
+
 class TestProductRW(TestProduct):
     OPEN_MODE = 'rb+'
 
@@ -447,25 +407,12 @@ class TestProductHighLevelAPI(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAMES = TestProduct.DATASET_NAMES
     BAND_NAMES = [
+        'slant_range_time',
+        'incident_angle',
         'latitude',
         'longitude',
-        'dem_alt',
-        'dem_rough',
-        'lat_corr',
-        'lon_corr',
-        'sun_zenith',
-        'sun_azimuth',
-        'view_zenith',
-        'view_azimuth',
-        'zonal_wind',
-        'merid_wind',
-        'atm_press',
-        'ozone',
-        'rel_hum',
-        'water_vapour',
-        'cloud_opt_thick',
-        'cloud_top_press',
-        'l2_flags',
+        'proc_data_1',
+        'proc_data_2',
     ]
 
     def setUp(self):
@@ -561,8 +508,8 @@ class TestProductLowLevelAPI(unittest.TestCase):
 
 class TestClosedProduct(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    DATASET_NAME = 'Vapour_Content'
-    BAND_NAME = 'water_vapour'
+    DATASET_NAME = 'MDS1'
+    BAND_NAME = 'proc_data_1'
 
     def setUp(self):
         self.product = epr.open(self.PRODUCT_FILE)
@@ -641,10 +588,10 @@ class TestClosedProduct(unittest.TestCase):
 class TestDataset(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     OPEN_MODE = 'rb'
-    DATASET_NAME = 'Vapour_Content'
-    DATASET_DESCRIPTION = 'Level 2 MDS Total Water vapour'
-    NUM_RECORDS = 149
-    DSD_NAME = 'MDS Vapour Content'
+    DATASET_NAME = 'MDS1'
+    DATASET_DESCRIPTION = 'Measurement Data Set 1'
+    NUM_RECORDS = 3915
+    DSD_NAME = 'MDS1'
     RECORD_INDEX = 0
 
     def setUp(self):
@@ -761,7 +708,7 @@ class TestDatasetHighLevelAPI(unittest.TestCase):
 
 class TestDatasetOnClosedProduct(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    DATASET_NAME = 'Vapour_Content'
+    DATASET_NAME = 'MDS1'
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
@@ -812,60 +759,37 @@ class TestDatasetOnClosedProduct(unittest.TestCase):
 class TestBand(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     OPEN_MODE = 'rb+'
-    DATASET_NAME = 'Vapour_Content'
+    DATASET_NAME = 'MDS1'
     BAND_NAMES = (
+        'slant_range_time',
+        'incident_angle',
         'latitude',
         'longitude',
-        'dem_alt',
-        'dem_rough',
-        'lat_corr',
-        'lon_corr',
-        'sun_zenith',
-        'sun_azimuth',
-        'view_zenith',
-        'view_azimuth',
-        'zonal_wind',
-        'merid_wind',
-        'atm_press',
-        'ozone',
-        'rel_hum',
-        'water_vapour',
-        'cloud_opt_thick',
-        'cloud_top_press',
-        'l2_flags',
-    )
-    BAND_NAME = 'water_vapour'
-    BAND_DESCTIPTION = 'Water vapour content'
-    XOFFSET = 30
-    YOFFSET = 20
+        'proc_data_1',
+        'proc_data_2',
+     )
+    BAND_NAME = 'proc_data_1'
+    BAND_DESCTIPTION = 'Alternating Polarization Medium Resolution Image'
+    XOFFSET = 90
+    YOFFSET = 80
     WIDTH = 200
     HEIGHT = 100
-    SCALING_FACTOR = 0.10000000149011612
-    SCALING_OFFSET = -0.10000000149011612
-    UNIT = 'g/cm^2'
+    SCALING_FACTOR = 1.0
+    SCALING_OFFSET = 0.0
+    UNIT = None
     RTOL = 1e-7
     DATA_TYPE = np.float32
     TEST_DATA = np.asarray([
-        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
-         0.20000002, 0.20000002, 0.20000002, 0.10000000, 0.10000000],
-        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
-         0.20000002, 0.20000002, 0.20000002, 0.10000000, 0.10000000],
-        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
-         0.20000002, 0.20000002, 0.20000002, 0.10000000, 0.10000000],
-        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
-         0.20000002, 0.20000002, 0.20000002, 0.10000000, 0.10000000],
-        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
-         0.20000002, 0.20000002, 0.20000002, 0.10000000, 0.10000000],
-        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
-         0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.10000000],
-        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
-         0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.10000000],
-        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
-         0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.10000000],
-        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
-         0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.10000000],
-        [0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.20000002,
-         0.20000002, 0.20000002, 0.20000002, 0.20000002, 0.10000000],
+        [228., 213., 235., 256., 239., 260., 210., 197., 233., 213.],
+        [246., 248., 333., 317., 272., 247., 247., 221., 221., 205.],
+        [239., 297., 412., 381., 301., 226., 262., 256., 229., 214.],
+        [212., 279., 328., 318., 279., 231., 253., 274., 240., 242.],
+        [199., 236., 245., 262., 282., 265., 261., 255., 255., 239.],
+        [214., 218., 284., 300., 269., 266., 272., 224., 292., 238.],
+        [240., 241., 300., 308., 248., 254., 269., 230., 276., 256.],
+        [256., 261., 265., 269., 263., 262., 279., 279., 300., 367.],
+        [273., 262., 262., 239., 270., 284., 344., 380., 416., 447.],
+        [292., 286., 303., 261., 284., 374., 445., 431., 422., 416.],
     ])
 
     def setUp(self):
@@ -1070,8 +994,8 @@ class TestBand(unittest.TestCase):
         self.assertRaises(ValueError, self.band.read_raster, 0, -1, raster)
         self.assertRaises(ValueError, self.band.read_raster, -1, -1, raster)
 
-        invalid_xoffset = self.WIDTH
-        invalid_yoffset = self.HEIGHT
+        invalid_xoffset = 2 * self.product.get_scene_width()
+        invalid_yoffset = 2 * self.product.get_scene_height()
         self.assertRaises(ValueError, self.band.read_raster,
                           invalid_xoffset, 0, raster)
         self.assertRaises(ValueError, self.band.read_raster,
@@ -1225,64 +1149,34 @@ class TestBandRW(TestBand):
 
 
 class TestAnnotationBand(TestBand):
-    DATASET_NAME = 'Tie_points_ADS'
-    BAND_NAME = 'sun_zenith'
-    BAND_DESCTIPTION = 'Sun zenith angle'
-    SCALING_FACTOR = 9.999999974752427e-07
+    DATASET_NAME = 'GEOLOCATION_GRID_ADS'
+    BAND_NAME = 'incident_angle'
+    BAND_DESCTIPTION = 'Incident angle'
+    SCALING_FACTOR = 1.0
     SCALING_OFFSET = 0.0
     UNIT = 'deg'
-    RTOL = 1e-6
+    RTOL = 1e-7
     TEST_DATA = np.asarray([
-        [33.111412048339843750, 33.079044342041015625,
-         33.046680450439453125, 33.014350891113281250,
-         32.982025146484375000, 32.949695587158203125,
-         32.917366027832031250, 32.885074615478515625,
-         32.852783203125000000, 32.820491790771484375],
-        [33.089057922363281250, 33.056671142578125000,
-         33.024288177490234375, 32.991939544677734375,
-         32.959594726562500000, 32.927246093750000000,
-         32.894897460937500000, 32.862583160400390625,
-         32.830276489257812500, 32.797962188720703125],
-        [33.066703796386718750, 33.034297943115234375,
-         33.001895904541015625, 32.969532012939453125,
-         32.937164306640625000, 32.904792785644531250,
-         32.872428894042968750, 32.840099334716796875,
-         32.807769775390625000, 32.775436401367187500],
-        [33.044349670410156250, 33.011924743652343750,
-         32.979503631591796875, 32.947116851806640625,
-         32.914733886718750000, 32.882343292236328125,
-         32.849956512451171875, 32.817611694335937500,
-         32.785259246826171875, 32.752910614013671875],
-        [33.021995544433593750, 32.989555358886718750,
-         32.957111358642578125, 32.924705505371093750,
-         32.892299652099609375, 32.859893798828125000,
-         32.827487945556640625, 32.795120239257812500,
-         32.762748718261718750, 32.730381011962890625],
-        [32.999782562255859375, 32.967323303222656250,
-         32.934860229492187500, 32.902431488037109375,
-         32.870010375976562500, 32.837581634521484375,
-         32.805160522460937500, 32.772773742675781250,
-         32.740379333496093750, 32.707992553710937500],
-        [32.977569580078125000, 32.945091247558593750,
-         32.912605285644531250, 32.880161285400390625,
-         32.847717285156250000, 32.815273284912109375,
-         32.782829284667968750, 32.750423431396484375,
-         32.718013763427734375, 32.685604095458984375],
-        [32.955352783203125000, 32.922855377197265625,
-         32.890354156494140625, 32.857891082763671875,
-         32.825424194335937500, 32.792964935302734375,
-         32.760498046875000000, 32.728076934814453125,
-         32.695644378662109375, 32.663219451904296875],
-        [32.933139801025390625, 32.900619506835937500,
-         32.868103027343750000, 32.835620880126953125,
-         32.803138732910156250, 32.770652770996093750,
-         32.738170623779296875, 32.705722808837890625,
-         32.673278808593750000, 32.640830993652343750],
-        [32.911067962646484375, 32.878528594970703125,
-         32.845993041992187500, 32.813491821289062500,
-         32.780990600585937500, 32.748485565185546875,
-         32.715984344482421875, 32.683513641357421875,
-         32.651054382324218750, 32.618587493896484375],
+        [21.86950111, 21.86438370, 21.85926437, 21.85414696, 21.84902954,
+         21.84391022, 21.83879280, 21.83367538, 21.82855606, 21.82343864],
+        [21.86950302, 21.86438560, 21.85926628, 21.85414886, 21.84903145,
+         21.84391212, 21.83879471, 21.83367729, 21.82855797, 21.82344055],
+        [21.86950302, 21.86438560, 21.85926628, 21.85414886, 21.84903145,
+         21.84391212, 21.83879471, 21.83367729, 21.82855797, 21.82344055],
+        [21.86950302, 21.86438560, 21.85926628, 21.85414886, 21.84903145,
+         21.84391212, 21.83879471, 21.83367729, 21.82855797, 21.82344055],
+        [21.86950493, 21.86438751, 21.85926819, 21.85415077, 21.84903335,
+         21.84391403, 21.83879662, 21.83367920, 21.82855987, 21.82344246],
+        [21.86950493, 21.86438751, 21.85926819, 21.85415077, 21.84903335,
+         21.84391403, 21.83879661, 21.83367920, 21.82855987, 21.82344246],
+        [21.86950493, 21.86438751, 21.85926819, 21.85415077, 21.84903335,
+         21.84391403, 21.83879661, 21.83367912, 21.82855987, 21.82344246],
+        [21.86950683, 21.86438942, 21.85927009, 21.85415268, 21.84903526,
+         21.84391594, 21.83879852, 21.83368111, 21.82856178, 21.82344437],
+        [21.86950683, 21.86438942, 21.85927009, 21.85415268, 21.84903526,
+         21.84391594, 21.83879852, 21.83368111, 21.82856178, 21.82344437],
+        [21.86950683, 21.86438942, 21.85927009, 21.85415268, 21.84903526,
+         21.84391594, 21.83879852, 21.83368111, 21.82856178, 21.82344437],
     ])
 
     @unittest.skipIf(EPR_C_BUG_PYEPR009, 'buggy EPR_C_API detected')
@@ -1331,7 +1225,7 @@ class TestBandHighLevelAPI(unittest.TestCase):
 
 class TestBandLowLevelAPI(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    FIELD_INDEX = 3
+    FIELD_INDEX = 7
     ELEM_INDEX = -1
 
     def setUp(self):
@@ -1665,10 +1559,10 @@ class TestRasterLowLevelAPI(unittest.TestCase):
 class TestRecord(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     OPEN_MODE = 'rb'
-    DATASET_NAME = 'Quality_ADS'
-    NUM_FIELD = 21
-    FIELD_NAME = 'perc_water_abs_aero'
-    TOT_SIZE = 32
+    DATASET_NAME = 'MDS1_SQ_ADS'
+    NUM_FIELD = 39
+    FIELD_NAME = 'input_missing_lines_flag'
+    TOT_SIZE = 170
     RECORD_INDEX = 0
 
     def setUp(self):
@@ -1716,19 +1610,11 @@ class TestRecord(unittest.TestCase):
         field = self.record.get_field(self.FIELD_NAME)
         self.assertTrue(isinstance(field, epr.Field))
 
-    if 'unicode' in dir(__builtins__):
-
-        def test_get_field_unicode(self):
-            field = self.record.get_field(unicode(self.FIELD_NAME))
-            self.assertTrue(isinstance(field, epr.Field))
-
-    else:
-
-        def test_get_field_bytes(self):
-            field_name = self.FIELD_NAME.encode('UTF-8')
-            field = self.record.get_field(self.FIELD_NAME)
-            self.assertTrue(isinstance(field_name, bytes))
-            self.assertTrue(isinstance(field, epr.Field))
+    def test_get_field_bytes(self):
+        field_name = self.FIELD_NAME.encode('UTF-8')
+        field = self.record.get_field(self.FIELD_NAME)
+        self.assertTrue(isinstance(field_name, bytes))
+        self.assertTrue(isinstance(field, epr.Field))
 
     def test_get_field_invlid_name(self):
         self.assertRaises(ValueError, self.record.get_field, '')
@@ -1762,27 +1648,45 @@ class TestRecordHighLevelAPI(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = TestRecord.DATASET_NAME
     FIELD_NAMES = [
-        'dsr_time',
+        'zero_doppler_time',
         'attach_flag',
-        'perc_water_abs_aero',
-        'perc_water',
-        'perc_ddv_land',
-        'perc_land',
-        'perc_cloud',
-        'perc_low_poly_press',
-        'perc_low_neural_press',
-        'perc_out_ran_inp_wvapour',
-        'per_out_ran_outp_wvapour',
-        'perc_out_range_inp_cl',
-        'perc_out_ran_outp_cl',
-        'perc_in_ran_inp_land',
-        'perc_out_ran_outp_land',
-        'perc_out_ran_inp_ocean',
-        'perc_out_ran_outp_ocean',
-        'perc_out_ran_inp_case1',
-        'perc_out_ran_outp_case1',
-        'perc_out_ran_inp_case2',
-        'perc_out_ran_outp_case2',
+        'input_mean_flag',
+        'input_std_dev_flag',
+        'input_gaps_flag',
+        'input_missing_lines_flag',
+        'dop_cen_flag',
+        'dop_amb_flag',
+        'output_mean_flag',
+        'output_std_dev_flag',
+        'chirp_flag',
+        'missing_data_sets_flag',
+        'invalid_downlink_flag',
+        'spare_1',
+        'thresh_chirp_broadening',
+        'thresh_chirp_sidelobe',
+        'thresh_chirp_islr',
+        'thresh_input_mean',
+        'exp_input_mean',
+        'thresh_input_std_dev',
+        'exp_input_std_dev',
+        'thresh_dop_cen',
+        'thresh_dop_amb',
+        'thresh_output_mean',
+        'exp_output_mean',
+        'thresh_output_std_dev',
+        'exp_output_std_dev',
+        'thresh_input_missing_lines',
+        'thresh_input_gaps',
+        'lines_per_gaps',
+        'spare_2',
+        'input_mean',
+        'input_std_dev',
+        'num_gaps',
+        'num_missing_lines',
+        'output_mean',
+        'output_std_dev',
+        'tot_errors',
+        'Spare_3',
     ]
 
     def setUp(self):
@@ -1825,8 +1729,8 @@ class TestRecordHighLevelAPI(unittest.TestCase):
 
 class TestRecordLowLevelAPI(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    RECORD_INDEX = 1
-    RECORD_SIZE = 32
+    RECORD_INDEX = 0
+    RECORD_SIZE = 170
     RECORD_OFFSET = RECORD_INDEX * RECORD_SIZE
 
     def setUp(self):
@@ -1905,9 +1809,9 @@ class TestMphRecordHighLevelAPI(TestRecordHighLevelAPI):
 
 class TestRecordOnClosedProduct(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    DATASET_NAME = 'Quality_ADS'
-    NUM_FIELD = 21
-    FIELD_NAME = 'perc_water_abs_aero'
+    DATASET_NAME = 'MDS1_SQ_ADS'
+    NUM_FIELD = 39
+    FIELD_NAME = 'input_missing_lines_flag'
     FIELD_NAMES = TestRecordHighLevelAPI.FIELD_NAMES
 
     def setUp(self):
@@ -1954,21 +1858,28 @@ class TestRecordOnClosedProduct(unittest.TestCase):
 class TestField(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     OPEN_MODE = 'rb'
-    DATASET_NAME = 'Quality_ADS'
+    DATASET_NAME = 'MDS1_SQ_ADS'
+    RECORD_INDEX = 0
 
-    FIELD_NAME = 'perc_water_abs_aero'
-    FIELD_DESCRIPTION = '% of water pixels having absorbing aerosols'
+    FIELD_NAME = 'input_missing_lines_flag'
+    FIELD_DESCRIPTION = (
+        'Missing lines significant flag. '
+        '0 = percentage of missing lines &lt;= threshold value '
+        '1 = percentage of missing lines &gt; threshold value. '
+        'The number of missing lines is the number of lines missing from '
+        'the input data excluding data gaps.'
+    )
     FIELD_TYPE = epr.E_TID_UCHAR
-    FIELD_TYPE_NAME = 'byte'
+    # FIELD_TYPE_NAME = 'uchar'
     FIELD_NUM_ELEMS = 1
-    FIELD_VALUES = (81,)
-    FIELD_UNIT = '%'
-    # FIELD_OFFSET = 13
+    FIELD_VALUES = (0,)
+    FIELD_UNIT = 'flag'
+    FIELD_OFFSET = 16
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE, self.OPEN_MODE)
         dataset = self.product.get_dataset(self.DATASET_NAME)
-        record = dataset.read_record(0)
+        record = dataset.read_record(self.RECORD_INDEX)
         self.field = record.get_field(self.FIELD_NAME)
 
     def tearDown(self):
@@ -2000,6 +1911,9 @@ class TestField(unittest.TestCase):
     def test_get_type(self):
         self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
 
+    def test_get_offset(self):
+        self.assertEqual(self.field.get_offset(), self.FIELD_OFFSET)
+
     def test_get_elem(self):
         self.assertEqual(self.field.get_elem(), self.FIELD_VALUES[0])
 
@@ -2030,15 +1944,15 @@ class TestFieldRW(TestField):
 class TestFieldWriteOnReadOnly(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     OPEN_MODE = 'rb'
-    DATASET_NAME = 'Vapour_Content'
+    DATASET_NAME = 'MDS1'
     RECORD_INDEX = 10
 
-    FIELD_NAME = 'wvapour_cont_pix'
-    FIELD_DESCRIPTION = 'Water Vapour Content pixel #1- #281'
-    FIELD_TYPE = epr.E_TID_UCHAR
-    FIELD_TYPE_NAME = 'uchar'
+    FIELD_NAME = 'proc_data'
+    FIELD_DESCRIPTION = 'SAR Processed Data. Real samples (detected products)'
+    FIELD_TYPE = epr.E_TID_USHORT
+    FIELD_TYPE_NAME = 'ushort'
     FIELD_UNIT = ''
-    FIELD_NUM_ELEMS = 281
+    FIELD_NUM_ELEMS = 1452
 
     def setUp(self):
         self.filename = self.PRODUCT_FILE + '_'
@@ -2061,32 +1975,22 @@ class TestFieldWrite(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     OPEN_MODE = 'rb+'
     REOPEN = False
-    DATASET_NAME = 'Vapour_Content'
-    RECORD_INDEX = 10
+    DATASET_NAME = 'MDS1'
+    RECORD_INDEX = 100
 
-    FIELD_NAME = 'wvapour_cont_pix'
-    FIELD_DESCRIPTION = 'Water Vapour Content pixel #1- #281'
-    FIELD_TYPE = epr.E_TID_UCHAR
-    FIELD_TYPE_NAME = 'uchar'
+    FIELD_NAME = 'proc_data'
+    FIELD_DESCRIPTION = 'SAR Processed Data. Real samples (detected products)'
+    FIELD_TYPE = epr.E_TID_USHORT
+    FIELD_TYPE_NAME = 'ushort'
     FIELD_UNIT = ''
-    FIELD_INDEX = 2
-    FIELD_NUM_ELEMS = 281
+    FIELD_INDEX = 3
+    FIELD_NUM_ELEMS = 1452
     FIELD_VALUES = (
-        1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3,
-        3, 3, 3, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 3, 3,
-        3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1,
-        1,
+           0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+           0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+           0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+           0,    0,    0,    0,    0, 2417, 2282, 2280, 2393, 2440,
+        2697, 3119, 3577, 3853, 3688, 3784, 4201, 3846, 2821, 2186,
     )
 
     def setUp(self):
@@ -2151,7 +2055,9 @@ class TestFieldWrite(unittest.TestCase):
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
 
     def test_set_elem_data(self):
-        npt.assert_array_equal(self.field.get_elems(), self.FIELD_VALUES)
+        npt.assert_array_equal(
+            self.field.get_elems()[:len(self.FIELD_VALUES)],
+            self.FIELD_VALUES)
         self.assertEqual(self.field.get_elem(), self.FIELD_VALUES[0])
 
         value = self.field.get_elem() + 10
@@ -2166,7 +2072,8 @@ class TestFieldWrite(unittest.TestCase):
 
         values = np.array(self.FIELD_VALUES)
         values[0] = value
-        npt.assert_array_equal(self.field.get_elems(), values)
+        npt.assert_array_equal(
+            self.field.get_elems()[:len(self.FIELD_VALUES)], values)
 
     def test_set_elem_rawdata(self):
         orig_data = self.read()
@@ -2182,7 +2089,10 @@ class TestFieldWrite(unittest.TestCase):
         data = self.read()
         self.assertNotEqual(data, orig_data)
 
-        dtype = epr.get_numpy_dtype(self.FIELD_TYPE)
+        dtype = np.dtype(epr.get_numpy_dtype(self.FIELD_TYPE))
+        if dtype.byteorder != '>':
+            dtype = dtype.newbyteorder()
+
         data = np.frombuffer(data, dtype)
         orig_data = np.frombuffer(orig_data, dtype).copy()
         orig_data[0] = value
@@ -2212,7 +2122,9 @@ class TestFieldWrite(unittest.TestCase):
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
 
     def test_set_elem0_data(self):
-        npt.assert_array_equal(self.field.get_elems(), self.FIELD_VALUES)
+        npt.assert_array_equal(
+            self.field.get_elems()[:len(self.FIELD_VALUES)],
+            self.FIELD_VALUES)
         self.assertEqual(self.field.get_elem(0), self.FIELD_VALUES[0])
 
         value = self.field.get_elem(0) + 10
@@ -2227,7 +2139,8 @@ class TestFieldWrite(unittest.TestCase):
 
         values = np.array(self.FIELD_VALUES)
         values[0] = value
-        npt.assert_array_equal(self.field.get_elems(), values)
+        npt.assert_array_equal(
+            self.field.get_elems()[:len(self.FIELD_VALUES)], values)
 
     def test_set_elem0_rawdata(self):
         orig_data = self.read()
@@ -2243,7 +2156,10 @@ class TestFieldWrite(unittest.TestCase):
         data = self.read()
         self.assertNotEqual(data, orig_data)
 
-        dtype = epr.get_numpy_dtype(self.FIELD_TYPE)
+        dtype = np.dtype(epr.get_numpy_dtype(self.FIELD_TYPE))
+        if dtype.byteorder != '>':
+            dtype = dtype.newbyteorder()
+
         data = np.frombuffer(data, dtype)
         orig_data = np.frombuffer(orig_data, dtype).copy()
         orig_data[0] = value
@@ -2273,7 +2189,9 @@ class TestFieldWrite(unittest.TestCase):
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
 
     def test_set_elem20_data(self):
-        npt.assert_array_equal(self.field.get_elems(), self.FIELD_VALUES)
+        npt.assert_array_equal(
+            self.field.get_elems()[:len(self.FIELD_VALUES)],
+            self.FIELD_VALUES)
         self.assertEqual(self.field.get_elem(20), self.FIELD_VALUES[20])
 
         value = self.field.get_elem(20) + 1
@@ -2288,7 +2206,8 @@ class TestFieldWrite(unittest.TestCase):
 
         values = np.array(self.FIELD_VALUES)
         values[20] = value
-        npt.assert_array_equal(self.field.get_elems(), values)
+        npt.assert_array_equal(
+            self.field.get_elems()[:len(self.FIELD_VALUES)], values)
 
     def test_set_elem20_rawdata(self):
         orig_data = self.read()
@@ -2304,7 +2223,10 @@ class TestFieldWrite(unittest.TestCase):
         data = self.read()
         self.assertNotEqual(data, orig_data)
 
-        dtype = epr.get_numpy_dtype(self.FIELD_TYPE)
+        dtype = np.dtype(epr.get_numpy_dtype(self.FIELD_TYPE))
+        if dtype.byteorder != '>':
+            dtype = dtype.newbyteorder()
+
         data = np.frombuffer(data, dtype)
         orig_data = np.frombuffer(orig_data, dtype).copy()
         orig_data[20] = value
@@ -2334,7 +2256,9 @@ class TestFieldWrite(unittest.TestCase):
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
 
     def test_set_elems_data(self):
-        npt.assert_array_equal(self.field.get_elems(), self.FIELD_VALUES)
+        npt.assert_array_equal(
+            self.field.get_elems()[:len(self.FIELD_VALUES)],
+            self.FIELD_VALUES)
 
         values = self.field.get_elems() + 1
         self.field.set_elems(values)
@@ -2360,7 +2284,10 @@ class TestFieldWrite(unittest.TestCase):
         data = self.read()
         self.assertNotEqual(data, orig_data)
 
-        dtype = epr.get_numpy_dtype(self.FIELD_TYPE)
+        dtype = np.dtype(epr.get_numpy_dtype(self.FIELD_TYPE))
+        if dtype.byteorder != '>':
+            dtype = dtype.newbyteorder()
+
         data = np.frombuffer(data, dtype)
         orig_data = np.frombuffer(orig_data, dtype).copy()
         orig_data += 1
@@ -2378,15 +2305,18 @@ class TestFieldWriteReopen(TestFieldWrite):
 
 class TestTimeField(TestField):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    DATASET_NAME = 'Quality_ADS'
+    DATASET_NAME = 'MDS1_SQ_ADS'
 
-    FIELD_NAME = 'dsr_time'
-    FIELD_DESCRIPTION = 'Start time of the measurement'
+    FIELD_NAME = 'zero_doppler_time'
+    FIELD_DESCRIPTION = 'Zero doppler time at which SQ information applies'
     FIELD_TYPE = epr.E_TID_TIME
     FIELD_TYPE_NAME = 'time'
     FIELD_NUM_ELEMS = 1
-    FIELD_VALUES = (epr.EPRTime(days=171, seconds=38598, microseconds=260634),)
+    FIELD_VALUES = (
+        epr.EPRTime(days=3567, seconds=10588, microseconds=239091),
+    )
     FIELD_UNIT = 'MJD'
+    FIELD_OFFSET = 0
 
     def test_get_elems(self):
         vect = self.field.get_elems()
@@ -2401,13 +2331,15 @@ class TestTimeField(TestField):
 
 class TestFieldWithMiltipleElems(TestField):
     DATASET_NAME = TestProduct.DATASET_NAME
-    FIELD_NAME = 'wvapour_cont_pix'
-    FIELD_DESCRIPTION = 'Water Vapour Content pixel #1- #281'
-    FIELD_TYPE = epr.E_TID_UCHAR
-    FIELD_TYPE_NAME = 'float'
-    FIELD_NUM_ELEMS = 281
-    FIELD_VALUES = (1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)
+    RECORD_INDEX = TestFieldWrite.RECORD_INDEX
+    FIELD_NAME = 'proc_data'
+    FIELD_DESCRIPTION = 'SAR Processed Data. Real samples (detected products)'
+    FIELD_TYPE = epr.E_TID_USHORT
+    FIELD_TYPE_NAME = 'ushort'
+    FIELD_NUM_ELEMS = 1452
+    FIELD_VALUES = TestFieldWrite.FIELD_VALUES
     FIELD_UNIT = ''
+    FIELD_OFFSET = 17
 
 
 class TestFieldHighLevelAPI(unittest.TestCase):
@@ -2481,6 +2413,8 @@ class TestFieldHighLevelAPI(unittest.TestCase):
 
 class TestFieldHighLevelAPI2(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    DATASET_NAME = 'MAIN_PROCESSING_PARAMS_ADS'
+    RECORD_INDEX = 0
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
@@ -2489,37 +2423,36 @@ class TestFieldHighLevelAPI2(unittest.TestCase):
         self.product.close()
 
     def test_len_1(self):
-        dataset = self.product.get_dataset_at(0)
-        record = dataset.read_record(0)
-        field = record.get_field('perc_water_abs_aero')
+        dataset = self.product.get_dataset(self.DATASET_NAME)
+        record = dataset.read_record(self.RECORD_INDEX)
+        field = record.get_field('range_spacing')
         self.assertEqual(len(field), field.get_num_elems())
 
     def test_len_x(self):
-        dataset = self.product.get_dataset_at(5)
-        record = dataset.read_record(0)
-        field = record.get_field('wvapour_cont_pix')
+        dataset = self.product.get_dataset(self.DATASET_NAME)
+        record = dataset.read_record(self.RECORD_INDEX)
+        field = record.get_field('image_parameters.prf_value')
         self.assertEqual(len(field), field.get_num_elems())
 
     def test_len_e_tid_unknown(self):
-        dataset = self.product.get_dataset_at(1)
-        record = dataset.read_record(0)
+        dataset = self.product.get_dataset(self.DATASET_NAME)
+        record = dataset.read_record(self.RECORD_INDEX)
         field = record.get_field('spare_1')
         self.assertEqual(len(field), field.get_num_elems())
 
-    # @TODO: no e_tid_string field available
-    # def test_len_e_tid_string(self):
-    #     dataset = self.product.get_dataset_at(0)
-    #     record = dataset.read_record(0)
-    #     field = record.get_field('???')
-    #     self.assertEqual(len(field), len(field.get_elem()))
+    def test_len_e_tid_string(self):
+        dataset = self.product.get_dataset(self.DATASET_NAME)
+        record = dataset.read_record(self.RECORD_INDEX)
+        field = record.get_field('swath_id')
+        self.assertEqual(len(field), len(field.get_elem()))
 
 
 class TestFieldLowLevelAPI(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_INDEX = 0
     RECORD_INDEX = 0
-    FIELD_NAME = 'perc_water_abs_aero'
-    FIELD_OFFSET = 13
+    FIELD_NAME = 'invalid_downlink_flag'
+    FIELD_OFFSET = 23
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
@@ -2539,15 +2472,17 @@ class TestFieldLowLevelAPI(unittest.TestCase):
 
 class TestFieldOnClosedProduct(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    DATASET_NAME = 'Quality_ADS'
-    FIELD_NAME = 'perc_water_abs_aero'
+    DATASET_NAME = 'MDS1_SQ_ADS'
+    RECOSR_INDEX = 0
+    FIELD_NAME = 'invalid_downlink_flag'
+    FIELD_NAME2 = 'zero_doppler_time'
 
     def setUp(self):
         product = epr.Product(self.PRODUCT_FILE)
         dataset = product.get_dataset(self.DATASET_NAME)
-        self.record = dataset.read_record(0)
+        self.record = dataset.read_record(self.RECOSR_INDEX)
         self.field = self.record.get_field(self.FIELD_NAME)
-        self.field2 = self.record.get_field_at(4)
+        self.field2 = self.record.get_field(self.FIELD_NAME2)
         product.close()
 
     def test_print_field(self):
@@ -2594,12 +2529,12 @@ class TestDSD(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     OPEN_MODE = 'rb'
     DSD_INDEX = 0
-    DS_NAME = 'Quality ADS'
-    DS_OFFSET = 12869
+    DS_NAME = 'MDS1 SQ ADS'
+    DS_OFFSET = 7346
     DS_TYPE = 'A'
-    DS_SIZE = 160
-    DSR_SIZE = 32
-    NUM_DSR = 5
+    DS_SIZE = 170
+    DSR_SIZE = 170
+    NUM_DSR = 1
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE, self.OPEN_MODE)
@@ -2895,13 +2830,14 @@ class TestMemoryLeaks(unittest.TestCase):
     # See gh-10 (https://github.com/avalentino/pyepr/issues/10)
 
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+    BAND_NAME = 'incident_angle'
 
     def test_memory_leacks_on_read_as_array(self):
         N = 10
 
         for n in range(N):
             with epr.open(self.PRODUCT_FILE) as p:
-                p.get_band('l2_flags').read_as_array()
+                p.get_band(self.BAND_NAME).read_as_array()
             if n <= 1:
                 m1 = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
             m2 = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
