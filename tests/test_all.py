@@ -51,10 +51,10 @@ EPR_TO_NUMPY_TYPE = {
     epr.E_TID_USHORT:   np.ushort,
     epr.E_TID_SHORT:    np.short,
     epr.E_TID_UINT:     np.uint,
-    epr.E_TID_INT:      np.int,
+    epr.E_TID_INT:      int,
     epr.E_TID_FLOAT:    np.float32,
     epr.E_TID_DOUBLE:   np.double,
-    epr.E_TID_STRING:   np.str,
+    epr.E_TID_STRING:   str,
     # epr.E_TID_SPARE   = e_tid_spare,
     # epr.E_TID_TIME    = e_tid_time,
 }
