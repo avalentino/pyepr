@@ -1,15 +1,20 @@
 Change history
 ==============
 
-PyEPR 1.1.0 (under development)
--------------------------------
+PyEPR 1.1.0 (UNRELEASED)
+------------------------
 
 * Old Python versions are no longer officially supported.
   Now PyEPR require Python >= 3.5 and Cython_ >= v0.29.
 * Introduced the ``pyproject.toml`` file.
-* The `setup.py` scripts has been simplified and modernized,
+* The ``setup.py`` script has been simplified and modernized,
   now it always use setuptools_ and ``setup.cfg``.
 * Now the EPR C API is handled using git submodule.
+* Fixed potential chrash in cases in which the EPR C API fails to open the
+  requested product
+* Update the test suite to use the public product
+  ``ASA_APM_1PNPDE20091007_025628_000000432083_00118_39751_9244.N1``.
+  The previously used one is no longer available.
 
 
 PyEPR 1.0.1 (07/03/2020)
