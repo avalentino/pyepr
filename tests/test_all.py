@@ -128,6 +128,9 @@ def setUpModule():
 
         os.remove(filename + '.zip')
 
+    print('Test product:', filename)
+    assert os.path.exists(filename)
+
 
 class TestOpenProduct(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
