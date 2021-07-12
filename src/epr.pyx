@@ -68,6 +68,7 @@ np.import_array()
 import os
 import sys
 import atexit
+import warnings                             # COMPATIBILITY
 from collections import namedtuple
 
 import numpy as np
@@ -577,8 +578,8 @@ cdef class Field(EprObject):
 
         return offset
 
-    def print_(self, ostream=None):
-        """print_(self, ostream=None)
+    def print(self, ostream=None):
+        """print(self, ostream=None)
 
         Write the field to specified file (default: :data:`sys.stdout`).
 
@@ -604,6 +605,13 @@ cdef class Field(EprObject):
             stdio.fclose(fstream)
 
         pyepr_check_errors()
+
+    def print_(self, ostream=None):
+        # COMPATIBILITY
+        warnings.warn(
+            'the "print_" method is deprecated, please use "print" instead',
+            DeprecationWarning)
+        return self.print(ostream=ostream)
 
     # def dump_field(self):
     #     epr_dump_field(self._ptr)
@@ -1141,8 +1149,8 @@ cdef class Record(EprObject):
         """
         return epr_get_num_fields(self._ptr)
 
-    def print_(self, ostream=None):
-        """print_(self, ostream=None)
+    def print(self, ostream=None):
+        """print(self, ostream=None)
 
         Write the record to specified file.
 
@@ -1168,6 +1176,13 @@ cdef class Record(EprObject):
             stdio.fclose(fstream)
 
         pyepr_check_errors()
+
+    def print_(self, ostream=None):
+        # COMPATIBILITY
+        warnings.warn(
+            'the "print_" method is deprecated, please use "print" instead',
+            DeprecationWarning)
+        return self.print(ostream=ostream)
 
     def print_element(self, uint field_index, uint element_index,
                       ostream=None):

@@ -17,6 +17,10 @@ PyEPR 1.1.0 (UNRELEASED)
   The previously used one is no longer available.
 * Continuous Integration moved to GitHub Actions (GHA).
 * Fix a leak of resources on Windows platforms.
+* The ``print_()`` methond of :class:`Field` and :class:`Record` calsses has
+  been renamed into ``print()``.
+  The old ``print_()`` method is now deprecated and will be removed in
+  future versions.
 
 
 PyEPR 1.0.1 (07/03/2020)

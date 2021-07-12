@@ -1580,15 +1580,15 @@ class TestRecord(unittest.TestCase):
         self.assertEqual(self.record.get_num_fields(), self.NUM_FIELD)
 
     @quiet
-    def test_print_(self):
-        self.record.print_()
+    def test_print(self):
+        self.record.print()
 
     @quiet
     def test_print_ostream(self):
-        self.record.print_(sys.stderr)
+        self.record.print(sys.stderr)
 
     def test_print_invalid_ostream(self):
-        self.assertRaises(TypeError, self.record.print_, 'invalid')
+        self.assertRaises(TypeError, self.record.print, 'invalid')
 
     @quiet
     def test_print_element(self):
@@ -1772,7 +1772,7 @@ class TestMultipleRecordsHighLevelAPI(unittest.TestCase):
     def test_str_vs_print(self):
         for record in self.dataset:
             with tempfile.TemporaryFile('w+') as fd:
-                record.print_(fd)
+                record.print(fd)
                 fd.flush()
                 fd.seek(0)
                 data = fd.read()
@@ -1830,8 +1830,8 @@ class TestRecordOnClosedProduct(unittest.TestCase):
     # def test_get_num_fields_mph(self):
     #     self.assertEqual(self.mph.get_num_fields(), 34)
 
-    def test_print_(self):
-        self.assertRaises(ValueError, self.record.print_)
+    def test_print(self):
+        self.assertRaises(ValueError, self.record.print)
 
     def test_print_element(self):
         self.assertRaises(ValueError, self.record.print_element, 3, 0)
@@ -1890,14 +1890,14 @@ class TestField(unittest.TestCase):
 
     @quiet
     def test_print_field(self):
-        self.field.print_()
+        self.field.print()
 
     @quiet
     def test_print_field_ostream(self):
-        self.field.print_(sys.stderr)
+        self.field.print(sys.stderr)
 
     def test_print_fied_invalid_ostream(self):
-        self.assertRaises(TypeError, self.field.print_, 'invalid')
+        self.assertRaises(TypeError, self.field.print, 'invalid')
 
     def test_get_unit(self):
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
@@ -2379,7 +2379,7 @@ class TestFieldHighLevelAPI(unittest.TestCase):
     def test_str_vs_print(self):
         for field in self.record:
             with tempfile.TemporaryFile('w+') as fd:
-                field.print_(fd)
+                field.print(fd)
                 fd.flush()
                 fd.seek(0)
                 data = fd.read()
@@ -2489,7 +2489,7 @@ class TestFieldOnClosedProduct(unittest.TestCase):
         product.close()
 
     def test_print_field(self):
-        self.assertRaises(ValueError, self.field.print_)
+        self.assertRaises(ValueError, self.field.print)
 
     def test_get_unit(self):
         self.assertRaises(ValueError, self.field.get_unit)
