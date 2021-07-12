@@ -15,7 +15,9 @@ PyEPR 1.1.0 (UNRELEASED)
 * Update the test suite to use the public product
   ``ASA_APM_1PNPDE20091007_025628_000000432083_00118_39751_9244.N1``.
   The previously used one is no longer available.
+* Continuous Integration moved to GitHub Actions (GHA).
 * Fix a leak of resources on Windows platforms.
+
 
 PyEPR 1.0.1 (07/03/2020)
 ------------------------
