@@ -79,14 +79,11 @@ cdef bint SWAP_BYTES = (sys.byteorder == 'little')
 _DEFAULT_FS_ENCODING = sys.getfilesystemencoding()
 
 
-cdef inline bytes _to_bytes(s, encoding='UTF-8'):
-    if hasattr(s, 'encode'):
-        return s.encode(encoding)
-    else:
-        return s
+cdef inline bytes _to_bytes(str s, encoding='UTF-8'):
+    return s.encode(encoding)
 
 
-cdef inline str _to_str(b, encoding='UTF-8'):
+cdef inline str _to_str(bytes b, encoding='UTF-8'):
     return b.decode(encoding)
 
 
@@ -267,7 +264,7 @@ cdef pyepr_check_errors():
             raise EPRError(msg, code)
 
 
-cdef pyepr_null_ptr_error(msg='null pointer'):
+cdef pyepr_null_ptr_error(str msg='null pointer'):
     cdef int code
     cdef str eprmsg = _to_str(<char*>epr_get_last_err_message(), 'ascii')
 
@@ -520,7 +517,7 @@ cdef class DSD(EprObject):
             return self._ptr.magic
 
 
-cdef new_dsd(EPR_SDSD* ptr, object parent=None):
+cdef new_dsd(EPR_SDSD* ptr, EprObject parent=None):
     if ptr is NULL:
         pyepr_null_ptr_error()
 
@@ -1217,7 +1214,7 @@ cdef class Record(EprObject):
 
         pyepr_check_errors()
 
-    def get_field(self, name):
+    def get_field(self, str name):
         """get_field(self, name)
 
         Gets a field specified by name.
@@ -1367,7 +1364,7 @@ cdef class Record(EprObject):
             return None
 
 
-cdef new_record(EPR_SRecord* ptr, object parent=None, bint dealloc=False):
+cdef new_record(EPR_SRecord* ptr, EprObject parent=None, bint dealloc=False):
     if ptr is NULL:
         pyepr_null_ptr_error()
 
@@ -1809,7 +1806,8 @@ cdef class Band(EprObject):
         def __get__(self):
             self.check_closed_product()
             cdef EPR_SDatasetId* dataset_id = self._ptr.dataset_ref.dataset_id
-            cdef const char* name = epr_get_dataset_name(dataset_id)
+            cdef const char* cname = epr_get_dataset_name(dataset_id)
+            cdef str name = _to_str(cname)
             return self.product.get_dataset(name)
 
     def get_name(self):
@@ -2304,8 +2302,16 @@ cdef class Product(EprObject):
     cdef str _mode
 
     def __cinit__(self, filename, str mode='rb'):
-        cdef bytes bfilename = _to_bytes(filename, _DEFAULT_FS_ENCODING)
-        cdef char* cfilename = bfilename
+        pfilename = os.fspath(filename)
+        cdef bytes bfilename
+        cdef char* cfilename
+
+        if hasattr(pfilename, 'encode'):
+            bfilename = _to_bytes(pfilename, _DEFAULT_FS_ENCODING)
+            cfilename = bfilename
+        else:
+            cfilename = pfilename
+
         cdef bytes bmode
         cdef char* cmode
         cdef int ret
@@ -2516,7 +2522,7 @@ cdef class Product(EprObject):
 
         return new_dataset(dataset_id, self)
 
-    def get_dataset(self, name):
+    def get_dataset(self, str name):
         """get_dataset(self, name)
 
         Gets the dataset corresponding to the specified dataset name.
@@ -2582,7 +2588,7 @@ cdef class Product(EprObject):
 
         return new_record(record_ptr, self, False)
 
-    def get_band(self, name):
+    def get_band(self, str name):
         """get_band(self, name)
 
         Gets the band corresponding to the specified name.
@@ -2620,7 +2626,7 @@ cdef class Product(EprObject):
 
         return new_band(band_id, self)
 
-    def read_bitmask_raster(self, bm_expr, int xoffset, int yoffset,
+    def read_bitmask_raster(self, str bm_expr, int xoffset, int yoffset,
                             Raster raster not None):
         """read_bitmask_raster(self, bm_expr, xoffset, yoffset, raster)
 
@@ -2778,7 +2784,7 @@ cdef class Product(EprObject):
             return self._ptr.magic
 
 
-def open(filename, mode='rb'):
+def open(filename, str mode='rb'):
     """open(filename)
 
     Open the ENVISAT product.

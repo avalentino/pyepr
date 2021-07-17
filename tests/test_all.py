@@ -23,6 +23,7 @@ import re
 import sys
 import shutil
 import numbers
+import pathlib
 import zipfile
 import operator
 import platform
@@ -167,7 +168,11 @@ class TestOpenProduct(unittest.TestCase):
     def test_open_bytes(self):
         filename = self.PRODUCT_FILE.encode('UTF-8')
         with epr.open(filename) as product:
-            self.assertTrue(isinstance(filename, bytes))
+            self.assertTrue(isinstance(product, epr.Product))
+
+    def test_open_pathlib(self):
+        filename = pathlib.Path(self.PRODUCT_FILE)
+        with epr.open(filename) as product:
             self.assertTrue(isinstance(product, epr.Product))
 
     def test_product_constructor(self):
@@ -273,12 +278,6 @@ class TestProduct(unittest.TestCase):
 
     def test_get_dataset(self):
         dataset = self.product.get_dataset(self.DATASET_NAME)
-        self.assertTrue(dataset)
-
-    def test_get_dataset_bytes(self):
-        filename = self.DATASET_NAME.encode('UTF-8')
-        dataset = self.product.get_dataset(filename)
-        self.assertTrue(isinstance(filename, bytes))
         self.assertTrue(dataset)
 
     def test_datasets(self):

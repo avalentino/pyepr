@@ -21,6 +21,8 @@ PyEPR 1.1.0 (UNRELEASED)
   been renamed into ``print()``.
   The old ``print_()`` method is now deprecated and will be removed in
   future versions.
+* Support for :mod:`pathlib`.
+* Enforce type checking.
 
 
 PyEPR 1.0.1 (07/03/2020)
