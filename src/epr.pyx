@@ -469,45 +469,29 @@ cdef class DSD(EprObject):
     def __repr__(self):
         return 'epr.DSD("%s")' % self.ds_name
 
-    def __richcmp__(self, other, int op):
-        cdef EPR_SDSD* p1 = (<DSD>self)._ptr
-        cdef EPR_SDSD* p2 = (<DSD>other)._ptr
+    def __eq__(self, other):
+        cdef EPR_SDSD* p1 = NULL
+        cdef EPR_SDSD* p2 = NULL
 
-        if isinstance(self, DSD) and isinstance(other, DSD):
-            if op == 2:         # eq
-                if p1 == p2:
-                    return True
+        if isinstance(other, self.__class__):
+            p1 = (<DSD>self)._ptr
+            p2 = (<DSD>other)._ptr
 
-                (<DSD>self).check_closed_product()
+            if p1 == p2:
+                return True
 
-                return ((p1.index == p2.index) and
-                        (p1.ds_offset == p2.ds_offset) and
-                        (p1.ds_size == p2.ds_size) and
-                        (p1.num_dsr == p2.num_dsr) and
-                        (p1.dsr_size == p2.dsr_size)and
-                        (cstring.strcmp(p1.ds_name, p2.ds_name) == 0) and
-                        (cstring.strcmp(p1.ds_type, p2.ds_type) == 0) and
-                        (cstring.strcmp(p1.filename, p2.filename) == 0))
+            (<DSD>self).check_closed_product()
 
-            elif op == 3:       # ne
-                if p1 == p2:
-                    return False
+            return ((p1.index == p2.index) and
+                    (p1.ds_offset == p2.ds_offset) and
+                    (p1.ds_size == p2.ds_size) and
+                    (p1.num_dsr == p2.num_dsr) and
+                    (p1.dsr_size == p2.dsr_size)and
+                    (cstring.strcmp(p1.ds_name, p2.ds_name) == 0) and
+                    (cstring.strcmp(p1.ds_type, p2.ds_type) == 0) and
+                    (cstring.strcmp(p1.filename, p2.filename) == 0))
 
-                (<DSD>self).check_closed_product()
-
-                return ((p1.index != p2.index) or
-                        (p1.ds_offset != p2.ds_offset) or
-                        (p1.ds_size != p2.ds_size) or
-                        (p1.num_dsr != p2.num_dsr) or
-                        (p1.dsr_size != p2.dsr_size) or
-                        (cstring.strcmp(p1.ds_name, p2.ds_name) != 0) or
-                        (cstring.strcmp(p1.ds_type, p2.ds_type) != 0) or
-                        (cstring.strcmp(p1.filename, p2.filename) != 0))
-
-            else:
-                raise TypeError('DSD only implements "==" and "!=" operators')
-        else:
-            return NotImplemented
+        return NotImplemented
 
     # --- low level interface -------------------------------------------------
     property _magic:
@@ -594,7 +578,7 @@ cdef class Field(EprObject):
         cdef FILE* fstream = NULL
 
         self.check_closed_product()
-        
+
         fstream = pyepr_get_file_stream(ostream)
         with nogil:
             epr_print_field(self._ptr, fstream)
@@ -984,82 +968,42 @@ cdef class Field(EprObject):
             else:
                 return '%s = %s' % (name, fmt % self.get_elem())
 
-    def __richcmp__(self, other, int op):
-        cdef int ret
-        cdef size_t n
-        cdef EPR_SField* p1 = (<Field>self)._ptr
-        cdef EPR_SField* p2 = (<Field>other)._ptr
+    def __eq__(self, other):
+        cdef size_t n = 0
+        cdef EPR_SField* p1 = NULL
+        cdef EPR_SField* p2 = NULL
 
-        if isinstance(self, Field) and isinstance(other, Field):
-            if op == 2:         # eq
-                if p1 == p2:
-                    return True
+        if isinstance(other, self.__class__):
+            p1 = (<Field>self)._ptr
+            p2 = (<Field>other)._ptr
 
-                (<Field>self).check_closed_product()
+            if p1 == p2:
+                return True
 
-                if ((epr_get_field_num_elems(p1) !=
-                            epr_get_field_num_elems(p2)) or
+            (<Field>self).check_closed_product()
 
-                    (epr_get_field_type(p1) != epr_get_field_type(p2)) or
+            if ((epr_get_field_num_elems(p1) != epr_get_field_num_elems(p2)) or
+                (epr_get_field_type(p1) != epr_get_field_type(p2)) or
+                (cstring.strcmp(epr_get_field_unit(p1),
+                                epr_get_field_unit(p2)) != 0) or
+                (cstring.strcmp(epr_get_field_description(p1),
+                                epr_get_field_description(p2)) != 0) or
+                (cstring.strcmp(epr_get_field_name(p1),
+                                epr_get_field_name(p2)) != 0)):
 
-                    (cstring.strcmp(epr_get_field_unit(p1),
-                                    epr_get_field_unit(p2)) != 0) or
+                return False
 
-                    (cstring.strcmp(epr_get_field_description(p1),
-                                    epr_get_field_description(p2)) != 0) or
+            n = epr_get_data_type_size(epr_get_field_type(p1))
+            if n != 0:
+                n *= epr_get_field_num_elems(p1)
+            # pyepr_check_errors()
+            if n <= 0:
+                # @TODO: check
+                return True
 
-                    (cstring.strcmp(epr_get_field_name(p1),
-                                    epr_get_field_name(p2)) != 0)):
+            return (cstring.memcmp(p1.elems, p2.elems, n) == 0)
 
-                    return False
-
-                n = epr_get_data_type_size(epr_get_field_type(p1))
-                if n != 0:
-                    n *= epr_get_field_num_elems(p1)
-                # pyepr_check_errors()
-                if n <= 0:
-                    # @TODO: check
-                    return True
-
-                return (cstring.memcmp(p1.elems, p2.elems, n) == 0)
-
-            elif op == 3:       # ne
-                if p1 == p2:
-                    return False
-
-                (<Field>self).check_closed_product()
-
-                if ((epr_get_field_num_elems(p1) !=
-                            epr_get_field_num_elems(p2)) or
-
-                    (epr_get_field_type(p1) != epr_get_field_type(p2)) or
-
-                    (cstring.strcmp(epr_get_field_unit(p1),
-                                    epr_get_field_unit(p2)) != 0) or
-
-                    (cstring.strcmp(epr_get_field_description(p1),
-                                    epr_get_field_description(p2)) != 0) or
-
-                    (cstring.strcmp(epr_get_field_name(p1),
-                                    epr_get_field_name(p2)) != 0)):
-
-                    return True
-
-                n = epr_get_data_type_size(epr_get_field_type(p1))
-                if n != 0:
-                    n *= epr_get_field_num_elems(p1)
-                # pyepr_check_errors()
-                if n <= 0:
-                    # @TODO: check
-                    return False
-
-                return (cstring.memcmp(p1.elems, p2.elems, n) != 0)
-
-            else:
-                raise TypeError(
-                    'Field only implements "==" and "!=" operators')
-        else:
-            return NotImplemented
+        return NotImplemented
 
     def __len__(self):
         self.check_closed_product()
