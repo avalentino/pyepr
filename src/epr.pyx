@@ -40,7 +40,7 @@ in a product file.
 .. _ESA: http://earth.esa.int
 """
 
-__version__ = '1.1.0.dev1'
+__version__ = '1.1.0.dev2'
 
 from libc cimport errno
 from libc cimport stdio
@@ -277,9 +277,11 @@ cdef pyepr_null_ptr_error(msg='null pointer'):
     raise EPRValueError('%s: %s' % (msg, eprmsg), code=code if code else None)
 
 
+# https://stackoverflow.com/questions/1603916/close-a-file-pointer-without-closing-the-underlying-file-descriptor
 cdef FILE* pyepr_get_file_stream(object ostream) except NULL:
+    # The returned stream can be safely closed
     cdef FILE* fstream = NULL
-    cdef int fileno
+    cdef int fileno = -1
 
     if ostream is None:
         ostream = sys.stdout
@@ -293,10 +295,14 @@ cdef FILE* pyepr_get_file_stream(object ostream) except NULL:
         if fileno == -1:
             raise TypeError('bad output stream')
         else:
-            fstream = stdio.fdopen(fileno, 'w')
-            if fstream is NULL:
-                errno.errno = 0
-                raise TypeError('invalid ostream')
+            fileno = os.dup(fileno)
+            if fileno == -1:
+                raise TypeError('bad output stream')
+            else:
+                fstream = stdio.fdopen(fileno, 'a+')
+                if fstream is NULL:
+                    errno.errno = 0
+                    raise TypeError('invalid ostream')
 
     return fstream
 
@@ -587,13 +593,15 @@ cdef class Field(EprObject):
                   a generic stream object like
                   :class:`StringIO.StringIO` instances
         """
-        cdef FILE* fstream = pyepr_get_file_stream(ostream)
+        cdef FILE* fstream = NULL
 
         self.check_closed_product()
-
+        
+        fstream = pyepr_get_file_stream(ostream)
         with nogil:
             epr_print_field(self._ptr, fstream)
             stdio.fflush(fstream)
+            stdio.fclose(fstream)
 
         pyepr_check_errors()
 
@@ -1149,13 +1157,15 @@ cdef class Record(EprObject):
                   a generic stream object like
                   :class:`StringIO.StringIO` instances
         """
-        cdef FILE* fstream = pyepr_get_file_stream(ostream)
+        cdef FILE* fstream = NULL
 
         self.check_closed_product()
 
+        fstream = pyepr_get_file_stream(ostream)
         with nogil:
             epr_print_record(self._ptr, fstream)
             stdio.fflush(fstream)
+            stdio.fclose(fstream)
 
         pyepr_check_errors()
 
@@ -1180,13 +1190,15 @@ cdef class Record(EprObject):
                   a generic stream object like
                   :class:`StringIO.StringIO` instances.
         """
-        cdef FILE* fstream = pyepr_get_file_stream(ostream)
+        cdef FILE* fstream = NULL
 
         self.check_closed_product()
 
+        fstream = pyepr_get_file_stream(ostream)
         with nogil:
             epr_print_element(self._ptr, field_index, element_index, fstream)
             stdio.fflush(fstream)
+            stdio.fclose(fstream)
 
         pyepr_check_errors()
 
