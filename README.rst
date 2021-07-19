@@ -97,6 +97,15 @@ To clone the git_ repository the following command can be used::
 
     $ git clone https://github.com/avalentino/pyepr.git
 
+To get also the EPR C API source code, the following commands are necessary::
+
+    $ cd pyepr
+    $ git submodule init
+    Submodule 'extern/epr-api' (https://github.com/avalentino/epr-api.git) registered for path 'extern/epr-api'
+    $ git submodule update
+    Cloning into '/Users/antonio valentino/projects/av/pyepr/extern/epr-api'...
+    Submodule path 'extern/epr-api': checked out '93c1f1efce26c64d508fe882d5c72a898a068f29'
+
 .. _PyPi: https://pypi.org
 .. _GitHub: https://github.com
 .. _git: https://git-scm.com
