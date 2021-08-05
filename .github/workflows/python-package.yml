@@ -90,3 +90,47 @@ jobs:
         print('Python: %s' % sys.version)"
 
         pytest -v
+
+
+  coverage:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.9]
+
+    env:
+      OS: ubuntu-latest
+      PYTHON: '3.9'
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        submodules: true
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade setuptools pip wheel
+        python -m pip install sphinx coverage codecov
+        python -m pip install -r requirements-dev.txt
+    - name: Build and install
+      run: |
+        make coverage-report
+    - name: Print info
+      run: |
+        python -c "\
+        import sys, epr, numpy as np;\
+        print('PyEPR: %s' % epr.__version__);\
+        print('EPR API: %s' % epr.EPR_C_API_VERSION);\
+        print('Numpy: %s' % np.__version__);\
+        print('Python: %s' % sys.version)"
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2
+      with:
+        env_vars: OS,PYTHON
+        verbose: true
