@@ -20,14 +20,9 @@
 
 PYTHON = python3
 CYTHON = $(PYTHON) -m cython
-DOWNLOAD = wget -c
-# DOWNLOAD = curl -C - -O
 CYTHONFLAGS=$(shell $(CYTHON) --help | grep -o -- '--3str')
 
-TEST_DATSET_URL = "http://www.brockmann-consult.de/beam/data/products/ASAR/ASA_APM_1PNPDE20091007_025628_000000432083_00118_39751_9244.zip"
-# TEST_DATSET_URL = "http://www.brockmann-consult.de/beam/data/products/MER_RR__2PNPDK20030809_100609_000022512018_00466_07534_3898.zip"
-TEST_DATSET_ARCH = $(shell basename $(TEST_DATSET_URL))
-TEST_DATSET = tests/$(shell basename $(TEST_DATSET_ARCH) .zip).N1
+TEST_DATSET = tests/$(shell grep N1 tests/test_all.py | cut -d "'" -f 2)
 
 EPRAPIROOT = extern/epr-api
 
@@ -57,6 +52,7 @@ fullsdist: doc cythonize eprsrc
 	$(PYTHON) setup.py sdist
 
 upload: fullsdist
+	twine check dist/pyepr-*.tar.gz
 	twine upload dist/pyepr-*.tar.gz
 
 doc:
@@ -79,19 +75,19 @@ clean:
 	$(RM) epr.p*        # workaround for Cython.Coverage bug #1985
 
 distclean: clean
-	$(RM) $(TEST_DATSET) $(TEST_DATSET_ARCH)
+	$(RM) $(TEST_DATSET)
 	$(RM) -r doc/html
 	$(RM) -r LICENSES
 	$(MAKE) -C tests -f checksetup.mak distclean
 	$(RM) -r .eggs
 
-check: ext data
+check: ext
 	env PYTHONPATH=. $(PYTHON) tests/test_all.py --verbose
 
 ext-coverage: src/epr.pyx
 	env PYEPR_COVERAGE=TRUE $(PYTHON) setup.py build_ext --inplace
 
-coverage: clean ext-coverage data
+coverage: clean ext-coverage
 	ln -s src/epr.p* .  # workaround for Cython.Coverage bug #1985
 	env PYEPR_COVERAGE=TRUE PYTHONPATH=. \
 		$(PYTHON) -m coverage run --branch --source=src setup.py test
@@ -107,14 +103,6 @@ coverage-report: coverage
 
 debug:
 	$(PYTHON)d setup.py build_ext --inplace --debug
-
-data: $(TEST_DATSET)
-
-$(TEST_DATSET_ARCH):
-	$(DOWNLOAD) $(TEST_DATSET_URL)
-
-$(TEST_DATSET): $(TEST_DATSET_ARCH)
-	unzip -o -d tests $(TEST_DATSET_ARCH) $(shell basename $@)
 
 wheels:
 	# make distclean
