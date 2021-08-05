@@ -178,7 +178,7 @@ It is possible to control which `EPR API`_ C sources to use by means of the
 Also it is possible to switch off the *standalone mode* and force the link
 with the system `EPR API`_ C library::
 
-    $ python3 setup.py install --epr-api-src=None
+    $ python3 setup.py install --epr-api-src=""
 
 .. _pip: https://pypi.org/project/pip
 
