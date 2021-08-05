@@ -120,7 +120,8 @@ def get_parser():
     PYEPR_COVERAGE_STR = os.environ.get('PYEPR_COVERAGE', '').upper()
     DEFAULT_COVERAGE = bool(
         PYEPR_COVERAGE_STR in ('Y', 'YES', 'TRUE', 'OK', 'ON', '1'))
-    DEFAULT_EPRAPI_SRC = 'extern/epr-api/src'
+    DEFAULT_EPRAPI_SRC = os.path.join(os.path.dirname(__file__),
+                                      'extern/epr-api/src')
     if not os.path.exists(DEFAULT_EPRAPI_SRC):
         DEFAULT_EPRAPI_SRC = ''
     DEFAULT_EPRAPI_SRC = os.environ.get('PYEPR_EPRAPI_SRC', DEFAULT_EPRAPI_SRC)
