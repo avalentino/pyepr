@@ -98,10 +98,10 @@ coverage: clean ext-coverage data
 	env PYTHONPATH=. $(PYTHON) -m coverage report
 
 coverage-report: coverage
-	env PYTHONPATH=. $(PYTHON) -m coverage xml -i
 	env PYTHONPATH=. $(PYTHON) -m cython -E CYTHON_TRACE_NOGIL=1 \
 		-X linetrace=True -X language_level=3str \
 		--annotate-coverage coverage.xml src/epr.pyx
+	env PYTHONPATH=. $(PYTHON) -m coverage xml -i
 	env PYTHONPATH=. $(PYTHON) -m coverage html -i
 	cp src/epr.html htmlcov
 
@@ -116,7 +116,7 @@ $(TEST_DATSET_ARCH):
 $(TEST_DATSET): $(TEST_DATSET_ARCH)
 	unzip -o -d tests $(TEST_DATSET_ARCH) $(shell basename $@)
 
-manylinux:
-	# make fullsdist
-	# docker pull quay.io/pypa/manylinux2010_x86_64
-	docker run --rm -v $(shell pwd):/io quay.io/pypa/manylinux2010_x86_64 sh /io/build-manylinux-wheels.sh
+wheels:
+	# make distclean
+	# python3 -m pip install -U cibuildwheel
+	python3 -m cibuildwheel --output-dir wheelhouse --platform linux
