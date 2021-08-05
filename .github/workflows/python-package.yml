@@ -52,3 +52,41 @@ jobs:
         print('Python: %s' % sys.version)"
 
         pytest -v
+
+
+  syslibs:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.9]
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        submodules: true
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        sudo apt-get -y install libepr-api-dev
+        python -m pip install --upgrade setuptools pip wheel
+        python -m pip install sphinx coverage codecov
+        python -m pip install -r requirements-dev.txt
+    - name: Build and install
+      run: |
+        python setup.py install --epr-api-src=""
+    - name: Test with pytest
+      run: |
+        python -c "\
+        import sys, epr, numpy as np;\
+        print('PyEPR: %s' % epr.__version__);\
+        print('EPR API: %s' % epr.EPR_C_API_VERSION);\
+        print('Numpy: %s' % np.__version__);\
+        print('Python: %s' % sys.version)"
+
+        pytest -v
