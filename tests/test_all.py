@@ -1601,10 +1601,12 @@ class TestRecord(unittest.TestCase):
         self.assertRaises(TypeError, self.record.print_element, 0, 0,
                           'invalid')
 
+    @quiet  # quiet avoids errors when sys.stderr does not have fileno
     def test_print_element_field_out_of_range(self):
         index = self.record.get_num_fields() + 10
         self.assertRaises(ValueError, self.record.print_element, index, 0)
 
+    @quiet  # quiet avoids errors when sys.stderr does not have fileno
     def test_print_element_element_out_of_range(self):
         self.assertRaises(ValueError, self.record.print_element, 0, 150)
 
