@@ -5,6 +5,7 @@ on:
     branches:
       - 'releases/**'
     tags:
+      - v*
 
 jobs:
   build_wheels:
