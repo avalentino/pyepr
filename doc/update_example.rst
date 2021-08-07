@@ -25,7 +25,7 @@ instructions:
 
 .. literalinclude:: examples/update_elements.py
    :language: python
-   :lines: 10-15
+   :lines: 8-13
 
 .. index:: matplotlib
 
@@ -37,7 +37,7 @@ The resulting histogram can be plot using Matplotlib_:
 
 .. literalinclude:: examples/update_elements.py
    :language: python
-   :lines: 17-21
+   :lines: 15-19
 
 .. figure:: images/water_vapour_histogram_01.*
    :width: 60%
@@ -79,7 +79,7 @@ The change can be performed using the :meth:`Field.set_elem` and
 
 .. literalinclude:: examples/update_elements.py
    :language: python
-   :lines: 24-32
+   :lines: 22-30
 
 Now the `sf_wvapour` scaling factor has been changed and it is possible to
 compute and display the histogram of modified data in the `water_vapour`
@@ -91,7 +91,7 @@ compute and display the histogram of modified data in the `water_vapour`
 
 .. literalinclude:: examples/update_elements.py
    :language: python
-   :lines: 34-48
+   :lines: 32-46
 
 .. figure:: images/water_vapour_histogram_02.*
    :width: 60%
@@ -150,7 +150,7 @@ It is possible to change a small box inside the :class:`Dataset` as follows:
 
 .. literalinclude:: examples/update_elements.py
    :language: python
-   :lines: 60-68
+   :lines: 58-66
 
 Please note that when one modifies the content of a :class:`Dataset` he/she
 should also take into account id the corresponding band has lines mirrored
@@ -170,7 +170,7 @@ modified :class:`Band`:
 
 .. literalinclude:: examples/update_elements.py
    :language: python
-   :lines: 71-82
+   :lines: 69-80
 
 .. figure:: images/modified_water_vapour_with_box.*
 

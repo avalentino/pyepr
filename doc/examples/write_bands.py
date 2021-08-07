@@ -6,9 +6,6 @@
 # Source code of the C program is available at:
 # https://github.com/bcdev/epr-api/blob/master/src/examples/write_bands.c
 
-
-from __future__ import print_function
-
 import os
 import sys
 import epr
@@ -18,9 +15,7 @@ def write_raw_image(output_dir, product, band_name):
     '''Generate the ENVI binary pattern image file for an actual DS.
 
     The first parameter is the output directory path.
-
     '''
-
     # Build ENVI file path, DS name specifically
     image_file_path = os.path.join(output_dir, band_name + '.raw')
 
@@ -36,13 +31,10 @@ def write_raw_image(output_dir, product, band_name):
     print('Reading band "%s"...' % band_name)
     raster = band.read_raster(0, 0, raster)
 
-    out_stream = open(image_file_path, 'wb')
-
-    for line in raster.data:
-        out_stream.write(line.tostring())
-    # or better: raster.data.tofile(out_stream)
-
-    out_stream.close()
+    with open(image_file_path, 'wb') as out_stream:
+        for line in raster.data:
+            out_stream.write(line.tostring())
+        # or better: raster.data.tofile(out_stream)
 
     print('Raw image data successfully written to "%s".' % image_file_path)
     print('C data type is "%s", element size %u byte(s), '
@@ -73,7 +65,6 @@ def main(*argv):
         . latitude
 
     '''
-
     if not argv:
         argv = sys.argv
 
@@ -95,7 +86,7 @@ def main(*argv):
     product_file_path = argv[1]
     output_dir_path = argv[2]
 
-    # Open the product; an argument is a path to product data file
+    # Open the product; the argument is the path to product the data file
     with epr.open(product_file_path) as product:
         for band_name in argv[3:]:
             write_raw_image(output_dir_path, product, band_name)

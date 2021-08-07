@@ -106,7 +106,7 @@ def epr2gdal(product, vrt, overwrite_existing=False):
     xsize = product.get_scene_width()
 
     if os.path.exists(vrt) and not overwrite_existing:
-        raise ValueError('unable to create "{0}". Already exists'.format(vrt))
+        raise ValueError('unable to create "{}". Already exists'.format(vrt))
 
     driver = gdal.GetDriverByName('VRT')
     if driver is None:

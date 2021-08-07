@@ -41,7 +41,7 @@ In order to use the Python_ EPR API the :mod:`epr` module is imported:
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bitmask.py
-   :lines: 27
+   :lines: 25
 
 .. index:: product, open
    pair: with; statement
@@ -58,7 +58,7 @@ program exits the ``with`` block.
 
 .. literalinclude:: examples/write_bitmask.py
    :language: python
-   :lines: 51-52
+   :lines: 49-50
 
 .. index:: product
 
@@ -72,7 +72,7 @@ using the :meth:`epr.Product.get_scene_width` and
 
 .. literalinclude:: examples/write_bitmask.py
    :language: python
-   :lines: 55-56
+   :lines: 53-54
 
 The EPR API allows to manage data by means of :class:`epr.Raster` objects, so
 the function :func:`epr.create_bitmask_raster`, specific for bitmasks, is used
@@ -89,7 +89,7 @@ method of the :class:`epr.Product` class:
 
 .. literalinclude:: examples/write_bitmask.py
    :language: python
-   :lines: 63
+   :lines: 61
 
 The :meth:`epr.Product.read_bitmask_raster` method receives in input the
 *bm_expr* parameter that is set via command line:
@@ -100,7 +100,7 @@ The :meth:`epr.Product.read_bitmask_raster` method receives in input the
 
 .. literalinclude:: examples/write_bitmask.py
    :language: python
-   :lines: 48
+   :lines: 46
 
 *bm_expr* is a string that define the logical expression for the definition
 of the bit-mask. In a bit-mask expression, any number of the flag-names
@@ -127,7 +127,7 @@ of the :class:`epr.Raster` objects that exposes data via the
 
 .. literalinclude:: examples/write_bitmask.py
    :language: python
-   :lines: 65-66
+   :lines: 63-64
 
 
 .. _Python: https://www.python.org

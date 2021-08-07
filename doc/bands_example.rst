@@ -38,7 +38,7 @@ At first import time the underlaying  C library is opportunely initialized.
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 1-15
+   :lines: 1-11
 
 
 The main program
@@ -52,7 +52,7 @@ The main program in quite simple (this is just an example).
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 55-
+   :lines: 48-
 
 It performs some basic command line arguments handling and then open the
 input product.
@@ -63,7 +63,7 @@ input product.
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 97-99
+   :lines: 89-90
 
 Finally the core function (:func:`write_raw_image`) is called on each band
 specified on the command:
@@ -74,7 +74,7 @@ specified on the command:
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 100-101
+   :lines: 91-92
 
 
 The :func:`write_raw_image` core function
@@ -101,7 +101,7 @@ First the output file name is computed using the :mod:`os` module.
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 23-25
+   :lines: 19-20
 
 Then the desired band is retrieved using the :meth:`epr.Product.get_band`
 method and some of its parameters are loaded in to local variables:
@@ -112,7 +112,7 @@ method and some of its parameters are loaded in to local variables:
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 26-27
+   :lines: 22
 
 Band data are accessed by means of a :class:`epr.Raster` object.
 
@@ -128,7 +128,7 @@ with the band data:
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 32-34
+   :lines: 28-29
 
 Then data are read using the :meth:`epr.Band.read_raster` method:
 
@@ -138,18 +138,9 @@ Then data are read using the :meth:`epr.Band.read_raster` method:
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 36-37
+   :lines: 31-32
 
 Then the output file object is created (in binary mode of course)
-
-.. raw:: latex
-
-    \fvset{fontsize=\footnotesize}
-
-.. literalinclude:: examples/write_bands.py
-   :language: python
-   :lines: 39
-
 and data are copied to the output file one line at time
 
 .. raw:: latex
@@ -158,7 +149,7 @@ and data are copied to the output file one line at time
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 41-42
+   :lines: 34-36
 
 Please note that it has been used :data:`epr.Raster.data` attribute of the
 :class:`epr.Raster` objects that exposes :class:`epr.Raster` data with the

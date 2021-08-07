@@ -38,7 +38,7 @@ function.
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_ndvi.py
-   :lines: 49
+   :lines: 46-47
 
 .. index:: context, open
    pair: with; statement
@@ -70,7 +70,7 @@ method:
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_ndvi.py
-   :lines: 51-56
+   :lines: 49-54
 
 *band1* and *band2* are used to read the calibrated radiances into the
 :class:`epr.Raster` objects that allow to access data matrices with the
@@ -92,7 +92,7 @@ class:
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_ndvi.py
-   :lines: 58-66
+   :lines: 56-64
 
 Then data are actually loaded into memory using the
 :meth:`epr.Band.read_raster` method.
@@ -105,7 +105,7 @@ specified offset):
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_ndvi.py
-   :lines: 68-76
+   :lines: 66-74
 
 .. note::
 
@@ -119,7 +119,7 @@ After opening (in binary mode) the stream for the output
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_ndvi.py
-   :lines: 78-80
+   :lines: 76-78
 
 the program simply loops over all pixel and calculate the NDVI with the
 following formula:
@@ -131,7 +131,7 @@ following formula:
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_ndvi.py
-   :lines: 82-95
+   :lines: 80-93
 
 This part of the code tries to mimic closely the original C code
 (`write_ndvi.c`_)
@@ -164,7 +164,7 @@ used to write the NDVI of the pixel n the file in binary format.
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_ndvi.py
-   :lines: 94
+   :lines: 92
 
 .. note::
 

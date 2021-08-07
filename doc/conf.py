@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -179,7 +177,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'pyepr.tex', u'PyEPR Documentation',
+    (master_doc, 'pyepr.tex', 'PyEPR Documentation',
      author, 'manual'),
 ]
 
@@ -191,7 +189,7 @@ latex_domain_indices = False
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'pyepr', u'PyEPR Documentation',
+    (master_doc, 'pyepr', 'PyEPR Documentation',
      [author], 1)
 ]
 
@@ -201,7 +199,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'PyEPR', u'PyEPR Documentation',
+    (master_doc, 'PyEPR', 'PyEPR Documentation',
      author, 'PyEPR', 'One line description of project.',
      'Miscellaneous'),
 ]

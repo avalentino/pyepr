@@ -24,8 +24,6 @@ for example::
 
 '''
 
-from __future__ import pront_function
-
 import sys
 import struct
 import logging
