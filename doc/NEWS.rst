@@ -1,7 +1,7 @@
 Change history
 ==============
 
-PyEPR 1.1.0 (UNRELEASED)
+PyEPR 1.1.0 (06/08/2021)
 ------------------------
 
 * Old Python versions are no longer officially supported.
