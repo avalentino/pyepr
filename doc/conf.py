@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('sphinxext'))
 # -- Project information -----------------------------------------------------
 
 project = 'PyEPR'
-copyright = '2011-2020, Antonio Valentino'
+copyright = '2011-2021, Antonio Valentino'
 author = 'Antonio Valentino'
 
 def get_version(filename, strip_extra=False):
