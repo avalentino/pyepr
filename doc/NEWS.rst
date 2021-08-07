@@ -16,14 +16,14 @@ PyEPR 1.1.0 (06/08/2021)
 * The ``setup.py`` script has been simplified and modernized,
   now it always use setuptools_ and ``setup.cfg``.
 * Now the EPR C API is handled using git submodule.
-* Fixed potential chrash in cases in which the EPR C API fails to open the
+* Fixed potential crash in cases in which the EPR C API fails to open the
   requested product
 * Update the test suite to use the public product
   ``ASA_APM_1PNPDE20091007_025628_000000432083_00118_39751_9244.N1``.
   The previously used one is no longer available.
 * Continuous Integration moved to GitHub Actions (GHA).
 * Fix a leak of resources on Windows platforms.
-* The ``print_()`` methond of :class:`Field` and :class:`Record` calsses has
+* The ``print_()`` method of :class:`Field` and :class:`Record` classes has
   been renamed into ``print()``.
   The old ``print_()`` method is now deprecated and will be removed in
   future versions.
