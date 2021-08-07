@@ -1,10 +1,10 @@
 Change history
 ==============
 
-PyEPR 1.1.1 (UNRELEASED)
+PyEPR 1.1.1 (07/08/2021)
 ------------------------
 
-* Fix setious issue in sdist generation.
+* Fix a setious issue in sdist generation.
 
 
 PyEPR 1.1.0 (06/08/2021)
