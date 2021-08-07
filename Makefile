@@ -71,7 +71,7 @@ clean:
 	find . -name '*~' -delete
 	$(RM) *.c *.o *.html .coverage coverage.xml
 	$(RM) src/epr.html
-	$(RM) -r htmlcov .pytest_cache
+	$(RM) -r htmlcov .pytest_cache .hypothesis
 	$(RM) epr.p*        # workaround for Cython.Coverage bug #1985
 
 distclean: clean
