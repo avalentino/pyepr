@@ -168,7 +168,7 @@ used to write the NDVI of the pixel n the file in binary format.
 
 .. note::
 
-    the entire solution is quite not pythonic_. As an alternative
+    the entire solution is quite not "pythonic". As an alternative
     implementation it could be used the :class:`numpy.ndarray` interface of
     :class:`epr.Raster` objects available via the :data:`epr.Raster.data`
     property. The NDVI index is computed on all pixels altogether using
@@ -193,7 +193,6 @@ used to write the NDVI of the pixel n the file in binary format.
 
 .. _ENVISAT: https://envisat.esa.int
 .. _Python: https://www.python.org
-.. _pythonic: http://www.cafepy.com/article/be_pythonic
 
 
 .. raw:: latex

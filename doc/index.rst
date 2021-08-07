@@ -9,7 +9,7 @@ ENVISAT Product Reader Python API
     \clearpage
 
 
-:HomePage:  http://avalentino.github.io/pyepr
+:HomePage:  https://avalentino.github.io/pyepr
 :Author:    Antonio Valentino
 :Contact:   antonio.valentino@tiscali.it
 :Copyright: 2011-2021, Antonio Valentino

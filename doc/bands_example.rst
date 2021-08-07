@@ -182,13 +182,12 @@ powerful :class:`numpy.ndarray` interface.
         }
         fclose(out_stream);
 
-    A by far more pythonic_ solution would be::
+    A by far more "pythonic" solution would be::
 
         raster.data.tofile(out_stream)
 
 
 .. _Python: https://www.python.org
-.. _pythonic: http://www.cafepy.com/article/be_pythonic
 
 .. raw:: latex
 

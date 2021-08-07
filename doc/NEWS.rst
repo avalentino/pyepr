@@ -70,7 +70,7 @@ PyEPR 0.9.4 (29/04/2018)
 * PyEPR has been successfully tested with PyPy_
 
 
-.. _PyPy: https://pypy.org
+.. _PyPy: https://www.pypy.org
 
 
 PyEPR 0.9.3 (02/05/2015)
@@ -325,7 +325,7 @@ PyEPR 0.5 (25/04/2011)
 * suppressed several constness related warnings
 
 .. _`Python 3`: https://docs.python.org/3
-.. _intersphinx: http://www.sphinx-doc.org/en/master/ext/intersphinx.html
+.. _intersphinx: https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html
 .. _Cython: https://cython.org
 
 
@@ -376,7 +376,7 @@ PyEPR 0.2 (20/03/2011)
 * introduced some utility methods to :class:`epr.Product` and
   :class:`epr.Record` classes
 
-.. _sphinx: http://www.sphinx-doc.org
+.. _sphinx: https://www.sphinx-doc.org
 
 
 PyEPR 0.1 (09/03/2011)
