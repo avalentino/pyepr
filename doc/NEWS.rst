@@ -4,7 +4,7 @@ Change history
 PyEPR 1.1.1 (UNRELEASED)
 ------------------------
 
-* TBW
+* Fix setious issue in sdist generation.
 
 
 PyEPR 1.1.0 (06/08/2021)
