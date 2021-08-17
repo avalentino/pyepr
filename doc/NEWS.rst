@@ -10,7 +10,7 @@ PyEPR 1.1.2 (UNRELEASED)
 PyEPR 1.1.1 (07/08/2021)
 ------------------------
 
-* Fix a setious issue in sdist generation.
+* Fix a serious issue in sdist generation.
 
 
 PyEPR 1.1.0 (06/08/2021)
