@@ -32,7 +32,7 @@ EPRAPIROOT = extern/epr-api
 default: ext
 
 ext: src/epr.pyx
-	$(PYTHON) setup.py build_ext --inplace
+	$(PYTHON) setup.py build_ext --inplace --epr-api-src=$(EPRAPIROOT)/src
 
 cythonize: src/epr.c
 
