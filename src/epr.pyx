@@ -40,7 +40,7 @@ in a product file.
 .. _ESA: http://earth.esa.int
 """
 
-__version__ = '1.1.2.dev0'
+__version__ = '1.1.2'
 
 from libc cimport errno
 from libc cimport stdio

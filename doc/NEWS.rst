@@ -1,7 +1,7 @@
 Change history
 ==============
 
-PyEPR 1.1.2 (UNRELEASED)
+PyEPR 1.1.2 (06/11/2021)
 ------------------------
 
 * Enable CI testing with Python 3.10.
