@@ -40,7 +40,7 @@ src/epr.c: src/epr.pyx
 	$(CYTHON) $(CYTHONFLAGS) src/epr.pyx
 
 sdist: doc
-	$(PYTHON) setup.py sdist
+	$(PYTHON) -m build --sdist
 
 LICENSES/epr-api.txt:
 	mkdir LICENSES
@@ -49,7 +49,7 @@ LICENSES/epr-api.txt:
 eprsrc: LICENSES/epr-api.txt
 
 fullsdist: doc eprsrc
-	$(PYTHON) setup.py sdist
+	$(PYTHON) -m build --sdist
 
 upload: fullsdist
 	twine check dist/pyepr-*.tar.gz
