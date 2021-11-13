@@ -180,6 +180,11 @@ with the system `EPR API`_ C library::
 
     $ python3 setup.py install --epr-api-src=""
 
+Please note that if the ``setup.py`` script is invoked directly, then the
+user must make sure that setup requirements are propely installed::
+
+    $ python3 -m pip install cython numpy
+
 .. _pip: https://pypi.org/project/pip
 
 
