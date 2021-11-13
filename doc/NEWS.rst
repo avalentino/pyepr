@@ -1,7 +1,7 @@
 Change history
 ==============
 
-PyEPR 1.1.3 (UNRELEASED)
+PyEPR 1.1.3 (13/09/2021)
 ------------------------
 
 * Do not use the deprecated distutils package.
