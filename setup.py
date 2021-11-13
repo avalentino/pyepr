@@ -95,17 +95,11 @@ def setup_extension(eprsrcdir=None, coverage=False):
     return ext
 
 
-BASE_CONFIG = dict(
-    version=str(get_version(os.path.join('src', 'epr.pyx'))),
-)
-
-
 def make_config(eprsrcdir=None, coverage=False):
-    config = BASE_CONFIG.copy()
-    config['version'] = str(get_version(os.path.join('src', 'epr.pyx')))
-    config['ext_modules'] = [setup_extension(eprsrcdir, coverage)]
-    if not os.path.exists(os.path.join('src', 'epr.c')):
-        config.setdefault('setup_requires', []).append('cython>=0.29')
+    config = {
+        'version': str(get_version(os.path.join('src', 'epr.pyx'))),
+        'ext_modules': [setup_extension(eprsrcdir, coverage)],
+    }
 
     return config
 
