@@ -67,7 +67,7 @@ correctly installed and configured:
 * `EPR API`_ >= 2.2 (optional, since PyEPR 0.7 the source tar-ball comes
   with a copy of the EPR C API sources)
 * a reasonably updated C compiler [#]_ (build only)
-* Cython_ >= 0.29 [#]_ (optional and build only)
+* Cython_ >= 0.29.22 [#]_ (build only)
 * pytest_ (optional and only needed for testing)
 
 
@@ -156,7 +156,7 @@ the :envvar:`PYTHONPATH`.
 
 PyEPR_ can be installed from sources using the following command::
 
-    $ python3 setup.py install
+    $ python3 -m pip install .
 
 The :file:`setup.py` script by default checks for the availability of the
 EPR C API source code in the :file:`<package-root>/epr-api-src` directory

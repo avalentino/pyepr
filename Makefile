@@ -39,7 +39,7 @@ cythonize: src/epr.c
 src/epr.c: src/epr.pyx
 	$(CYTHON) $(CYTHONFLAGS) src/epr.pyx
 
-sdist: doc cythonize
+sdist: doc
 	$(PYTHON) setup.py sdist
 
 LICENSES/epr-api.txt:
@@ -48,7 +48,7 @@ LICENSES/epr-api.txt:
 
 eprsrc: LICENSES/epr-api.txt
 
-fullsdist: doc cythonize eprsrc
+fullsdist: doc eprsrc
 	$(PYTHON) setup.py sdist
 
 upload: fullsdist

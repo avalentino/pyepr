@@ -3,8 +3,8 @@
 requires = [
     "setuptools >= 40.8.0",
     "wheel",
-    "pakaging",
-    "cython >= 0.29",
+    "packaging",
+    "cython >= 0.29.22",
     "oldest-supported-numpy",
 ]
 build-backend = "setuptools.build_meta"
