@@ -5,6 +5,7 @@ PyEPR 1.1.3 (UNRELEASED)
 ------------------------
 
 * Do not use the deprecated distutils package.
+* Improve command line arguments management in ``setup.py``.
 
 
 PyEPR 1.1.2 (06/11/2021)

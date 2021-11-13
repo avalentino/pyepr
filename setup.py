@@ -120,7 +120,7 @@ def get_parser():
     DEFAULT_EPRAPI_SRC = os.environ.get('PYEPR_EPRAPI_SRC', DEFAULT_EPRAPI_SRC)
 
     import argparse
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
         '--coverage', action='store_true', default=DEFAULT_COVERAGE)
     parser.add_argument('--epr-api-src', default=DEFAULT_EPRAPI_SRC)
@@ -135,4 +135,11 @@ if __name__ == '__main__':
     print('PYEPR_COVERAGE:', extra_args.coverage)
 
     config = make_config(extra_args.epr_api_src, extra_args.coverage)
+
+    if '-h' in setup_argv or '--help' in setup_argv:
+        msg = parser.format_help()
+        msg = '\n'.join(msg.splitlines()[2:])  # remove usage string
+        print(msg)
+        print()
+
     setuptools.setup(**config)
