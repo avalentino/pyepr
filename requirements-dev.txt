@@ -1,5 +1,5 @@
 numpy>=1.7
-cython>=0.29
+cython>=0.29.22
 sphinx
 pytest
 coverage
