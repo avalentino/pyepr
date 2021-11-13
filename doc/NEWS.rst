@@ -20,7 +20,7 @@ PyEPR 1.1.2 (06/11/2021)
 ------------------------
 
 * Enable CI testing with Python 3.10.
-* Update the internal copu of EPR C API to v2.3dev_pyerp112.
+* Update the internal copy of EPR C API to v2.3dev_pyerp112.
 
 
 PyEPR 1.1.1 (07/08/2021)
