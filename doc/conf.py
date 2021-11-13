@@ -20,9 +20,10 @@ project = 'PyEPR'
 copyright = '2011-2021, Antonio Valentino'
 author = 'Antonio Valentino'
 
-def get_version(filename, strip_extra=False):
+
+def get_version(filename):
     import re
-    from distutils.version import LooseVersion
+    from packaging.version import parse as Version
 
     with open(filename) as fd:
         data = fd.read()
@@ -30,18 +31,15 @@ def get_version(filename, strip_extra=False):
     mobj = re.search(
         r'''^__version__\s*=\s*(?P<quote>['"])(?P<version>.*)(?P=quote)''',
         data, re.MULTILINE)
-    version = LooseVersion(mobj.group('version'))
+    return Version(mobj.group('version'))
 
-    if strip_extra:
-        return '.'.join(map(str, version.version[:3]))
-    else:
-        return version.vstring
+_version = get_version('../src/epr.pyx')
 
 # The short X.Y version.
-version = get_version('../src/epr.pyx', strip_extra=True)
+version = _version.base_version
 
 # The full version, including alpha/beta/rc tags.
-release = get_version('../src/epr.pyx', strip_extra=False)
+release = str(_version)
 
 # -- General configuration ---------------------------------------------------
 

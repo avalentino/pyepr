@@ -32,7 +32,7 @@ except ImportError:
 
 def get_version(filename, strip_extra=False):
     import re
-    from distutils.version import LooseVersion
+    from packaging.version import parse as Version
 
     with open(filename) as fd:
         data = fd.read()
@@ -40,12 +40,7 @@ def get_version(filename, strip_extra=False):
     mobj = re.search(
         r'''^__version__\s*=\s*(?P<quote>['"])(?P<version>.*)(?P=quote)''',
         data, re.MULTILINE)
-    version = LooseVersion(mobj.group('version'))
-
-    if strip_extra:
-        return '.'.join(map(str, version.version[:3]))
-    else:
-        return version.vstring
+    return Version(mobj.group('version'))
 
 
 # https://mail.python.org/pipermail/distutils-sig/2007-September/008253.html
@@ -101,13 +96,13 @@ def setup_extension(eprsrcdir=None, coverage=False):
 
 
 BASE_CONFIG = dict(
-    version=get_version(os.path.join('src', 'epr.pyx')),
+    version=str(get_version(os.path.join('src', 'epr.pyx'))),
 )
 
 
 def make_config(eprsrcdir=None, coverage=False):
     config = BASE_CONFIG.copy()
-    config['version'] = get_version(os.path.join('src', 'epr.pyx'))
+    config['version'] = str(get_version(os.path.join('src', 'epr.pyx')))
     config['ext_modules'] = [setup_extension(eprsrcdir, coverage)]
     if not os.path.exists(os.path.join('src', 'epr.c')):
         config.setdefault('setup_requires', []).append('cython>=0.29')

@@ -31,7 +31,7 @@ import tempfile
 import unittest
 import functools
 from urllib.request import urlopen
-from distutils.version import LooseVersion
+from packaging.version import parse as Version
 
 try:
     import resource
@@ -62,11 +62,14 @@ EPR_TO_NUMPY_TYPE = {
 
 
 def has_epr_c_bug_pyepr009():
-    v = LooseVersion(epr.EPR_C_API_VERSION)
-    if 'pyepr' in v.version:
-        return v < LooseVersion('2.3dev_pyepr082')
+    v = Version(epr.EPR_C_API_VERSION)
+    if '_pyepr' in str(v):
+        epr_version, _, pyepr_version = str(v).partition('_pyepr')
+        v = Version(epr_version), Version(pyepr_version)
+        v_ref = Version('2.3dev'), Version('082')
+        return v < v_ref
     else:
-        return v <= LooseVersion('2.3')
+        return v <= Version('2.3')
 
 
 EPR_C_BUG_PYEPR009 = has_epr_c_bug_pyepr009()

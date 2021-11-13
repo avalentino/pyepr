@@ -4,7 +4,7 @@ Change history
 PyEPR 1.1.3 (UNRELEASED)
 ------------------------
 
-* TBW
+* Do not use the deprecated distutils package.
 
 
 PyEPR 1.1.2 (06/11/2021)
