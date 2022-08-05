@@ -340,7 +340,7 @@ cdef _CLib _EPR_C_LIB = None
 cdef class EprObject:
     cdef object epr_c_lib
 
-    def __cinit__(self, *ars, **kargs):
+    def __cinit__(self, *args, **kargs):
         self.epr_c_lib = _EPR_C_LIB
 
     def __dealloc__(self):
