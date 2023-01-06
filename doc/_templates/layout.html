@@ -1,0 +1,12 @@
+{% extends "!layout.html" %}
+
+{%- block menu %}
+{{ super() }}
+{%- if sidebars != None and pagename == root_doc %}
+  <hr>
+  {#- new style sidebar: explicitly include/exclude templates #}
+  {%- for sidebartemplate in sidebars %}
+    {%- include sidebartemplate %}
+  {%- endfor %}
+{%- endif %}
+{% endblock %}
