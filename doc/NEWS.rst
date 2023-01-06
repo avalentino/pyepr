@@ -6,6 +6,7 @@ PyEPR 1.1.4 (UNRELEASED)
 
 * Do not use deprecated keywords in `setup.cfg`.
 * Silence compiler warnings.
+* Fix `extlinks` configuration.
 
 
 PyEPR 1.1.3 (13/09/2021)

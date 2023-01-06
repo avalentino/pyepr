@@ -228,7 +228,7 @@ intersphinx_mapping = {
 # -- Options for extlinks extension ------------------------------------------
 # External links configuration
 extlinks = {
-    'issue': ('https://github.com/avalentino/pyepr/issues/%s', 'gh-'),
+    'issue': ('https://github.com/avalentino/pyepr/issues/%s', 'gh-%s'),
 }
 
 # -- Options for todo extension ----------------------------------------------
