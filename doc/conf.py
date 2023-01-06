@@ -32,32 +32,13 @@ release = str(_version)
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    # 'sphinx.ext.autodoc',
-    # 'sphinx.ext.autosectionlabel',
-    # 'sphinx.ext.autosummary',
-    # 'sphinx.ext.coverage',
-    # 'sphinx.ext.doctest',
     'sphinx.ext.extlinks',
-    # 'sphinx.ext.githubpages',
-    # 'sphinx.ext.graphviz',
     'sphinx.ext.ifconfig',
-    # 'sphinx.ext.imgconverter',
-    # 'sphinx.ext.inheritance_diagram',
     'sphinx.ext.intersphinx',
-    # 'sphinx.ext.linkcode',
-    # 'sphinx.ext.napoleon',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
-
-    # Math support for HTML outputs in Sphinx
     'sphinx.ext.imgmath',
-    # 'sphinx.ext.mathjax',
-    # 'sphinx.ext.jsmath',
-
-    # Sphinx theme
     'sphinx_rtd_theme',
-
-    # Ipython sphinx extension
     'IPython.sphinxext.ipython_console_highlighting',
     'IPython.sphinxext.ipython_directive',
 ]
@@ -68,7 +49,6 @@ exclude_patterns = [
     '_build',
     'Thumbs.db',
     '.DS_Store',
-    'sphinxext',
     '**/empty.txt',
 ]
 pygments_style = 'sphinx'
@@ -151,14 +131,6 @@ intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
     'numpy':  ('https://docs.scipy.org/doc/numpy', None),
 }
-
-# -- Options for autodoc extension -------------------------------------------
-# autoclass_content = 'both'
-# autodoc_default_flags = ['members', 'undoc-members', 'show-inheritance']
-#                        #,'inherited-members']
-
-# Auto summary generation
-# autosummary_generate = ['reference']
 
 # -- Options for extlinks extension ------------------------------------------
 

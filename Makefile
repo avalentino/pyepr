@@ -57,15 +57,13 @@ upload: fullsdist
 
 doc:
 	$(MAKE) -C doc html
-	$(RM) -r doc/html
-	mv doc/_build/html doc/html
 
 clean:
 	$(PYTHON) setup.py clean --all
 	$(RM) -r build dist pyepr.egg-info wheelhouse
 	$(RM) -r $$(find doc -name __pycache__) $$(find tests -name __pycache__)
 	$(RM) MANIFEST src/*.c src/*.o *.so
-	$(RM) tests/*.py[co] doc/sphinxext/*.py[co] README.html
+	$(RM) tests/*.py[co] README.html
 	$(MAKE) -C doc clean
 	$(RM) -r doc/_build
 	find . -name '*~' -delete
@@ -76,7 +74,6 @@ clean:
 
 distclean: clean
 	$(RM) $(TEST_DATSET)
-	$(RM) -r doc/html
 	$(RM) -r LICENSES
 	$(MAKE) -C tests -f checksetup.mak distclean
 	$(RM) -r .eggs
