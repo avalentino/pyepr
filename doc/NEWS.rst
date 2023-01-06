@@ -4,7 +4,7 @@ Change history
 PyEPR 1.1.4 (UNRELEASED)
 ------------------------
 
-* TBW
+* Do not use deprecated keywords in `setup.cfg`.
 
 
 PyEPR 1.1.3 (13/09/2021)
