@@ -2394,10 +2394,7 @@ cdef class Product(EprObject):
         """
         def __get__(self):
             self.check_closed_product()
-            if self._ptr.id_string is NULL:
-                return None
-            else:
-                return _to_str(self._ptr.id_string, 'ascii')
+            return _to_str(self._ptr.id_string, 'ascii')
 
     property meris_iodd_version:
         """For MERIS L1b and RR and FR to provide backward compatibility."""
