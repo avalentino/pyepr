@@ -24,10 +24,11 @@ import setuptools
 
 try:
     import Cython
-    print('CYTHON_VERSION: {}'.format(Cython.__version__))
+
+    print("CYTHON_VERSION: {}".format(Cython.__version__))
     del Cython
 except ImportError:
-    print('CYTHON not installed')
+    print("CYTHON not installed")
 
 
 def get_version(filename, strip_extra=False):
@@ -38,9 +39,11 @@ def get_version(filename, strip_extra=False):
         data = fd.read()
 
     mobj = re.search(
-        r'''^__version__\s*=\s*(?P<quote>['"])(?P<version>.*)(?P=quote)''',
-        data, re.MULTILINE)
-    return Version(mobj.group('version'))
+        r"""^__version__\s*=\s*(?P<quote>['"])(?P<version>.*)(?P=quote)""",
+        data,
+        re.MULTILINE,
+    )
+    return Version(mobj.group("version"))
 
 
 # https://mail.python.org/pipermail/distutils-sig/2007-September/008253.html
@@ -50,6 +53,7 @@ class NumpyExtension(setuptools.Extension):
     @property
     def include_dirs(self):
         from numpy import get_include
+
         return self._include_dirs + [get_include()]
 
     @include_dirs.setter
@@ -62,88 +66,90 @@ def setup_extension(eprsrcdir=None, coverage=False):
 
     if eprsrcdir:
         print('EPR_API: using EPR C API sources at "{}"'.format(eprsrcdir))
-        extra_sources = glob.glob('{}/epr_*.c'.format(eprsrcdir))
+        extra_sources = glob.glob("{}/epr_*.c".format(eprsrcdir))
         include_dirs = [eprsrcdir]
         libraries = []
     else:
-        print('EPR_API: using pre-built dynamic library for EPR C API')
+        print("EPR_API: using pre-built dynamic library for EPR C API")
         extra_sources = []
         include_dirs = []
-        libraries = ['epr_api']
+        libraries = ["epr_api"]
 
-    define_macros = [('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION')]
+    define_macros = [("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]
     if coverage:
-        define_macros.extend([('CYTHON_TRACE_NOGIL', '1')])
+        define_macros.extend([("CYTHON_TRACE_NOGIL", "1")])
 
     ext = NumpyExtension(
-        'epr',
-        sources=[os.path.join('src', 'epr.pyx')] + extra_sources,
+        "epr",
+        sources=[os.path.join("src", "epr.pyx")] + extra_sources,
         include_dirs=include_dirs,
         libraries=libraries,
-        language='c',
+        language="c",
         define_macros=define_macros,
     )
 
     # compiler directives
-    language_level = '3str'
+    language_level = "3str"
     ext.cython_directives = dict(language_level=language_level)
-    print('CYTHON_LANGUAGE_LEVEL: {}'.format(language_level))
+    print("CYTHON_LANGUAGE_LEVEL: {}".format(language_level))
 
     if coverage:
-        ext.cython_directives['linetrace'] = True
+        ext.cython_directives["linetrace"] = True
 
     return ext
 
 
 def make_config(eprsrcdir=None, coverage=False):
     config = {
-        'version': str(get_version(os.path.join('src', 'epr.pyx'))),
-        'ext_modules': [setup_extension(eprsrcdir, coverage)],
+        "version": str(get_version(os.path.join("src", "epr.pyx"))),
+        "ext_modules": [setup_extension(eprsrcdir, coverage)],
     }
 
     return config
 
 
 def get_parser():
-    PYEPR_COVERAGE_STR = os.environ.get('PYEPR_COVERAGE', '').upper()
+    PYEPR_COVERAGE_STR = os.environ.get("PYEPR_COVERAGE", "").upper()
     DEFAULT_COVERAGE = bool(
-        PYEPR_COVERAGE_STR in ('Y', 'YES', 'TRUE', 'OK', 'ON', '1'))
-    DEFAULT_EPRAPI_SRC = 'extern/epr-api/src'
+        PYEPR_COVERAGE_STR in ("Y", "YES", "TRUE", "OK", "ON", "1")
+    )
+    DEFAULT_EPRAPI_SRC = "extern/epr-api/src"
     if not os.path.exists(DEFAULT_EPRAPI_SRC):
-        DEFAULT_EPRAPI_SRC = ''
-    DEFAULT_EPRAPI_SRC = os.environ.get('PYEPR_EPRAPI_SRC', DEFAULT_EPRAPI_SRC)
+        DEFAULT_EPRAPI_SRC = ""
+    DEFAULT_EPRAPI_SRC = os.environ.get("PYEPR_EPRAPI_SRC", DEFAULT_EPRAPI_SRC)
 
     import argparse
+
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
-        '--coverage',
-        action='store_true',
+        "--coverage",
+        action="store_true",
         default=DEFAULT_COVERAGE,
-        help='build the epr module to allow cython coverage measurement '
-             '(default: %(default)s)'
+        help="build the epr module to allow cython coverage measurement "
+        "(default: %(default)s)",
     )
     parser.add_argument(
-        '--epr-api-src',
+        "--epr-api-src",
         default=DEFAULT_EPRAPI_SRC,
-        help='set the path to the EPR-API source tree. '
-             'If not set uses the system libraries for epr-api. '
-             'Default: %(default)s'
+        help="set the path to the EPR-API source tree. "
+        "If not set uses the system libraries for epr-api. "
+        "Default: %(default)s",
     )
 
     return parser
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = get_parser()
     extra_args, setup_argv = parser.parse_known_args(sys.argv)
     sys.argv[:] = setup_argv
-    print('PYEPR_COVERAGE:', extra_args.coverage)
+    print("PYEPR_COVERAGE:", extra_args.coverage)
 
     config = make_config(extra_args.epr_api_src, extra_args.coverage)
 
-    if '-h' in setup_argv or '--help' in setup_argv:
+    if "-h" in setup_argv or "--help" in setup_argv:
         msg = parser.format_help()
-        msg = '\n'.join(msg.splitlines()[2:])  # remove usage string
+        msg = "\n".join(msg.splitlines()[2:])  # remove usage string
         print(msg)
         print()
 
