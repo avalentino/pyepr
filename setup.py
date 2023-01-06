@@ -116,8 +116,19 @@ def get_parser():
     import argparse
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
-        '--coverage', action='store_true', default=DEFAULT_COVERAGE)
-    parser.add_argument('--epr-api-src', default=DEFAULT_EPRAPI_SRC)
+        '--coverage',
+        action='store_true',
+        default=DEFAULT_COVERAGE,
+        help='build the epr module to allow cython coverage measurement '
+             '(default: %(default)s)'
+    )
+    parser.add_argument(
+        '--epr-api-src',
+        default=DEFAULT_EPRAPI_SRC,
+        help='set the path to the EPR-API source tree. '
+             'If not set uses the system libraries for epr-api. '
+             'Default: %(default)s'
+    )
 
     return parser
 
