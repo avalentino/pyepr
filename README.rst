@@ -5,8 +5,8 @@ ENVISAT Product Reader Python API
 :HomePage:  https://avalentino.github.io/pyepr
 :Author:    Antonio Valentino
 :Contact:   antonio.valentino@tiscali.it
-:Copyright: 2011-2021, Antonio Valentino <antonio.valentino@tiscali.it>
-:Version:   1.1.3
+:Copyright: 2011-2023, Antonio Valentino <antonio.valentino@tiscali.it>
+:Version:   1.1.4
 
 .. image:: https://github.com/avalentino/pyepr/actions/workflows/python-package.yml/badge.svg?branch=master
     :alt: CI status page
@@ -133,7 +133,7 @@ To install PyEPR_ in a non-standard path::
 License
 =======
 
-Copyright (C) 2011-2021 Antonio Valentino <antonio.valentino@tiscali.it>
+Copyright (C) 2011-2023 Antonio Valentino <antonio.valentino@tiscali.it>
 
 PyEPR is free software: you can redistribute it and/or modify
 it under the terms of the `GNU General Public License`_ as published by
