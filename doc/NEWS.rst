@@ -1,7 +1,7 @@
 Change history
 ==============
 
-PyEPR 1.1.4 (UNRELEASED)
+PyEPR 1.1.4 (07/01/2023)
 ------------------------
 
 * Do not use deprecated keywords in `setup.cfg`.
