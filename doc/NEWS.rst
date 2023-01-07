@@ -13,6 +13,8 @@ PyEPR 1.1.4 (UNRELEASED)
   - use the RTD sphinx theme
   - update sidebar templates
 * Fix comparibility with `packaging` v22.0.
+* Modernize and re-format the Python code.
+* The minimum required Python version is now v3.7.
 
 
 PyEPR 1.1.3 (13/09/2021)

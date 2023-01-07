@@ -25,7 +25,7 @@ import setuptools
 try:
     import Cython
 
-    print("CYTHON_VERSION: {}".format(Cython.__version__))
+    print(f"CYTHON_VERSION: {Cython.__version__}")
     del Cython
 except ImportError:
     print("CYTHON not installed")
@@ -65,8 +65,8 @@ def setup_extension(eprsrcdir=None, coverage=False):
     import glob
 
     if eprsrcdir:
-        print('EPR_API: using EPR C API sources at "{}"'.format(eprsrcdir))
-        extra_sources = glob.glob("{}/epr_*.c".format(eprsrcdir))
+        print(f'EPR_API: using EPR C API sources at "{eprsrcdir}"')
+        extra_sources = glob.glob(f"{eprsrcdir}/epr_*.c")
         include_dirs = [eprsrcdir]
         libraries = []
     else:
@@ -91,7 +91,7 @@ def setup_extension(eprsrcdir=None, coverage=False):
     # compiler directives
     language_level = "3str"
     ext.cython_directives = dict(language_level=language_level)
-    print("CYTHON_LANGUAGE_LEVEL: {}".format(language_level))
+    print(f"CYTHON_LANGUAGE_LEVEL: {language_level}")
 
     if coverage:
         ext.cython_directives["linetrace"] = True
