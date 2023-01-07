@@ -63,7 +63,7 @@ clean:
 	$(RM) -r build dist pyepr.egg-info wheelhouse
 	$(RM) -r $$(find doc -name __pycache__) $$(find tests -name __pycache__)
 	$(RM) MANIFEST src/*.c src/*.o *.so
-	$(RM) tests/*.py[co] README.html
+	$(RM) tests/*.py[co]
 	$(MAKE) -C doc clean
 	$(RM) -r doc/_build
 	find . -name '*~' -delete
