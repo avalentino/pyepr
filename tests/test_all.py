@@ -833,6 +833,7 @@ class TestBand(unittest.TestCase):
     UNIT = None
     RTOL = 1e-7
     DATA_TYPE = np.float32
+    # fmt: off
     TEST_DATA = np.asarray([
         [228., 213., 235., 256., 239., 260., 210., 197., 233., 213.],
         [246., 248., 333., 317., 272., 247., 247., 221., 221., 205.],
@@ -845,6 +846,7 @@ class TestBand(unittest.TestCase):
         [273., 262., 262., 239., 270., 284., 344., 380., 416., 447.],
         [292., 286., 303., 261., 284., 374., 445., 431., 422., 416.],
     ])
+    # fmt: on
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE, self.OPEN_MODE)
@@ -1304,6 +1306,7 @@ class TestAnnotationBand(TestBand):
     SCALING_OFFSET = 0.0
     UNIT = "deg"
     RTOL = 1e-7
+    # fmt: off
     TEST_DATA = np.asarray([
         [21.86950111, 21.86438370, 21.85926437, 21.85414696, 21.84902954,
          21.84391022, 21.83879280, 21.83367538, 21.82855606, 21.82343864],
@@ -1326,6 +1329,7 @@ class TestAnnotationBand(TestBand):
         [21.86950683, 21.86438942, 21.85927009, 21.85415268, 21.84903526,
          21.84391594, 21.83879852, 21.83368111, 21.82856178, 21.82344437],
     ])
+    # fmt: on
 
     @unittest.skipIf(EPR_C_BUG_PYEPR009, "buggy EPR_C_API detected")
     def test_read_raster(self):
@@ -2188,6 +2192,7 @@ class TestFieldWrite(unittest.TestCase):
     FIELD_UNIT = ""
     FIELD_INDEX = 3
     FIELD_NUM_ELEMS = 1452
+    # fmt: off
     FIELD_VALUES = (
            0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
            0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
@@ -2195,6 +2200,7 @@ class TestFieldWrite(unittest.TestCase):
            0,    0,    0,    0,    0, 2417, 2282, 2280, 2393, 2440,
         2697, 3119, 3577, 3853, 3688, 3784, 4201, 3846, 2821, 2186,
     )
+    # fmt: on
 
     def setUp(self):
         self.filename = self.PRODUCT_FILE + "_"

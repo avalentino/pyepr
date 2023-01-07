@@ -29,8 +29,10 @@ jobs:
 
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
-        # env:
-        #   CIBW_SKIP: pp*-macosx*
+        env:
+          # numpy only has pp38 currently
+          CIBW_SKIP: pp37-* pp39-*
+          # CIBW_SKIP: pp*-macosx*
 
       - uses: actions/upload-artifact@v3
         with:

@@ -6,20 +6,20 @@
 # Source code of the C program is available at:
 # https://github.com/bcdev/epr-api/blob/master/src/examples/write_bitmask.c
 
-'''Generates bit mask from ENVISAT flags information as "raw" image
+"""Generates bit mask from ENVISAT flags information as "raw" image
 for (e.g.) Photoshop
 
 Call::
 
-    $ python write_bitmask.py <envisat-product> <bitmask-expression>
+    $ python3 write_bitmask.py <envisat-product> <bitmask-expression>
     <output-file>
 
 Example to call the main function::
 
-    $ python write_bitmask.py MER_RR__2P_TEST.N1 \
+    $ python3 write_bitmask.py MER_RR__2P_TEST.N1 \
     'l2_flags.LAND and !l2_flags.BRIGHT' my_flags.raw
 
-'''
+"""
 
 import sys
 import epr
@@ -30,13 +30,13 @@ def main(*argv):
         argv = sys.argv
 
     if len(argv) != 4:
-        print('Usage: write_bitmask <envisat-product> <bitmask-expression> '
-              '<output-file>')
-        print('  where envisat-product is the input filename')
-        print('  and bitmask-expression is a string containing the bitmask '
-              'logic')
-        print('  and output-file is the output filename.')
-        print('Example:')
+        print("Usage: write_bitmask <envisat-product> <bitmask-expression> "
+              "<output-file>")
+        print("  where envisat-product is the input filename")
+        print("  and bitmask-expression is a string containing the bitmask "
+              "logic")
+        print("  and output-file is the output filename.")
+        print("Example:")
         print("  MER_RR__2P_TEST.N1 'l2_flags.LAND and not l2_flags.BRIGHT' "
               "my_flags.raw")
         print
@@ -60,13 +60,13 @@ def main(*argv):
 
         product.read_bitmask_raster(bm_expr, offset_x, offset_y, bm_raster)
 
-        with open(image_file_path, 'wb') as out_stream:
+        with open(image_file_path, "wb") as out_stream:
             bm_raster.data.tofile(out_stream)
 
-    print('Raw image data successfully written to "%s".' % image_file_path)
-    print('Data type is "byte", size is %d x %d pixels.' % (source_width,
-                                                            source_height))
+    print(f"Raw image data successfully written to {image_file_path!r}.")
+    print(f"Data type is 'byte', size is {source_width} x {source_height} "
+          f"pixels.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
