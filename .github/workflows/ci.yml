@@ -65,9 +65,10 @@ jobs:
       run: |
         sudo apt-get -y install libepr-api-dev
         python -m pip install --upgrade setuptools pip wheel
+        python -m pip install --upgrade wcwidth
     - name: Build and install
       run: |
-        python -m pip install --install-option='--epr-api-src=""' .[all]
+        python -m pip install --install-option='--epr-api-src=""' .[test]
     - name: Test with pytest
       run: |
         python -c "\
