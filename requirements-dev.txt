@@ -4,5 +4,6 @@ sphinx
 sphinx_rtd_theme
 ipython
 pytest
+pytest-cov
 packaging
 coverage
