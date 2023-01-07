@@ -85,18 +85,7 @@ ext-coverage: src/epr.pyx
 	env PYEPR_COVERAGE=TRUE $(PYTHON) setup.py build_ext --inplace
 
 coverage: clean ext-coverage
-	ln -s src/epr.p* .  # workaround for Cython.Coverage bug #1985
-	env PYEPR_COVERAGE=TRUE PYTHONPATH=. \
-		$(PYTHON) -m coverage run --branch --source=src setup.py test
-	env PYTHONPATH=. $(PYTHON) -m coverage report
-
-coverage-report: coverage
-	env PYTHONPATH=. $(PYTHON) -m cython -E CYTHON_TRACE_NOGIL=1 \
-		-X linetrace=True -X language_level=3str \
-		--annotate-coverage coverage.xml src/epr.pyx
-	env PYTHONPATH=. $(PYTHON) -m coverage xml -i
-	env PYTHONPATH=. $(PYTHON) -m coverage html -i
-	cp src/epr.html htmlcov
+	$(PYTHON) -m pytest --cov --cov-report=term --cov-report=html
 
 debug:
 	$(PYTHON)d setup.py build_ext --inplace --debug
