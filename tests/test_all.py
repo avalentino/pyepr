@@ -61,14 +61,14 @@ EPR_TO_NUMPY_TYPE = {
 
 
 def has_epr_c_bug_pyepr009():
-    v = Version(epr.EPR_C_API_VERSION)
-    if "_pyepr" in str(v):
+    if "_pyepr" in epr.EPR_C_API_VERSION:
+        v = epr.EPR_C_API_VERSION
         epr_version, _, pyepr_version = str(v).partition("_pyepr")
         v = Version(epr_version), Version(pyepr_version)
         v_ref = Version("2.3dev"), Version("082")
         return v < v_ref
     else:
-        return v <= Version("2.3")
+        return Version(epr.EPR_C_API_VERSION) <= Version("2.3")
 
 
 EPR_C_BUG_PYEPR009 = has_epr_c_bug_pyepr009()
