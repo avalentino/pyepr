@@ -22,7 +22,7 @@ PYTHON = python3
 CYTHON = $(PYTHON) -m cython
 CYTHONFLAGS=$(shell $(CYTHON) --help | grep -o -- '--3str')
 
-TEST_DATSET = tests/$(shell grep N1 tests/test_all.py | cut -d "'" -f 2)
+TEST_DATSET = tests/$(shell grep N1 tests/test_all.py | cut -d '"' -f 2)
 
 EPRAPIROOT = extern/epr-api
 
