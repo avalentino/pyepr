@@ -4,4 +4,5 @@ sphinx
 sphinx_rtd_theme
 ipython
 pytest
+packaging
 coverage
