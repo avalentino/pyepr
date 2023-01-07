@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 # Copyright (C) 2011-2023, Antonio Valentino <antonio.valentino@tiscali.it>
 #
@@ -47,15 +46,15 @@ import epr
 
 EPR_TO_NUMPY_TYPE = {
     # epr.E_TID_UNKNOWN:  np.NPY_NOTYPE,
-    epr.E_TID_UCHAR:    np.ubyte,
-    epr.E_TID_CHAR:     np.byte,
-    epr.E_TID_USHORT:   np.ushort,
-    epr.E_TID_SHORT:    np.short,
-    epr.E_TID_UINT:     np.uint,
-    epr.E_TID_INT:      int,
-    epr.E_TID_FLOAT:    np.float32,
-    epr.E_TID_DOUBLE:   np.double,
-    epr.E_TID_STRING:   str,
+    epr.E_TID_UCHAR: np.ubyte,
+    epr.E_TID_CHAR: np.byte,
+    epr.E_TID_USHORT: np.ushort,
+    epr.E_TID_SHORT: np.short,
+    epr.E_TID_UINT: np.uint,
+    epr.E_TID_INT: int,
+    epr.E_TID_FLOAT: np.float32,
+    epr.E_TID_DOUBLE: np.double,
+    epr.E_TID_STRING: str,
     # epr.E_TID_SPARE   = e_tid_spare,
     # epr.E_TID_TIME    = e_tid_time,
 }
@@ -63,13 +62,13 @@ EPR_TO_NUMPY_TYPE = {
 
 def has_epr_c_bug_pyepr009():
     v = Version(epr.EPR_C_API_VERSION)
-    if '_pyepr' in str(v):
-        epr_version, _, pyepr_version = str(v).partition('_pyepr')
+    if "_pyepr" in str(v):
+        epr_version, _, pyepr_version = str(v).partition("_pyepr")
         v = Version(epr_version), Version(pyepr_version)
-        v_ref = Version('2.3dev'), Version('082')
+        v_ref = Version("2.3dev"), Version("082")
         return v < v_ref
     else:
-        return v <= Version('2.3')
+        return v <= Version("2.3")
 
 
 EPR_C_BUG_PYEPR009 = has_epr_c_bug_pyepr009()
@@ -77,8 +76,9 @@ EPR_C_BUG_BCEPR002 = EPR_C_BUG_PYEPR009
 
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
-TEST_PRODUCT = 'ASA_APM_1PNPDE20091007_025628_000000432083_00118_39751_9244.N1'
+TEST_PRODUCT = "ASA_APM_1PNPDE20091007_025628_000000432083_00118_39751_9244.N1"
 TEST_PRODUCT_BM_EXPR = None
+
 
 def quiet(func):
     @functools.wraps(func)
@@ -89,7 +89,7 @@ def quiet(func):
             # using '/dev/null' doesn't work in python 3 because the file
             # object coannot be converted into a C FILE*
             # with file(os.devnull) as fd:
-            with tempfile.TemporaryFile('w+') as fd:
+            with tempfile.TemporaryFile("w+") as fd:
                 sys.stdout = fd
                 sys.stderr = fd
                 ret = func(*args, **kwds)
@@ -105,12 +105,17 @@ def equal_products(product1, product2):
     if type(product1) != type(product2):
         return False
 
-    for name in ('file_path', 'tot_size', 'id_string', 'meris_iodd_version'):
+    for name in ("file_path", "tot_size", "id_string", "meris_iodd_version"):
         if getattr(product1, name) != getattr(product2, name):
             return False
 
-    for name in ('get_scene_width', 'get_scene_height', 'get_num_datasets',
-                 'get_num_dsds', 'get_num_bands', ):
+    for name in (
+        "get_scene_width",
+        "get_scene_height",
+        "get_num_datasets",
+        "get_num_dsds",
+        "get_num_bands",
+    ):
         if getattr(product1, name)() != getattr(product2, name)():
             return False
 
@@ -119,20 +124,20 @@ def equal_products(product1, product2):
 
 def setUpModule():
     filename = os.path.join(TESTDIR, TEST_PRODUCT)
-    baseurl = 'http://www.brockmann-consult.de/beam/data/products/ASAR'
-    url = baseurl + '/' + os.path.splitext(TEST_PRODUCT)[0] + '.zip'
+    baseurl = "http://www.brockmann-consult.de/beam/data/products/ASAR"
+    url = baseurl + "/" + os.path.splitext(TEST_PRODUCT)[0] + ".zip"
     if not os.path.exists(filename):
         with urlopen(url) as src:
-            with open(filename + '.zip', 'wb') as dst:
+            with open(filename + ".zip", "wb") as dst:
                 for data in src:
                     dst.write(data)
 
-        with zipfile.ZipFile(filename + '.zip') as arch:
+        with zipfile.ZipFile(filename + ".zip") as arch:
             arch.extractall(TESTDIR)
 
-        os.remove(filename + '.zip')
+        os.remove(filename + ".zip")
 
-    print('Test product:', filename)
+    print("Test product:", filename)
     assert os.path.exists(filename)
 
 
@@ -142,34 +147,34 @@ class TestOpenProduct(unittest.TestCase):
     def test_open(self):
         with epr.open(self.PRODUCT_FILE) as product:
             self.assertTrue(isinstance(product, epr.Product))
-            self.assertEqual(product.mode, 'rb')
+            self.assertEqual(product.mode, "rb")
 
     def test_open_rb(self):
-        with epr.open(self.PRODUCT_FILE, 'rb') as product:
+        with epr.open(self.PRODUCT_FILE, "rb") as product:
             self.assertTrue(isinstance(product, epr.Product))
-            self.assertEqual(product.mode, 'rb')
+            self.assertEqual(product.mode, "rb")
 
     def test_open_rwb_01(self):
-        with epr.open(self.PRODUCT_FILE, 'r+b') as product:
+        with epr.open(self.PRODUCT_FILE, "r+b") as product:
             self.assertTrue(isinstance(product, epr.Product))
-            self.assertTrue(product.mode in ('r+b', 'rb+'))
+            self.assertTrue(product.mode in ("r+b", "rb+"))
 
     def test_open_rwb_02(self):
-        with epr.open(self.PRODUCT_FILE, 'rb+') as product:
+        with epr.open(self.PRODUCT_FILE, "rb+") as product:
             self.assertTrue(isinstance(product, epr.Product))
-            self.assertTrue(product.mode in ('r+b', 'rb+'))
+            self.assertTrue(product.mode in ("r+b", "rb+"))
 
     def test_open_invalid_mode_01(self):
-        self.assertRaises(ValueError, epr.open, self.PRODUCT_FILE, '')
+        self.assertRaises(ValueError, epr.open, self.PRODUCT_FILE, "")
 
     def test_open_invalid_mode_02(self):
-        self.assertRaises(ValueError, epr.open, self.PRODUCT_FILE, 'rx')
+        self.assertRaises(ValueError, epr.open, self.PRODUCT_FILE, "rx")
 
     def test_open_invalid_mode_03(self):
         self.assertRaises(TypeError, epr.open, self.PRODUCT_FILE, 0)
 
     def test_open_bytes(self):
-        filename = self.PRODUCT_FILE.encode('UTF-8')
+        filename = self.PRODUCT_FILE.encode("UTF-8")
         with epr.open(filename) as product:
             self.assertTrue(isinstance(product, epr.Product))
 
@@ -183,7 +188,7 @@ class TestOpenProduct(unittest.TestCase):
             self.assertTrue(isinstance(product, epr.Product))
 
     def test_open_failure(self):
-        self.assertRaises(epr.EPRError, epr.open, '')
+        self.assertRaises(epr.EPRError, epr.open, "")
 
     def test_filename_type(self):
         self.assertRaises(TypeError, epr.open, 3)
@@ -192,7 +197,7 @@ class TestOpenProduct(unittest.TestCase):
         self.assertRaises(ValueError, epr.open, __file__)
 
     def test_product_constructor_failure(self):
-        self.assertRaises(epr.EPRError, epr.Product, '')
+        self.assertRaises(epr.EPRError, epr.Product, "")
 
     def test_product_constructor_failure_invalid_product(self):
         self.assertRaises(ValueError, epr.Product, __file__)
@@ -200,29 +205,29 @@ class TestOpenProduct(unittest.TestCase):
 
 class TestProduct(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    OPEN_MODE = 'rb'
-    ID_STRING = 'ASA_APM_1PNPDE20091007_025628_000000432083_00118'
+    OPEN_MODE = "rb"
+    ID_STRING = "ASA_APM_1PNPDE20091007_025628_000000432083_00118"
     TOT_SIZE = 22903686
 
     DATASET_NAMES = [
-        'MDS1_SQ_ADS',
-        'MDS2_SQ_ADS',
-        'MAIN_PROCESSING_PARAMS_ADS',
-        'DOP_CENTROID_COEFFS_ADS',
-        'SR_GR_ADS',
-        'CHIRP_PARAMS_ADS',
-        'GEOLOCATION_GRID_ADS',
-        'MDS1',
-        'MDS2',
+        "MDS1_SQ_ADS",
+        "MDS2_SQ_ADS",
+        "MAIN_PROCESSING_PARAMS_ADS",
+        "DOP_CENTROID_COEFFS_ADS",
+        "SR_GR_ADS",
+        "CHIRP_PARAMS_ADS",
+        "GEOLOCATION_GRID_ADS",
+        "MDS1",
+        "MDS2",
     ]
-    DATASET_NAME = 'MDS1'
+    DATASET_NAME = "MDS1"
     DATASET_WIDTH = 1452
     DATASET_HEIGHT = 3915
     DATASET_NDSDS = 18
     DATASET_NBANDS = 6
 
-    BAND_NAME = 'proc_data_1'
-    SPH_DESCRIPTOR = 'AP Mode Medium Res. Image'
+    BAND_NAME = "proc_data_1"
+    SPH_DESCRIPTOR = "AP Mode Medium Res. Image"
     MERIS_IODD_VERSION = 0
 
     def setUp(self):
@@ -243,8 +248,9 @@ class TestProduct(unittest.TestCase):
         self.product.close()
 
     def test_file_path_property(self):
-        self.assertEqual(self.product.file_path,
-                         self.PRODUCT_FILE.replace('\\', '/'))
+        self.assertEqual(
+            self.product.file_path, self.PRODUCT_FILE.replace("\\", "/")
+        )
 
     def test_mode_property(self):
         self.assertEqual(self.product.mode, self.OPEN_MODE)
@@ -256,8 +262,9 @@ class TestProduct(unittest.TestCase):
         self.assertEqual(self.product.id_string, self.ID_STRING)
 
     def test_meris_iodd_version_property(self):
-        self.assertEqual(self.product.meris_iodd_version,
-                         self.MERIS_IODD_VERSION)
+        self.assertEqual(
+            self.product.meris_iodd_version, self.MERIS_IODD_VERSION
+        )
 
     def test_get_scene_width(self):
         self.assertEqual(self.product.get_scene_width(), self.DATASET_WIDTH)
@@ -266,8 +273,9 @@ class TestProduct(unittest.TestCase):
         self.assertEqual(self.product.get_scene_height(), self.DATASET_HEIGHT)
 
     def test_get_num_datasets(self):
-        self.assertEqual(self.product.get_num_datasets(),
-                         len(self.DATASET_NAMES))
+        self.assertEqual(
+            self.product.get_num_datasets(), len(self.DATASET_NAMES)
+        )
 
     def test_get_num_dsds(self):
         self.assertEqual(self.product.get_num_dsds(), self.DATASET_NDSDS)
@@ -284,8 +292,10 @@ class TestProduct(unittest.TestCase):
         self.assertTrue(dataset)
 
     def test_datasets(self):
-        datasets = [self.product.get_dataset_at(idx)
-                    for idx in range(self.product.get_num_datasets())]
+        datasets = [
+            self.product.get_dataset_at(idx)
+            for idx in range(self.product.get_num_datasets())
+        ]
         dataset_names = [ds.get_name() for ds in datasets]
         self.assertEqual(dataset_names, self.DATASET_NAMES)
 
@@ -295,37 +305,41 @@ class TestProduct(unittest.TestCase):
     def test_get_mph(self):
         record = self.product.get_mph()
         self.assertTrue(isinstance(record, epr.Record))
-        product = record.get_field('PRODUCT').get_elem()
-        self.assertEqual(product.decode('ascii'),
-                         os.path.basename(self.PRODUCT_FILE))
+        product = record.get_field("PRODUCT").get_elem()
+        self.assertEqual(
+            product.decode("ascii"), os.path.basename(self.PRODUCT_FILE)
+        )
 
     def test_get_sph(self):
         record = self.product.get_sph()
         self.assertTrue(isinstance(record, epr.Record))
-        sph_desct = record.get_field('SPH_DESCRIPTOR').get_elem()
-        self.assertEqual(sph_desct.decode('ascii'), self.SPH_DESCRIPTOR)
+        sph_desct = record.get_field("SPH_DESCRIPTOR").get_elem()
+        self.assertEqual(sph_desct.decode("ascii"), self.SPH_DESCRIPTOR)
 
     def test_get_band_id(self):
-        self.assertTrue(isinstance(self.product.get_band(self.BAND_NAME),
-                                   epr.Band))
+        self.assertTrue(
+            isinstance(self.product.get_band(self.BAND_NAME), epr.Band)
+        )
 
     def test_get_band_id_bytes(self):
-        band_name = self.BAND_NAME.encode('UTF-8')
+        band_name = self.BAND_NAME.encode("UTF-8")
         self.assertTrue(isinstance(band_name, bytes))
-        self.assertTrue(isinstance(self.product.get_band(self.BAND_NAME),
-                                    epr.Band))
+        self.assertTrue(
+            isinstance(self.product.get_band(self.BAND_NAME), epr.Band)
+        )
 
     def test_get_band_id_invalid_name(self):
-        self.assertRaises(ValueError, self.product.get_band, '')
+        self.assertRaises(ValueError, self.product.get_band, "")
 
     def test_get_band_id_at(self):
         self.assertTrue(isinstance(self.product.get_band_at(0), epr.Band))
 
     def test_get_band_id_at_invalid_index(self):
-        self.assertRaises(ValueError, self.product.get_band_at,
-                          self.product.get_num_bands())
+        self.assertRaises(
+            ValueError, self.product.get_band_at, self.product.get_num_bands()
+        )
 
-    @unittest.skipIf(TEST_PRODUCT_BM_EXPR is None, 'no flag band available')
+    @unittest.skipIf(TEST_PRODUCT_BM_EXPR is None, "no flag band available")
     def test_read_bitmask_raster(self):
         bm_expr = self.bm_expr
 
@@ -335,15 +349,16 @@ class TestProduct(unittest.TestCase):
         height = self.DATASET_HEIGHT // 2
 
         raster = epr.create_bitmask_raster(width, height)
-        raster = self.product.read_bitmask_raster(bm_expr, xoffset, yoffset,
-                                                  raster)
+        raster = self.product.read_bitmask_raster(
+            bm_expr, xoffset, yoffset, raster
+        )
         self.assertTrue(isinstance(raster, epr.Raster))
         self.assertEqual(raster.get_width(), width)
         self.assertEqual(raster.get_height(), height)
 
-    @unittest.skipIf(TEST_PRODUCT_BM_EXPR is None, 'no flag band available')
+    @unittest.skipIf(TEST_PRODUCT_BM_EXPR is None, "no flag band available")
     def test_read_bitmask_raster_bytes(self):
-        bm_expr = self.bm_expr.encode('UTF-8')
+        bm_expr = self.bm_expr.encode("UTF-8")
 
         self.assertTrue(isinstance(bm_expr, bytes))
 
@@ -353,14 +368,15 @@ class TestProduct(unittest.TestCase):
         height = self.DATASET_HEIGHT // 2
 
         raster = epr.create_bitmask_raster(width, height)
-        raster = self.product.read_bitmask_raster(bm_expr, xoffset, yoffset,
-                                                  raster)
+        raster = self.product.read_bitmask_raster(
+            bm_expr, xoffset, yoffset, raster
+        )
         self.assertTrue(isinstance(raster, epr.Raster))
         self.assertEqual(raster.get_width(), width)
         self.assertEqual(raster.get_height(), height)
 
     def test_read_bitmask_raster_with_invalid_bm_expr(self):
-        bm_expr = 'l5_flags.LAND AND !l2_flags.CLOUD'
+        bm_expr = "l5_flags.LAND AND !l2_flags.CLOUD"
 
         xoffset = self.DATASET_WIDTH // 2
         yoffset = self.DATASET_HEIGHT // 2
@@ -368,15 +384,21 @@ class TestProduct(unittest.TestCase):
         height = self.DATASET_HEIGHT // 2
 
         raster = epr.create_bitmask_raster(width, height)
-        self.assertRaises(epr.EPRError, self.product.read_bitmask_raster,
-                          bm_expr, xoffset, yoffset, raster)
+        self.assertRaises(
+            epr.EPRError,
+            self.product.read_bitmask_raster,
+            bm_expr,
+            xoffset,
+            yoffset,
+            raster,
+        )
         try:
             self.product.read_bitmask_raster(bm_expr, xoffset, yoffset, raster)
         except epr.EPRError as e:
             self.assertEqual(e.code, 301)
 
     def test_read_bitmask_raster_with_wrong_data_type(self):
-        bm_expr = 'l2_flags.LAND AND !l2_flags.CLOUD'
+        bm_expr = "l2_flags.LAND AND !l2_flags.CLOUD"
 
         xoffset = self.DATASET_WIDTH // 2
         yoffset = self.DATASET_HEIGHT // 2
@@ -384,8 +406,14 @@ class TestProduct(unittest.TestCase):
         height = self.DATASET_HEIGHT // 2
 
         raster = epr.create_raster(epr.E_TID_DOUBLE, width, height)
-        self.assertRaises(epr.EPRError, self.product.read_bitmask_raster,
-                          bm_expr, xoffset, yoffset, raster)
+        self.assertRaises(
+            epr.EPRError,
+            self.product.read_bitmask_raster,
+            bm_expr,
+            xoffset,
+            yoffset,
+            raster,
+        )
         try:
             self.product.read_bitmask_raster(bm_expr, xoffset, yoffset, raster)
         except epr.EPRError as e:
@@ -399,25 +427,25 @@ class TestProduct(unittest.TestCase):
         try:
             os.lseek(self.product._fileno, 0, os.SEEK_SET)
             data = os.read(self.product._fileno, 7)
-            self.assertEqual(data, b'PRODUCT')
+            self.assertEqual(data, b"PRODUCT")
         finally:
             os.lseek(self.product._fileno, pos, os.SEEK_SET)
 
 
 class TestProductRW(TestProduct):
-    OPEN_MODE = 'rb+'
+    OPEN_MODE = "rb+"
 
 
 class TestProductHighLevelAPI(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAMES = TestProduct.DATASET_NAMES
     BAND_NAMES = [
-        'slant_range_time',
-        'incident_angle',
-        'latitude',
-        'longitude',
-        'proc_data_1',
-        'proc_data_2',
+        "slant_range_time",
+        "incident_angle",
+        "latitude",
+        "longitude",
+        "proc_data_1",
+        "proc_data_2",
     ]
 
     def setUp(self):
@@ -433,8 +461,9 @@ class TestProductHighLevelAPI(unittest.TestCase):
 
     def test_readonly_closed(self):
         self.assertFalse(self.product.closed)
-        self.assertRaises(AttributeError,
-                          setattr, self.product, 'closed', True)
+        self.assertRaises(
+            AttributeError, setattr, self.product, "closed", True
+        )
 
     def test_get_dataset_names(self):
         self.assertEqual(self.product.get_dataset_names(), self.DATASET_NAMES)
@@ -463,27 +492,31 @@ class TestProductHighLevelAPI(unittest.TestCase):
     #     pass
 
     def test_repr(self):
-        pattern = (r'epr\.Product\((?P<name>\w+)\) '
-                   r'(?P<n_datasets>\d+) datasets, '
-                   r'(?P<n_bands>\d+) bands')
+        pattern = (
+            r"epr\.Product\((?P<name>\w+)\) "
+            r"(?P<n_datasets>\d+) datasets, "
+            r"(?P<n_bands>\d+) bands"
+        )
 
         mobj = re.match(pattern, repr(self.product))
         self.assertNotEqual(mobj, None)
-        self.assertEqual(mobj.group('name'), self.product.id_string)
-        self.assertEqual(mobj.group('n_datasets'),
-                         str(self.product.get_num_datasets()))
-        self.assertEqual(mobj.group('n_bands'),
-                         str(self.product.get_num_bands()))
+        self.assertEqual(mobj.group("name"), self.product.id_string)
+        self.assertEqual(
+            mobj.group("n_datasets"), str(self.product.get_num_datasets())
+        )
+        self.assertEqual(
+            mobj.group("n_bands"), str(self.product.get_num_bands())
+        )
 
     def test_repr_type(self):
         self.assertTrue(isinstance(repr(self.product), str))
 
     def test_str(self):
-        lines = [repr(self.product), '']
+        lines = [repr(self.product), ""]
         lines.extend(map(repr, self.product.datasets()))
-        lines.append('')
+        lines.append("")
         lines.extend(map(str, self.product.bands()))
-        data = '\n'.join(lines)
+        data = "\n".join(lines)
         self.assertEqual(data, str(self.product))
 
     def test_str_type(self):
@@ -513,16 +546,20 @@ class TestProductLowLevelAPI(unittest.TestCase):
 
 class TestClosedProduct(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    DATASET_NAME = 'MDS1'
-    BAND_NAME = 'proc_data_1'
+    DATASET_NAME = "MDS1"
+    BAND_NAME = "proc_data_1"
 
     def setUp(self):
         self.product = epr.open(self.PRODUCT_FILE)
         self.product.close()
 
     def test_properties(self):
-        for name in ('file_path', 'tot_size', 'id_string',
-                     'meris_iodd_version'):
+        for name in (
+            "file_path",
+            "tot_size",
+            "id_string",
+            "meris_iodd_version",
+        ):
             self.assertRaises(ValueError, getattr, self.product, name)
 
     def test_get_get_scene_width(self):
@@ -550,8 +587,9 @@ class TestClosedProduct(unittest.TestCase):
         self.assertRaises(ValueError, self.product.get_dataset_at, 0)
 
     def test_get_dataset(self):
-        self.assertRaises(ValueError, self.product.get_dataset,
-                          self.DATASET_NAME)
+        self.assertRaises(
+            ValueError, self.product.get_dataset, self.DATASET_NAME
+        )
 
     def test_get_dsd_at(self):
         self.assertRaises(ValueError, self.product.get_dsd_at, 0)
@@ -563,13 +601,19 @@ class TestClosedProduct(unittest.TestCase):
         self.assertRaises(ValueError, self.product.get_band_at, 0)
 
     def test_read_bitmask_raster(self):
-        bm_expr = 'l2_flags.LAND AND !l2_flags.CLOUD'
+        bm_expr = "l2_flags.LAND AND !l2_flags.CLOUD"
         raster = epr.create_bitmask_raster(12, 10)
         xoffset = 0
         yoffset = 0
 
-        self.assertRaises(ValueError, self.product.read_bitmask_raster,
-                          bm_expr, xoffset, yoffset, raster)
+        self.assertRaises(
+            ValueError,
+            self.product.read_bitmask_raster,
+            bm_expr,
+            xoffset,
+            yoffset,
+            raster,
+        )
 
     def test_get_dataset_names(self):
         self.assertRaises(ValueError, self.product.get_dataset_names)
@@ -592,11 +636,11 @@ class TestClosedProduct(unittest.TestCase):
 
 class TestDataset(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    OPEN_MODE = 'rb'
-    DATASET_NAME = 'MDS1'
-    DATASET_DESCRIPTION = 'Measurement Data Set 1'
+    OPEN_MODE = "rb"
+    DATASET_NAME = "MDS1"
+    DATASET_DESCRIPTION = "Measurement Data Set 1"
     NUM_RECORDS = 3915
-    DSD_NAME = 'MDS1'
+    DSD_NAME = "MDS1"
     RECORD_INDEX = 0
 
     def setUp(self):
@@ -642,15 +686,17 @@ class TestDataset(unittest.TestCase):
 
     def test_read_record_passed(self):
         created_record = self.dataset.create_record()
-        read_record = self.dataset.read_record(self.RECORD_INDEX,
-                                               created_record)
+        read_record = self.dataset.read_record(
+            self.RECORD_INDEX, created_record
+        )
         self.assertTrue(created_record is read_record)
 
     def test_read_record_passed_index(self):
         created_record = self.dataset.create_record()
         self.assertEqual(created_record.index, None)
-        read_record = self.dataset.read_record(self.RECORD_INDEX,
-                                               created_record)
+        read_record = self.dataset.read_record(
+            self.RECORD_INDEX, created_record
+        )
         self.assertEqual(read_record.index, self.RECORD_INDEX)
 
     def test_read_record_passed_invalid(self):
@@ -658,7 +704,7 @@ class TestDataset(unittest.TestCase):
 
 
 class TestDatasetRW(TestDataset):
-    OPEN_MODE = 'rb+'
+    OPEN_MODE = "rb+"
 
 
 class TestDatasetHighLevelAPI(unittest.TestCase):
@@ -678,33 +724,36 @@ class TestDatasetHighLevelAPI(unittest.TestCase):
         self.assertEqual(len(records), self.dataset.get_num_records())
         for index, record in enumerate(records):
             ref_record = self.dataset.read_record(index)
-            self.assertEqual(record.get_field_names(),
-                             ref_record.get_field_names())
+            self.assertEqual(
+                record.get_field_names(), ref_record.get_field_names()
+            )
 
     def test_iter(self):
         index = 0
         for record in self.dataset:
             ref_record = self.dataset.read_record(index)
-            self.assertEqual(record.get_field_names(),
-                             ref_record.get_field_names())
+            self.assertEqual(
+                record.get_field_names(), ref_record.get_field_names()
+            )
             index += 1
         self.assertEqual(index, self.dataset.get_num_records())
 
     def test_repr(self):
-        pattern = r'epr\.Dataset\((?P<name>\w+)\) (?P<num>\d+) records'
+        pattern = r"epr\.Dataset\((?P<name>\w+)\) (?P<num>\d+) records"
         mobj = re.match(pattern, repr(self.dataset))
         self.assertNotEqual(mobj, None)
-        self.assertEqual(mobj.group('name'), self.dataset.get_name())
-        self.assertEqual(mobj.group('num'),
-                         str(self.dataset.get_num_records()))
+        self.assertEqual(mobj.group("name"), self.dataset.get_name())
+        self.assertEqual(
+            mobj.group("num"), str(self.dataset.get_num_records())
+        )
 
     def test_repr_type(self):
         self.assertTrue(isinstance(repr(self.dataset), str))
 
     def test_str(self):
-        lines = [repr(self.dataset), '']
+        lines = [repr(self.dataset), ""]
         lines.extend(map(str, self.dataset))
-        data = '\n'.join(lines)
+        data = "\n".join(lines)
         self.assertEqual(data, str(self.dataset))
 
     def test_str_type(self):
@@ -713,7 +762,7 @@ class TestDatasetHighLevelAPI(unittest.TestCase):
 
 class TestDatasetOnClosedProduct(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    DATASET_NAME = 'MDS1'
+    DATASET_NAME = "MDS1"
 
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
@@ -725,7 +774,7 @@ class TestDatasetOnClosedProduct(unittest.TestCase):
         self.assertTrue(isinstance(self.dataset.product, epr.Product))
 
     def test_description_property(self):
-        self.assertRaises(ValueError, getattr, self.dataset, 'description')
+        self.assertRaises(ValueError, getattr, self.dataset, "description")
 
     def test_get_name(self):
         self.assertRaises(ValueError, self.dataset.get_name)
@@ -763,18 +812,18 @@ class TestDatasetOnClosedProduct(unittest.TestCase):
 
 class TestBand(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    OPEN_MODE = 'rb+'
-    DATASET_NAME = 'MDS1'
+    OPEN_MODE = "rb+"
+    DATASET_NAME = "MDS1"
     BAND_NAMES = (
-        'slant_range_time',
-        'incident_angle',
-        'latitude',
-        'longitude',
-        'proc_data_1',
-        'proc_data_2',
-     )
-    BAND_NAME = 'proc_data_1'
-    BAND_DESCTIPTION = 'Alternating Polarization Medium Resolution Image'
+        "slant_range_time",
+        "incident_angle",
+        "latitude",
+        "longitude",
+        "proc_data_1",
+        "proc_data_2",
+    )
+    BAND_NAME = "proc_data_1"
+    BAND_DESCTIPTION = "Alternating Polarization Medium Resolution Image"
     XOFFSET = 90
     YOFFSET = 80
     WIDTH = 200
@@ -863,17 +912,31 @@ class TestBand(unittest.TestCase):
         width = self.product.get_scene_width()
         height = self.product.get_scene_height()
 
-        self.assertRaises((ValueError, OverflowError),
-                          self.band.create_compatible_raster,
-                          -1, height)
-        self.assertRaises((ValueError, OverflowError),
-                          self.band.create_compatible_raster,
-                          width, -1)
+        self.assertRaises(
+            (ValueError, OverflowError),
+            self.band.create_compatible_raster,
+            -1,
+            height,
+        )
+        self.assertRaises(
+            (ValueError, OverflowError),
+            self.band.create_compatible_raster,
+            width,
+            -1,
+        )
 
-        self.assertRaises(ValueError, self.band.create_compatible_raster,
-                          self.product.get_scene_width() + 10, height)
-        self.assertRaises(ValueError, self.band.create_compatible_raster,
-                          width, self.product.get_scene_height() + 10)
+        self.assertRaises(
+            ValueError,
+            self.band.create_compatible_raster,
+            self.product.get_scene_width() + 10,
+            height,
+        )
+        self.assertRaises(
+            ValueError,
+            self.band.create_compatible_raster,
+            width,
+            self.product.get_scene_height() + 10,
+        )
 
     def test_create_compatible_raster_with_step(self):
         src_width = self.product.get_scene_width()
@@ -882,8 +945,9 @@ class TestBand(unittest.TestCase):
         ystep = 3
         width = (src_width - 1) // xstep + 1
         height = (src_height - 1) // ystep + 1
-        raster = self.band.create_compatible_raster(src_width, src_height,
-                                                    xstep, ystep)
+        raster = self.band.create_compatible_raster(
+            src_width, src_height, xstep, ystep
+        )
         self.assertTrue(isinstance(raster, epr.Raster))
         self.assertEqual(raster.get_width(), width)
         self.assertEqual(raster.get_height(), height)
@@ -894,25 +958,55 @@ class TestBand(unittest.TestCase):
         width = self.product.get_scene_width()
         height = self.product.get_scene_height()
 
-        self.assertRaises((ValueError, OverflowError),
-                          self.band.create_compatible_raster,
-                          width, height, -1, 2)
-        self.assertRaises((ValueError, OverflowError),
-                          self.band.create_compatible_raster,
-                          width, height, 2, -1)
-        self.assertRaises((ValueError, OverflowError),
-                          self.band.create_compatible_raster,
-                          width, height, -2, -1)
+        self.assertRaises(
+            (ValueError, OverflowError),
+            self.band.create_compatible_raster,
+            width,
+            height,
+            -1,
+            2,
+        )
+        self.assertRaises(
+            (ValueError, OverflowError),
+            self.band.create_compatible_raster,
+            width,
+            height,
+            2,
+            -1,
+        )
+        self.assertRaises(
+            (ValueError, OverflowError),
+            self.band.create_compatible_raster,
+            width,
+            height,
+            -2,
+            -1,
+        )
 
-        self.assertRaises((ValueError, ValueError),
-                          self.band.create_compatible_raster,
-                          width, height, width + 10, 2)
-        self.assertRaises((ValueError, ValueError),
-                          self.band.create_compatible_raster,
-                          width, height, 2, height + 10)
-        self.assertRaises((ValueError, ValueError),
-                          self.band.create_compatible_raster,
-                          width, height, width + 10, height + 10)
+        self.assertRaises(
+            (ValueError, ValueError),
+            self.band.create_compatible_raster,
+            width,
+            height,
+            width + 10,
+            2,
+        )
+        self.assertRaises(
+            (ValueError, ValueError),
+            self.band.create_compatible_raster,
+            width,
+            height,
+            2,
+            height + 10,
+        )
+        self.assertRaises(
+            (ValueError, ValueError),
+            self.band.create_compatible_raster,
+            width,
+            height,
+            width + 10,
+            height + 10,
+        )
 
     def test_create_compatible_raster_with_default_size(self):
         src_width = self.product.get_scene_width()
@@ -937,12 +1031,14 @@ class TestBand(unittest.TestCase):
         self.assertEqual(raster.data_type, epr.E_TID_FLOAT)
 
         h, w = self.TEST_DATA.shape
-        npt.assert_allclose(raster.get_pixel(0, 0),
-                            self.TEST_DATA[0, 0],
-                            rtol=self.RTOL)
-        npt.assert_allclose(raster.get_pixel(w - 1, h - 1),
-                            self.TEST_DATA[h - 1, w - 1],
-                            rtol=self.RTOL)
+        npt.assert_allclose(
+            raster.get_pixel(0, 0), self.TEST_DATA[0, 0], rtol=self.RTOL
+        )
+        npt.assert_allclose(
+            raster.get_pixel(w - 1, h - 1),
+            self.TEST_DATA[h - 1, w - 1],
+            rtol=self.RTOL,
+        )
 
     def test_read_raster_none(self):
         raster = self.band.read_raster()
@@ -957,11 +1053,13 @@ class TestBand(unittest.TestCase):
         npt.assert_allclose(
             raster.get_pixel(self.XOFFSET, self.YOFFSET),
             self.TEST_DATA[0, 0],
-            rtol=self.RTOL)
+            rtol=self.RTOL,
+        )
         npt.assert_allclose(
             raster.get_pixel(self.XOFFSET + w - 1, self.YOFFSET + h - 1),
             self.TEST_DATA[h - 1, w - 1],
-            rtol=self.RTOL)
+            rtol=self.RTOL,
+        )
 
     def test_read_raster_default_offset(self):
         height = self.HEIGHT
@@ -976,18 +1074,22 @@ class TestBand(unittest.TestCase):
         self.assertTrue(r1 is raster1)
         self.assertTrue(r2 is raster2)
         self.assertEqual(raster1.get_pixel(0, 0), raster2.get_pixel(0, 0))
-        self.assertEqual(raster1.get_pixel(width - 1, height - 1),
-                         raster2.get_pixel(width - 1, height - 1))
+        self.assertEqual(
+            raster1.get_pixel(width - 1, height - 1),
+            raster2.get_pixel(width - 1, height - 1),
+        )
 
         h, w = self.TEST_DATA.shape
         npt.assert_allclose(
             raster1.get_pixel(self.XOFFSET, self.YOFFSET),
             self.TEST_DATA[0, 0],
-            rtol=self.RTOL)
+            rtol=self.RTOL,
+        )
         npt.assert_allclose(
             raster1.get_pixel(self.XOFFSET + w - 1, self.YOFFSET + h - 1),
             self.TEST_DATA[h - 1, w - 1],
-            rtol=self.RTOL)
+            rtol=self.RTOL,
+        )
 
     def test_read_raster_with_invalid_raster(self):
         self.assertRaises(TypeError, self.band.read_raster, 0, 0, 0)
@@ -1001,16 +1103,24 @@ class TestBand(unittest.TestCase):
 
         invalid_xoffset = 2 * self.product.get_scene_width()
         invalid_yoffset = 2 * self.product.get_scene_height()
-        self.assertRaises(ValueError, self.band.read_raster,
-                          invalid_xoffset, 0, raster)
-        self.assertRaises(ValueError, self.band.read_raster,
-                          0, invalid_yoffset, raster)
-        self.assertRaises(ValueError, self.band.read_raster,
-                          invalid_xoffset, invalid_yoffset, raster)
+        self.assertRaises(
+            ValueError, self.band.read_raster, invalid_xoffset, 0, raster
+        )
+        self.assertRaises(
+            ValueError, self.band.read_raster, 0, invalid_yoffset, raster
+        )
+        self.assertRaises(
+            ValueError,
+            self.band.read_raster,
+            invalid_xoffset,
+            invalid_yoffset,
+            raster,
+        )
 
     def test_read_as_array_ref(self):
-        data = self.band.read_as_array(self.WIDTH, self.HEIGHT,
-                                       self.XOFFSET, self.YOFFSET)
+        data = self.band.read_as_array(
+            self.WIDTH, self.HEIGHT, self.XOFFSET, self.YOFFSET
+        )
 
         self.assertTrue(isinstance(data, np.ndarray))
         self.assertEqual(data.shape, (self.HEIGHT, self.WIDTH))
@@ -1021,13 +1131,17 @@ class TestBand(unittest.TestCase):
 
     def test_read_as_array_cross(self):
         data = self.band.read_as_array()
-        box = self.band.read_as_array(self.WIDTH, self.HEIGHT,
-                                      self.XOFFSET, self.YOFFSET)
+        box = self.band.read_as_array(
+            self.WIDTH, self.HEIGHT, self.XOFFSET, self.YOFFSET
+        )
 
         npt.assert_array_equal(
-            data[self.YOFFSET:self.YOFFSET + self.HEIGHT,
-                 self.XOFFSET:self.XOFFSET + self.WIDTH],
-            box)
+            data[
+                self.YOFFSET : self.YOFFSET + self.HEIGHT,
+                self.XOFFSET : self.XOFFSET + self.WIDTH,
+            ],
+            box,
+        )
 
     def test_read_as_array_default(self):
         data = self.band.read_as_array()
@@ -1035,131 +1149,160 @@ class TestBand(unittest.TestCase):
         self.assertTrue(isinstance(data, np.ndarray))
         self.assertEqual(
             data.shape,
-            (self.product.get_scene_height(), self.product.get_scene_width()))
+            (self.product.get_scene_height(), self.product.get_scene_width()),
+        )
         self.assertEqual(data.dtype, self.DATA_TYPE)
 
         h, w = self.TEST_DATA.shape
         npt.assert_allclose(
-            data[self.YOFFSET:self.YOFFSET + h, self.XOFFSET:self.XOFFSET + w],
+            data[
+                self.YOFFSET : self.YOFFSET + h,
+                self.XOFFSET : self.XOFFSET + w,
+            ],
             self.TEST_DATA,
-            rtol=self.RTOL)
+            rtol=self.RTOL,
+        )
 
     # @SEEALSO: https://www.brockmann-consult.de/beam-jira/browse/EPR-2
-    @unittest.skipIf(EPR_C_BUG_BCEPR002, 'buggy EPR_C_API detected')
+    @unittest.skipIf(EPR_C_BUG_BCEPR002, "buggy EPR_C_API detected")
     def test_read_as_array_with_step_2(self):
         step = 2
         band = self.band
 
         data = band.read_as_array()
-        box = band.read_as_array(self.WIDTH, self.HEIGHT,
-                                 self.XOFFSET, self.YOFFSET, step, step)
+        box = band.read_as_array(
+            self.WIDTH, self.HEIGHT, self.XOFFSET, self.YOFFSET, step, step
+        )
 
         self.assertTrue(isinstance(box, np.ndarray))
         self.assertEqual(
             box.shape,
-            ((self.HEIGHT - 1) // step + 1, (self.WIDTH - 1) // step + 1))
+            ((self.HEIGHT - 1) // step + 1, (self.WIDTH - 1) // step + 1),
+        )
         self.assertEqual(box.dtype, self.DATA_TYPE)
 
         npt.assert_allclose(
-            data[self.YOFFSET:self.YOFFSET + self.HEIGHT:step,
-                 self.XOFFSET:self.XOFFSET + self.WIDTH:step],
-            box)
+            data[
+                self.YOFFSET : self.YOFFSET + self.HEIGHT : step,
+                self.XOFFSET : self.XOFFSET + self.WIDTH : step,
+            ],
+            box,
+        )
 
         h, w = self.TEST_DATA.shape
         npt.assert_allclose(
-            box[:(h-1)//step+1, :(w-1)//step+1],
+            box[: (h - 1) // step + 1, : (w - 1) // step + 1],
             self.TEST_DATA[::step, ::step],
-            rtol=self.RTOL)
+            rtol=self.RTOL,
+        )
 
-    @unittest.skipIf(EPR_C_BUG_BCEPR002, 'buggy EPR_C_API detected')
+    @unittest.skipIf(EPR_C_BUG_BCEPR002, "buggy EPR_C_API detected")
     def test_read_as_array_with_step_3(self):
         step = 3
         band = self.band
 
         data = band.read_as_array()
-        box = band.read_as_array(self.WIDTH, self.HEIGHT,
-                                 self.XOFFSET, self.YOFFSET, step, step)
+        box = band.read_as_array(
+            self.WIDTH, self.HEIGHT, self.XOFFSET, self.YOFFSET, step, step
+        )
 
         self.assertTrue(isinstance(box, np.ndarray))
         self.assertEqual(
             box.shape,
-            ((self.HEIGHT - 1) // step + 1, (self.WIDTH - 1) // step + 1))
+            ((self.HEIGHT - 1) // step + 1, (self.WIDTH - 1) // step + 1),
+        )
         self.assertEqual(box.dtype, self.DATA_TYPE)
 
         npt.assert_allclose(
-            data[self.YOFFSET:self.YOFFSET + self.HEIGHT:step,
-                 self.XOFFSET:self.XOFFSET + self.WIDTH:step],
-            box)
+            data[
+                self.YOFFSET : self.YOFFSET + self.HEIGHT : step,
+                self.XOFFSET : self.XOFFSET + self.WIDTH : step,
+            ],
+            box,
+        )
 
         h, w = self.TEST_DATA.shape
         npt.assert_allclose(
-            box[:(h-1)//step+1, :(w-1)//step+1],
+            box[: (h - 1) // step + 1, : (w - 1) // step + 1],
             self.TEST_DATA[::step, ::step],
-            rtol=self.RTOL)
+            rtol=self.RTOL,
+        )
 
-    @unittest.skipIf(EPR_C_BUG_BCEPR002, 'buggy EPR_C_API detected')
+    @unittest.skipIf(EPR_C_BUG_BCEPR002, "buggy EPR_C_API detected")
     def test_read_as_array_with_step_4(self):
         step = 4
         band = self.band
 
         data = band.read_as_array()
-        box = band.read_as_array(self.WIDTH, self.HEIGHT,
-                                 self.XOFFSET, self.YOFFSET, step, step)
+        box = band.read_as_array(
+            self.WIDTH, self.HEIGHT, self.XOFFSET, self.YOFFSET, step, step
+        )
 
         self.assertTrue(isinstance(box, np.ndarray))
         self.assertEqual(
             box.shape,
-            ((self.HEIGHT - 1) // step + 1, (self.WIDTH - 1) // step + 1))
+            ((self.HEIGHT - 1) // step + 1, (self.WIDTH - 1) // step + 1),
+        )
         self.assertEqual(box.dtype, self.DATA_TYPE)
 
         npt.assert_allclose(
-            data[self.YOFFSET:self.YOFFSET + self.HEIGHT:step,
-                 self.XOFFSET:self.XOFFSET + self.WIDTH:step],
-            box)
+            data[
+                self.YOFFSET : self.YOFFSET + self.HEIGHT : step,
+                self.XOFFSET : self.XOFFSET + self.WIDTH : step,
+            ],
+            box,
+        )
 
         h, w = self.TEST_DATA.shape
         npt.assert_allclose(
-            box[:(h-1)//step+1, :(w-1)//step+1],
-            self.TEST_DATA[::step, ::step])
+            box[: (h - 1) // step + 1, : (w - 1) // step + 1],
+            self.TEST_DATA[::step, ::step],
+        )
 
-    @unittest.skipIf(EPR_C_BUG_BCEPR002, 'buggy EPR_C_API detected')
+    @unittest.skipIf(EPR_C_BUG_BCEPR002, "buggy EPR_C_API detected")
     def test_read_as_array_with_step_5(self):
         step = 5
         band = self.band
 
         data = band.read_as_array()
-        box = band.read_as_array(self.WIDTH, self.HEIGHT,
-                                 self.XOFFSET, self.YOFFSET, step, step)
+        box = band.read_as_array(
+            self.WIDTH, self.HEIGHT, self.XOFFSET, self.YOFFSET, step, step
+        )
 
         self.assertTrue(isinstance(box, np.ndarray))
         self.assertEqual(
             box.shape,
-            ((self.HEIGHT - 1) // step + 1, (self.WIDTH - 1) // step + 1))
+            ((self.HEIGHT - 1) // step + 1, (self.WIDTH - 1) // step + 1),
+        )
         self.assertEqual(box.dtype, self.DATA_TYPE)
 
         npt.assert_allclose(
-            data[self.YOFFSET:self.YOFFSET + self.HEIGHT:step,
-                 self.XOFFSET:self.XOFFSET + self.WIDTH:step],
-            box)
+            data[
+                self.YOFFSET : self.YOFFSET + self.HEIGHT : step,
+                self.XOFFSET : self.XOFFSET + self.WIDTH : step,
+            ],
+            box,
+        )
 
         h, w = self.TEST_DATA.shape
         npt.assert_allclose(
-            box[:(h-1)//step+1, :(w-1)//step+1],
+            box[: (h - 1) // step + 1, : (w - 1) // step + 1],
             self.TEST_DATA[::step, ::step],
-            rtol=self.RTOL)
+            rtol=self.RTOL,
+        )
 
 
 class TestBandRW(TestBand):
-    OPEN_MODE = 'rb+'
+    OPEN_MODE = "rb+"
 
 
 class TestAnnotationBand(TestBand):
-    DATASET_NAME = 'GEOLOCATION_GRID_ADS'
-    BAND_NAME = 'incident_angle'
-    BAND_DESCTIPTION = 'Incident angle'
+    DATASET_NAME = "GEOLOCATION_GRID_ADS"
+    BAND_NAME = "incident_angle"
+    BAND_DESCTIPTION = "Incident angle"
     SCALING_FACTOR = 1.0
     SCALING_OFFSET = 0.0
-    UNIT = 'deg'
+    UNIT = "deg"
     RTOL = 1e-7
     TEST_DATA = np.asarray([
         [21.86950111, 21.86438370, 21.85926437, 21.85414696, 21.84902954,
@@ -1184,21 +1327,21 @@ class TestAnnotationBand(TestBand):
          21.84391594, 21.83879852, 21.83368111, 21.82856178, 21.82344437],
     ])
 
-    @unittest.skipIf(EPR_C_BUG_PYEPR009, 'buggy EPR_C_API detected')
+    @unittest.skipIf(EPR_C_BUG_PYEPR009, "buggy EPR_C_API detected")
     def test_read_raster(self):
-        super(TestAnnotationBand, self).test_read_raster()
+        super().test_read_raster()
 
-    @unittest.skipIf(EPR_C_BUG_PYEPR009, 'buggy EPR_C_API detected')
+    @unittest.skipIf(EPR_C_BUG_PYEPR009, "buggy EPR_C_API detected")
     def test_read_raster_default_offset(self):
-        super(TestAnnotationBand, self).test_read_raster_default_offset()
+        super().test_read_raster_default_offset()
 
-    @unittest.skipIf(EPR_C_BUG_PYEPR009, 'buggy EPR_C_API detected')
+    @unittest.skipIf(EPR_C_BUG_PYEPR009, "buggy EPR_C_API detected")
     def test_read_as_array_ref(self):
-        super(TestAnnotationBand, self).test_read_as_array_ref()
+        super().test_read_as_array_ref()
 
-    @unittest.skipIf(EPR_C_BUG_PYEPR009, 'buggy EPR_C_API detected')
+    @unittest.skipIf(EPR_C_BUG_PYEPR009, "buggy EPR_C_API detected")
     def test_read_as_array_cross(self):
-        super(TestAnnotationBand, self).test_read_as_array_cross()
+        super().test_read_as_array_cross()
 
 
 class TestBandHighLevelAPI(unittest.TestCase):
@@ -1211,13 +1354,15 @@ class TestBandHighLevelAPI(unittest.TestCase):
         self.product.close()
 
     def test_repr(self):
-        pattern = (r'epr.Band\((?P<name>\w+)\) of '
-                   r'epr.Product\((?P<product_id>\w+)\)')
+        pattern = (
+            r"epr.Band\((?P<name>\w+)\) of "
+            r"epr.Product\((?P<product_id>\w+)\)"
+        )
         for band in self.product.bands():
             mobj = re.match(pattern, repr(band))
             self.assertNotEqual(mobj, None)
-            self.assertEqual(mobj.group('name'), band.get_name())
-            self.assertEqual(mobj.group('product_id'), self.product.id_string)
+            self.assertEqual(mobj.group("name"), band.get_name())
+            self.assertEqual(mobj.group("product_id"), self.product.id_string)
 
     def test_repr_type(self):
         band = self.product.get_band_at(0)
@@ -1258,8 +1403,9 @@ class TestBandOnClosedProduct(unittest.TestCase):
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
         self.band = self.product.get_band_at(0)
-        self.raster = self.band.create_compatible_raster(self.WIDTH,
-                                                         self.HEIGHT)
+        self.raster = self.band.create_compatible_raster(
+            self.WIDTH, self.HEIGHT
+        )
         self.product.close()
 
     def test_product_property(self):
@@ -1267,16 +1413,16 @@ class TestBandOnClosedProduct(unittest.TestCase):
 
     def test_properties(self):
         fields = (
-            'spectr_band_index',
-            'sample_model',
-            'data_type',
-            'scaling_method',
-            'scaling_offset',
-            'scaling_factor',
-            'bm_expr',
-            'unit',
-            'description',
-            'lines_mirrored',
+            "spectr_band_index",
+            "sample_model",
+            "data_type",
+            "scaling_method",
+            "scaling_offset",
+            "scaling_factor",
+            "bm_expr",
+            "unit",
+            "description",
+            "lines_mirrored",
         )
         for name in fields:
             with self.subTest(field=name):
@@ -1286,15 +1432,20 @@ class TestBandOnClosedProduct(unittest.TestCase):
         self.assertRaises(ValueError, self.product.get_band_at, 0)
 
     def test_create_compatible_raster(self):
-        self.assertRaises(ValueError, self.band.create_compatible_raster,
-                          self.WIDTH, self.HEIGHT)
+        self.assertRaises(
+            ValueError,
+            self.band.create_compatible_raster,
+            self.WIDTH,
+            self.HEIGHT,
+        )
 
     def test_read_raster(self):
         self.assertRaises(ValueError, self.band.read_raster)
 
     def test_read_as_array(self):
-        self.assertRaises(ValueError, self.band.read_as_array,
-                          self.WIDTH, self.HEIGHT)
+        self.assertRaises(
+            ValueError, self.band.read_as_array, self.WIDTH, self.HEIGHT
+        )
 
     def test_str(self):
         self.assertRaises(ValueError, str, self.band)
@@ -1309,8 +1460,9 @@ class TestCreateRaster(unittest.TestCase):
     RASTER_DATA_TYPE = epr.E_TID_FLOAT
 
     def test_create_raster(self):
-        raster = epr.create_raster(self.RASTER_DATA_TYPE, self.RASTER_WIDTH,
-                                   self.RASTER_HEIGHT)
+        raster = epr.create_raster(
+            self.RASTER_DATA_TYPE, self.RASTER_WIDTH, self.RASTER_HEIGHT
+        )
         self.assertTrue(isinstance(raster, epr.Raster))
         self.assertEqual(raster.data_type, self.RASTER_DATA_TYPE)
         self.assertEqual(raster.get_width(), self.RASTER_WIDTH)
@@ -1319,8 +1471,9 @@ class TestCreateRaster(unittest.TestCase):
     def test_create_raster_with_step(self):
         src_width = 3 * self.RASTER_WIDTH
         src_height = 2 * self.RASTER_HEIGHT
-        raster = epr.create_raster(self.RASTER_DATA_TYPE,
-                                   src_width, src_height, 3, 2)
+        raster = epr.create_raster(
+            self.RASTER_DATA_TYPE, src_width, src_height, 3, 2
+        )
         self.assertTrue(isinstance(raster, epr.Raster))
         self.assertEqual(raster.data_type, self.RASTER_DATA_TYPE)
         self.assertEqual(raster.get_width(), self.RASTER_WIDTH)
@@ -1329,16 +1482,29 @@ class TestCreateRaster(unittest.TestCase):
     def test_create_raster_with_invalid_step(self):
         src_width = 3 * self.RASTER_WIDTH
         src_height = 2 * self.RASTER_HEIGHT
-        self.assertRaises(ValueError, epr.create_raster,
-                          self.RASTER_DATA_TYPE,  src_width, src_height, 0, 2)
+        self.assertRaises(
+            ValueError,
+            epr.create_raster,
+            self.RASTER_DATA_TYPE,
+            src_width,
+            src_height,
+            0,
+            2,
+        )
 
     def test_create_raster_with_invalid_size(self):
-        self.assertRaises((ValueError, OverflowError), epr.create_raster,
-                          self.RASTER_DATA_TYPE, -1, self.RASTER_HEIGHT)
+        self.assertRaises(
+            (ValueError, OverflowError),
+            epr.create_raster,
+            self.RASTER_DATA_TYPE,
+            -1,
+            self.RASTER_HEIGHT,
+        )
 
     def test_create_bitmask_raster(self):
-        raster = epr.create_bitmask_raster(self.RASTER_WIDTH,
-                                           self.RASTER_HEIGHT)
+        raster = epr.create_bitmask_raster(
+            self.RASTER_WIDTH, self.RASTER_HEIGHT
+        )
         self.assertTrue(isinstance(raster, epr.Raster))
         self.assertEqual(raster.data_type, epr.E_TID_UCHAR)
         self.assertEqual(raster.get_width(), self.RASTER_WIDTH)
@@ -1356,12 +1522,17 @@ class TestCreateRaster(unittest.TestCase):
     def test_create_bitmask_raster_with_invalid_step(self):
         src_width = 3 * self.RASTER_WIDTH
         src_height = 2 * self.RASTER_HEIGHT
-        self.assertRaises(ValueError, epr.create_bitmask_raster,
-                          src_width, src_height, 0, 2)
+        self.assertRaises(
+            ValueError, epr.create_bitmask_raster, src_width, src_height, 0, 2
+        )
 
     def test_create_bitmask_raster_with_invalid_size(self):
-        self.assertRaises((ValueError, OverflowError),
-                          epr.create_bitmask_raster, -1, self.RASTER_HEIGHT)
+        self.assertRaises(
+            (ValueError, OverflowError),
+            epr.create_bitmask_raster,
+            -1,
+            self.RASTER_HEIGHT,
+        )
 
 
 class TestRaster(unittest.TestCase):
@@ -1373,8 +1544,9 @@ class TestRaster(unittest.TestCase):
     TEST_DATA = np.zeros((10, 10))
 
     def setUp(self):
-        self.raster = epr.create_raster(self.RASTER_DATA_TYPE,
-                                        self.RASTER_WIDTH, self.RASTER_HEIGHT)
+        self.raster = epr.create_raster(
+            self.RASTER_DATA_TYPE, self.RASTER_WIDTH, self.RASTER_HEIGHT
+        )
 
     def test_get_width(self):
         self.assertEqual(self.raster.get_width(), self.RASTER_WIDTH)
@@ -1386,23 +1558,30 @@ class TestRaster(unittest.TestCase):
         self.assertEqual(self.raster.get_elem_size(), self.RASTER_ELEM_SIZE)
 
     def test_get_pixel(self):
-        self.assertAlmostEqual(self.raster.get_pixel(0, 0),
-                               self.TEST_DATA[0, 0])
+        self.assertAlmostEqual(
+            self.raster.get_pixel(0, 0), self.TEST_DATA[0, 0]
+        )
 
     def test_get_pixel_invalid_x(self):
         self.assertRaises(ValueError, self.raster.get_pixel, -1, 0)
-        self.assertRaises(ValueError, self.raster.get_pixel,
-                          self.RASTER_WIDTH + 1, 0)
+        self.assertRaises(
+            ValueError, self.raster.get_pixel, self.RASTER_WIDTH + 1, 0
+        )
 
     def test_get_pixel_invalid_y(self):
         self.assertRaises(ValueError, self.raster.get_pixel, 0, -1)
-        self.assertRaises(ValueError, self.raster.get_pixel,
-                          0, self.RASTER_HEIGHT + 1)
+        self.assertRaises(
+            ValueError, self.raster.get_pixel, 0, self.RASTER_HEIGHT + 1
+        )
 
     def test_get_pixel_invalid_coor(self):
         self.assertRaises(ValueError, self.raster.get_pixel, -1, -1)
-        self.assertRaises(ValueError, self.raster.get_pixel,
-                          self.RASTER_WIDTH + 1, self.RASTER_HEIGHT + 1)
+        self.assertRaises(
+            ValueError,
+            self.raster.get_pixel,
+            self.RASTER_WIDTH + 1,
+            self.RASTER_HEIGHT + 1,
+        )
 
     def test_get_pixel_type(self):
         self.assertEqual(type(self.raster.get_pixel(0, 0)), float)
@@ -1416,18 +1595,21 @@ class TestRaster(unittest.TestCase):
 
     def test_source_height_property(self):
         self.assertEqual(self.raster.source_height, self.RASTER_HEIGHT)
-        self.assertTrue(isinstance(self.raster.source_height,
-                                   numbers.Integral))
+        self.assertTrue(
+            isinstance(self.raster.source_height, numbers.Integral)
+        )
 
     def test_source_step_x_property(self):
         self.assertEqual(self.raster.source_step_x, 1)
-        self.assertTrue(isinstance(self.raster.source_step_x,
-                                   numbers.Integral))
+        self.assertTrue(
+            isinstance(self.raster.source_step_x, numbers.Integral)
+        )
 
     def test_source_step_y_property(self):
         self.assertEqual(self.raster.source_step_y, 1)
-        self.assertTrue(isinstance(self.raster.source_step_y,
-                                   numbers.Integral))
+        self.assertTrue(
+            isinstance(self.raster.source_step_y, numbers.Integral)
+        )
 
     def test_data_property(self):
         height = self.raster.get_height()
@@ -1482,11 +1664,13 @@ class TestRasterRead(TestRaster):
     def setUp(self):
         self.product = epr.Product(self.PRODUCT_FILE)
         self.band = self.product.get_band(self.BAND_NAME)
-        self.raster = self.band.create_compatible_raster(self.RASTER_WIDTH,
-                                                         self.RASTER_HEIGHT)
+        self.raster = self.band.create_compatible_raster(
+            self.RASTER_WIDTH, self.RASTER_HEIGHT
+        )
 
-        self.band.read_raster(self.RASTER_XOFFSET, self.RASTER_YOFFSET,
-                              self.raster)
+        self.band.read_raster(
+            self.RASTER_XOFFSET, self.RASTER_YOFFSET, self.raster
+        )
 
     def tearDown(self):
         self.product.close()
@@ -1494,8 +1678,9 @@ class TestRasterRead(TestRaster):
     def test_data_property_shared_semantics_readload(self):
         data1 = self.raster.data
         data1[0, 0] *= 2
-        self.band.read_raster(self.RASTER_XOFFSET, self.RASTER_YOFFSET,
-                              self.raster)
+        self.band.read_raster(
+            self.RASTER_XOFFSET, self.RASTER_YOFFSET, self.raster
+        )
         data2 = self.raster.data
         self.assertEqual(data1[0, 0], data2[0, 0])
         self.assertTrue(np.all(data1 == data2))
@@ -1509,17 +1694,17 @@ class TestAnnotatedRasterRead(TestRasterRead):
     TEST_DATA = TestAnnotationBand.TEST_DATA
     RTOL = 1e-6
 
-    @unittest.skipIf(EPR_C_BUG_PYEPR009, 'buggy EPR_C_API detected')
+    @unittest.skipIf(EPR_C_BUG_PYEPR009, "buggy EPR_C_API detected")
     def test_get_pixel(self):
-        super(TestAnnotatedRasterRead, self).test_get_pixel()
+        super().test_get_pixel()
 
-    @unittest.skipIf(EPR_C_BUG_PYEPR009, 'buggy EPR_C_API detected')
+    @unittest.skipIf(EPR_C_BUG_PYEPR009, "buggy EPR_C_API detected")
     def test_data_property(self):
-        super(TestAnnotatedRasterRead, self).test_data_property()
+        super().test_data_property()
 
-    @unittest.skipIf(EPR_C_BUG_PYEPR009, 'buggy EPR_C_API detected')
+    @unittest.skipIf(EPR_C_BUG_PYEPR009, "buggy EPR_C_API detected")
     def test_data_property_raster_scope(self):
-        super(TestAnnotatedRasterRead, self).test_data_property_raster_scope()
+        super().test_data_property_raster_scope()
 
 
 class TestRasterHighLevelAPI(unittest.TestCase):
@@ -1528,18 +1713,23 @@ class TestRasterHighLevelAPI(unittest.TestCase):
     RASTER_DATA_TYPE = epr.E_TID_FLOAT
 
     def setUp(self):
-        self.raster = epr.create_raster(self.RASTER_DATA_TYPE,
-                                        self.RASTER_WIDTH, self.RASTER_HEIGHT)
+        self.raster = epr.create_raster(
+            self.RASTER_DATA_TYPE, self.RASTER_WIDTH, self.RASTER_HEIGHT
+        )
 
     def test_repr(self):
-        pattern = (r'<epr.Raster object at 0x\w+> (?P<data_type>\w+) '
-                   r'\((?P<lines>\d+)L x (?P<pixels>\d+)P\)')
+        pattern = (
+            r"<epr.Raster object at 0x\w+> (?P<data_type>\w+) "
+            r"\((?P<lines>\d+)L x (?P<pixels>\d+)P\)"
+        )
         mobj = re.match(pattern, repr(self.raster))
         self.assertNotEqual(mobj, None)
-        self.assertEqual(mobj.group('data_type'),
-                         epr.data_type_id_to_str(self.raster.data_type))
-        self.assertEqual(mobj.group('lines'), str(self.raster.get_height()))
-        self.assertEqual(mobj.group('pixels'), str(self.raster.get_width()))
+        self.assertEqual(
+            mobj.group("data_type"),
+            epr.data_type_id_to_str(self.raster.data_type),
+        )
+        self.assertEqual(mobj.group("lines"), str(self.raster.get_height()))
+        self.assertEqual(mobj.group("pixels"), str(self.raster.get_width()))
 
     def test_repr_type(self):
         self.assertTrue(isinstance(repr(self.raster), str))
@@ -1554,8 +1744,9 @@ class TestRasterLowLevelAPI(unittest.TestCase):
     RASTER_DATA_TYPE = epr.E_TID_FLOAT
 
     def setUp(self):
-        self.raster = epr.create_raster(self.RASTER_DATA_TYPE,
-                                        self.RASTER_WIDTH, self.RASTER_HEIGHT)
+        self.raster = epr.create_raster(
+            self.RASTER_DATA_TYPE, self.RASTER_WIDTH, self.RASTER_HEIGHT
+        )
 
     def test_magic(self):
         self.assertEqual(self.raster._magic, epr._EPR_MAGIC_RASTER)
@@ -1563,10 +1754,10 @@ class TestRasterLowLevelAPI(unittest.TestCase):
 
 class TestRecord(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    OPEN_MODE = 'rb'
-    DATASET_NAME = 'MDS1_SQ_ADS'
+    OPEN_MODE = "rb"
+    DATASET_NAME = "MDS1_SQ_ADS"
     NUM_FIELD = 39
-    FIELD_NAME = 'input_missing_lines_flag'
+    FIELD_NAME = "input_missing_lines_flag"
     TOT_SIZE = 170
     RECORD_INDEX = 0
 
@@ -1590,7 +1781,7 @@ class TestRecord(unittest.TestCase):
         self.record.print(sys.stderr)
 
     def test_print_invalid_ostream(self):
-        self.assertRaises(TypeError, self.record.print, 'invalid')
+        self.assertRaises(TypeError, self.record.print, "invalid")
 
     @quiet
     def test_print_element(self):
@@ -1601,8 +1792,9 @@ class TestRecord(unittest.TestCase):
         self.record.print_element(0, 0, sys.stderr)
 
     def test_print_element_invalid_ostream(self):
-        self.assertRaises(TypeError, self.record.print_element, 0, 0,
-                          'invalid')
+        self.assertRaises(
+            TypeError, self.record.print_element, 0, 0, "invalid"
+        )
 
     @quiet  # quiet avoids errors when sys.stderr does not have fileno
     def test_print_element_field_out_of_range(self):
@@ -1618,13 +1810,13 @@ class TestRecord(unittest.TestCase):
         self.assertTrue(isinstance(field, epr.Field))
 
     def test_get_field_bytes(self):
-        field_name = self.FIELD_NAME.encode('UTF-8')
+        field_name = self.FIELD_NAME.encode("UTF-8")
         field = self.record.get_field(self.FIELD_NAME)
         self.assertTrue(isinstance(field_name, bytes))
         self.assertTrue(isinstance(field, epr.Field))
 
     def test_get_field_invlid_name(self):
-        self.assertRaises(ValueError, self.record.get_field, '')
+        self.assertRaises(ValueError, self.record.get_field, "")
 
     def test_get_field_at(self):
         self.assertTrue(isinstance(self.record.get_field_at(0), epr.Field))
@@ -1648,52 +1840,52 @@ class TestRecord(unittest.TestCase):
 
 
 class TestRecordRW(TestRecord):
-    OPEN_MODE = 'rb+'
+    OPEN_MODE = "rb+"
 
 
 class TestRecordHighLevelAPI(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = TestRecord.DATASET_NAME
     FIELD_NAMES = [
-        'zero_doppler_time',
-        'attach_flag',
-        'input_mean_flag',
-        'input_std_dev_flag',
-        'input_gaps_flag',
-        'input_missing_lines_flag',
-        'dop_cen_flag',
-        'dop_amb_flag',
-        'output_mean_flag',
-        'output_std_dev_flag',
-        'chirp_flag',
-        'missing_data_sets_flag',
-        'invalid_downlink_flag',
-        'spare_1',
-        'thresh_chirp_broadening',
-        'thresh_chirp_sidelobe',
-        'thresh_chirp_islr',
-        'thresh_input_mean',
-        'exp_input_mean',
-        'thresh_input_std_dev',
-        'exp_input_std_dev',
-        'thresh_dop_cen',
-        'thresh_dop_amb',
-        'thresh_output_mean',
-        'exp_output_mean',
-        'thresh_output_std_dev',
-        'exp_output_std_dev',
-        'thresh_input_missing_lines',
-        'thresh_input_gaps',
-        'lines_per_gaps',
-        'spare_2',
-        'input_mean',
-        'input_std_dev',
-        'num_gaps',
-        'num_missing_lines',
-        'output_mean',
-        'output_std_dev',
-        'tot_errors',
-        'Spare_3',
+        "zero_doppler_time",
+        "attach_flag",
+        "input_mean_flag",
+        "input_std_dev_flag",
+        "input_gaps_flag",
+        "input_missing_lines_flag",
+        "dop_cen_flag",
+        "dop_amb_flag",
+        "output_mean_flag",
+        "output_std_dev_flag",
+        "chirp_flag",
+        "missing_data_sets_flag",
+        "invalid_downlink_flag",
+        "spare_1",
+        "thresh_chirp_broadening",
+        "thresh_chirp_sidelobe",
+        "thresh_chirp_islr",
+        "thresh_input_mean",
+        "exp_input_mean",
+        "thresh_input_std_dev",
+        "exp_input_std_dev",
+        "thresh_dop_cen",
+        "thresh_dop_amb",
+        "thresh_output_mean",
+        "exp_output_mean",
+        "thresh_output_std_dev",
+        "exp_output_std_dev",
+        "thresh_input_missing_lines",
+        "thresh_input_gaps",
+        "lines_per_gaps",
+        "spare_2",
+        "input_mean",
+        "input_std_dev",
+        "num_gaps",
+        "num_missing_lines",
+        "output_mean",
+        "output_std_dev",
+        "tot_errors",
+        "Spare_3",
     ]
 
     def setUp(self):
@@ -1705,12 +1897,15 @@ class TestRecordHighLevelAPI(unittest.TestCase):
         self.product.close()
 
     def test_get_field_names_number(self):
-        self.assertEqual(len(self.record.get_field_names()),
-                         self.record.get_num_fields())
+        self.assertEqual(
+            len(self.record.get_field_names()), self.record.get_num_fields()
+        )
 
     def test_get_field_names(self):
-        self.assertEqual(self.record.get_field_names()[:len(self.FIELD_NAMES)],
-                         self.FIELD_NAMES)
+        self.assertEqual(
+            self.record.get_field_names()[: len(self.FIELD_NAMES)],
+            self.FIELD_NAMES,
+        )
 
     def test_fields(self):
         fields = self.record.fields()
@@ -1767,40 +1962,40 @@ class TestMultipleRecordsHighLevelAPI(unittest.TestCase):
         self.product.close()
 
     def test_repr(self):
-        pattern = r'<epr\.Record object at 0x\w+> (?P<num>\d+) fields'
+        pattern = r"<epr\.Record object at 0x\w+> (?P<num>\d+) fields"
         for record in self.dataset:
             mobj = re.match(pattern, repr(record))
             self.assertNotEqual(mobj, None)
-            self.assertEqual(mobj.group('num'), str(record.get_num_fields()))
+            self.assertEqual(mobj.group("num"), str(record.get_num_fields()))
 
     def test_str_vs_print(self):
         for record in self.dataset:
-            with tempfile.TemporaryFile('w+') as fd:
+            with tempfile.TemporaryFile("w+") as fd:
                 record.print(fd)
                 fd.flush()
                 fd.seek(0)
                 data = fd.read()
-                if data.endswith('\n'):
+                if data.endswith("\n"):
                     data = data[:-1]
                 self.assertEqual(data, str(record))
 
 
 class TestMphRecordHighLevelAPI(TestRecordHighLevelAPI):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    DATASET_NAME = 'MPH'
+    DATASET_NAME = "MPH"
     FIELD_NAMES = [
-        'PRODUCT',
-        'PROC_STAGE',
-        'REF_DOC',
-        'ACQUISITION_STATION',
-        'PROC_CENTER',
-        'PROC_TIME',
-        'SOFTWARE_VER',
-        'SENSING_START',
-        'SENSING_STOP',
-        'PHASE',
-        'CYCLE',
-        'REL_ORBIT',
+        "PRODUCT",
+        "PROC_STAGE",
+        "REF_DOC",
+        "ACQUISITION_STATION",
+        "PROC_CENTER",
+        "PROC_TIME",
+        "SOFTWARE_VER",
+        "SENSING_START",
+        "SENSING_STOP",
+        "PHASE",
+        "CYCLE",
+        "REL_ORBIT",
     ]
 
     def setUp(self):
@@ -1816,9 +2011,9 @@ class TestMphRecordHighLevelAPI(TestRecordHighLevelAPI):
 
 class TestRecordOnClosedProduct(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    DATASET_NAME = 'MDS1_SQ_ADS'
+    DATASET_NAME = "MDS1_SQ_ADS"
     NUM_FIELD = 39
-    FIELD_NAME = 'input_missing_lines_flag'
+    FIELD_NAME = "input_missing_lines_flag"
     FIELD_NAMES = TestRecordHighLevelAPI.FIELD_NAMES
 
     def setUp(self):
@@ -1864,23 +2059,23 @@ class TestRecordOnClosedProduct(unittest.TestCase):
 
 class TestField(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    OPEN_MODE = 'rb'
-    DATASET_NAME = 'MDS1_SQ_ADS'
+    OPEN_MODE = "rb"
+    DATASET_NAME = "MDS1_SQ_ADS"
     RECORD_INDEX = 0
 
-    FIELD_NAME = 'input_missing_lines_flag'
+    FIELD_NAME = "input_missing_lines_flag"
     FIELD_DESCRIPTION = (
-        'Missing lines significant flag. '
-        '0 = percentage of missing lines &lt;= threshold value '
-        '1 = percentage of missing lines &gt; threshold value. '
-        'The number of missing lines is the number of lines missing from '
-        'the input data excluding data gaps.'
+        "Missing lines significant flag. "
+        "0 = percentage of missing lines &lt;= threshold value "
+        "1 = percentage of missing lines &gt; threshold value. "
+        "The number of missing lines is the number of lines missing from "
+        "the input data excluding data gaps."
     )
     FIELD_TYPE = epr.E_TID_UCHAR
     # FIELD_TYPE_NAME = 'uchar'
     FIELD_NUM_ELEMS = 1
     FIELD_VALUES = (0,)
-    FIELD_UNIT = 'flag'
+    FIELD_UNIT = "flag"
     FIELD_OFFSET = 16
 
     def setUp(self):
@@ -1901,7 +2096,7 @@ class TestField(unittest.TestCase):
         self.field.print(sys.stderr)
 
     def test_print_fied_invalid_ostream(self):
-        self.assertRaises(TypeError, self.field.print, 'invalid')
+        self.assertRaises(TypeError, self.field.print, "invalid")
 
     def test_get_unit(self):
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
@@ -1928,15 +2123,16 @@ class TestField(unittest.TestCase):
         self.assertEqual(self.field.get_elem(0), self.FIELD_VALUES[0])
 
     def test_get_elem_invalid_index(self):
-        self.assertRaises(ValueError, self.field.get_elem,
-                          self.FIELD_NUM_ELEMS + 10)
+        self.assertRaises(
+            ValueError, self.field.get_elem, self.FIELD_NUM_ELEMS + 10
+        )
 
     def test_get_elems(self):
         vect = self.field.get_elems()
         self.assertTrue(isinstance(vect, np.ndarray))
         self.assertEqual(vect.shape, (self.field.get_num_elems(),))
         self.assertEqual(vect.dtype, epr.get_numpy_dtype(self.FIELD_TYPE))
-        npt.assert_allclose(vect[:len(self.FIELD_VALUES)], self.FIELD_VALUES)
+        npt.assert_allclose(vect[: len(self.FIELD_VALUES)], self.FIELD_VALUES)
 
     def test_tot_size(self):
         elem_size = epr.get_data_type_size(self.FIELD_TYPE)
@@ -1945,24 +2141,24 @@ class TestField(unittest.TestCase):
 
 
 class TestFieldRW(TestField):
-    OPEN_MODE = 'rb+'
+    OPEN_MODE = "rb+"
 
 
 class TestFieldWriteOnReadOnly(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    OPEN_MODE = 'rb'
-    DATASET_NAME = 'MDS1'
+    OPEN_MODE = "rb"
+    DATASET_NAME = "MDS1"
     RECORD_INDEX = 10
 
-    FIELD_NAME = 'proc_data'
-    FIELD_DESCRIPTION = 'SAR Processed Data. Real samples (detected products)'
+    FIELD_NAME = "proc_data"
+    FIELD_DESCRIPTION = "SAR Processed Data. Real samples (detected products)"
     FIELD_TYPE = epr.E_TID_USHORT
-    FIELD_TYPE_NAME = 'ushort'
-    FIELD_UNIT = ''
+    FIELD_TYPE_NAME = "ushort"
+    FIELD_UNIT = ""
     FIELD_NUM_ELEMS = 1452
 
     def setUp(self):
-        self.filename = self.PRODUCT_FILE + '_'
+        self.filename = self.PRODUCT_FILE + "_"
         shutil.copy(self.PRODUCT_FILE, self.filename)
         self.product = epr.Product(self.filename, self.OPEN_MODE)
         dataset = self.product.get_dataset(self.DATASET_NAME)
@@ -1980,16 +2176,16 @@ class TestFieldWriteOnReadOnly(unittest.TestCase):
 
 class TestFieldWrite(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    OPEN_MODE = 'rb+'
+    OPEN_MODE = "rb+"
     REOPEN = False
-    DATASET_NAME = 'MDS1'
+    DATASET_NAME = "MDS1"
     RECORD_INDEX = 100
 
-    FIELD_NAME = 'proc_data'
-    FIELD_DESCRIPTION = 'SAR Processed Data. Real samples (detected products)'
+    FIELD_NAME = "proc_data"
+    FIELD_DESCRIPTION = "SAR Processed Data. Real samples (detected products)"
     FIELD_TYPE = epr.E_TID_USHORT
-    FIELD_TYPE_NAME = 'ushort'
-    FIELD_UNIT = ''
+    FIELD_TYPE_NAME = "ushort"
+    FIELD_UNIT = ""
     FIELD_INDEX = 3
     FIELD_NUM_ELEMS = 1452
     FIELD_VALUES = (
@@ -2001,7 +2197,7 @@ class TestFieldWrite(unittest.TestCase):
     )
 
     def setUp(self):
-        self.filename = self.PRODUCT_FILE + '_'
+        self.filename = self.PRODUCT_FILE + "_"
         shutil.copy(self.PRODUCT_FILE, self.filename)
         self.product = None
         self.dataset = None
@@ -2022,7 +2218,7 @@ class TestFieldWrite(unittest.TestCase):
         self.product.close()
         os.unlink(self.filename)
 
-    def reopen(self, mode='rb'):
+    def reopen(self, mode="rb"):
         if self.product is not None:
             self.product.close()
         self.product = epr.Product(self.filename, mode)
@@ -2042,8 +2238,10 @@ class TestFieldWrite(unittest.TestCase):
         self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
         self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
         self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
-        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
-                         self.FIELD_TYPE_NAME)
+        self.assertEqual(
+            epr.data_type_id_to_str(self.field.get_type()),
+            self.FIELD_TYPE_NAME,
+        )
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
 
         value = self.field.get_elem() + 10
@@ -2057,14 +2255,16 @@ class TestFieldWrite(unittest.TestCase):
         self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
         self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
         self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
-        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
-                         self.FIELD_TYPE_NAME)
+        self.assertEqual(
+            epr.data_type_id_to_str(self.field.get_type()),
+            self.FIELD_TYPE_NAME,
+        )
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
 
     def test_set_elem_data(self):
         npt.assert_array_equal(
-            self.field.get_elems()[:len(self.FIELD_VALUES)],
-            self.FIELD_VALUES)
+            self.field.get_elems()[: len(self.FIELD_VALUES)], self.FIELD_VALUES
+        )
         self.assertEqual(self.field.get_elem(), self.FIELD_VALUES[0])
 
         value = self.field.get_elem() + 10
@@ -2080,7 +2280,8 @@ class TestFieldWrite(unittest.TestCase):
         values = np.array(self.FIELD_VALUES)
         values[0] = value
         npt.assert_array_equal(
-            self.field.get_elems()[:len(self.FIELD_VALUES)], values)
+            self.field.get_elems()[: len(self.FIELD_VALUES)], values
+        )
 
     def test_set_elem_rawdata(self):
         orig_data = self.read()
@@ -2097,7 +2298,7 @@ class TestFieldWrite(unittest.TestCase):
         self.assertNotEqual(data, orig_data)
 
         dtype = np.dtype(epr.get_numpy_dtype(self.FIELD_TYPE))
-        if dtype.byteorder != '>':
+        if dtype.byteorder != ">":
             dtype = dtype.newbyteorder()
 
         data = np.frombuffer(data, dtype)
@@ -2109,8 +2310,10 @@ class TestFieldWrite(unittest.TestCase):
         self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
         self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
         self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
-        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
-                         self.FIELD_TYPE_NAME)
+        self.assertEqual(
+            epr.data_type_id_to_str(self.field.get_type()),
+            self.FIELD_TYPE_NAME,
+        )
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
 
         value = self.field.get_elem(0) + 10
@@ -2124,14 +2327,16 @@ class TestFieldWrite(unittest.TestCase):
         self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
         self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
         self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
-        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
-                         self.FIELD_TYPE_NAME)
+        self.assertEqual(
+            epr.data_type_id_to_str(self.field.get_type()),
+            self.FIELD_TYPE_NAME,
+        )
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
 
     def test_set_elem0_data(self):
         npt.assert_array_equal(
-            self.field.get_elems()[:len(self.FIELD_VALUES)],
-            self.FIELD_VALUES)
+            self.field.get_elems()[: len(self.FIELD_VALUES)], self.FIELD_VALUES
+        )
         self.assertEqual(self.field.get_elem(0), self.FIELD_VALUES[0])
 
         value = self.field.get_elem(0) + 10
@@ -2147,7 +2352,8 @@ class TestFieldWrite(unittest.TestCase):
         values = np.array(self.FIELD_VALUES)
         values[0] = value
         npt.assert_array_equal(
-            self.field.get_elems()[:len(self.FIELD_VALUES)], values)
+            self.field.get_elems()[: len(self.FIELD_VALUES)], values
+        )
 
     def test_set_elem0_rawdata(self):
         orig_data = self.read()
@@ -2164,7 +2370,7 @@ class TestFieldWrite(unittest.TestCase):
         self.assertNotEqual(data, orig_data)
 
         dtype = np.dtype(epr.get_numpy_dtype(self.FIELD_TYPE))
-        if dtype.byteorder != '>':
+        if dtype.byteorder != ">":
             dtype = dtype.newbyteorder()
 
         data = np.frombuffer(data, dtype)
@@ -2176,8 +2382,10 @@ class TestFieldWrite(unittest.TestCase):
         self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
         self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
         self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
-        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
-                         self.FIELD_TYPE_NAME)
+        self.assertEqual(
+            epr.data_type_id_to_str(self.field.get_type()),
+            self.FIELD_TYPE_NAME,
+        )
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
 
         value = self.field.get_elem(20) + 1
@@ -2191,14 +2399,16 @@ class TestFieldWrite(unittest.TestCase):
         self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
         self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
         self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
-        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
-                         self.FIELD_TYPE_NAME)
+        self.assertEqual(
+            epr.data_type_id_to_str(self.field.get_type()),
+            self.FIELD_TYPE_NAME,
+        )
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
 
     def test_set_elem20_data(self):
         npt.assert_array_equal(
-            self.field.get_elems()[:len(self.FIELD_VALUES)],
-            self.FIELD_VALUES)
+            self.field.get_elems()[: len(self.FIELD_VALUES)], self.FIELD_VALUES
+        )
         self.assertEqual(self.field.get_elem(20), self.FIELD_VALUES[20])
 
         value = self.field.get_elem(20) + 1
@@ -2214,7 +2424,8 @@ class TestFieldWrite(unittest.TestCase):
         values = np.array(self.FIELD_VALUES)
         values[20] = value
         npt.assert_array_equal(
-            self.field.get_elems()[:len(self.FIELD_VALUES)], values)
+            self.field.get_elems()[: len(self.FIELD_VALUES)], values
+        )
 
     def test_set_elem20_rawdata(self):
         orig_data = self.read()
@@ -2231,7 +2442,7 @@ class TestFieldWrite(unittest.TestCase):
         self.assertNotEqual(data, orig_data)
 
         dtype = np.dtype(epr.get_numpy_dtype(self.FIELD_TYPE))
-        if dtype.byteorder != '>':
+        if dtype.byteorder != ">":
             dtype = dtype.newbyteorder()
 
         data = np.frombuffer(data, dtype)
@@ -2243,8 +2454,10 @@ class TestFieldWrite(unittest.TestCase):
         self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
         self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
         self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
-        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
-                         self.FIELD_TYPE_NAME)
+        self.assertEqual(
+            epr.data_type_id_to_str(self.field.get_type()),
+            self.FIELD_TYPE_NAME,
+        )
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
 
         values = self.field.get_elems() + 1
@@ -2258,14 +2471,16 @@ class TestFieldWrite(unittest.TestCase):
         self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
         self.assertEqual(self.field.get_num_elems(), self.FIELD_NUM_ELEMS)
         self.assertEqual(self.field.get_type(), self.FIELD_TYPE)
-        self.assertEqual(epr.data_type_id_to_str(self.field.get_type()),
-                         self.FIELD_TYPE_NAME)
+        self.assertEqual(
+            epr.data_type_id_to_str(self.field.get_type()),
+            self.FIELD_TYPE_NAME,
+        )
         self.assertEqual(self.field.get_unit(), self.FIELD_UNIT)
 
     def test_set_elems_data(self):
         npt.assert_array_equal(
-            self.field.get_elems()[:len(self.FIELD_VALUES)],
-            self.FIELD_VALUES)
+            self.field.get_elems()[: len(self.FIELD_VALUES)], self.FIELD_VALUES
+        )
 
         values = self.field.get_elems() + 1
         self.field.set_elems(values)
@@ -2292,7 +2507,7 @@ class TestFieldWrite(unittest.TestCase):
         self.assertNotEqual(data, orig_data)
 
         dtype = np.dtype(epr.get_numpy_dtype(self.FIELD_TYPE))
-        if dtype.byteorder != '>':
+        if dtype.byteorder != ">":
             dtype = dtype.newbyteorder()
 
         data = np.frombuffer(data, dtype)
@@ -2312,17 +2527,17 @@ class TestFieldWriteReopen(TestFieldWrite):
 
 class TestTimeField(TestField):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    DATASET_NAME = 'MDS1_SQ_ADS'
+    DATASET_NAME = "MDS1_SQ_ADS"
 
-    FIELD_NAME = 'zero_doppler_time'
-    FIELD_DESCRIPTION = 'Zero doppler time at which SQ information applies'
+    FIELD_NAME = "zero_doppler_time"
+    FIELD_DESCRIPTION = "Zero doppler time at which SQ information applies"
     FIELD_TYPE = epr.E_TID_TIME
-    FIELD_TYPE_NAME = 'time'
+    FIELD_TYPE_NAME = "time"
     FIELD_NUM_ELEMS = 1
     FIELD_VALUES = (
         epr.EPRTime(days=3567, seconds=10588, microseconds=239091),
     )
-    FIELD_UNIT = 'MJD'
+    FIELD_UNIT = "MJD"
     FIELD_OFFSET = 0
 
     def test_get_elems(self):
@@ -2331,21 +2546,21 @@ class TestTimeField(TestField):
         self.assertEqual(vect.shape, (self.field.get_num_elems(),))
         self.assertEqual(vect.dtype, epr.MJD)
         value = self.FIELD_VALUES[0]
-        self.assertEqual(vect[0]['days'], value.days)
-        self.assertEqual(vect[0]['seconds'], value.seconds)
-        self.assertEqual(vect[0]['microseconds'], value.microseconds)
+        self.assertEqual(vect[0]["days"], value.days)
+        self.assertEqual(vect[0]["seconds"], value.seconds)
+        self.assertEqual(vect[0]["microseconds"], value.microseconds)
 
 
 class TestFieldWithMiltipleElems(TestField):
     DATASET_NAME = TestProduct.DATASET_NAME
     RECORD_INDEX = TestFieldWrite.RECORD_INDEX
-    FIELD_NAME = 'proc_data'
-    FIELD_DESCRIPTION = 'SAR Processed Data. Real samples (detected products)'
+    FIELD_NAME = "proc_data"
+    FIELD_DESCRIPTION = "SAR Processed Data. Real samples (detected products)"
     FIELD_TYPE = epr.E_TID_USHORT
-    FIELD_TYPE_NAME = 'ushort'
+    FIELD_TYPE_NAME = "ushort"
     FIELD_NUM_ELEMS = 1452
     FIELD_VALUES = TestFieldWrite.FIELD_VALUES
-    FIELD_UNIT = ''
+    FIELD_UNIT = ""
     FIELD_OFFSET = 17
 
 
@@ -2362,15 +2577,18 @@ class TestFieldHighLevelAPI(unittest.TestCase):
         self.product.close()
 
     def test_repr(self):
-        pattern = (r'epr\.Field\("(?P<name>.+)"\) (?P<num>\d+) '
-                   r'(?P<type>\w+) elements')
+        pattern = (
+            r'epr\.Field\("(?P<name>.+)"\) (?P<num>\d+) '
+            r"(?P<type>\w+) elements"
+        )
         for field in self.record:
             mobj = re.match(pattern, repr(field))
             self.assertNotEqual(mobj, None)
-            self.assertEqual(mobj.group('name'), field.get_name())
-            self.assertEqual(mobj.group('num'), str(field.get_num_elems()))
-            self.assertEqual(mobj.group('type'),
-                             epr.data_type_id_to_str(field.get_type()))
+            self.assertEqual(mobj.group("name"), field.get_name())
+            self.assertEqual(mobj.group("num"), str(field.get_num_elems()))
+            self.assertEqual(
+                mobj.group("type"), epr.data_type_id_to_str(field.get_type())
+            )
 
     def test_repr_type(self):
         field = self.record.get_field_at(0)
@@ -2382,12 +2600,12 @@ class TestFieldHighLevelAPI(unittest.TestCase):
 
     def test_str_vs_print(self):
         for field in self.record:
-            with tempfile.TemporaryFile('w+') as fd:
+            with tempfile.TemporaryFile("w+") as fd:
                 field.print(fd)
                 fd.flush()
                 fd.seek(0)
                 data = fd.read()
-                if data.endswith('\n'):
+                if data.endswith("\n"):
                     data = data[:-1]
                 self.assertEqual(data, str(field))
 
@@ -2420,7 +2638,7 @@ class TestFieldHighLevelAPI(unittest.TestCase):
 
 class TestFieldHighLevelAPI2(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    DATASET_NAME = 'MAIN_PROCESSING_PARAMS_ADS'
+    DATASET_NAME = "MAIN_PROCESSING_PARAMS_ADS"
     RECORD_INDEX = 0
 
     def setUp(self):
@@ -2432,25 +2650,25 @@ class TestFieldHighLevelAPI2(unittest.TestCase):
     def test_len_1(self):
         dataset = self.product.get_dataset(self.DATASET_NAME)
         record = dataset.read_record(self.RECORD_INDEX)
-        field = record.get_field('range_spacing')
+        field = record.get_field("range_spacing")
         self.assertEqual(len(field), field.get_num_elems())
 
     def test_len_x(self):
         dataset = self.product.get_dataset(self.DATASET_NAME)
         record = dataset.read_record(self.RECORD_INDEX)
-        field = record.get_field('image_parameters.prf_value')
+        field = record.get_field("image_parameters.prf_value")
         self.assertEqual(len(field), field.get_num_elems())
 
     def test_len_e_tid_unknown(self):
         dataset = self.product.get_dataset(self.DATASET_NAME)
         record = dataset.read_record(self.RECORD_INDEX)
-        field = record.get_field('spare_1')
+        field = record.get_field("spare_1")
         self.assertEqual(len(field), field.get_num_elems())
 
     def test_len_e_tid_string(self):
         dataset = self.product.get_dataset(self.DATASET_NAME)
         record = dataset.read_record(self.RECORD_INDEX)
-        field = record.get_field('swath_id')
+        field = record.get_field("swath_id")
         self.assertEqual(len(field), len(field.get_elem()))
 
 
@@ -2458,7 +2676,7 @@ class TestFieldLowLevelAPI(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_INDEX = 0
     RECORD_INDEX = 0
-    FIELD_NAME = 'invalid_downlink_flag'
+    FIELD_NAME = "invalid_downlink_flag"
     FIELD_OFFSET = 23
 
     def setUp(self):
@@ -2479,10 +2697,10 @@ class TestFieldLowLevelAPI(unittest.TestCase):
 
 class TestFieldOnClosedProduct(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    DATASET_NAME = 'MDS1_SQ_ADS'
+    DATASET_NAME = "MDS1_SQ_ADS"
     RECOSR_INDEX = 0
-    FIELD_NAME = 'invalid_downlink_flag'
-    FIELD_NAME2 = 'zero_doppler_time'
+    FIELD_NAME = "invalid_downlink_flag"
+    FIELD_NAME2 = "zero_doppler_time"
 
     def setUp(self):
         product = epr.Product(self.PRODUCT_FILE)
@@ -2534,11 +2752,11 @@ class TestFieldOnClosedProduct(unittest.TestCase):
 
 class TestDSD(unittest.TestCase):
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    OPEN_MODE = 'rb'
+    OPEN_MODE = "rb"
     DSD_INDEX = 0
-    DS_NAME = 'MDS1 SQ ADS'
+    DS_NAME = "MDS1 SQ ADS"
     DS_OFFSET = 7346
-    DS_TYPE = 'A'
+    DS_TYPE = "A"
     DS_SIZE = 170
     DSR_SIZE = 170
     NUM_DSR = 1
@@ -2563,7 +2781,7 @@ class TestDSD(unittest.TestCase):
         self.assertTrue(isinstance(self.dsd.ds_type, str))
 
     def test_filename(self):
-        self.assertEqual(self.dsd.filename, '')
+        self.assertEqual(self.dsd.filename, "")
         self.assertTrue(isinstance(self.dsd.filename, str))
 
     def test_ds_offset(self):
@@ -2606,7 +2824,7 @@ class TestDSD(unittest.TestCase):
 
 
 class TestDSDRW(TestDSD):
-    OPEN_MODE = 'rb+'
+    OPEN_MODE = "rb+"
 
 
 class TestDsdHighLevelAPI(unittest.TestCase):
@@ -2623,7 +2841,7 @@ class TestDsdHighLevelAPI(unittest.TestCase):
         pattern = r'epr\.DSD\("(?P<name>.+)"\)'
         mobj = re.match(pattern, repr(self.dsd))
         self.assertNotEqual(mobj, None)
-        self.assertEqual(mobj.group('name'), self.dsd.ds_name)
+        self.assertEqual(mobj.group("name"), self.dsd.ds_name)
 
     def test_repr_type(self):
         self.assertTrue(isinstance(repr(self.dsd), str))
@@ -2658,28 +2876,28 @@ class TestDSDOnCloserProduct(unittest.TestCase):
         self.product.close()
 
     def test_index(self):
-        self.assertRaises(ValueError, getattr, self.dsd, 'index')
+        self.assertRaises(ValueError, getattr, self.dsd, "index")
 
     def test_ds_name(self):
-        self.assertRaises(ValueError, getattr, self.dsd, 'ds_name')
+        self.assertRaises(ValueError, getattr, self.dsd, "ds_name")
 
     def test_ds_type(self):
-        self.assertRaises(ValueError, getattr, self.dsd, 'ds_type')
+        self.assertRaises(ValueError, getattr, self.dsd, "ds_type")
 
     def test_filename(self):
-        self.assertRaises(ValueError, getattr, self.dsd, 'filename')
+        self.assertRaises(ValueError, getattr, self.dsd, "filename")
 
     def test_ds_offset(self):
-        self.assertRaises(ValueError, getattr, self.dsd, 'ds_offset')
+        self.assertRaises(ValueError, getattr, self.dsd, "ds_offset")
 
     def test_ds_size(self):
-        self.assertRaises(ValueError, getattr, self.dsd, 'ds_size')
+        self.assertRaises(ValueError, getattr, self.dsd, "ds_size")
 
     def test_num_dsr(self):
-        self.assertRaises(ValueError, getattr, self.dsd, 'num_dsr')
+        self.assertRaises(ValueError, getattr, self.dsd, "num_dsr")
 
     def test_dsr_size(self):
-        self.assertRaises(ValueError, getattr, self.dsd, 'dsr_size')
+        self.assertRaises(ValueError, getattr, self.dsd, "dsr_size")
 
     def test_eq(self):
         self.assertRaises(ValueError, operator.eq, self.dsd, self.dsd2)
@@ -2696,48 +2914,48 @@ class TestDSDOnCloserProduct(unittest.TestCase):
 
 class TestDataypeFunctions(unittest.TestCase):
     TYPE_NAMES = {
-        epr.E_TID_UNKNOWN: '',
-        epr.E_TID_UCHAR:   'uchar',
-        epr.E_TID_CHAR:    'char',
-        epr.E_TID_USHORT:  'ushort',
-        epr.E_TID_SHORT:   'short',
-        epr.E_TID_UINT:    'uint',
-        epr.E_TID_INT:     'int',
-        epr.E_TID_FLOAT:   'float',
-        epr.E_TID_DOUBLE:  'double',
-        epr.E_TID_STRING:  'string',
-        epr.E_TID_SPARE:   'spare',
-        epr.E_TID_TIME:    'time',
+        epr.E_TID_UNKNOWN: "",
+        epr.E_TID_UCHAR: "uchar",
+        epr.E_TID_CHAR: "char",
+        epr.E_TID_USHORT: "ushort",
+        epr.E_TID_SHORT: "short",
+        epr.E_TID_UINT: "uint",
+        epr.E_TID_INT: "int",
+        epr.E_TID_FLOAT: "float",
+        epr.E_TID_DOUBLE: "double",
+        epr.E_TID_STRING: "string",
+        epr.E_TID_SPARE: "spare",
+        epr.E_TID_TIME: "time",
     }
 
     TYPE_SIZES = {
         epr.E_TID_UNKNOWN: 0,
-        epr.E_TID_UCHAR:   1,
-        epr.E_TID_CHAR:    1,
-        epr.E_TID_USHORT:  2,
-        epr.E_TID_SHORT:   2,
-        epr.E_TID_UINT:    4,
-        epr.E_TID_INT:     4,
-        epr.E_TID_FLOAT:   4,
-        epr.E_TID_DOUBLE:  8,
-        epr.E_TID_STRING:  1,
-        epr.E_TID_SPARE:   1,
-        epr.E_TID_TIME:    12,
+        epr.E_TID_UCHAR: 1,
+        epr.E_TID_CHAR: 1,
+        epr.E_TID_USHORT: 2,
+        epr.E_TID_SHORT: 2,
+        epr.E_TID_UINT: 4,
+        epr.E_TID_INT: 4,
+        epr.E_TID_FLOAT: 4,
+        epr.E_TID_DOUBLE: 8,
+        epr.E_TID_STRING: 1,
+        epr.E_TID_SPARE: 1,
+        epr.E_TID_TIME: 12,
     }
 
     TYPE_MAP = {
         epr.E_TID_UNKNOWN: None,
-        epr.E_TID_UCHAR:   np.uint8,
-        epr.E_TID_CHAR:    np.int8,
-        epr.E_TID_USHORT:  np.uint16,
-        epr.E_TID_SHORT:   np.int16,
-        epr.E_TID_UINT:    np.uint32,
-        epr.E_TID_INT:     np.int32,
-        epr.E_TID_FLOAT:   np.float32,
-        epr.E_TID_DOUBLE:  np.float64,
-        epr.E_TID_STRING:  np.bytes_,
-        epr.E_TID_SPARE:   None,
-        epr.E_TID_TIME:    epr.MJD,
+        epr.E_TID_UCHAR: np.uint8,
+        epr.E_TID_CHAR: np.int8,
+        epr.E_TID_USHORT: np.uint16,
+        epr.E_TID_SHORT: np.int16,
+        epr.E_TID_UINT: np.uint32,
+        epr.E_TID_INT: np.int32,
+        epr.E_TID_FLOAT: np.float32,
+        epr.E_TID_DOUBLE: np.float64,
+        epr.E_TID_STRING: np.bytes_,
+        epr.E_TID_SPARE: None,
+        epr.E_TID_TIME: epr.MJD,
     }
 
     def test_data_type_id_to_str(self):
@@ -2745,7 +2963,7 @@ class TestDataypeFunctions(unittest.TestCase):
             self.assertEqual(epr.data_type_id_to_str(type_id), type_name)
 
     def test_data_type_id_to_str_invalid(self):
-        self.assertEqual(epr.data_type_id_to_str(500), '')
+        self.assertEqual(epr.data_type_id_to_str(500), "")
 
     def test_get_data_type_size(self):
         for type_id, type_size in self.TYPE_SIZES.items():
@@ -2758,14 +2976,15 @@ class TestDataypeFunctions(unittest.TestCase):
         for epr_type in self.TYPE_MAP:
             with self.subTest(epr_type=epr_type):
                 self.assertEqual(
-                    epr.get_numpy_dtype(epr_type), self.TYPE_MAP[epr_type])
+                    epr.get_numpy_dtype(epr_type), self.TYPE_MAP[epr_type]
+                )
 
 
 class TestScalingMethodFunctions(unittest.TestCase):
     METHOD_NAMES = {
-        epr.E_SMID_NON: 'NONE',
-        epr.E_SMID_LIN: 'LIN',
-        epr.E_SMID_LOG: 'LOG',
+        epr.E_SMID_NON: "NONE",
+        epr.E_SMID_LIN: "LIN",
+        epr.E_SMID_LOG: "LOG",
     }
 
     def test_get_scaling_method_name(self):
@@ -2778,11 +2997,11 @@ class TestScalingMethodFunctions(unittest.TestCase):
 
 class TestSampleModelFunctions(unittest.TestCase):
     MODEL_NAMES = {
-        epr.E_SMOD_1OF1: '1OF1',
-        epr.E_SMOD_1OF2: '1OF2',
-        epr.E_SMOD_2OF2: '2OF2',
-        epr.E_SMOD_3TOI: '3TOI',
-        epr.E_SMOD_2TOF: '2TOF',
+        epr.E_SMOD_1OF1: "1OF1",
+        epr.E_SMOD_1OF2: "1OF2",
+        epr.E_SMOD_2OF2: "2OF2",
+        epr.E_SMOD_3TOI: "3TOI",
+        epr.E_SMOD_2TOF: "2TOF",
     }
 
     def test_get_scaling_method_name(self):
@@ -2821,7 +3040,7 @@ class TestDirectInstantiation(unittest.TestCase):
         self.assertRaisesRegex(TypeError, pattern, epr.Dataset)
 
     def test_direct_Product_instantiation(self):
-        self.assertRaises(epr.EPRError, epr.Product, 'filename')
+        self.assertRaises(epr.EPRError, epr.Product, "filename")
 
 
 class TestLibVersion(unittest.TestCase):
@@ -2830,14 +3049,16 @@ class TestLibVersion(unittest.TestCase):
 
 
 # only PyPy 3 seems to be affected
-@unittest.skipIf(platform.python_implementation() == 'PyPy',
-                 'skip memory leak check on PyPy')
+@unittest.skipIf(
+    platform.python_implementation() == "PyPy",
+    "skip memory leak check on PyPy",
+)
 @unittest.skipIf(resource is None, '"resource" module not available')
 class TestMemoryLeaks(unittest.TestCase):
     # See gh-10 (https://github.com/avalentino/pyepr/issues/10)
 
     PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-    BAND_NAME = 'incident_angle'
+    BAND_NAME = "incident_angle"
 
     def test_memory_leacks_on_read_as_array(self):
         N = 10
@@ -2851,9 +3072,9 @@ class TestMemoryLeaks(unittest.TestCase):
         self.assertLessEqual(m2 - m1, 8)
 
 
-if __name__ == '__main__':
-    print('PyEPR: %s' % epr.__version__)
-    print('EPR API: %s' % epr.EPR_C_API_VERSION)
-    print('Numpy: %s' % np.__version__)
-    print('Python: %s' % sys.version)
+if __name__ == "__main__":
+    print("PyEPR: %s" % epr.__version__)
+    print("EPR API: %s" % epr.EPR_C_API_VERSION)
+    print("Numpy: %s" % np.__version__)
+    print("Python: %s" % sys.version)
     unittest.main()
