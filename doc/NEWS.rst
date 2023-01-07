@@ -12,6 +12,7 @@ PyEPR 1.1.4 (UNRELEASED)
   - drop local sphinxect for IPython console highlighting
   - use the RTD sphinx theme
   - update sidebar templates
+* Fix comparibility with `packaging` v22.0.
 
 
 PyEPR 1.1.3 (13/09/2021)
