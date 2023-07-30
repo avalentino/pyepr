@@ -46,15 +46,7 @@ from libc cimport errno
 from libc cimport stdio
 from libc.stdio cimport FILE
 from libc cimport string as cstring
-
-
-IF UNAME_SYSNAME == 'Windows':
-    cdef extern from "stdio.h" nogil:
-        int fileno "_fileno" (FILE*)
-ELSE:
-    # posix
-    cdef extern from "stdio.h" nogil:
-        int fileno(FILE*)
+from posix.stdio cimport fileno
 
 
 from epr cimport *
