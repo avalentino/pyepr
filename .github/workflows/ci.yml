@@ -67,8 +67,10 @@ jobs:
         python -m pip install --upgrade setuptools pip wheel
         python -m pip install --upgrade wcwidth
     - name: Build and install
+      env:
+        PYEPR_EPRAPI_SRC: ""
       run: |
-        python -m pip install --install-option='--epr-api-src=""' .[test]
+        python -m pip install .[test]
     - name: Test with pytest
       run: |
         python -c "\
