@@ -16,7 +16,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           submodules: true
@@ -29,10 +29,10 @@ jobs:
         run: python -m pip install cibuildwheel
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.11.4
+        uses: pypa/cibuildwheel@v2.16.2
         env:
-          # numpy only has pp38 currently
-          CIBW_SKIP: cp36-* pp37-* pp39-*
+           # numpy only has pp39 currently
+          CIBW_SKIP: cp36-* cp37-* pp37-* pp38-*
 
       - uses: actions/upload-artifact@v3
         with:
