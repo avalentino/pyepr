@@ -4,7 +4,9 @@ Change history
 PyEPR 1.1.5 (UNRELEASED)
 ------------------------
 
-* TBW
+* Get rid of the deprecated `pip --install-options`.
+* No longer ise the deprecated Cython_ `IF` statement.
+* Build wheels for Python 3.12.
 
 
 PyEPR 1.1.4 (07/01/2023)
