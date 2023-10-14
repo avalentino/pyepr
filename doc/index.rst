@@ -61,7 +61,8 @@ ENVISAT Product Reader Python API
 
     ============ ======================================================
     PyEPR latest https://pyepr.readthedocs.io/en/latest (development)
-    PyEPR 1.1.3  https://pyepr.readthedocs.io/en/v1.1.4 (latest stable)
+    PyEPR 1.1.5  https://pyepr.readthedocs.io/en/v1.1.5 (latest stable)
+    PyEPR 1.1.4  https://pyepr.readthedocs.io/en/v1.1.4
     PyEPR 1.1.3  https://pyepr.readthedocs.io/en/v1.1.3
     PyEPR 1.1.2  https://pyepr.readthedocs.io/en/v1.1.2
     PyEPR 1.1.1  https://pyepr.readthedocs.io/en/v1.1.1
