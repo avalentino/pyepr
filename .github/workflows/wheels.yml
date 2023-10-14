@@ -31,8 +31,7 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.2
         env:
-           # numpy only has pp39 currently
-          CIBW_SKIP: cp36-* cp37-* pp37-* pp38-*
+          CIBW_SKIP: cp36-* cp37-* pp*
 
       - uses: actions/upload-artifact@v3
         with:
