@@ -1,7 +1,7 @@
 Change history
 ==============
 
-PyEPR 1.1.5 (UNRELEASED)
+PyEPR 1.1.5 (15/10/2023)
 ------------------------
 
 * Get rid of the deprecated `pip --install-options`.
