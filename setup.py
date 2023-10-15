@@ -153,4 +153,5 @@ if __name__ == "__main__":
         print(msg)
         print()
 
+    print(config)
     setuptools.setup(**config)

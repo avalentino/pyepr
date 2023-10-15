@@ -7,6 +7,7 @@ PyEPR 1.1.5 (UNRELEASED)
 * Get rid of the deprecated `pip --install-options`.
 * No longer ise the deprecated Cython_ `IF` statement.
 * Build wheels for Python 3.12.
+* Move project metadata to `pyproject.toml`
 
 
 PyEPR 1.1.4 (07/01/2023)

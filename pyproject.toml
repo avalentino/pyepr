@@ -1,10 +1,81 @@
-# See: https://pip.pypa.io/en/stable/reference/pip/#pep-517-and-518-support
 [build-system]
 requires = [
-    "setuptools >= 40.8.0",
-    "wheel",
+    "setuptools >= 61.0.0",
     "packaging",
     "cython >= 0.29.22",
     "oldest-supported-numpy",
 ]
 build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "pyepr"
+authors = [
+    {name = "Antonio Valentino", email = "antonio.valentino@tiscali.it"},
+]
+description = "Python ENVISAT Product Reader API"
+requires-python = ">=3.7, <4"
+keywords = ["satellite", "reader", "envisat"]
+license = {text = "GPL-3.0-or-later"}
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Other Environment",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License (GPL)",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Programming Language :: Cython",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: GIS",
+]
+dependencies = [
+    "numpy>=1.7",
+]
+dynamic = ["version"]
+
+
+[project.readme]
+text = """\
+PyEPR provides Python_ bindings for the ENVISAT_ Product Reader C API
+(`EPR API`_) for reading satellite data from ENVISAT_
+ESA_ (European Space Agency) mission.
+
+PyEPR, as well as the `EPR API`_ for C, supports ENVISAT_ MERIS, AATSR
+Level 1B and Level 2 and also ASAR data products. It provides access to
+the data either on a geophysical (decoded, ready-to-use pixel samples)
+or on a raw data layer. The raw data access makes it possible to read
+any data field contained in a product file.
+
+.. _Python: https://www.python.org
+.. _`EPR API`: https://github.com/bcdev/epr-api
+.. _ENVISAT: https://envisat.esa.int
+.. _ESA: https://earth.esa.int
+"""
+content-type = "text/x-rst"
+
+
+[project.optional-dependencies]
+docs = ["sphinx", "sphinx_rtd_theme", "ipython"]
+test = ["pytest", "packaging"]
+all = ["pyepr[docs]", "pyepr[test]"]
+
+
+[project.urls]
+homepage = "https://github.com/avalentino/pyepr"
+documentation = "http://avalentino.github.io/pyepr/html/index.html"
+repository = "https://github.com/avalentino/pyepr.git"
+changelog = "https://github.com/avalentino/pyepr/blob/master/doc/NEWS.rst"
+issues = "https://github.com/avalentino/pyepr/issues"
+
+
+[tool.setuptools]
+zip-safe = false
+# license-files = ["LICENSE"]
