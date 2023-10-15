@@ -85,7 +85,7 @@ ext-coverage: src/epr.pyx
 	env PYEPR_COVERAGE=TRUE $(PYTHON) setup.py build_ext --inplace
 
 coverage: clean ext-coverage
-	$(PYTHON) -m pytest --cov --cov-report=term --cov-report=html
+	env PYTHONPATH=src $(PYTHON) -m pytest --cov --cov-report=term --cov-report=html
 
 debug:
 	$(PYTHON)d setup.py build_ext --inplace --debug

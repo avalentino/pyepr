@@ -113,7 +113,7 @@ jobs:
         make coverage
     - name: Print info
       run: |
-        python -c "\
+        env PYTHONPATH=src python -c "\
         import sys, epr, numpy as np;\
         print('PyEPR: %s' % epr.__version__);\
         print('EPR API: %s' % epr.EPR_C_API_VERSION);\
