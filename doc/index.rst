@@ -9,7 +9,7 @@ ENVISAT Product Reader Python API
     \clearpage
 
 
-:HomePage:  https://avalentino.github.io/pyepr
+:HomePage:  https://pyepr.readthedocs.io
 :Author:    Antonio Valentino
 :Contact:   antonio.valentino@tiscali.it
 :Copyright: 2011-2023, Antonio Valentino
@@ -40,6 +40,24 @@ ENVISAT Product Reader Python API
     .. index:: ENVISAT, MERIS, AASTR, ASAR
 
 
+    Project Links
+    =============
+
+    * HTML documentation (`stable <https://pyepr.readthedocs.io/en/stable/>`_,
+      `latest <https://pyepr.readthedocs.io/en/latest/>`_)
+    * PyEPR_ project page on `github <https://github.com>`_
+    * `source browser`__
+    * `commit history <https://github.com/avalentino/pyepr/commits>`_
+    * `issue tracker <https://github.com/avalentino/pyepr/issues>`_
+    * `CI status page <https://github.com/avalentino/pyepr/actions>`_
+    * `PyEPR project page on PyPi <http://pypi.python.org/pypi/pyepr>`_
+    * EPR-API `project page <https://github.com/bcdev/epr-api>`_
+    * EPR-API `documentation
+      <https://rawgithub.com/bcdev/epr-api/master/docs/epr_c_api/index.html>`_
+
+    __ PyEPR_
+
+
     Documentation
     =============
 
@@ -57,7 +75,7 @@ ENVISAT Product Reader Python API
     Other versions
     ==============
 
-    Online documentation for other PyEpr_ versions:
+    Online documentation for other PyEPR_ versions:
 
     ============ ======================================================
     PyEPR latest https://pyepr.readthedocs.io/en/latest (development)

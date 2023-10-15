@@ -70,7 +70,7 @@ all = ["pyepr[docs]", "pyepr[test]"]
 
 [project.urls]
 homepage = "https://github.com/avalentino/pyepr"
-documentation = "http://avalentino.github.io/pyepr/html/index.html"
+documentation = "https://pyepr.readthedocs.io"
 repository = "https://github.com/avalentino/pyepr.git"
 changelog = "https://github.com/avalentino/pyepr/blob/master/doc/NEWS.rst"
 issues = "https://github.com/avalentino/pyepr/issues"

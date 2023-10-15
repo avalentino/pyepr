@@ -74,7 +74,7 @@ available classes and functions::
         The raw data access makes it possible to read any data field contained
         in a product file.
 
-        .. _PyEPR: http://avalentino.github.io/pyepr
+        .. _PyEPR: https://pyepr.readthedocs.io
         .. _Python: https://www.python.org
         .. _`EPR API`: https://github.com/bcdev/epr-api
         .. _ENVISAT: https://envisat.esa.int

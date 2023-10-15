@@ -2,13 +2,13 @@
 ENVISAT Product Reader Python API
 =================================
 
-:HomePage:  https://avalentino.github.io/pyepr
+:HomePage:  https://pyepr.readthedocs.io
 :Author:    Antonio Valentino
 :Contact:   antonio.valentino@tiscali.it
 :Copyright: 2011-2023, Antonio Valentino <antonio.valentino@tiscali.it>
 :Version:   1.1.5
 
-.. image:: https://github.com/avalentino/pyepr/actions/workflows/python-package.yml/badge.svg?branch=master
+.. image:: https://github.com/avalentino/pyepr/actions/workflows/ci.yml/badge.svg?branch=master
     :alt: CI status page
     :target: https://github.com/avalentino/pyepr/actions
 
@@ -57,7 +57,24 @@ any data field contained in a product file.
 .. _ESA: https://earth.esa.int
 
 
-Requirements
+Links
+=====
+
+* HTML documentation (`stable <https://pyepr.readthedocs.io/en/stable/>`_,
+  `latest <https://pyepr.readthedocs.io/en/latest/>`_)
+* `PyEPR <http://github.com/avalentino/pyepr>`_ project page on
+  `github <https://github.com>`_
+* `source browser <http://github.com/avalentino/pyepr>`_
+* `commit history <https://github.com/avalentino/pyepr/commits>`_
+* `issue tracker <https://github.com/avalentino/pyepr/issues>`_
+* `CI status page <https://github.com/avalentino/pyepr/actions>`_
+* `PyEPR project page on PyPi <http://pypi.python.org/pypi/pyepr>`_
+* EPR-API `project page <https://github.com/bcdev/epr-api>`_
+* EPR-API `documentation
+  <https://rawgithub.com/bcdev/epr-api/master/docs/epr_c_api/index.html>`_
+
+
+Dependencies
 ============
 
 In order to use PyEPR it is needed that the following software are
@@ -69,12 +86,14 @@ correctly installed and configured:
   with a copy of the EPR C API sources)
 * a reasonably updated C compiler (build only)
 * Cython_ >= 0.29 (build only)
+* pytest_ (optional and only needed for testing)
 
 .. _Python3: Python_
 .. _PyPy3: https://www.pypy.org
 .. _numpy: https://numpy.org
 .. _gcc: https://gcc.gnu.org
 .. _Cython: https://cython.org
+.. _pytest: https://pytest.org
 
 
 Download
