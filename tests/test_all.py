@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright (C) 2011-2023, Antonio Valentino <antonio.valentino@tiscali.it>
+# Copyright (C) 2011-2024, Antonio Valentino <antonio.valentino@tiscali.it>
 #
 # This file is part of PyEPR.
 #
