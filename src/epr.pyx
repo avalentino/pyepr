@@ -409,53 +409,53 @@ cdef class DSD(EprObject):
             # elif isinstance(self, Product):
             (<Product>self._parent).check_closed_product()
 
-    property index:
+    @property
+    def index(self):
         """The index of this DSD (zero-based)."""
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.index
+        self.check_closed_product()
+        return self._ptr.index
 
-    property ds_name:
+    @property
+    def ds_name(self):
         """The dataset name."""
-        def __get__(self):
-            self.check_closed_product()
-            return _to_str(self._ptr.ds_name, 'ascii')
+        self.check_closed_product()
+        return _to_str(self._ptr.ds_name, 'ascii')
 
-    property ds_type:
+    @property
+    def ds_type(self):
         """The dataset type descriptor."""
-        def __get__(self):
-            self.check_closed_product()
-            return _to_str(self._ptr.ds_type, 'ascii')
+        self.check_closed_product()
+        return _to_str(self._ptr.ds_type, 'ascii')
 
-    property filename:
+    @property
+    def filename(self):
         """The filename in the DDDB with the description of this dataset."""
-        def __get__(self):
-            self.check_closed_product()
-            return _to_str(self._ptr.filename, 'ascii')
+        self.check_closed_product()
+        return _to_str(self._ptr.filename, 'ascii')
 
-    property ds_offset:
+    @property
+    def ds_offset(self):
         """The offset of dataset-information the product file."""
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.ds_offset
+        self.check_closed_product()
+        return self._ptr.ds_offset
 
-    property ds_size:
+    @property
+    def ds_size(self):
         """The size of dataset-information in dataset product file."""
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.ds_size
+        self.check_closed_product()
+        return self._ptr.ds_size
 
-    property num_dsr:
+    @property
+    def num_dsr(self):
         """The number of dataset records for the given dataset name."""
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.num_dsr
+        self.check_closed_product()
+        return self._ptr.num_dsr
 
-    property dsr_size:
+    @property
+    def dsr_size(self):
         """The size of dataset record for the given dataset name."""
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.dsr_size
+        self.check_closed_product()
+        return self._ptr.dsr_size
 
     # --- high level interface ------------------------------------------------
     def __repr__(self):
@@ -486,11 +486,11 @@ cdef class DSD(EprObject):
         return NotImplemented
 
     # --- low level interface -------------------------------------------------
-    property _magic:
+    @property
+    def _magic(self):
         """The magic number for internal C structure."""
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.magic
+        self.check_closed_product()
+        return self._ptr.magic
 
 
 cdef new_dsd(EPR_SDSD* ptr, EprObject parent=None):
@@ -901,15 +901,15 @@ cdef class Field(EprObject):
 
         self._set_elems(elems)
 
-    property tot_size:
+    @property
+    def tot_size(self):
         """The total size in bytes of all data elements of a field.
 
         *tot_size* is a derived variable, it is computed at runtime and
         not stored in the DSD-DB.
         """
-        def __get__(self):
-            cdef EPR_FieldInfo* info = <EPR_FieldInfo*>self._ptr.info
-            return info.tot_size
+        cdef EPR_FieldInfo* info = <EPR_FieldInfo*>self._ptr.info
+        return info.tot_size
 
     # --- high level interface ------------------------------------------------
     def __repr__(self):
@@ -1006,11 +1006,11 @@ cdef class Field(EprObject):
             return epr_get_field_num_elems(self._ptr)
 
     # --- low level interface -------------------------------------------------
-    property _magic:
+    @property
+    def _magic(self):
         """The magic number for internal C structure."""
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.magic
+        self.check_closed_product()
+        return self._ptr.magic
 
     def get_offset(self):
         """Field offset in bytes within the Record."""
@@ -1196,17 +1196,18 @@ cdef class Record(EprObject):
 
         return new_field(field_ptr, self)
 
-    property dataset_name:
+    @property
+    def dataset_name(self):
         """The name of the dataset to which this record belongs to."""
-        def __get__(self):
-            self.check_closed_product()
-            cdef EPR_RecordInfo* info = <EPR_RecordInfo*>self._ptr.info
-            if info.dataset_name == NULL:
-                return ''
-            else:
-                return _to_str(info.dataset_name)
+        self.check_closed_product()
+        cdef EPR_RecordInfo* info = <EPR_RecordInfo*>self._ptr.info
+        if info.dataset_name == NULL:
+            return ''
+        else:
+            return _to_str(info.dataset_name)
 
-    property tot_size:
+    @property
+    def tot_size(self):
         """The total size in bytes of the record.
 
         It includes all data elements of all fields of a record in a
@@ -1215,12 +1216,12 @@ cdef class Record(EprObject):
         *tot_size* is a derived variable, it is computed at runtime
         and not stored in the DSD-DB.
         """
-        def __get__(self):
-            self.check_closed_product()
-            cdef EPR_RecordInfo* info = <EPR_RecordInfo*>self._ptr.info
-            return info.tot_size
+        self.check_closed_product()
+        cdef EPR_RecordInfo* info = <EPR_RecordInfo*>self._ptr.info
+        return info.tot_size
 
-    property index:
+    @property
+    def index(self):
         """Index of the record within the dataset.
 
         It is *None* for empty records (created with
@@ -1230,8 +1231,7 @@ cdef class Record(EprObject):
 
         .. seealso:: :meth:`epr.Dataset.read_record`
         """
-        def __get__(self):
-            return self._index if self._index >= 0 else None
+        return self._index if self._index >= 0 else None
 
     # --- high level interface ------------------------------------------------
     def get_field_names(self):
@@ -1284,12 +1284,11 @@ cdef class Record(EprObject):
                                  self.get_num_fields())
 
     # --- low level interface -------------------------------------------------
-    property _magic:
+    @property
+    def _magic(self):
         """The magic number for internal C structure."""
-
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.magic
+        self.check_closed_product()
+        return self._ptr.magic
 
     def get_offset(self):
         """Record offset in bytes within the Dataset."""
@@ -1327,33 +1326,33 @@ cdef class Raster(EprObject):
         if self._ptr is not NULL:
             epr_free_raster(self._ptr)
 
-    property data_type:
+    @property
+    def data_type(self):
         """The data type of the band's pixels.
 
         All ``E_TID_*`` types are possible.
         """
-        def __get__(self):
-            return self._ptr.data_type
+        return self._ptr.data_type
 
-    property source_width:
+    @property
+    def source_width(self):
         """The width of the source."""
-        def __get__(self):
-            return self._ptr.source_width
+        return self._ptr.source_width
 
-    property source_height:
+    @property
+    def source_height(self):
         """The height of the source."""
-        def __get__(self):
-            return self._ptr.source_height
+        return self._ptr.source_height
 
-    property source_step_x:
+    @property
+    def source_step_x(self):
         """The sub-sampling for the across-track direction in pixel."""
-        def __get__(self):
-            return self._ptr.source_step_x
+        return self._ptr.source_step_x
 
-    property source_step_y:
+    @property
+    def source_step_y(self):
         """The sub-sampling for the along-track direction in pixel."""
-        def __get__(self):
-            return self._ptr.source_step_y
+        return self._ptr.source_step_y
 
     def get_width(self):
         """get_width(self)
@@ -1434,28 +1433,28 @@ cdef class Raster(EprObject):
 
         return result
 
-    property data:
+    @property
+    def data(self):
         """Raster data exposed as :class:`numpy.ndarray` object.
 
         .. note:: this property shares the data buffer with the
                   :class:`Raster` object so any change in its contents
                   is also reflected to the :class:`Raster` object.
         """
-        def __get__(self):
-            cdef object data
+        cdef object data
 
-            if self._data is not None:
-                data = self._data()
-                if data is not None:
-                    return data
+        if self._data is not None:
+            data = self._data()
+            if data is not None:
+                return data
 
-            if self._ptr.buffer is NULL:
-                return np.ndarray(())
+        if self._ptr.buffer is NULL:
+            return np.ndarray(())
 
-            data = self.toarray()
-            self._data = PyWeakref_NewRef(data, None)
+        data = self.toarray()
+        self._data = PyWeakref_NewRef(data, None)
 
-            return data
+        return data
 
     def __repr__(self):
         return '%s %s (%dL x %dP)' % (super(Raster, self).__repr__(),
@@ -1463,10 +1462,10 @@ cdef class Raster(EprObject):
                                       self.get_height(), self.get_width())
 
     # --- low level interface -------------------------------------------------
-    property _magic:
+    @property
+    def _magic(self):
         """The magic number for internal C structure."""
-        def __get__(self):
-            return self._ptr.magic
+        return self._ptr.magic
 
 
 cdef new_raster(EPR_SRaster* ptr, Band parent=None):
@@ -1586,21 +1585,22 @@ cdef class Band(EprObject):
 
         return 0
 
-    property product:
+    @property
+    def product(self):
         """The :class:`Product` instance to which this band belongs to."""
-        def __get__(self):
-            return self._parent
+        return self._parent
 
-    property spectr_band_index:
+    @property
+    def spectr_band_index(self):
         """The (zero-based) spectral band index.
 
         -1 if this is not a spectral band.
         """
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.spectr_band_index
+        self.check_closed_product()
+        return self._ptr.spectr_band_index
 
-    property sample_model:
+    @property
+    def sample_model(self):
         """The sample model operation.
 
         The sample model operation applied to the source dataset for
@@ -1615,11 +1615,11 @@ cdef class Band(EprObject):
         * ``0123``  --> combine 3-bytes interleaved to 4-byte integer
 
         """
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.sample_model
+        self.check_closed_product()
+        return self._ptr.sample_model
 
-    property data_type:
+    @property
+    def data_type(self):
         """The data type of the band's pixels.
 
         Possible values are:
@@ -1630,11 +1630,11 @@ cdef class Band(EprObject):
         * ``Float``     --> 32-bit IEEE floating point
 
         """
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.data_type
+        self.check_closed_product()
+        return self._ptr.data_type
 
-    property scaling_method:
+    @property
+    def scaling_method(self):
         """Scaling method.
 
         The scaling method which must be applied to the raw source data
@@ -1652,11 +1652,11 @@ cdef class Band(EprObject):
             y = log10(offset + scale * x)
 
         """
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.scaling_method
+        self.check_closed_product()
+        return self._ptr.scaling_method
 
-    property scaling_offset:
+    @property
+    def scaling_offset(self):
         """The scaling offset.
 
         Possible values are:
@@ -1669,11 +1669,11 @@ cdef class Band(EprObject):
           can be given too
 
         """
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.scaling_offset
+        self.check_closed_product()
+        return self._ptr.scaling_offset
 
-    property scaling_factor:
+    @property
+    def scaling_factor(self):
         """The scaling factor.
 
         Possible values are:
@@ -1686,65 +1686,62 @@ cdef class Band(EprObject):
           can be given too
 
         """
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.scaling_factor
+        self.check_closed_product()
+        return self._ptr.scaling_factor
 
-    property bm_expr:
+    @property
+    def bm_expr(self):
         """A bit-mask expression used to filter valid pixels.
 
         All others are set to zero.
         """
-        def __get__(self):
-            self.check_closed_product()
-            if self._ptr.bm_expr is NULL:
-                return None
-            else:
-                return _to_str(self._ptr.bm_expr, 'ascii')
+        self.check_closed_product()
+        if self._ptr.bm_expr is NULL:
+            return None
+        else:
+            return _to_str(self._ptr.bm_expr, 'ascii')
 
-    property unit:
+    @property
+    def unit(self):
         """The geophysical unit for the band's pixel values."""
-        def __get__(self):
-            self.check_closed_product()
-            if self._ptr.unit is NULL:
-                return None
-            else:
-                return _to_str(self._ptr.unit, 'ascii')
+        self.check_closed_product()
+        if self._ptr.unit is NULL:
+            return None
+        else:
+            return _to_str(self._ptr.unit, 'ascii')
 
-    property description:
+    @property
+    def description(self):
         """A short description of the band's contents."""
-        def __get__(self):
-            self.check_closed_product()
-            if self._ptr.description is NULL:
-                return None
-            else:
-                return _to_str(self._ptr.description, 'ascii')
+        self.check_closed_product()
+        if self._ptr.description is NULL:
+            return None
+        else:
+            return _to_str(self._ptr.description, 'ascii')
 
-    property lines_mirrored:
+    @property
+    def lines_mirrored(self):
         """Mirrored lines flag.
 
         If true (=1) lines will be mirrored (flipped) after read into a
         raster in order to ensure a pixel ordering in raster X
         direction from WEST to EAST.
         """
-        def __get__(self):
-            self.check_closed_product()
-            return <bint>self._ptr.lines_mirrored
+        self.check_closed_product()
+        return <bint>self._ptr.lines_mirrored
 
-    property dataset:
+    @property
+    def dataset(self):
         """The source dataset.
 
         The source dataset containing the raw data used to create the
         band's pixel values.
-
         """
-
-        def __get__(self):
-            self.check_closed_product()
-            cdef EPR_SDatasetId* dataset_id = self._ptr.dataset_ref.dataset_id
-            cdef const char* cname = epr_get_dataset_name(dataset_id)
-            cdef str name = _to_str(cname)
-            return self.product.get_dataset(name)
+        self.check_closed_product()
+        cdef EPR_SDatasetId* dataset_id = self._ptr.dataset_ref.dataset_id
+        cdef const char* cname = epr_get_dataset_name(dataset_id)
+        cdef str name = _to_str(cname)
+        return self.product.get_dataset(name)
 
     def get_name(self):
         """get_name(self)
@@ -1995,31 +1992,31 @@ cdef class Band(EprObject):
                                                     self.product.id_string)
 
     # --- low level interface -------------------------------------------------
-    property _magic:
+    @property
+    def _magic(self):
         """The magic number for internal C structure."""
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.magic
+        self.check_closed_product()
+        return self._ptr.magic
 
-    property _field_index:
+    @property
+    def _field_index(self):
         """Index or the field (within the dataset) containing the raw
         data used to create the band's pixel values.
 
         It is set to -1 if not used.
         """
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.dataset_ref.field_index
+        self.check_closed_product()
+        return self._ptr.dataset_ref.field_index
 
-    property _elem_index:
+    @property
+    def _elem_index(self):
         """Index or the element (within the dataset field) containing
         the raw data used to create the band's pixel values.
 
         It is set to -1 if not used.
         """
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.dataset_ref.elem_index
+        self.check_closed_product()
+        return self._ptr.dataset_ref.elem_index
 
 
 cdef new_band(EPR_SBandId* ptr, Product parent=None):
@@ -2058,19 +2055,19 @@ cdef class Dataset(EprObject):
         cdef const EPR_SDSD* dsd = epr_get_dsd(self._ptr)
         return dsd.ds_offset
 
-    property product:
+    @property
+    def product(self):
         """The :class:`Product` instance to which this dataset belongs to."""
-        def __get__(self):
-            return self._parent
+        return self._parent
 
-    property description:
+    @property
+    def description(self):
         """A short description of the band's contents."""
-        def __get__(self):
-            if self._ptr is not NULL:
-                self.check_closed_product()
-                if self._ptr.description is not NULL:
-                    return _to_str(self._ptr.description, 'ascii')
-            return ''
+        if self._ptr is not NULL:
+            self.check_closed_product()
+            if self._ptr.description is not NULL:
+                return _to_str(self._ptr.description, 'ascii')
+        return ''
 
     def get_name(self):
         """get_name(self)
@@ -2207,11 +2204,11 @@ cdef class Dataset(EprObject):
                                                self.get_num_records())
 
     # --- low level interface -------------------------------------------------
-    property _magic:
+    @property
+    def _magic(self):
         """The magic number for internal C structure."""
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.magic
+        self.check_closed_product()
+        return self._ptr.magic
 
 
 cdef new_dataset(EPR_SDatasetId* ptr, Product parent=None):
@@ -2334,16 +2331,17 @@ cdef class Product(EprObject):
                 errno.errno = 0
                 raise IOError('flush error')
 
-    property file_path:
+    @property
+    def file_path(self):
         """The file's path including the file name."""
-        def __get__(self):
-            self.check_closed_product()
-            if self._ptr.file_path is NULL:
-                return None
-            else:
-                return _to_str(self._ptr.file_path, 'ascii')
+        self.check_closed_product()
+        if self._ptr.file_path is NULL:
+            return None
+        else:
+            return _to_str(self._ptr.file_path, 'ascii')
 
-    property _fileno:
+    @property
+    def _fileno(self):
         """The fileno of the :class:`epr.Product` input stream.
 
         To be used with care.
@@ -2352,30 +2350,29 @@ cdef class Product(EprObject):
 
             on MacOS-X the position of the file descriptor shall be
             reset to the original one after its use.
-
         """
-        def __get__(self):
-            if self._ptr.istream is NULL:
-                return None
-            else:
-                return fileno(self._ptr.istream)
+        if self._ptr.istream is NULL:
+            return None
+        else:
+            return fileno(self._ptr.istream)
 
-    property mode:
-        def __get__(self):
-            """String that specifies the mode in which the file is opened.
+    @property
+    def mode(self):
+        """String that specifies the mode in which the file is opened.
 
-            Possible values: 'rb' for read-only mode, 'rb+' for read-write
-            mode.
-            """
-            return self._mode
+        Possible values: 'rb' for read-only mode, 'rb+' for read-write
+        mode.
+        """
+        return self._mode
 
-    property tot_size:
+    @property
+    def tot_size(self):
         """The total size in bytes of the product file."""
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.tot_size
+        self.check_closed_product()
+        return self._ptr.tot_size
 
-    property id_string:
+    @property
+    def id_string(self):
         """The product identifier string obtained from the MPH
         parameter 'PRODUCT'.
 
@@ -2384,15 +2381,14 @@ cdef class Product(EprObject):
         product.
         The rest of the string decodes product instance properties.
         """
-        def __get__(self):
-            self.check_closed_product()
-            return _to_str(self._ptr.id_string, 'ascii')
+        self.check_closed_product()
+        return _to_str(self._ptr.id_string, 'ascii')
 
-    property meris_iodd_version:
+    @property
+    def meris_iodd_version(self):
         """For MERIS L1b and RR and FR to provide backward compatibility."""
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.meris_iodd_version
+        self.check_closed_product()
+        return self._ptr.meris_iodd_version
 
     def get_scene_width(self):
         """get_scene_width(self)
@@ -2606,11 +2602,10 @@ cdef class Product(EprObject):
         return raster
 
     # --- high level interface ------------------------------------------------
-    property closed:
+    @property
+    def closed(self):
         '''True if the :class:`epr.Product` is closed.'''
-
-        def __get__(self):
-            return self._ptr is NULL
+        return self._ptr is NULL
 
     def get_dataset_names(self):
         """get_dataset_names(self)
@@ -2709,12 +2704,11 @@ cdef class Product(EprObject):
         self.close()
 
     # --- low level interface -------------------------------------------------
-    property _magic:
+    @property
+    def _magic(self):
         """The magic number for internal C structure."""
-
-        def __get__(self):
-            self.check_closed_product()
-            return self._ptr.magic
+        self.check_closed_product()
+        return self._ptr.magic
 
 
 def open(filename, str mode='rb'):
