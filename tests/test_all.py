@@ -1562,9 +1562,7 @@ class TestRaster(unittest.TestCase):
         self.assertEqual(self.raster.get_elem_size(), self.RASTER_ELEM_SIZE)
 
     def test_get_pixel(self):
-        self.assertAlmostEqual(
-            self.raster.get_pixel(0, 0), self.TEST_DATA[0, 0]
-        )
+        npt.assert_allclose(self.raster.get_pixel(0, 0), self.TEST_DATA[0, 0])
 
     def test_get_pixel_invalid_x(self):
         self.assertRaises(ValueError, self.raster.get_pixel, -1, 0)
