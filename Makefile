@@ -79,7 +79,7 @@ distclean: clean
 	$(RM) -r .eggs
 
 check: ext
-	env PYTHONPATH=. $(PYTHON) tests/test_all.py --verbose
+	env PYTHONPATH=src $(PYTHON) tests/test_all.py --verbose
 
 ext-coverage: src/epr.pyx
 	env PYEPR_COVERAGE=TRUE $(PYTHON) setup.py build_ext --inplace
