@@ -137,7 +137,6 @@ def setUpModule():
 
         os.remove(filename + ".zip")
 
-    print("Test product:", filename)
     assert os.path.exists(filename)
 
 
@@ -493,7 +492,7 @@ class TestProductHighLevelAPI(unittest.TestCase):
 
     def test_repr(self):
         pattern = (
-            r"epr\.Product\((?P<name>\w+)\) "
+            r"epr\.Product\((?P<q>['\"])(?P<name>\w+)(?P=q)\) "
             r"(?P<n_datasets>\d+) datasets, "
             r"(?P<n_bands>\d+) bands"
         )
@@ -739,7 +738,10 @@ class TestDatasetHighLevelAPI(unittest.TestCase):
         self.assertEqual(index, self.dataset.get_num_records())
 
     def test_repr(self):
-        pattern = r"epr\.Dataset\((?P<name>\w+)\) (?P<num>\d+) records"
+        pattern = (
+            r"epr\.Dataset\((?P<q>['\"])(?P<name>\w+)(?P=q)\) "
+            r"(?P<num>\d+) records"
+        )
         mobj = re.match(pattern, repr(self.dataset))
         self.assertNotEqual(mobj, None)
         self.assertEqual(mobj.group("name"), self.dataset.get_name())
@@ -1359,8 +1361,8 @@ class TestBandHighLevelAPI(unittest.TestCase):
 
     def test_repr(self):
         pattern = (
-            r"epr.Band\((?P<name>\w+)\) of "
-            r"epr.Product\((?P<product_id>\w+)\)"
+            r"epr.Band\((?P<q1>['\"])(?P<name>\w+)(?P=q1)\) of "
+            r"epr.Product\((?P<q2>['\"])(?P<product_id>\w+)(?P=q2)\)"
         )
         for band in self.product.bands():
             mobj = re.match(pattern, repr(band))
@@ -2582,7 +2584,7 @@ class TestFieldHighLevelAPI(unittest.TestCase):
 
     def test_repr(self):
         pattern = (
-            r'epr\.Field\("(?P<name>.+)"\) (?P<num>\d+) '
+            r"epr\.Field\((?P<q>['\"])(?P<name>.+)(?P=q)\) (?P<num>\d+) "
             r"(?P<type>\w+) elements"
         )
         for field in self.record:
@@ -2842,7 +2844,7 @@ class TestDsdHighLevelAPI(unittest.TestCase):
         self.product.close()
 
     def test_repr(self):
-        pattern = r'epr\.DSD\("(?P<name>.+)"\)'
+        pattern = r"epr\.DSD\((?P<q>['\"])(?P<name>.+)(?P=q)\)"
         mobj = re.match(pattern, repr(self.dsd))
         self.assertNotEqual(mobj, None)
         self.assertEqual(mobj.group("name"), self.dsd.ds_name)
@@ -3017,7 +3019,9 @@ class TestSampleModelFunctions(unittest.TestCase):
 
 
 class TestDirectInstantiation(unittest.TestCase):
-    MSG_PATTERN = '"%s" class cannot be instantiated from Python'
+    MSG_PATTERN = (
+        "(?P<q>['\"])%s(?P=q) class cannot be instantiated from Python"
+    )
 
     def test_direct_dsd_instantiation(self):
         pattern = self.MSG_PATTERN % epr.DSD.__name__

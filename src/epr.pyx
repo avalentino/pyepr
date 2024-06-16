@@ -40,7 +40,7 @@ in a product file.
 .. _ESA: http://earth.esa.int
 """
 
-__version__ = '1.1.5'
+__version__ = "1.1.5"
 
 from libc cimport errno
 from libc cimport stdio
@@ -65,29 +65,31 @@ from collections import namedtuple
 
 import numpy as np
 
-cdef bint SWAP_BYTES = (sys.byteorder == 'little')
+cdef bint SWAP_BYTES = (sys.byteorder == "little")
 
 # internal utils
 _DEFAULT_FS_ENCODING = sys.getfilesystemencoding()
 
 
-cdef inline bytes _to_bytes(str s, encoding='UTF-8'):
+cdef inline bytes _to_bytes(str s, encoding="UTF-8"):
     return s.encode(encoding)
 
 
-cdef inline str _to_str(bytes b, encoding='UTF-8'):
+cdef inline str _to_str(bytes b, encoding="UTF-8"):
     return b.decode(encoding)
 
 
 # utils
-EPRTime = namedtuple('EPRTime', ('days', 'seconds', 'microseconds'))
-MJD = np.dtype([
-    ('days', 'i%d' % sizeof(int)),
-    ('seconds', 'u%d' % sizeof(uint)),
-    ('microseconds', 'u%d' % sizeof(uint)),
-])
+EPRTime = namedtuple("EPRTime", ("days", "seconds", "microseconds"))
+MJD = np.dtype(
+    [
+        ("days", f"i{sizeof(int)}"),
+        ("seconds", f"u{sizeof(uint)}"),
+        ("microseconds", f"u{sizeof(uint)}"),
+    ]
+)
 
-EPR_C_API_VERSION = _to_str(EPR_PRODUCT_API_VERSION_STR, 'ascii')
+EPR_C_API_VERSION = _to_str(EPR_PRODUCT_API_VERSION_STR, "ascii")
 
 # EPR_DataTypeId
 E_TID_UNKNOWN = e_tid_unknown
@@ -165,18 +167,18 @@ _DTYPE_MAP = {
 
 
 _METHOD_MAP = {
-    E_SMID_NON: 'NONE',
-    E_SMID_LIN: 'LIN',
-    E_SMID_LOG: 'LOG',
+    E_SMID_NON: "NONE",
+    E_SMID_LIN: "LIN",
+    E_SMID_LOG: "LOG",
 }
 
 
 _MODEL_MAP = {
-    E_SMOD_1OF1: '1OF1',
-    E_SMOD_1OF2: '1OF2',
-    E_SMOD_2OF2: '2OF2',
-    E_SMOD_3TOI: '3TOI',
-    E_SMOD_2TOF: '2TOF',
+    E_SMOD_1OF1: "1OF1",
+    E_SMOD_1OF2: "1OF2",
+    E_SMOD_2OF2: "2OF2",
+    E_SMOD_3TOI: "3TOI",
+    E_SMOD_2TOF: "2TOF",
 }
 
 
@@ -217,7 +219,7 @@ cdef const void* _to_ptr(np.ndarray a, EPR_DataTypeId etype):
     elif etype == e_tid_string:
         p = _view_to_ptr[np.npy_byte](a)
     else:
-        raise ValueError('unexpected type ID: %d' % etype)
+        raise ValueError("unexpected type ID: {etype}")
 
     return p
 
@@ -225,8 +227,8 @@ cdef const void* _to_ptr(np.ndarray a, EPR_DataTypeId etype):
 class EPRError(Exception):
     """EPR API error."""
 
-    def __init__(self, message='', code=None, *args, **kargs):
-        """__init__(self, message='', code=None, *args, **kargs)"""
+    def __init__(self, message="", code=None, *args, **kargs):
+        """__init__(self, message="", code=None, *args, **kargs)"""
 
         super(EPRError, self).__init__(message, code, *args, **kargs)
 
@@ -243,7 +245,7 @@ cdef pyepr_check_errors():
     cdef str msg
     code = epr_get_last_err_code()
     if code != e_err_none:
-        msg = _to_str(<char*>epr_get_last_err_message(), 'ascii')
+        msg = _to_str(<char*>epr_get_last_err_message(), "ascii")
         epr_clear_err()
 
         # @TODO: if not msg: msg = EPR_ERR_MSG[code]
@@ -256,22 +258,22 @@ cdef pyepr_check_errors():
             raise EPRError(msg, code)
 
 
-cdef pyepr_null_ptr_error(str msg='null pointer'):
+cdef pyepr_null_ptr_error(str msg="null pointer"):
     cdef int code
-    cdef str eprmsg = _to_str(<char*>epr_get_last_err_message(), 'ascii')
+    cdef str eprmsg = _to_str(<char*>epr_get_last_err_message(), "ascii")
 
     code = epr_get_last_err_code()
 
     epr_clear_err()
 
-    raise EPRValueError('%s: %s' % (msg, eprmsg), code=code if code else None)
+    raise EPRValueError(f"{msg}: {eprmsg}", code=code if code else None)
 
 
 # https://stackoverflow.com/questions/1603916/close-a-file-pointer-without-closing-the-underlying-file-descriptor
 cdef FILE* pyepr_get_file_stream(object ostream) except NULL:
     # The returned stream can be safely closed
     cdef FILE* fstream = NULL
-    cdef int fileno = -1
+    cdef int fileno_ = -1
 
     if ostream is None:
         ostream = sys.stdout
@@ -281,18 +283,18 @@ cdef FILE* pyepr_get_file_stream(object ostream) except NULL:
     except AttributeError as exc:
         raise TypeError(str(exc))
     else:
-        fileno = PyObject_AsFileDescriptor(ostream)
-        if fileno == -1:
-            raise TypeError('bad output stream')
+        fileno_ = PyObject_AsFileDescriptor(ostream)
+        if fileno_ == -1:
+            raise TypeError("bad output stream")
         else:
-            fileno = os.dup(fileno)
-            if fileno == -1:
-                raise TypeError('bad output stream')
+            fileno_ = os.dup(fileno_)
+            if fileno_ == -1:
+                raise TypeError("bad output stream")
             else:
-                fstream = stdio.fdopen(fileno, 'a+')
+                fstream = stdio.fdopen(fileno_, "a+")
                 if fstream is NULL:
                     errno.errno = 0
-                    raise TypeError('invalid ostream')
+                    raise TypeError("invalid ostream")
 
     return fstream
 
@@ -306,23 +308,27 @@ cdef class _CLib:
         cdef bytes msg
 
         # @TODO: check
-        # if EPR_C_API_VERSION != '2.2':
+        # if EPR_C_API_VERSION != "2.2":
         #     raise ImportError(
-        #         'C library version not supported: "%s"' % EPR_C_API_VERSION)
+        #         f"C library version not supported: {EPR_C_API_VERSION!r}")
 
         # if epr_init_api(e_log_warning, epr_log_message, NULL):
         if epr_init_api(e_log_warning, NULL, NULL):
             msg = <char*>epr_get_last_err_message()
             epr_clear_err()
-            raise ImportError('unable to inizialize EPR API library: '
-                              '%s' % _to_str(msg, 'ascii'))
+            raise ImportError(
+                f"unable to inizialize EPR API library: "
+                f"{_to_str(msg, 'ascii')}"
+            )
 
     def __dealloc__(self):
         epr_close_api()
 
     def __init__(self):
-        raise TypeError('"%s" class cannot be instantiated from Python' %
-                                                    self.__class__.__name__)
+        raise TypeError(
+            f"{self.__class__.__name__!r} class cannot be instantiated from "
+            f"Python"
+        )
 
 
 # global _CLib instance
@@ -339,8 +345,10 @@ cdef class EprObject:
         self.epr_c_lib = None
 
     def __init__(self):
-        raise TypeError('"%s" class cannot be instantiated from Python' %
-                                                    self.__class__.__name__)
+        raise TypeError(
+            f"{self.__class__.__name__!r} class cannot be instantiated from "
+            f"Python"
+        )
 
 
 cpdef get_numpy_dtype(EPR_EDataTypeId type_id):
@@ -351,7 +359,7 @@ cpdef get_numpy_dtype(EPR_EDataTypeId type_id):
     try:
         return _DTYPE_MAP[type_id]
     except KeyError:
-        raise ValueError('invalid EPR type ID: %d' % type_id)
+        raise ValueError(f"invalid EPR type ID: {type_id}")
 
 
 cpdef uint get_data_type_size(EPR_EDataTypeId type_id):
@@ -365,10 +373,10 @@ cpdef uint get_data_type_size(EPR_EDataTypeId type_id):
 cpdef str data_type_id_to_str(EPR_EDataTypeId type_id):
     """data_type_id_to_str(type_id)
 
-    Gets the 'C' data type string for the given data type.
+    Gets the "C" data type string for the given data type.
     """
     cdef char* type_id_str = <char*>epr_data_type_id_to_str(type_id)
-    return _to_str(type_id_str, 'ascii')
+    return _to_str(type_id_str, "ascii")
 
 
 cpdef str get_scaling_method_name(EPR_ScalingMethod method):
@@ -379,7 +387,7 @@ cpdef str get_scaling_method_name(EPR_ScalingMethod method):
     try:
         return _METHOD_MAP[method]
     except KeyError:
-        raise ValueError('invalid scaling method: "%s"' % method)
+        raise ValueError(f"invalid scaling method: {method!r}")
 
 
 cpdef str get_sample_model_name(EPR_SampleModel model):
@@ -390,7 +398,7 @@ cpdef str get_sample_model_name(EPR_SampleModel model):
     try:
         return _MODEL_MAP[model]
     except KeyError:
-        raise ValueError('invalid sample model: "%s"' % model)
+        raise ValueError(f"invalid sample model: {model!r}")
 
 
 cdef class DSD(EprObject):
@@ -419,19 +427,19 @@ cdef class DSD(EprObject):
     def ds_name(self):
         """The dataset name."""
         self.check_closed_product()
-        return _to_str(self._ptr.ds_name, 'ascii')
+        return _to_str(self._ptr.ds_name, "ascii")
 
     @property
     def ds_type(self):
         """The dataset type descriptor."""
         self.check_closed_product()
-        return _to_str(self._ptr.ds_type, 'ascii')
+        return _to_str(self._ptr.ds_type, "ascii")
 
     @property
     def filename(self):
         """The filename in the DDDB with the description of this dataset."""
         self.check_closed_product()
-        return _to_str(self._ptr.filename, 'ascii')
+        return _to_str(self._ptr.filename, "ascii")
 
     @property
     def ds_offset(self):
@@ -459,7 +467,7 @@ cdef class DSD(EprObject):
 
     # --- high level interface ------------------------------------------------
     def __repr__(self):
-        return 'epr.DSD("%s")' % self.ds_name
+        return f"epr.DSD({self.ds_name!r})"
 
     def __eq__(self, other):
         cdef EPR_SDSD* p1 = NULL
@@ -545,7 +553,7 @@ cdef class Field(EprObject):
             offset += info.tot_size
 
         if not found:
-            raise EPRError('inable to compute field offset')
+            raise EPRError("inable to compute field offset")
         elif absolute:
             offset += self._parent._get_offset(absolute)
 
@@ -582,7 +590,7 @@ cdef class Field(EprObject):
     def print_(self, ostream=None):
         # COMPATIBILITY
         warnings.warn(
-            'the "print_" method is deprecated, please use "print" instead',
+            "the 'print_' method is deprecated, please use 'print' instead",
             DeprecationWarning)
         return self.print(ostream=ostream)
 
@@ -602,9 +610,9 @@ cdef class Field(EprObject):
         unit = epr_get_field_unit(self._ptr)
 
         if unit is NULL:
-            return ''
+            return ""
         else:
-            return _to_str(<char*>unit, 'ascii')
+            return _to_str(<char*>unit, "ascii")
 
     def get_description(self):
         """get_description(self)
@@ -614,7 +622,7 @@ cdef class Field(EprObject):
         cdef char* description = NULL
         self.check_closed_product()
         description = <char*>epr_get_field_description(self._ptr)
-        return _to_str(description, 'ascii')
+        return _to_str(description, "ascii")
 
     def get_num_elems(self):
         """get_num_elems(self)
@@ -632,7 +640,7 @@ cdef class Field(EprObject):
         cdef char* name = NULL
         self.check_closed_product()
         name = <char*>epr_get_field_name(self._ptr)
-        return _to_str(name, 'ascii')
+        return _to_str(name, "ascii")
 
     def get_type(self):
         """get_type(self)
@@ -679,19 +687,19 @@ cdef class Field(EprObject):
             val = epr_get_field_elem_as_double(self._ptr, index)
         elif etype == e_tid_string:
             if index != 0:
-                raise ValueError('invalid index: %d' % index)
+                raise ValueError(f"invalid index: {index}")
             val = <char*>epr_get_field_elem_as_str(self._ptr)
         # elif etype == e_tid_spare:
         #     val = epr_get_field_elem_as_str(self._ptr)
         elif etype == e_tid_time:
             if index != 0:
-                raise ValueError('invalid index: %d' % index)
+                raise ValueError(f"invalid index: {index}")
 
             # use casting to silence warnings
             eprtime = <EPR_STime*>epr_get_field_elem_as_mjd(self._ptr)
             val = EPRTime(eprtime.days, eprtime.seconds, eprtime.microseconds)
         else:
-            raise ValueError('invalid field type')
+            raise ValueError("invalid field type")
 
         pyepr_check_errors()
         return val
@@ -719,20 +727,21 @@ cdef class Field(EprObject):
 
         shape[0] = epr_get_field_num_elems(self._ptr)
         etype = epr_get_field_type(self._ptr)
-        msg = 'Filed("%s") elems pointer is null' % self.get_name()
+        msg = "Filed('%s') elems pointer is null" % self.get_name()
 
         if etype == e_tid_time:
             if shape[0] != 1:
                 raise ValueError(
-                    'unexpected number of elements: %d' % shape[0])
+                    f"unexpected number of elements: {shape[0]}"
+                )
             t = <EPR_Time*>epr_get_field_elem_as_mjd(self._ptr)
             if t is NULL:
                 pyepr_null_ptr_error(msg)
 
             out = np.ndarray(1, MJD)
-            out[0]['days'] = t.days
-            out[0]['seconds'] = t.seconds
-            out[0]['microseconds'] = t.microseconds
+            out[0]["days"] = t.days
+            out[0]["seconds"] = t.seconds
+            out[0]["microseconds"] = t.microseconds
 
             return out
 
@@ -778,8 +787,7 @@ cdef class Field(EprObject):
                 pyepr_null_ptr_error(msg)
         elif etype == e_tid_string:
             if shape[0] != 1:
-                raise ValueError(
-                    'unexpected number of elements: %d' % shape[0])
+                raise ValueError(f"unexpected number of elements: {shape[0]}")
             nd = 0
             dtype = np.NPY_STRING
             buf = <char*>epr_get_field_elem_as_str(self._ptr)
@@ -790,7 +798,7 @@ cdef class Field(EprObject):
         # elif etype = e_tid_spare:
         #     pass
         else:
-            raise ValueError('invalid field type')
+            raise ValueError("invalid field type")
 
         out = np.PyArray_SimpleNewFromData(nd, shape, dtype, <void*>buf)
         # np.PyArray_CLEARFLAG(out, NPY_ARRAY_WRITEABLE)  # new in numpy 1.7
@@ -842,8 +850,7 @@ cdef class Field(EprObject):
             stdio.fseek(istream, file_offset + field_offset, stdio.SEEK_SET)
             ret = stdio.fwrite(p, elemsize, nelems, product._ptr.istream)
         if ret != nelems:
-            raise IOError(
-                'write error: %d of %d bytes written' % (ret, datasize))
+            raise IOError(f"write error: {ret} of {datasize} bytes written")
 
     def set_elem(self, elem, uint index=0):
         """set_elem(self, elem, index=0)
@@ -864,12 +871,14 @@ cdef class Field(EprObject):
 
         if self._parent.index is None:
             raise NotImplementedError(
-                'setting elements is not implemented on MPH/SPH records')
+                "setting elements is not implemented on MPH/SPH records"
+            )
 
         elem = np.asarray(elem)
         if elem.size != 1:
             raise ValueError(
-                'invalid shape "%s", scalar value expected' % elem.shape)
+                f"invalid shape {elem.shape!r}, scalar value expected"
+            )
 
         self._set_elems(elem, index)
 
@@ -891,13 +900,15 @@ cdef class Field(EprObject):
 
         if self._parent._index is None:
             raise NotImplementedError(
-                'setting elements is not implemented on MPH/SPH records')
+                "setting elements is not implemented on MPH/SPH records"
+            )
 
         elems = np.ascontiguousarray(elems)
         nelems = epr_get_field_num_elems(self._ptr)
         if elems.ndim > 1 or elems.size != nelems:
-            raise ValueError('invalid shape "%s", "(%s,)" value expected' % (
-                elems.shape, nelems))
+            raise ValueError(
+                f"invalid shape {elems.shape!r}, '({nelems},)' value expected"
+            )
 
         self._set_elems(elems)
 
@@ -913,8 +924,10 @@ cdef class Field(EprObject):
 
     # --- high level interface ------------------------------------------------
     def __repr__(self):
-        return 'epr.Field("%s") %d %s elements' % (self.get_name(),
-                    self.get_num_elems(), data_type_id_to_str(self.get_type()))
+        return (
+            f"epr.Field({self.get_name()!r}) {self.get_num_elems()} "
+            f"{data_type_id_to_str(self.get_type())} elements"
+        )
 
     def __str__(self):
         cdef object name = self.get_name()
@@ -922,43 +935,42 @@ cdef class Field(EprObject):
         cdef int num_elems = 0
 
         if type_ == e_tid_string:
-            return '%s = "%s"' % (name, self.get_elem().decode('utf-8'))
+            return f"{name} = {self.get_elem().decode('UTF-8')!r}"
         elif type_ == e_tid_time:
             days, seconds, microseconds = self.get_elem()
-            return '%s = {d=%d, j=%d, m=%d}' % (name,
-                                                days, seconds, microseconds)
+            return f"{name} = {{d={days}, j={seconds}, m={microseconds}}}"
         else:
             num_elems = epr_get_field_num_elems(self._ptr)
 
             if type_ == e_tid_uchar:
-                fmt = '%u'
+                fmt = "%u"
             elif type_ == e_tid_char:
-                fmt = '%d'
+                fmt = "%d"
             elif type_ == e_tid_ushort:
-                fmt = '%u'
+                fmt = "%u"
             elif type_ == e_tid_short:
-                fmt = '%d'
+                fmt = "%d"
             elif type_ == e_tid_uint:
-                fmt = '%u'
+                fmt = "%u"
             elif type_ == e_tid_int:
-                fmt = '%d'
+                fmt = "%d"
             elif type_ == e_tid_float:
-                fmt = '%f'
+                fmt = "%f"
             elif type_ == e_tid_double:
-                fmt = '%f'
+                fmt = "%f"
             else:
                 if num_elems > 1:
-                    data = ['<<unknown data type>>'] * num_elems
-                    data = ', '.join(data)
-                    return '%s = {%s}' % (name, data)
+                    data = ["<<unknown data type>>"] * num_elems
+                    data = ", ".join(data)
+                    return f"{name} = {{{data}}}"
                 else:
-                    return '%s = <<unknown data type>>' % name
+                    return f"{name} = <<unknown data type>>"
 
             if num_elems > 1:
-                data = ', '.join([fmt % item for item in self.get_elems()])
-                return '%s = {%s}' % (name, data)
+                data = ", ".join([fmt % item for item in self.get_elems()])
+                return f"{name} = {{{data}}}"
             else:
-                return '%s = %s' % (name, fmt % self.get_elem())
+                return f"{name} = {fmt % self.get_elem()}"
 
     def __eq__(self, other):
         cdef size_t n = 0
@@ -1113,7 +1125,7 @@ cdef class Record(EprObject):
     def print_(self, ostream=None):
         # COMPATIBILITY
         warnings.warn(
-            'the "print_" method is deprecated, please use "print" instead',
+            "the 'print_' method is deprecated, please use 'print' instead",
             DeprecationWarning)
         return self.print(ostream=ostream)
 
@@ -1171,7 +1183,7 @@ cdef class Record(EprObject):
 
         field_ptr = <EPR_SField*>epr_get_field(self._ptr, cname)
         if field_ptr is NULL:
-            pyepr_null_ptr_error('unable to get field "%s"' % name)
+            pyepr_null_ptr_error("unable to get field '%s'" % name)
 
         return new_field(field_ptr, self)
 
@@ -1192,7 +1204,7 @@ cdef class Record(EprObject):
 
         field_ptr = <EPR_SField*>epr_get_field_at(self._ptr, index)
         if field_ptr is NULL:
-            pyepr_null_ptr_error('unable to get field at index %d' % index)
+            pyepr_null_ptr_error("unable to get field at index %d" % index)
 
         return new_field(field_ptr, self)
 
@@ -1202,7 +1214,7 @@ cdef class Record(EprObject):
         self.check_closed_product()
         cdef EPR_RecordInfo* info = <EPR_RecordInfo*>self._ptr.info
         if info.dataset_name == NULL:
-            return ''
+            return ""
         else:
             return _to_str(info.dataset_name)
 
@@ -1253,7 +1265,7 @@ cdef class Record(EprObject):
         for idx in range(num_fields):
             field_ptr = <EPR_SField*>epr_get_field_at(self._ptr, idx)
             name = <char*>epr_get_field_name(field_ptr)
-            names.append(_to_str(name, 'ascii'))
+            names.append(_to_str(name, "ascii"))
 
         return names
 
@@ -1273,12 +1285,13 @@ cdef class Record(EprObject):
 
     def __str__(self):
         self.check_closed_product()
-        return '\n'.join(map(str, self))
+        return "\n".join(map(str, self))
 
     def __repr__(self):
         self.check_closed_product()
-        return '%s %d fields' % (super(Record, self).__repr__(),
-                                 self.get_num_fields())
+        return (
+            f"{super(Record, self).__repr__()} {self.get_num_fields()} fields"
+        )
 
     # --- low level interface -------------------------------------------------
     @property
@@ -1313,7 +1326,7 @@ cdef new_record(EPR_SRecord* ptr, EprObject parent=None, bint dealloc=False):
 cdef class Raster(EprObject):
     """Represents a raster in which data will be stored.
 
-    All 'size' parameter are in PIXEL.
+    All "size" parameter are in PIXEL.
     """
     cdef EPR_SRaster* _ptr
     cdef Band _parent
@@ -1389,8 +1402,8 @@ cdef class Raster(EprObject):
             the typed value at the given co-ordinate
         """
         if (x < 0 or <uint>x >= self._ptr.raster_width or
-            y < 0 or <uint>y >= self._ptr.raster_height):
-            raise ValueError('index out of range: x=%d, y=%d' % (x, y))
+                y < 0 or <uint>y >= self._ptr.raster_height):
+            raise ValueError(f"index out of range: x={x}, y={y}")
 
         cdef EPR_EDataTypeId dtype = self._ptr.data_type
 
@@ -1403,10 +1416,11 @@ cdef class Raster(EprObject):
         elif dtype == e_tid_double:
             val = epr_get_pixel_as_double(self._ptr, x, y)
         else:
-            raise ValueError('invalid data type: "%s"' %
-                                        <char*>epr_data_type_id_to_str(dtype))
+            raise ValueError(
+                f"invalid data type: {<char*>epr_data_type_id_to_str(dtype)!r}"
+            )
 
-        pyepr_check_errors()    # @TODO: check
+        pyepr_check_errors()
 
         return val
 
@@ -1417,7 +1431,7 @@ cdef class Raster(EprObject):
         cdef np.ndarray result
 
         if dtype == np.NPY_NOTYPE:
-            raise TypeError('invalid data type')
+            raise TypeError("invalid data type")
         else:
             shape[0] = self._ptr.raster_height
             shape[1] = self._ptr.raster_width
@@ -1454,9 +1468,11 @@ cdef class Raster(EprObject):
         return data
 
     def __repr__(self):
-        return '%s %s (%dL x %dP)' % (super(Raster, self).__repr__(),
-                                      data_type_id_to_str(self.data_type),
-                                      self.get_height(), self.get_width())
+        return (
+            f"{super(Raster, self).__repr__()} "
+            f"{data_type_id_to_str(self.data_type)} "
+            f"({self.get_height()}L x {self.get_width()}P)"
+        )
 
     # --- low level interface -------------------------------------------------
     @property
@@ -1510,13 +1526,13 @@ def create_raster(EPR_EDataTypeId data_type, uint src_width, uint src_height,
     .. seealso:: description of :meth:`Band.create_compatible_raster`
     """
     if xstep == 0 or ystep == 0:
-        raise ValueError('invalid step: xspet=%d, ystep=%d' % (xstep, ystep))
+        raise ValueError(f"invalid step: xspet={xstep}, ystep={ystep}")
 
     cdef EPR_SRaster* raster_ptr
     raster_ptr = epr_create_raster(data_type, src_width, src_height,
                                    xstep, ystep)
     if raster_ptr is NULL:
-        pyepr_null_ptr_error('unable to create a new raster')
+        pyepr_null_ptr_error("unable to create a new raster")
 
     return new_raster(raster_ptr)
 
@@ -1549,12 +1565,12 @@ def create_bitmask_raster(uint src_width, uint src_height,
                  :meth:`Band.create_compatible_raster`
     """
     if xstep == 0 or ystep == 0:
-        raise ValueError('invalid step: xspet=%d, ystep=%d' % (xstep, ystep))
+        raise ValueError(f"invalid step: xspet={xstep}, ystep={ystep}")
 
     cdef EPR_SRaster* raster_ptr
     raster_ptr = epr_create_bitmask_raster(src_width, src_height, xstep, ystep)
     if raster_ptr is NULL:
-        pyepr_null_ptr_error('unable to create a new raster')
+        pyepr_null_ptr_error("unable to create a new raster")
 
     return new_raster(raster_ptr)
 
@@ -1574,7 +1590,7 @@ cdef class Band(EprObject):
 
     cdef inline int check_closed_product(self) except -1:
         if self._ptr is NULL:
-            raise ValueError('I/O operation on closed file')
+            raise ValueError("I/O operation on closed file")
 
         elif self._parent.check_closed_product() == -1:
             self._ptr = NULL
@@ -1635,7 +1651,7 @@ cdef class Band(EprObject):
         """Scaling method.
 
         The scaling method which must be applied to the raw source data
-        in order to get the 'real' pixel values in geo-physical units.
+        in order to get the "real" pixel values in geo-physical units.
 
         Possible values are:
 
@@ -1696,7 +1712,7 @@ cdef class Band(EprObject):
         if self._ptr.bm_expr is NULL:
             return None
         else:
-            return _to_str(self._ptr.bm_expr, 'ascii')
+            return _to_str(self._ptr.bm_expr, "ascii")
 
     @property
     def unit(self):
@@ -1705,7 +1721,7 @@ cdef class Band(EprObject):
         if self._ptr.unit is NULL:
             return None
         else:
-            return _to_str(self._ptr.unit, 'ascii')
+            return _to_str(self._ptr.unit, "ascii")
 
     @property
     def description(self):
@@ -1714,7 +1730,7 @@ cdef class Band(EprObject):
         if self._ptr.description is NULL:
             return None
         else:
-            return _to_str(self._ptr.description, 'ascii')
+            return _to_str(self._ptr.description, "ascii")
 
     @property
     def lines_mirrored(self):
@@ -1748,7 +1764,7 @@ cdef class Band(EprObject):
         cdef char* name = NULL
         self.check_closed_product()
         name = <char*>epr_get_band_name(self._ptr)
-        return _to_str(name, 'ascii')
+        return _to_str(name, "ascii")
 
     def create_compatible_raster(self, uint src_width=0, uint src_height=0,
                                  uint xstep=1, uint ystep=1):
@@ -1828,31 +1844,38 @@ cdef class Band(EprObject):
             src_width = scene_width
         elif src_width > scene_width:
             raise ValueError(
-                'requeted raster width (%d) is too large for the Band '
-                '(scene_width=%d)' % (src_width, scene_width))
+                f"requeted raster width ({src_width}) is too large for the "
+                f"Band (scene_width={scene_width})"
+            )
 
         if src_height == 0:
             src_height = scene_height
         elif src_height > scene_height:
             raise ValueError(
-                'requeted raster height (%d) is too large for the Band '
-                '(scene_height=%d)' % (src_height, scene_height))
+                f"requeted raster height ({src_height}) is too large for the "
+                f"Band (scene_height={scene_height})"
+            )
 
         if xstep > src_width:
-            raise ValueError('xstep (%d) too large for the requested width '
-                             '(%d)' % (xstep, src_width))
+            raise ValueError(
+                f"xstep ({xstep}) too large for the requested width "
+                f"({src_width})"
+            )
 
         if ystep > src_height:
-            raise ValueError('ystep (%d) too large for the requested height '
-                             '(%d)' % (ystep, src_height))
+            raise ValueError(
+                f"ystep ({ystep}) too large for the requested height "
+                f"({src_height})"
+            )
 
         raster_ptr = epr_create_compatible_raster(self._ptr,
                                                   src_width, src_height,
                                                   xstep, ystep)
         if raster_ptr is NULL:
-            pyepr_null_ptr_error('unable to create compatible raster with '
-                                 'width=%d, height=%d xstep=%d, ystep=%d' %
-                                        (src_width, src_height, xstep, ystep))
+            pyepr_null_ptr_error(
+                "unable to create compatible raster with width=%d, height=%d, "
+                "xstep=%d, ystep=%d" % (src_width, src_height, xstep, ystep)
+            )
 
         return new_raster(raster_ptr, self)
 
@@ -1903,7 +1926,8 @@ cdef class Band(EprObject):
         if (xoffset + raster._ptr.source_width > scene_width or
                 yoffset + raster._ptr.source_height > scene_height):
             raise ValueError(
-                'at lease part of the requested area is outside the scene')
+                "at lease part of the requested area is outside the scene"
+            )
 
         raster._data = None
 
@@ -1917,10 +1941,16 @@ cdef class Band(EprObject):
         return raster
 
     # --- high level interface ------------------------------------------------
-    def read_as_array(self, width=None, height=None,
-                      uint xoffset=0, uint yoffset=0,
-                      uint xstep=1, uint ystep=1):
-        """read_as_array(self, width=None, height=None, xoffset=0, yoffset=0, xstep=1, ystep=1):
+    def read_as_array(
+        self,
+        width=None,
+        height=None,
+        uint xoffset=0,
+        uint yoffset=0,
+        uint xstep=1,
+        uint ystep=1,
+    ):
+        """read_as_array(width=None, height=None, xoffset=0, yoffset=0, xstep=1, ystep=1):
 
         Reads the specified source region as an :class:`numpy.ndarray`.
 
@@ -1970,14 +2000,14 @@ cdef class Band(EprObject):
             if w > xoffset:
                 width = w - xoffset
             else:
-                raise ValueError('xoffset os larger that he scene width')
+                raise ValueError("xoffset os larger that the scene width")
 
         if height is None:
             h = epr_get_scene_height(product_id)
             if h > yoffset:
                 height = h - yoffset
             else:
-                raise ValueError('yoffset os larger that he scene height')
+                raise ValueError("yoffset os larger that the scene height")
 
         raster = self.create_compatible_raster(width, height, xstep, ystep)
         self.read_raster(xoffset, yoffset, raster)
@@ -1985,8 +2015,10 @@ cdef class Band(EprObject):
         return raster.data
 
     def __repr__(self):
-        return 'epr.Band(%s) of epr.Product(%s)' % (self.get_name(),
-                                                    self.product.id_string)
+        return (
+            f"epr.Band({self.get_name()!r}) of "
+            f"epr.Product({self.product.id_string!r})"
+        )
 
     # --- low level interface -------------------------------------------------
     @property
@@ -2063,8 +2095,8 @@ cdef class Dataset(EprObject):
         if self._ptr is not NULL:
             self.check_closed_product()
             if self._ptr.description is not NULL:
-                return _to_str(self._ptr.description, 'ascii')
-        return ''
+                return _to_str(self._ptr.description, "ascii")
+        return ""
 
     def get_name(self):
         """get_name(self)
@@ -2076,8 +2108,8 @@ cdef class Dataset(EprObject):
         if self._ptr is not NULL:
             self.check_closed_product()
             name = <char*>epr_get_dataset_name(self._ptr)
-            return _to_str(name, 'ascii')
-        return ''
+            return _to_str(name, "ascii")
+        return ""
 
     def get_dsd_name(self):
         """get_dsd_name(self)
@@ -2089,8 +2121,8 @@ cdef class Dataset(EprObject):
         if self._ptr is not NULL:
             self.check_closed_product()
             name = <char*>epr_get_dsd_name(self._ptr)
-            return _to_str(name, 'ascii')
-        return ''
+            return _to_str(name, "ascii")
+        return ""
 
     def get_num_records(self):
         """get_num_records(self)
@@ -2168,7 +2200,7 @@ cdef class Dataset(EprObject):
             record_ptr = epr_read_record(self._ptr, index, record_ptr)
 
         if record_ptr is NULL:
-            pyepr_null_ptr_error('unable to read record at index %d' % index)
+            pyepr_null_ptr_error("unable to read record at index %d" % index)
 
         if not record:
             record = new_record(record_ptr, self, True)
@@ -2187,18 +2219,20 @@ cdef class Dataset(EprObject):
 
     def __iter__(self):
         self.check_closed_product()
-        cdef int idx
+        cdef uint idx
         for idx in range(epr_get_num_records(self._ptr)):
             yield self.read_record(idx)
 
     def __str__(self):
-        lines = [repr(self), '']
+        lines = [repr(self), ""]
         lines.extend(map(str, self))
-        return '\n'.join(lines)
+        return "\n".join(lines)
 
     def __repr__(self):
-        return 'epr.Dataset(%s) %d records' % (self.get_name(),
-                                               self.get_num_records())
+        return (
+            f"epr.Dataset({self.get_name()!r}) {self.get_num_records()} "
+            f"records"
+        )
 
     # --- low level interface -------------------------------------------------
     @property
@@ -2231,12 +2265,12 @@ cdef class Product(EprObject):
     cdef EPR_SProductId* _ptr
     cdef str _mode
 
-    def __cinit__(self, filename, str mode='rb'):
+    def __cinit__(self, filename, str mode="rb"):
         pfilename = os.fspath(filename)
         cdef bytes bfilename
         cdef char* cfilename
 
-        if hasattr(pfilename, 'encode'):
+        if hasattr(pfilename, "encode"):
             bfilename = _to_bytes(pfilename, _DEFAULT_FS_ENCODING)
             cfilename = bfilename
         else:
@@ -2245,8 +2279,8 @@ cdef class Product(EprObject):
         cdef bytes bmode
         cdef char* cmode
 
-        if mode not in ('rb', 'rb+', 'r+b'):
-            raise ValueError('invalid open mode: "%s"' % mode)
+        if mode not in ("rb", "rb+", "r+b"):
+            raise ValueError(f"invalid open mode: {mode!r}")
 
         self._mode = mode
 
@@ -2257,10 +2291,10 @@ cdef class Product(EprObject):
             # try to get error info from the lib
             pyepr_check_errors()
 
-            raise ValueError('unable to open "%s"' % filename)
+            raise ValueError(f"unable to open '{filename}'")
 
-        if '+' in mode:
-            # reopen in 'rb+ mode
+        if "+" in mode:
+            # reopen in "rb+" mode
 
             bmode = _to_bytes(mode)
             cmode = bmode
@@ -2271,11 +2305,12 @@ cdef class Product(EprObject):
             if self._ptr.istream is NULL:
                 errno.errno = 0
                 raise ValueError(
-                    'unable to open file "%s" in "%s" mode' % (filename, mode))
+                    f"unable to open file '{filename}' in {mode!r} mode"
+                )
 
     def __dealloc__(self):
         if self._ptr is not NULL:
-            if '+' in self._mode:
+            if "+" in self._mode:
                 stdio.fflush(self._ptr.istream)
             epr_close_product(self._ptr)
             pyepr_check_errors()
@@ -2283,14 +2318,14 @@ cdef class Product(EprObject):
 
     cdef inline int check_closed_product(self) except -1:
         if self._ptr is NULL:
-            raise ValueError('I/O operation on closed file')
+            raise ValueError("I/O operation on closed file")
         return 0
 
     cdef inline _check_write_mode(self):
-        if '+' not in self._mode:
-            raise TypeError('write operation on read-only file')
+        if "+" not in self._mode:
+            raise TypeError("write operation on read-only file")
 
-    def __init__(self, filename, mode='rb'):
+    def __init__(self, filename, mode="rb"):
         # @NOTE: this method suppresses the default behavior of EprObject
         #        that is raising an exception when it is instantiated by
         #        the user.
@@ -2312,7 +2347,7 @@ cdef class Product(EprObject):
         once; only the first call, however, will have an effect.
         """
         if self._ptr is not NULL:
-            # if '+' in self.mode:
+            # if "+" in self.mode:
             #     stdio.fflush(self._ptr.istream)
             epr_close_product(self._ptr)
             pyepr_check_errors()
@@ -2321,11 +2356,11 @@ cdef class Product(EprObject):
     def flush(self):
         """Flush the file stream."""
         cdef int ret
-        if '+' in self.mode:
+        if "+" in self.mode:
             ret = stdio.fflush(self._ptr.istream)
             if ret != 0:
                 errno.errno = 0
-                raise IOError('flush error')
+                raise IOError("flush error")
 
     @property
     def file_path(self):
@@ -2334,7 +2369,7 @@ cdef class Product(EprObject):
         if self._ptr.file_path is NULL:
             return None
         else:
-            return _to_str(self._ptr.file_path, 'ascii')
+            return _to_str(self._ptr.file_path, "ascii")
 
     @property
     def _fileno(self):
@@ -2356,7 +2391,7 @@ cdef class Product(EprObject):
     def mode(self):
         """String that specifies the mode in which the file is opened.
 
-        Possible values: 'rb' for read-only mode, 'rb+' for read-write
+        Possible values: "rb" for read-only mode, "rb+" for read-write
         mode.
         """
         return self._mode
@@ -2370,7 +2405,7 @@ cdef class Product(EprObject):
     @property
     def id_string(self):
         """The product identifier string obtained from the MPH
-        parameter 'PRODUCT'.
+        parameter "PRODUCT".
 
         The first 10 characters of this string identify the product
         type, e.g. "MER_1P__FR" for a MERIS Level 1b full resolution
@@ -2378,7 +2413,7 @@ cdef class Product(EprObject):
         The rest of the string decodes product instance properties.
         """
         self.check_closed_product()
-        return _to_str(self._ptr.id_string, 'ascii')
+        return _to_str(self._ptr.id_string, "ascii")
 
     @property
     def meris_iodd_version(self):
@@ -2443,7 +2478,7 @@ cdef class Product(EprObject):
         cdef EPR_SDatasetId* dataset_id
         dataset_id = epr_get_dataset_id_at(self._ptr, index)
         if dataset_id is NULL:
-            pyepr_null_ptr_error('unable to get dataset at index %d' % index)
+            pyepr_null_ptr_error("unable to get dataset at index %d" % index)
 
         return new_dataset(dataset_id, self)
 
@@ -2461,7 +2496,7 @@ cdef class Product(EprObject):
         cdef bytes cname = _to_bytes(name)
         dataset_id = epr_get_dataset_id(self._ptr, cname)
         if dataset_id is NULL:
-            pyepr_null_ptr_error(r'unable to get dataset "%s"' % name)
+            pyepr_null_ptr_error(r"unable to get dataset '%s'" % name)
 
         return new_dataset(dataset_id, self)
 
@@ -2485,7 +2520,7 @@ cdef class Product(EprObject):
 
         dsd_ptr = epr_get_dsd_at(self._ptr, index)
         if dsd_ptr is NULL:
-            pyepr_null_ptr_error('unable to get DSD at index "%d"' % index)
+            pyepr_null_ptr_error("unable to get DSD at index '%d'" % index)
 
         return new_dsd(dsd_ptr, self)
 
@@ -2497,7 +2532,7 @@ cdef class Product(EprObject):
         cdef EPR_SRecord* record_ptr
         record_ptr = epr_get_mph(self._ptr)
         if record_ptr is NULL:
-            pyepr_null_ptr_error('unable to get MPH record')
+            pyepr_null_ptr_error("unable to get MPH record")
 
         return new_record(record_ptr, self, False)
 
@@ -2509,7 +2544,7 @@ cdef class Product(EprObject):
         cdef EPR_SRecord* record_ptr
         record_ptr = epr_get_sph(self._ptr)
         if record_ptr is NULL:
-            pyepr_null_ptr_error('unable to get SPH record')
+            pyepr_null_ptr_error("unable to get SPH record")
 
         return new_record(record_ptr, self, False)
 
@@ -2528,7 +2563,7 @@ cdef class Product(EprObject):
         cdef bytes cname = _to_bytes(name)
         band_id = epr_get_band_id(self._ptr, cname)
         if band_id is NULL:
-            pyepr_null_ptr_error('unable to get band "%s"' % name)
+            pyepr_null_ptr_error("unable to get band '%s'" % name)
 
         return new_band(band_id, self)
 
@@ -2547,7 +2582,7 @@ cdef class Product(EprObject):
         cdef EPR_SBandId* band_id
         band_id = epr_get_band_id_at(self._ptr, index)
         if band_id is NULL:
-            pyepr_null_ptr_error('unable to get band at index "%d"' % index)
+            pyepr_null_ptr_error("unable to get band at index '%d'" % index)
 
         return new_band(band_id, self)
 
@@ -2600,7 +2635,7 @@ cdef class Product(EprObject):
     # --- high level interface ------------------------------------------------
     @property
     def closed(self):
-        '''True if the :class:`epr.Product` is closed.'''
+        """True if the :class:`epr.Product` is closed."""
         return self._ptr is NULL
 
     def get_dataset_names(self):
@@ -2623,7 +2658,7 @@ cdef class Product(EprObject):
         for idx in range(num_datasets):
             dataset_ptr = epr_get_dataset_id_at(self._ptr, idx)
             name = <char*>epr_get_dataset_name(dataset_ptr)
-            names.append(_to_str(name, 'ascii'))
+            names.append(_to_str(name, "ascii"))
 
         return names
 
@@ -2647,7 +2682,7 @@ cdef class Product(EprObject):
         for idx in range(num_bands):
             band_ptr = epr_get_band_id_at(self._ptr, idx)
             name = <char*>epr_get_band_name(band_ptr)
-            names.append(_to_str(name, 'ascii'))
+            names.append(_to_str(name, "ascii"))
 
         return names
 
@@ -2678,15 +2713,17 @@ cdef class Product(EprObject):
     #     return itertools.chain((self.datasets(), self.bands()))
 
     def __repr__(self):
-        return 'epr.Product(%s) %d datasets, %d bands' % (self.id_string,
-                                self.get_num_datasets(), self.get_num_bands())
+        return (
+            f"epr.Product({self.id_string!r}) {self.get_num_datasets()} "
+            f"datasets, {self.get_num_bands()} bands"
+        )
 
     def __str__(self):
-        lines = [repr(self), '']
+        lines = [repr(self), ""]
         lines.extend(map(repr, self.datasets()))
-        lines.append('')
+        lines.append("")
         lines.extend(map(repr, self.bands()))
-        return '\n'.join(lines)
+        return "\n".join(lines)
 
     def __enter__(self):
         return self
@@ -2702,7 +2739,7 @@ cdef class Product(EprObject):
         return self._ptr.magic
 
 
-def open(filename, str mode='rb'):
+def open(filename, str mode="rb"):
     """open(filename)
 
     Open the ENVISAT product.
@@ -2715,8 +2752,8 @@ def open(filename, str mode='rb'):
         the path to the ENVISAT product file
     :param mode:
         string that specifies the mode in which the file is opened.
-        Allowed values: 'rb', 'rb+' for read-write mode.
-        Default: mode='rb'.
+        Allowed values: "rb", "rb+" for read-write mode.
+        Default: mode="rb".
     :returns:
         the :class:`Product` instance representing the specified
         product. An exception (:exc:`exceptions.ValueError`) is raised

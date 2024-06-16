@@ -33,7 +33,7 @@ cdef extern from 'epr_api.h' nogil:
     ctypedef unsigned long     ulong
 
     ctypedef EPR_Time          EPR_STime
-    #ctypedef EPR_FlagDef       EPR_SFlagDef
+    # ctypedef EPR_FlagDef       EPR_SFlagDef
     ctypedef EPR_PtrArray      EPR_SPtrArray
     ctypedef EPR_FieldInfo     EPR_SFieldInfo
     ctypedef EPR_RecordInfo    EPR_SRecordInfo
@@ -197,7 +197,7 @@ cdef extern from 'epr_api.h' nogil:
         char* dsd_name
         EPR_DSD* dsd
         char* dataset_name
-        #struct RecordDescriptor* record_descriptor
+        # struct RecordDescriptor* record_descriptor
         EPR_SRecordInfo* record_info
         char* description
 
