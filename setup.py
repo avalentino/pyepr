@@ -31,21 +31,6 @@ except ImportError:
     print("CYTHON not installed")
 
 
-def get_version(filename, strip_extra=False):
-    import re
-    from packaging.version import parse as Version
-
-    with open(filename) as fd:
-        data = fd.read()
-
-    mobj = re.search(
-        r"""^__version__\s*=\s*(?P<quote>['"])(?P<version>.*)(?P=quote)""",
-        data,
-        re.MULTILINE,
-    )
-    return Version(mobj.group("version"))
-
-
 # https://mail.python.org/pipermail/distutils-sig/2007-September/008253.html
 class NumpyExtension(setuptools.Extension):
     """Extension type that adds the NumPy include directory to include_dirs."""
@@ -80,8 +65,8 @@ def setup_extension(eprsrcdir=None, coverage=False):
         define_macros.extend([("CYTHON_TRACE_NOGIL", "1")])
 
     ext = NumpyExtension(
-        "epr",
-        sources=[os.path.join("src", "epr.pyx")] + extra_sources,
+        "epr._epr",
+        sources=[os.path.join("epr", "epr.pyx")] + extra_sources,
         include_dirs=include_dirs,
         libraries=libraries,
         language="c",
@@ -101,7 +86,6 @@ def setup_extension(eprsrcdir=None, coverage=False):
 
 def make_config(eprsrcdir=None, coverage=False):
     config = {
-        "version": str(get_version(os.path.join("src", "epr.pyx"))),
         "ext_modules": [setup_extension(eprsrcdir, coverage)],
     }
 

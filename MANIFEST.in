@@ -1,6 +1,6 @@
 recursive-include LICENSES *.txt
 recursive-include tests *.py
-recursive-include src *.pyx *.pxd
+recursive-include epr *.pyx *.pxd
 # recursive-include src *.c
 recursive-include extern/epr-api/src *.c *.h
 exclude extern/epr-api/*

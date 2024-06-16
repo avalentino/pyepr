@@ -1,5 +1,5 @@
 [run]
 plugins = Cython.Coverage
-source = src
+source = epr
 branch = True
 # omit = */Cython/Includes/*

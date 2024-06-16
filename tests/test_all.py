@@ -42,7 +42,15 @@ import numpy as np
 import numpy.testing as npt
 
 import epr
-
+from epr._epr import (
+    _EPR_MAGIC_PRODUCT_ID,
+    _EPR_MAGIC_DATASET_ID,
+    _EPR_MAGIC_BAND_ID,
+    _EPR_MAGIC_RECORD,
+    _EPR_MAGIC_FIELD,
+    _EPR_MAGIC_RASTER,
+    _EPR_MAGIC_FLAG_DEF,
+)
 
 EPR_TO_NUMPY_TYPE = {
     # epr.E_TID_UNKNOWN:  np.NPY_NOTYPE,
@@ -540,7 +548,7 @@ class TestProductLowLevelAPI(unittest.TestCase):
         self.product.close()
 
     def test_magic(self):
-        self.assertEqual(self.product._magic, epr._EPR_MAGIC_PRODUCT_ID)
+        self.assertEqual(self.product._magic, _EPR_MAGIC_PRODUCT_ID)
 
 
 class TestClosedProduct(unittest.TestCase):
@@ -1392,7 +1400,7 @@ class TestBandLowLevelAPI(unittest.TestCase):
         self.product.close()
 
     def test_magic(self):
-        self.assertEqual(self.band._magic, epr._EPR_MAGIC_BAND_ID)
+        self.assertEqual(self.band._magic, _EPR_MAGIC_BAND_ID)
 
     def test_field_index(self):
         self.assertEqual(self.band._field_index, self.FIELD_INDEX)
@@ -1723,7 +1731,7 @@ class TestRasterHighLevelAPI(unittest.TestCase):
 
     def test_repr(self):
         pattern = (
-            r"<epr.Raster object at 0x\w+> (?P<data_type>\w+) "
+            r"<epr\._epr\.Raster object at 0x\w+> (?P<data_type>\w+) "
             r"\((?P<lines>\d+)L x (?P<pixels>\d+)P\)"
         )
         mobj = re.match(pattern, repr(self.raster))
@@ -1753,7 +1761,7 @@ class TestRasterLowLevelAPI(unittest.TestCase):
         )
 
     def test_magic(self):
-        self.assertEqual(self.raster._magic, epr._EPR_MAGIC_RASTER)
+        self.assertEqual(self.raster._magic, _EPR_MAGIC_RASTER)
 
 
 class TestRecord(unittest.TestCase):
@@ -1948,7 +1956,7 @@ class TestRecordLowLevelAPI(unittest.TestCase):
         self.product.close()
 
     def test_magic(self):
-        self.assertEqual(self.record._magic, epr._EPR_MAGIC_RECORD)
+        self.assertEqual(self.record._magic, _EPR_MAGIC_RECORD)
 
     def test_get_offset(self):
         self.assertEqual(self.record.get_offset(), self.RECORD_OFFSET)
@@ -1966,7 +1974,7 @@ class TestMultipleRecordsHighLevelAPI(unittest.TestCase):
         self.product.close()
 
     def test_repr(self):
-        pattern = r"<epr\.Record object at 0x\w+> (?P<num>\d+) fields"
+        pattern = r"<epr\._epr\.Record object at 0x\w+> (?P<num>\d+) fields"
         for record in self.dataset:
             mobj = re.match(pattern, repr(record))
             self.assertNotEqual(mobj, None)
@@ -2695,7 +2703,7 @@ class TestFieldLowLevelAPI(unittest.TestCase):
         self.product.close()
 
     def test_magic(self):
-        self.assertEqual(self.field._magic, epr._EPR_MAGIC_FIELD)
+        self.assertEqual(self.field._magic, _EPR_MAGIC_FIELD)
 
     def test_get_offset(self):
         self.assertEqual(self.field.get_offset(), self.FIELD_OFFSET)
@@ -2867,7 +2875,7 @@ class TestDsdLowLevelAPI(unittest.TestCase):
         self.product.close()
 
     def test_magic(self):
-        # self.assertEqual(self.dsd._magic, epr._EPR_MAGIC_DSD_ID)
+        # self.assertEqual(self.dsd._magic, _EPR_MAGIC_DSD_ID)
         self.assertTrue(isinstance(self.dsd._magic, int))
 
 

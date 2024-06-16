@@ -20,27 +20,7 @@
 # along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
 
 
-"""Python bindings for ENVISAT Product Reader C API.
-
-PyEPR_ provides Python_ bindings for the ENVISAT Product Reader C API
-(`EPR API`_) for reading satellite data from ENVISAT_ ESA_ (European
-Space Agency) mission.
-
-PyEPR_ is fully object oriented and, as well as the `EPR API`_ for C,
-supports ENVISAT_ MERIS, AATSR Level 1B and Level 2 and also ASAR data
-products. It provides access to the data either on a geophysical
-(decoded, ready-to-use pixel samples) or on a raw data layer.
-The raw data access makes it possible to read any data field contained
-in a product file.
-
-.. _PyEPR: https://pyepr.readthedocs.io
-.. _Python: https://www.python.org
-.. _`EPR API`: https://github.com/bcdev/epr-api
-.. _ENVISAT: http://envisat.esa.int
-.. _ESA: http://earth.esa.int
-"""
-
-__version__ = "1.2.0.dev0"
+"""Python bindings for ENVISAT Product Reader C API."""
 
 from libc cimport errno
 from libc cimport stdio
@@ -49,7 +29,7 @@ from libc cimport string as cstring
 from posix.stdio cimport fileno
 
 
-from epr cimport *
+from .epr cimport *
 
 from cpython.object cimport PyObject_AsFileDescriptor
 from cpython.weakref cimport PyWeakref_NewRef

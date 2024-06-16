@@ -20,24 +20,24 @@
 
 PYTHON = python3
 CYTHON = $(PYTHON) -m cython
-CYTHONFLAGS=$(shell $(CYTHON) --help | grep -o -- '--3str')
+CYTHONFLAGS=-3
 
 TEST_DATSET = tests/$(shell grep N1 tests/test_all.py | cut -d '"' -f 2)
 
 EPRAPIROOT = extern/epr-api
 
 .PHONY: default ext cythonize sdist eprsrc fullsdist doc clean distclean \
-        check debug data upload manylinux coverage ext-coverage coverage-report
+        check debug upload coverage ext-coverage coverage-report
 
 default: ext
 
-ext: src/epr.pyx
+ext: epr/epr.pyx
 	$(PYTHON) setup.py build_ext --inplace --epr-api-src=$(EPRAPIROOT)/src
 
-cythonize: src/epr.c
+cythonize: epr/_epr.c
 
-src/epr.c: src/epr.pyx
-	$(CYTHON) $(CYTHONFLAGS) src/epr.pyx
+epr/_epr.c: epr/epr.pyx
+	$(CYTHON) $(CYTHONFLAGS) -o epr/_epr.c epr/epr.pyx
 
 sdist: doc
 	$(PYTHON) -m build --sdist
@@ -60,15 +60,15 @@ doc:
 
 clean:
 	$(PYTHON) setup.py clean --all
-	$(RM) -r build dist src/pyepr.egg-info wheelhouse
-	$(RM) -r $$(find doc -name __pycache__) $$(find tests -name __pycache__)
-	$(RM) MANIFEST src/*.c src/*.o src/*.so
+	$(RM) -r build dist pyepr.*-info wheelhouse
+	$(RM) -r $$(find . -name __pycache__)
+	$(RM) MANIFEST epr/*.c epr/*.o epr/*.so
 	$(RM) tests/*.py[co]
 	$(MAKE) -C doc clean
 	$(RM) -r doc/_build
 	find . -name '*~' -delete
 	$(RM) *.c *.o *.html .coverage coverage.xml
-	$(RM) src/epr.html
+	$(RM) epr/epr.html
 	$(RM) -r htmlcov .pytest_cache .hypothesis
 	$(RM) epr.p*        # workaround for Cython.Coverage bug #1985
 
@@ -80,13 +80,13 @@ distclean: clean
 	$(RM) -r .ipynb_checkpoints .ruff_cache
 
 check: ext
-	env PYTHONPATH=src $(PYTHON) tests/test_all.py --verbose
+	env PYTHONPATH=. $(PYTHON) tests/test_all.py --verbose
 
-ext-coverage: src/epr.pyx
+ext-coverage: epr/epr.pyx
 	env PYEPR_COVERAGE=TRUE $(PYTHON) setup.py build_ext --inplace
 
 coverage: clean ext-coverage
-	env PYTHONPATH=src $(PYTHON) -m pytest --cov --cov-report=term --cov-report=html
+	env PYTHONPATH=. $(PYTHON) -m pytest --cov --cov-report=term --cov-report=html
 
 debug:
 	$(PYTHON)d setup.py build_ext --inplace --debug
