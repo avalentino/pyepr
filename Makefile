@@ -62,7 +62,7 @@ clean:
 	$(PYTHON) setup.py clean --all
 	$(RM) -r build dist src/pyepr.egg-info wheelhouse
 	$(RM) -r $$(find doc -name __pycache__) $$(find tests -name __pycache__)
-	$(RM) MANIFEST src/*.c src/*.o *.so
+	$(RM) MANIFEST src/*.c src/*.o src/*.so
 	$(RM) tests/*.py[co]
 	$(MAKE) -C doc clean
 	$(RM) -r doc/_build
@@ -77,6 +77,7 @@ distclean: clean
 	$(RM) -r LICENSES
 	$(MAKE) -C tests -f checksetup.mak distclean
 	$(RM) -r .eggs
+	$(RM) -r .ipynb_checkpoints .ruff_cache
 
 check: ext
 	env PYTHONPATH=src $(PYTHON) tests/test_all.py --verbose
