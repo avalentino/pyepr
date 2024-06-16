@@ -47,7 +47,8 @@ jobs:
         print('Numpy: %s' % np.__version__);\
         print('Python: %s' % sys.version)"
 
-        pytest -v
+        pytest -v ..
+      working-directory: doc
 
 
   syslibs:
@@ -80,7 +81,8 @@ jobs:
         print('Numpy: %s' % np.__version__);\
         print('Python: %s' % sys.version)"
 
-        pytest -v
+        pytest -v ..
+      working-directory: doc
 
 
   coverage:
