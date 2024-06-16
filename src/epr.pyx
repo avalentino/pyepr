@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# cython: langyage_level=3str
 
 # PyEPR - Python bindings for ENVISAT Product Reader API
 #
@@ -1265,14 +1265,11 @@ cdef class Record(EprObject):
         return list(self)
 
     def __iter__(self):
-        cdef int idx
-        cdef int num_fields
-
         self.check_closed_product()
-
-        num_fields = epr_get_num_fields(self._ptr)
-
-        return (self.get_field_at(idx) for idx in range(num_fields))
+        cdef int num_fields = epr_get_num_fields(self._ptr)
+        cdef int idx
+        for idx in range(num_fields):
+            yield self.get_field_at(idx)
 
     def __str__(self):
         self.check_closed_product()
@@ -2191,8 +2188,8 @@ cdef class Dataset(EprObject):
     def __iter__(self):
         cdef int idx
         self.check_closed_product()
-        return (self.read_record(idx)
-                            for idx in range(epr_get_num_records(self._ptr)))
+        for idx in range(epr_get_num_records(self._ptr)):
+            yield self.read_record(idx)
 
     def __str__(self):
         lines = [repr(self), '']
@@ -2247,7 +2244,6 @@ cdef class Product(EprObject):
 
         cdef bytes bmode
         cdef char* cmode
-        cdef int ret
 
         if mode not in ('rb', 'rb+', 'r+b'):
             raise ValueError('invalid open mode: "%s"' % mode)
@@ -2660,13 +2656,8 @@ cdef class Product(EprObject):
 
         Return the list of dataset in the product.
         """
-        cdef int idx
-        cdef int num_datasets
-
         self.check_closed_product()
-
-        num_datasets = epr_get_num_datasets(self._ptr)
-
+        cdef int num_datasets = epr_get_num_datasets(self._ptr)
         return [self.get_dataset_at(idx) for idx in range(num_datasets)]
 
     def bands(self):
