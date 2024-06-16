@@ -727,7 +727,7 @@ cdef class Field(EprObject):
 
         shape[0] = epr_get_field_num_elems(self._ptr)
         etype = epr_get_field_type(self._ptr)
-        msg = "Filed('%s') elems pointer is null" % self.get_name()
+        msg = f"Filed({self.get_name()!r}) elems pointer is null"
 
         if etype == e_tid_time:
             if shape[0] != 1:
@@ -1183,7 +1183,7 @@ cdef class Record(EprObject):
 
         field_ptr = <EPR_SField*>epr_get_field(self._ptr, cname)
         if field_ptr is NULL:
-            pyepr_null_ptr_error("unable to get field '%s'" % name)
+            pyepr_null_ptr_error(f"unable to get field {name!r}")
 
         return new_field(field_ptr, self)
 
@@ -1204,7 +1204,7 @@ cdef class Record(EprObject):
 
         field_ptr = <EPR_SField*>epr_get_field_at(self._ptr, index)
         if field_ptr is NULL:
-            pyepr_null_ptr_error("unable to get field at index %d" % index)
+            pyepr_null_ptr_error(f"unable to get field at index {index}")
 
         return new_field(field_ptr, self)
 
@@ -1873,8 +1873,9 @@ cdef class Band(EprObject):
                                                   xstep, ystep)
         if raster_ptr is NULL:
             pyepr_null_ptr_error(
-                "unable to create compatible raster with width=%d, height=%d, "
-                "xstep=%d, ystep=%d" % (src_width, src_height, xstep, ystep)
+                f"unable to create compatible raster "
+                f"with width={src_width}, height={src_height}, "
+                f"xstep={xstep}, ystep={ystep}"
             )
 
         return new_raster(raster_ptr, self)
@@ -2200,7 +2201,7 @@ cdef class Dataset(EprObject):
             record_ptr = epr_read_record(self._ptr, index, record_ptr)
 
         if record_ptr is NULL:
-            pyepr_null_ptr_error("unable to read record at index %d" % index)
+            pyepr_null_ptr_error(f"unable to read record at index {index}")
 
         if not record:
             record = new_record(record_ptr, self, True)
@@ -2478,7 +2479,7 @@ cdef class Product(EprObject):
         cdef EPR_SDatasetId* dataset_id
         dataset_id = epr_get_dataset_id_at(self._ptr, index)
         if dataset_id is NULL:
-            pyepr_null_ptr_error("unable to get dataset at index %d" % index)
+            pyepr_null_ptr_error(f"unable to get dataset at index {index}")
 
         return new_dataset(dataset_id, self)
 
@@ -2496,7 +2497,7 @@ cdef class Product(EprObject):
         cdef bytes cname = _to_bytes(name)
         dataset_id = epr_get_dataset_id(self._ptr, cname)
         if dataset_id is NULL:
-            pyepr_null_ptr_error(r"unable to get dataset '%s'" % name)
+            pyepr_null_ptr_error(f"unable to get dataset {name!r}")
 
         return new_dataset(dataset_id, self)
 
@@ -2520,7 +2521,7 @@ cdef class Product(EprObject):
 
         dsd_ptr = epr_get_dsd_at(self._ptr, index)
         if dsd_ptr is NULL:
-            pyepr_null_ptr_error("unable to get DSD at index '%d'" % index)
+            pyepr_null_ptr_error(f"unable to get DSD at index {index}")
 
         return new_dsd(dsd_ptr, self)
 
@@ -2563,7 +2564,7 @@ cdef class Product(EprObject):
         cdef bytes cname = _to_bytes(name)
         band_id = epr_get_band_id(self._ptr, cname)
         if band_id is NULL:
-            pyepr_null_ptr_error("unable to get band '%s'" % name)
+            pyepr_null_ptr_error(f"unable to get band {name!r}")
 
         return new_band(band_id, self)
 
@@ -2582,7 +2583,7 @@ cdef class Product(EprObject):
         cdef EPR_SBandId* band_id
         band_id = epr_get_band_id_at(self._ptr, index)
         if band_id is NULL:
-            pyepr_null_ptr_error("unable to get band at index '%d'" % index)
+            pyepr_null_ptr_error(f"unable to get band at index {index}")
 
         return new_band(band_id, self)
 

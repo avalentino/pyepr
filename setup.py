@@ -89,7 +89,7 @@ def setup_extension(eprsrcdir=None, coverage=False):
     )
 
     # compiler directives
-    language_level = "3str"
+    language_level = "3"
     ext.cython_directives = dict(language_level=language_level)
     print(f"CYTHON_LANGUAGE_LEVEL: {language_level}")
 
