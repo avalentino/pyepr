@@ -801,7 +801,7 @@ class TestDatasetOnClosedProduct(unittest.TestCase):
         self.assertRaises(ValueError, self.dataset.records)
 
     def test_iter(self):
-        self.assertRaises(ValueError, iter, self.dataset)
+        self.assertRaises(ValueError, lambda x: next(iter(x)), self.dataset)
 
     def test_repr(self):
         self.assertRaises(ValueError, repr, self.dataset)
@@ -2050,7 +2050,7 @@ class TestRecordOnClosedProduct(unittest.TestCase):
         self.assertRaises(ValueError, self.record.fields)
 
     def test_iter(self):
-        self.assertRaises(ValueError, iter, self.record)
+        self.assertRaises(ValueError, lambda x: next(iter(x)), self.record)
 
     def test_repr(self):
         self.assertRaises(ValueError, repr, self.record)

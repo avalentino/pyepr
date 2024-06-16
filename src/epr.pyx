@@ -2186,8 +2186,8 @@ cdef class Dataset(EprObject):
         return list(self)
 
     def __iter__(self):
-        cdef int idx
         self.check_closed_product()
+        cdef int idx
         for idx in range(epr_get_num_records(self._ptr)):
             yield self.read_record(idx)
 
