@@ -29,7 +29,7 @@ jobs:
         fetch-depth: 0
         submodules: true
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
@@ -59,8 +59,8 @@ jobs:
       with:
         fetch-depth: 0
         submodules: true
-    - name: Set up Python 
-      uses: actions/setup-python@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
     - name: Install dependencies
       run: |
         sudo apt-get -y install libepr-api-dev
@@ -101,7 +101,7 @@ jobs:
         fetch-depth: 0
         submodules: true
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
@@ -120,7 +120,7 @@ jobs:
         print('Numpy: %s' % np.__version__);\
         print('Python: %s' % sys.version)"
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         env_vars: OS,PYTHON
         verbose: true
