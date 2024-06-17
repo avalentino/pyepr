@@ -72,8 +72,8 @@ issues = "https://github.com/avalentino/pyepr/issues"
 
 [tool.setuptools]
 packages = ["epr"]
-zip-safe = false
-# license-files = ["LICENSE"]
+include-package-data = false
+
 
 [tool.setuptools.dynamic]
 version = {attr = "epr.__version__"}
