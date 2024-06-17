@@ -62,7 +62,7 @@ jobs:
         print('Numpy: %s' % np.__version__);\
         print('Python: %s' % sys.version)"
 
-        ptyhon -m pytest -v ..
+        ptyhon -m pytest -v ../tests
       working-directory: dist
 
 
@@ -106,7 +106,7 @@ jobs:
         print('Numpy: %s' % np.__version__);\
         print('Python: %s' % sys.version)"
 
-        python -m pytest -v ..
+        python -m pytest -v ../tests
       working-directory: dist
 
 
