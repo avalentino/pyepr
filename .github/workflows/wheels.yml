@@ -4,8 +4,16 @@ on:
   push:
     branches:
       - 'releases/**'
+      - 'ci/**'
     tags:
       - v*
+  pull_request:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build_wheels:
@@ -21,7 +29,6 @@ jobs:
           fetch-depth: 0
           submodules: true
 
-      # Used to host cibuildwheel
       - uses: actions/setup-python@v5
         with:
           python-version: "3.x"
@@ -31,6 +38,8 @@ jobs:
         env:
           CIBW_SKIP: cp36-* cp37-* pp* cp312-*i686*
 
+
       - uses: actions/upload-artifact@v4
         with:
+          name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
           path: ./wheelhouse/*.whl
