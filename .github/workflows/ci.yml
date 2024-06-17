@@ -51,7 +51,11 @@ jobs:
       shell: bash
       run: |
         WHEELNAME=$(ls dist/${PACKAGE}-*.whl)
-        python -m pip install ${WHEELNAME}[test]
+        python -m pip install ${WHEELNAME}
+
+    - name: Install test dependencies
+      run: |
+        python -m pip install pytest
 
     - name: Test with pytest
       run: |
@@ -94,7 +98,11 @@ jobs:
         PYEPR_EPRAPI_SRC: ""
       run: |
         WHEELNAME=$(ls dist/${PACKAGE}-*.whl)
-        python -m pip install ${WHEELNAME}[test]
+        python -m pip install ${WHEELNAME}
+
+    - name: Install test dependencies
+      run: |
+        python -m pip install pytest
 
     - name: Test with pytest
       run: |
