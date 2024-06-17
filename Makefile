@@ -75,7 +75,6 @@ clean:
 distclean: clean
 	$(RM) $(TEST_DATSET)
 	$(RM) -r LICENSES
-	$(MAKE) -C tests -f checksetup.mak distclean
 	$(RM) -r .eggs
 	$(RM) -r .ipynb_checkpoints .ruff_cache
 
