@@ -58,7 +58,10 @@ jobs:
         python -m pip install pytest
 
     - name: Test with pytest
+      shell: bash
       run: |
+        pwd
+        echo ${PYTHONPATH}
         python -c "\
         import sys, epr, numpy as np;\
         print('PyEPR: %s' % epr.__version__);\
@@ -105,7 +108,10 @@ jobs:
         python -m pip install pytest
 
     - name: Test with pytest
+      shell: bash
       run: |
+        pwd
+        echo ${PYTHONPATH}
         python -c "\
         import sys, epr, numpy as np;\
         print('PyEPR: %s' % epr.__version__);\
