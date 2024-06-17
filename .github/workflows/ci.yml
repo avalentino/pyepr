@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 env:
-  PACKAGE: packagename
+  PACKAGE: pyepr
 
 jobs:
   build:
