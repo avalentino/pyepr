@@ -50,7 +50,7 @@ jobs:
     - name: Install
       shell: bash
       run: |
-        WHEELNAME=dist/${PACKAGE}-*.whl
+        WHEELNAME=$(ls dist/${PACKAGE}-*.whl)
         python -m pip install ${WHEELNAME}[test]
 
     - name: Test with pytest
@@ -94,7 +94,7 @@ jobs:
       env:
         PYEPR_EPRAPI_SRC: ""
       run: |
-        WHEELNAME=dist/${PACKAGE}-*.whl
+        WHEELNAME=$(ls dist/${PACKAGE}-*.whl)
         python -m pip install ${WHEELNAME}[test]
 
     - name: Test with pytest
