@@ -65,8 +65,7 @@ jobs:
         print('EPR API: %s' % epr.EPR_C_API_VERSION);\
         print('Numpy: %s' % np.__version__);\
         print('Python: %s' % sys.version)"
-
-        ptyhon -m pytest -v ../tests
+        python -m pytest -v ../tests/test_all.py
       working-directory: dist
 
 
@@ -113,8 +112,7 @@ jobs:
         print('EPR API: %s' % epr.EPR_C_API_VERSION);\
         print('Numpy: %s' % np.__version__);\
         print('Python: %s' % sys.version)"
-
-        python -m pytest -v ../tests
+        python -m pytest -v ../tests/test_all.py
       working-directory: dist
 
 
