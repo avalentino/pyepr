@@ -1,9 +1,11 @@
-numpy>=1.7
+coverage
 cython>=0.29.22
-sphinx
-sphinx_rtd_theme
 ipython
+numpy>=1.7
+packaging
 pytest
 pytest-cov
-packaging
-coverage
+python-build
+sphinx
+sphinx_rtd_theme
+twine
