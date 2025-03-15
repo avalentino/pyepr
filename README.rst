@@ -8,33 +8,29 @@ ENVISAT Product Reader Python API
 :Copyright: 2011-2025, Antonio Valentino <antonio.valentino@tiscali.it>
 :Version:   1.2.0
 
-.. image:: https://github.com/avalentino/pyepr/actions/workflows/ci.yml/badge.svg?branch=master
-    :alt: CI status page
+|PyPI Status| |GHA Status| |Documentation Status| |Python Versions| |License| |Wheels| |Coverage|
+
+.. |PyPI Status| image:: https://img.shields.io/pypi/v/pyepr
+    :target: https://pypi.org/project/pyepr
+    :alt: PyPI Status
+.. |GHA Status| image:: https://github.com/avalentino/pyepr/actions/workflows/ci.yml/badge.svg
     :target: https://github.com/avalentino/pyepr/actions
-
-.. image:: https://img.shields.io/pypi/v/pyepr
-    :alt: Latest Version
-    :target: https://pypi.org/project/pyepr
-
-.. image:: https://img.shields.io/pypi/pyversions/pyepr
-    :alt: Supported Python versions
-    :target: https://pypi.org/project/pyepr
-
-.. image:: https://img.shields.io/pypi/l/pyepr
-    :alt: License
-    :target: https://pypi.org/project/pyepr
-
-.. image:: https://img.shields.io/pypi/wheel/pyepr
-    :alt: Wheel Status
-    :target: https://pypi.org/project/pyepr
-
-.. image:: https://readthedocs.org/projects/pyepr/badge
+    :alt: GitHub Actions Status
+.. |Documentation Status| image:: https://readthedocs.org/projects/pyepr/badge
+    :target: https://pyepr.readthedocs.io
     :alt: Documentation Status
-    :target: https://pyepr.readthedocs.io/en/latest
-
-.. image:: https://codecov.io/gh/avalentino/pyepr/branch/master/graph/badge.svg
-    :alt: Coverage Status
+.. |Python Versions| image:: https://img.shields.io/pypi/pyversions/pyepr
+    :target: https://pypi.org/project/pyepr
+    :alt: Supported Python versions
+.. |License| image:: https://img.shields.io/pypi/l/pyepr
+    :target: https://pypi.org/project/pyepr
+    :alt: License
+.. |Wheels| image:: https://img.shields.io/pypi/wheel/pyepr
+    :target: https://pypi.org/project/pyepr
+    :alt: Wheels Status
+.. |Coverage| image:: https://codecov.io/gh/avalentino/pyepr/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/avalentino/pyepr
+    :alt: Coverage Status
 
 
 Introduction
@@ -80,12 +76,12 @@ Dependencies
 In order to use PyEPR it is needed that the following software are
 correctly installed and configured:
 
-* Python3_ >= 3.5 (including PyPy3_)
+* Python3_ >= 3.9 (including PyPy3_)
 * numpy_ >= 1.7.0
 * `EPR API`_ >= 2.2 (optional, since PyEPR 0.7 the source tar-ball comes
   with a copy of the EPR C API sources)
 * a reasonably updated C compiler (build only)
-* Cython_ >= 0.29 (build only)
+* Cython_ >= 3.0 (build only)
 * pytest_ (optional and only needed for testing)
 
 .. _Python3: Python_

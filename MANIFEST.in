@@ -1,17 +1,8 @@
 recursive-include LICENSES *.txt
 recursive-include tests *.py
 recursive-include epr *.pyx *.pxd
-# recursive-include src *.c
 recursive-include extern/epr-api/src *.c *.h
-exclude extern/epr-api/*
-recursive-exclude extern/epr-api/src/api-test *
-recursive-exclude extern/epr-api/src/examples *
-recursive-exclude extern/epr-api/src/test *
 
 recursive-include doc *.rst *.txt *.py Makefile make.bat *.png
 recursive-include doc/_templates *.html
-recursive-include doc/pydoctheme *
-recursive-include doc/html *
-recursive-exclude doc/_build *
-
-recursive-exclude .github *
+# recursive-exclude doc/_build *
