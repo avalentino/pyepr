@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "PyEPR"
-copyright = "2011-2024, Antonio Valentino"
+copyright = "2011-2025, Antonio Valentino"
 author = "Antonio Valentino"
 
 
