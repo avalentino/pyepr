@@ -28,7 +28,8 @@ import tempfile
 import unittest
 import functools
 from urllib.request import urlopen
-from packaging.version import parse as Version
+
+from packaging.version import parse as Version  # noqa: N812
 
 try:
     import resource
@@ -41,13 +42,11 @@ import numpy.testing as npt
 
 import epr
 from epr._epr import (
-    _EPR_MAGIC_PRODUCT_ID,
-    _EPR_MAGIC_DATASET_ID,
-    _EPR_MAGIC_BAND_ID,
-    _EPR_MAGIC_RECORD,
-    _EPR_MAGIC_FIELD,
-    _EPR_MAGIC_RASTER,
-    _EPR_MAGIC_FLAG_DEF,
+    _EPR_MAGIC_FIELD,  # noqa: PLC2701
+    _EPR_MAGIC_RASTER,  # noqa: PLC2701
+    _EPR_MAGIC_RECORD,  # noqa: PLC2701
+    _EPR_MAGIC_BAND_ID,  # noqa: PLC2701
+    _EPR_MAGIC_PRODUCT_ID,  # noqa: PLC2701
 )
 
 EPR_TO_NUMPY_TYPE = {
@@ -73,17 +72,18 @@ def has_epr_c_bug_pyepr009():
         v = Version(epr_version), Version(pyepr_version)
         v_ref = Version("2.3dev"), Version("082")
         return v < v_ref
-    else:
-        return Version(epr.EPR_C_API_VERSION) <= Version("2.3")
+
+    return Version(epr.EPR_C_API_VERSION) <= Version("2.3")
 
 
 EPR_C_BUG_PYEPR009 = has_epr_c_bug_pyepr009()
 EPR_C_BUG_BCEPR002 = EPR_C_BUG_PYEPR009
 
 
-TESTDIR = os.path.abspath(os.path.dirname(__file__))
+TESTDIR = pathlib.Path(__file__).parent
 TEST_PRODUCT = "ASA_APM_1PNPDE20091007_025628_000000432083_00118_39751_9244.N1"
 TEST_PRODUCT_BM_EXPR = None
+PRODUCT_FILE = TESTDIR / TEST_PRODUCT
 
 
 def quiet(func):
@@ -95,7 +95,7 @@ def quiet(func):
             # using '/dev/null' doesn't work in python 3 because the file
             # object coannot be converted into a C FILE*
             # with file(os.devnull) as fd:
-            with tempfile.TemporaryFile("w+") as fd:
+            with tempfile.TemporaryFile("w+", encoding="utf-8") as fd:
                 sys.stdout = fd
                 sys.stderr = fd
                 ret = func(*args, **kwds)
@@ -108,7 +108,7 @@ def quiet(func):
 
 
 def equal_products(product1, product2):
-    if type(product1) != type(product2):
+    if type(product1) is not type(product2):
         return False
 
     for name in ("file_path", "tot_size", "id_string", "meris_iodd_version"):
@@ -129,67 +129,65 @@ def equal_products(product1, product2):
 
 
 def setUpModule():
-    filename = os.path.join(TESTDIR, TEST_PRODUCT)
+    filename = PRODUCT_FILE
     baseurl = "http://www.brockmann-consult.de/beam/data/products/ASAR"
-    url = baseurl + "/" + os.path.splitext(TEST_PRODUCT)[0] + ".zip"
-    if not os.path.exists(filename):
-        with urlopen(url) as src:
-            with open(filename + ".zip", "wb") as dst:
-                for data in src:
-                    dst.write(data)
+    url = baseurl + "/" + pathlib.Path(TEST_PRODUCT).with_suffix(".zip").name
+    zipfilename = filename.with_name(filename.name + ".zip")
+    if not filename.exists():
+        with urlopen(url) as src, zipfilename.open("wb") as dst:
+            for data in src:
+                dst.write(data)
 
-        with zipfile.ZipFile(filename + ".zip") as arch:
+        with zipfile.ZipFile(zipfilename) as arch:
             arch.extractall(TESTDIR)
 
-        os.remove(filename + ".zip")
+        zipfilename.unlink()
 
-    assert os.path.exists(filename)
+    assert filename.exists()
 
 
 class TestOpenProduct(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-
     def test_open(self):
-        with epr.open(self.PRODUCT_FILE) as product:
+        with epr.open(PRODUCT_FILE) as product:
             self.assertTrue(isinstance(product, epr.Product))
             self.assertEqual(product.mode, "rb")
 
     def test_open_rb(self):
-        with epr.open(self.PRODUCT_FILE, "rb") as product:
+        with epr.open(PRODUCT_FILE, "rb") as product:
             self.assertTrue(isinstance(product, epr.Product))
             self.assertEqual(product.mode, "rb")
 
     def test_open_rwb_01(self):
-        with epr.open(self.PRODUCT_FILE, "r+b") as product:
+        with epr.open(PRODUCT_FILE, "r+b") as product:
             self.assertTrue(isinstance(product, epr.Product))
-            self.assertTrue(product.mode in ("r+b", "rb+"))
+            self.assertTrue(product.mode in {"r+b", "rb+"})
 
     def test_open_rwb_02(self):
-        with epr.open(self.PRODUCT_FILE, "rb+") as product:
+        with epr.open(PRODUCT_FILE, "rb+") as product:
             self.assertTrue(isinstance(product, epr.Product))
-            self.assertTrue(product.mode in ("r+b", "rb+"))
+            self.assertTrue(product.mode in {"r+b", "rb+"})
 
     def test_open_invalid_mode_01(self):
-        self.assertRaises(ValueError, epr.open, self.PRODUCT_FILE, "")
+        self.assertRaises(ValueError, epr.open, PRODUCT_FILE, "")
 
     def test_open_invalid_mode_02(self):
-        self.assertRaises(ValueError, epr.open, self.PRODUCT_FILE, "rx")
+        self.assertRaises(ValueError, epr.open, PRODUCT_FILE, "rx")
 
     def test_open_invalid_mode_03(self):
-        self.assertRaises(TypeError, epr.open, self.PRODUCT_FILE, 0)
+        self.assertRaises(TypeError, epr.open, PRODUCT_FILE, 0)
 
     def test_open_bytes(self):
-        filename = self.PRODUCT_FILE.encode("UTF-8")
+        filename = str(PRODUCT_FILE).encode("UTF-8")
         with epr.open(filename) as product:
             self.assertTrue(isinstance(product, epr.Product))
 
     def test_open_pathlib(self):
-        filename = pathlib.Path(self.PRODUCT_FILE)
+        filename = pathlib.Path(PRODUCT_FILE)
         with epr.open(filename) as product:
             self.assertTrue(isinstance(product, epr.Product))
 
     def test_product_constructor(self):
-        with epr.Product(self.PRODUCT_FILE) as product:
+        with epr.Product(PRODUCT_FILE) as product:
             self.assertTrue(isinstance(product, epr.Product))
 
     def test_open_failure(self):
@@ -208,8 +206,7 @@ class TestOpenProduct(unittest.TestCase):
         self.assertRaises(ValueError, epr.Product, __file__)
 
 
-class TestProduct(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+class TestProduct(unittest.TestCase):  # noqa: PLR0904
     OPEN_MODE = "rb"
     ID_STRING = "ASA_APM_1PNPDE20091007_025628_000000432083_00118"
     TOT_SIZE = 22903686
@@ -236,7 +233,7 @@ class TestProduct(unittest.TestCase):
     MERIS_IODD_VERSION = 0
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE, self.OPEN_MODE)
+        self.product = epr.Product(PRODUCT_FILE, self.OPEN_MODE)
         self.bm_expr = TEST_PRODUCT_BM_EXPR
 
     def tearDown(self):
@@ -253,9 +250,7 @@ class TestProduct(unittest.TestCase):
         self.product.close()
 
     def test_file_path_property(self):
-        self.assertEqual(
-            self.product.file_path, self.PRODUCT_FILE.replace("\\", "/")
-        )
+        self.assertEqual(pathlib.Path(self.product.file_path), PRODUCT_FILE)
 
     def test_mode_property(self):
         self.assertEqual(self.product.mode, self.OPEN_MODE)
@@ -311,9 +306,7 @@ class TestProduct(unittest.TestCase):
         record = self.product.get_mph()
         self.assertTrue(isinstance(record, epr.Record))
         product = record.get_field("PRODUCT").get_elem()
-        self.assertEqual(
-            product.decode("ascii"), os.path.basename(self.PRODUCT_FILE)
-        )
+        self.assertEqual(product.decode("ascii"), PRODUCT_FILE.name)
 
     def test_get_sph(self):
         record = self.product.get_sph()
@@ -425,16 +418,16 @@ class TestProduct(unittest.TestCase):
             self.assertEqual(e.code, 7)
 
     def test_fileno(self):
-        self.assertTrue(isinstance(self.product._fileno, int))
+        self.assertTrue(isinstance(self.product._fileno, int))  # noqa: SLF001
 
     def test_fileno_read(self):
-        pos = os.lseek(self.product._fileno, 0, os.SEEK_CUR)
+        pos = os.lseek(self.product._fileno, 0, os.SEEK_CUR)  # noqa: SLF001
         try:
-            os.lseek(self.product._fileno, 0, os.SEEK_SET)
-            data = os.read(self.product._fileno, 7)
+            os.lseek(self.product._fileno, 0, os.SEEK_SET)  # noqa: SLF001
+            data = os.read(self.product._fileno, 7)  # noqa: SLF001
             self.assertEqual(data, b"PRODUCT")
         finally:
-            os.lseek(self.product._fileno, pos, os.SEEK_SET)
+            os.lseek(self.product._fileno, pos, os.SEEK_SET)  # noqa: SLF001
 
 
 class TestProductRW(TestProduct):
@@ -442,7 +435,6 @@ class TestProductRW(TestProduct):
 
 
 class TestProductHighLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAMES = TestProduct.DATASET_NAMES
     BAND_NAMES = [
         "slant_range_time",
@@ -454,7 +446,7 @@ class TestProductHighLevelAPI(unittest.TestCase):
     ]
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(PRODUCT_FILE)
 
     def tearDown(self):
         self.product.close()
@@ -467,7 +459,11 @@ class TestProductHighLevelAPI(unittest.TestCase):
     def test_readonly_closed(self):
         self.assertFalse(self.product.closed)
         self.assertRaises(
-            AttributeError, setattr, self.product, "closed", True
+            AttributeError,
+            setattr,
+            self.product,
+            "closed",
+            True,  # noqa: FBT003
         )
 
     def test_get_dataset_names(self):
@@ -528,7 +524,7 @@ class TestProductHighLevelAPI(unittest.TestCase):
         self.assertTrue(isinstance(str(self.product), str))
 
     def test_context_manager(self):
-        with epr.open(self.PRODUCT_FILE) as product:
+        with epr.open(PRODUCT_FILE) as product:
             self.assertTrue(isinstance(product, epr.Product))
             self.assertFalse(product.closed)
             self.assertTrue(str(product))
@@ -537,25 +533,24 @@ class TestProductHighLevelAPI(unittest.TestCase):
 
 
 class TestProductLowLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(PRODUCT_FILE)
 
     def tearDown(self):
         self.product.close()
 
     def test_magic(self):
-        self.assertEqual(self.product._magic, _EPR_MAGIC_PRODUCT_ID)
+        self.assertEqual(
+            self.product._magic, _EPR_MAGIC_PRODUCT_ID  # noqa: SLF001
+        )
 
 
-class TestClosedProduct(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+class TestClosedProduct(unittest.TestCase):  # noqa: PLR0904
     DATASET_NAME = "MDS1"
     BAND_NAME = "proc_data_1"
 
     def setUp(self):
-        self.product = epr.open(self.PRODUCT_FILE)
+        self.product = epr.open(PRODUCT_FILE)
         self.product.close()
 
     def test_properties(self):
@@ -640,7 +635,6 @@ class TestClosedProduct(unittest.TestCase):
 
 
 class TestDataset(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     OPEN_MODE = "rb"
     DATASET_NAME = "MDS1"
     DATASET_DESCRIPTION = "Measurement Data Set 1"
@@ -649,7 +643,7 @@ class TestDataset(unittest.TestCase):
     RECORD_INDEX = 0
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE, self.OPEN_MODE)
+        self.product = epr.Product(PRODUCT_FILE, self.OPEN_MODE)
         self.dataset = self.product.get_dataset(self.DATASET_NAME)
 
     def tearDown(self):
@@ -713,11 +707,10 @@ class TestDatasetRW(TestDataset):
 
 
 class TestDatasetHighLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = TestDataset.DATASET_NAME
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(PRODUCT_FILE)
         self.dataset = self.product.get_dataset(self.DATASET_NAME)
 
     def tearDown(self):
@@ -769,11 +762,10 @@ class TestDatasetHighLevelAPI(unittest.TestCase):
 
 
 class TestDatasetOnClosedProduct(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = "MDS1"
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(PRODUCT_FILE)
         self.dataset = self.product.get_dataset(self.DATASET_NAME)
         self.record = self.dataset.create_record()
         self.product.close()
@@ -818,8 +810,7 @@ class TestDatasetOnClosedProduct(unittest.TestCase):
         self.assertRaises(ValueError, str, self.dataset)
 
 
-class TestBand(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
+class TestBand(unittest.TestCase):  # noqa: PLR0904
     OPEN_MODE = "rb+"
     DATASET_NAME = "MDS1"
     BAND_NAMES = (
@@ -857,7 +848,7 @@ class TestBand(unittest.TestCase):
     # fmt: on
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE, self.OPEN_MODE)
+        self.product = epr.Product(PRODUCT_FILE, self.OPEN_MODE)
         self.band = self.product.get_band(self.BAND_NAME)
 
     def tearDown(self):
@@ -1357,10 +1348,8 @@ class TestAnnotationBand(TestBand):
 
 
 class TestBandHighLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(PRODUCT_FILE)
 
     def tearDown(self):
         self.product.close()
@@ -1386,34 +1375,36 @@ class TestBandHighLevelAPI(unittest.TestCase):
 
 
 class TestBandLowLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     FIELD_INDEX = 7
     ELEM_INDEX = -1
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(PRODUCT_FILE)
         self.band = self.product.get_band_at(0)
 
     def tearDown(self):
         self.product.close()
 
     def test_magic(self):
-        self.assertEqual(self.band._magic, _EPR_MAGIC_BAND_ID)
+        self.assertEqual(self.band._magic, _EPR_MAGIC_BAND_ID)  # noqa: SLF001
 
     def test_field_index(self):
-        self.assertEqual(self.band._field_index, self.FIELD_INDEX)
+        self.assertEqual(
+            self.band._field_index, self.FIELD_INDEX  # noqa: SLF001
+        )
 
     def test_elem_index(self):
-        self.assertEqual(self.band._elem_index, self.ELEM_INDEX)
+        self.assertEqual(
+            self.band._elem_index, self.ELEM_INDEX  # noqa: SLF001
+        )
 
 
 class TestBandOnClosedProduct(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     WIDTH = 12
     HEIGHT = 10
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(PRODUCT_FILE)
         self.band = self.product.get_band_at(0)
         self.raster = self.band.create_compatible_raster(
             self.WIDTH, self.HEIGHT
@@ -1665,14 +1656,13 @@ class TestRaster(unittest.TestCase):
 
 
 class TestRasterRead(TestRaster):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     BAND_NAME = TestBand.BAND_NAME
     RASTER_XOFFSET = TestBand.XOFFSET
     RASTER_YOFFSET = TestBand.YOFFSET
     TEST_DATA = TestBand.TEST_DATA
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(PRODUCT_FILE)
         self.band = self.product.get_band(self.BAND_NAME)
         self.raster = self.band.create_compatible_raster(
             self.RASTER_WIDTH, self.RASTER_HEIGHT
@@ -1697,7 +1687,6 @@ class TestRasterRead(TestRaster):
 
 
 class TestAnnotatedRasterRead(TestRasterRead):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     BAND_NAME = TestAnnotationBand.BAND_NAME
     RASTER_XOFFSET = TestAnnotationBand.XOFFSET
     RASTER_YOFFSET = TestAnnotationBand.YOFFSET
@@ -1759,11 +1748,10 @@ class TestRasterLowLevelAPI(unittest.TestCase):
         )
 
     def test_magic(self):
-        self.assertEqual(self.raster._magic, _EPR_MAGIC_RASTER)
+        self.assertEqual(self.raster._magic, _EPR_MAGIC_RASTER)  # noqa: SLF001
 
 
 class TestRecord(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     OPEN_MODE = "rb"
     DATASET_NAME = "MDS1_SQ_ADS"
     NUM_FIELD = 39
@@ -1772,7 +1760,7 @@ class TestRecord(unittest.TestCase):
     RECORD_INDEX = 0
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE, self.OPEN_MODE)
+        self.product = epr.Product(PRODUCT_FILE, self.OPEN_MODE)
         self.dataset = self.product.get_dataset(self.DATASET_NAME)
         self.record = self.dataset.read_record(self.RECORD_INDEX)
 
@@ -1854,7 +1842,6 @@ class TestRecordRW(TestRecord):
 
 
 class TestRecordHighLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = TestRecord.DATASET_NAME
     FIELD_NAMES = [
         "zero_doppler_time",
@@ -1899,7 +1886,7 @@ class TestRecordHighLevelAPI(unittest.TestCase):
     ]
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(PRODUCT_FILE)
         self.dataset = self.product.get_dataset(self.DATASET_NAME)
         self.record = self.dataset.read_record(0)
 
@@ -1940,13 +1927,12 @@ class TestRecordHighLevelAPI(unittest.TestCase):
 
 
 class TestRecordLowLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     RECORD_INDEX = 0
     RECORD_SIZE = 170
     RECORD_OFFSET = RECORD_INDEX * RECORD_SIZE
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(PRODUCT_FILE)
         dataset = self.product.get_dataset_at(0)
         self.record = dataset.read_record(self.RECORD_INDEX)
 
@@ -1954,18 +1940,17 @@ class TestRecordLowLevelAPI(unittest.TestCase):
         self.product.close()
 
     def test_magic(self):
-        self.assertEqual(self.record._magic, _EPR_MAGIC_RECORD)
+        self.assertEqual(self.record._magic, _EPR_MAGIC_RECORD)  # noqa: SLF001
 
     def test_get_offset(self):
         self.assertEqual(self.record.get_offset(), self.RECORD_OFFSET)
 
 
 class TestMultipleRecordsHighLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = TestProduct.DATASET_NAME
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(PRODUCT_FILE)
         self.dataset = self.product.get_dataset(self.DATASET_NAME)
 
     def tearDown(self):
@@ -1980,7 +1965,7 @@ class TestMultipleRecordsHighLevelAPI(unittest.TestCase):
 
     def test_str_vs_print(self):
         for record in self.dataset:
-            with tempfile.TemporaryFile("w+") as fd:
+            with tempfile.TemporaryFile("w+", encoding="utf-8") as fd:
                 record.print(fd)
                 fd.flush()
                 fd.seek(0)
@@ -1991,7 +1976,6 @@ class TestMultipleRecordsHighLevelAPI(unittest.TestCase):
 
 
 class TestMphRecordHighLevelAPI(TestRecordHighLevelAPI):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = "MPH"
     FIELD_NAMES = [
         "PRODUCT",
@@ -2009,7 +1993,7 @@ class TestMphRecordHighLevelAPI(TestRecordHighLevelAPI):
     ]
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(PRODUCT_FILE)
         self.record = self.product.get_mph()
 
     def tearDown(self):
@@ -2020,14 +2004,13 @@ class TestMphRecordHighLevelAPI(TestRecordHighLevelAPI):
 
 
 class TestRecordOnClosedProduct(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = "MDS1_SQ_ADS"
     NUM_FIELD = 39
     FIELD_NAME = "input_missing_lines_flag"
     FIELD_NAMES = TestRecordHighLevelAPI.FIELD_NAMES
 
     def setUp(self):
-        product = epr.Product(self.PRODUCT_FILE)
+        product = epr.Product(PRODUCT_FILE)
         dataset = product.get_dataset(self.DATASET_NAME)
         self.record = dataset.read_record(0)
         # self.mph = product.get_mph()
@@ -2068,7 +2051,6 @@ class TestRecordOnClosedProduct(unittest.TestCase):
 
 
 class TestField(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     OPEN_MODE = "rb"
     DATASET_NAME = "MDS1_SQ_ADS"
     RECORD_INDEX = 0
@@ -2089,7 +2071,7 @@ class TestField(unittest.TestCase):
     FIELD_OFFSET = 16
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE, self.OPEN_MODE)
+        self.product = epr.Product(PRODUCT_FILE, self.OPEN_MODE)
         dataset = self.product.get_dataset(self.DATASET_NAME)
         record = dataset.read_record(self.RECORD_INDEX)
         self.field = record.get_field(self.FIELD_NAME)
@@ -2155,7 +2137,6 @@ class TestFieldRW(TestField):
 
 
 class TestFieldWriteOnReadOnly(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     OPEN_MODE = "rb"
     DATASET_NAME = "MDS1"
     RECORD_INDEX = 10
@@ -2168,8 +2149,8 @@ class TestFieldWriteOnReadOnly(unittest.TestCase):
     FIELD_NUM_ELEMS = 1452
 
     def setUp(self):
-        self.filename = self.PRODUCT_FILE + "_"
-        shutil.copy(self.PRODUCT_FILE, self.filename)
+        self.filename = PRODUCT_FILE.with_name(PRODUCT_FILE.name + "_")
+        shutil.copy(PRODUCT_FILE, self.filename)
         self.product = epr.Product(self.filename, self.OPEN_MODE)
         dataset = self.product.get_dataset(self.DATASET_NAME)
         record = dataset.read_record(self.RECORD_INDEX)
@@ -2177,7 +2158,7 @@ class TestFieldWriteOnReadOnly(unittest.TestCase):
 
     def tearDown(self):
         self.product.close()
-        os.unlink(self.filename)
+        self.filename.unlink()
 
     def test_write_on_read_only_product(self):
         value = self.field.get_elem() + 10
@@ -2185,7 +2166,6 @@ class TestFieldWriteOnReadOnly(unittest.TestCase):
 
 
 class TestFieldWrite(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     OPEN_MODE = "rb+"
     REOPEN = False
     DATASET_NAME = "MDS1"
@@ -2198,19 +2178,62 @@ class TestFieldWrite(unittest.TestCase):
     FIELD_UNIT = ""
     FIELD_INDEX = 3
     FIELD_NUM_ELEMS = 1452
-    # fmt: off
     FIELD_VALUES = (
-           0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-           0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-           0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-           0,    0,    0,    0,    0, 2417, 2282, 2280, 2393, 2440,
-        2697, 3119, 3577, 3853, 3688, 3784, 4201, 3846, 2821, 2186,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2417,
+        2282,
+        2280,
+        2393,
+        2440,
+        2697,
+        3119,
+        3577,
+        3853,
+        3688,
+        3784,
+        4201,
+        3846,
+        2821,
+        2186,
     )
-    # fmt: on
 
     def setUp(self):
-        self.filename = self.PRODUCT_FILE + "_"
-        shutil.copy(self.PRODUCT_FILE, self.filename)
+        self.filename = PRODUCT_FILE.with_name(PRODUCT_FILE.name + "_")
+        shutil.copy(PRODUCT_FILE, self.filename)
         self.product = None
         self.dataset = None
         self.record = None
@@ -2228,7 +2251,7 @@ class TestFieldWrite(unittest.TestCase):
 
     def tearDown(self):
         self.product.close()
-        os.unlink(self.filename)
+        self.filename.unlink()
 
     def reopen(self, mode="rb"):
         if self.product is not None:
@@ -2242,9 +2265,13 @@ class TestFieldWrite(unittest.TestCase):
         if size is None:
             size = self.field.tot_size
 
-        os.lseek(self.product._fileno, self.offset + offset, os.SEEK_SET)
+        os.lseek(
+            self.product._fileno,  # noqa: SLF001
+            self.offset + offset,
+            os.SEEK_SET,
+        )
 
-        return os.read(self.product._fileno, size)
+        return os.read(self.product._fileno, size)  # noqa: SLF001
 
     def test_set_elem_metadata(self):
         self.assertEqual(self.field.get_description(), self.FIELD_DESCRIPTION)
@@ -2538,7 +2565,6 @@ class TestFieldWriteReopen(TestFieldWrite):
 
 
 class TestTimeField(TestField):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = "MDS1_SQ_ADS"
 
     FIELD_NAME = "zero_doppler_time"
@@ -2577,11 +2603,10 @@ class TestFieldWithMiltipleElems(TestField):
 
 
 class TestFieldHighLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = TestProduct.DATASET_NAME
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(PRODUCT_FILE)
         dataset = self.product.get_dataset(self.DATASET_NAME)
         self.record = dataset.read_record(0)
 
@@ -2612,7 +2637,7 @@ class TestFieldHighLevelAPI(unittest.TestCase):
 
     def test_str_vs_print(self):
         for field in self.record:
-            with tempfile.TemporaryFile("w+") as fd:
+            with tempfile.TemporaryFile("w+", encoding="utf-8") as fd:
                 field.print(fd)
                 fd.flush()
                 fd.seek(0)
@@ -2636,7 +2661,7 @@ class TestFieldHighLevelAPI(unittest.TestCase):
 
     def test_ne_field1_field1(self):
         field = self.record.get_field_at(0)
-        self.assertFalse(field != field)
+        self.assertFalse(field != field)  # noqa: PLR0124
 
     def test_ne_field1_field2(self):
         field1 = self.record.get_field_at(1)
@@ -2649,12 +2674,11 @@ class TestFieldHighLevelAPI(unittest.TestCase):
 
 
 class TestFieldHighLevelAPI2(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = "MAIN_PROCESSING_PARAMS_ADS"
     RECORD_INDEX = 0
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(PRODUCT_FILE)
 
     def tearDown(self):
         self.product.close()
@@ -2685,14 +2709,13 @@ class TestFieldHighLevelAPI2(unittest.TestCase):
 
 
 class TestFieldLowLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_INDEX = 0
     RECORD_INDEX = 0
     FIELD_NAME = "invalid_downlink_flag"
     FIELD_OFFSET = 23
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(PRODUCT_FILE)
         dataset = self.product.get_dataset_at(self.DATASET_INDEX)
         record = dataset.read_record(self.RECORD_INDEX)
         self.field = record.get_field(self.FIELD_NAME)
@@ -2701,21 +2724,20 @@ class TestFieldLowLevelAPI(unittest.TestCase):
         self.product.close()
 
     def test_magic(self):
-        self.assertEqual(self.field._magic, _EPR_MAGIC_FIELD)
+        self.assertEqual(self.field._magic, _EPR_MAGIC_FIELD)  # noqa: SLF001
 
     def test_get_offset(self):
         self.assertEqual(self.field.get_offset(), self.FIELD_OFFSET)
 
 
 class TestFieldOnClosedProduct(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DATASET_NAME = "MDS1_SQ_ADS"
     RECOSR_INDEX = 0
     FIELD_NAME = "invalid_downlink_flag"
     FIELD_NAME2 = "zero_doppler_time"
 
     def setUp(self):
-        product = epr.Product(self.PRODUCT_FILE)
+        product = epr.Product(PRODUCT_FILE)
         dataset = product.get_dataset(self.DATASET_NAME)
         self.record = dataset.read_record(self.RECOSR_INDEX)
         self.field = self.record.get_field(self.FIELD_NAME)
@@ -2763,7 +2785,6 @@ class TestFieldOnClosedProduct(unittest.TestCase):
 
 
 class TestDSD(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     OPEN_MODE = "rb"
     DSD_INDEX = 0
     DS_NAME = "MDS1 SQ ADS"
@@ -2774,7 +2795,7 @@ class TestDSD(unittest.TestCase):
     NUM_DSR = 1
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE, self.OPEN_MODE)
+        self.product = epr.Product(PRODUCT_FILE, self.OPEN_MODE)
         self.dsd = self.product.get_dsd_at(self.DSD_INDEX)
 
     def tearDown(self):
@@ -2840,10 +2861,8 @@ class TestDSDRW(TestDSD):
 
 
 class TestDsdHighLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(PRODUCT_FILE)
         self.dsd = self.product.get_dsd_at(0)
 
     def tearDown(self):
@@ -2863,10 +2882,8 @@ class TestDsdHighLevelAPI(unittest.TestCase):
 
 
 class TestDsdLowLevelAPI(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
-
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(PRODUCT_FILE)
         self.dsd = self.product.get_dsd_at(0)
 
     def tearDown(self):
@@ -2874,15 +2891,14 @@ class TestDsdLowLevelAPI(unittest.TestCase):
 
     def test_magic(self):
         # self.assertEqual(self.dsd._magic, _EPR_MAGIC_DSD_ID)
-        self.assertTrue(isinstance(self.dsd._magic, int))
+        self.assertTrue(isinstance(self.dsd._magic, int))  # noqa: SLF001
 
 
 class TestDSDOnCloserProduct(unittest.TestCase):
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     DSD_INDEX = 0
 
     def setUp(self):
-        self.product = epr.Product(self.PRODUCT_FILE)
+        self.product = epr.Product(PRODUCT_FILE)
         self.dsd = self.product.get_dsd_at(self.DSD_INDEX)
         self.dsd2 = self.product.get_dsd_at(self.DSD_INDEX + 1)
         self.product.close()
@@ -3053,7 +3069,7 @@ class TestDirectInstantiation(unittest.TestCase):
         pattern = self.MSG_PATTERN % epr.Dataset.__name__
         self.assertRaisesRegex(TypeError, pattern, epr.Dataset)
 
-    def test_direct_Product_instantiation(self):
+    def test_direct_product_instantiation(self):
         self.assertRaises(epr.EPRError, epr.Product, "filename")
 
 
@@ -3071,14 +3087,13 @@ class TestLibVersion(unittest.TestCase):
 class TestMemoryLeaks(unittest.TestCase):
     # See gh-10 (https://github.com/avalentino/pyepr/issues/10)
 
-    PRODUCT_FILE = os.path.join(TESTDIR, TEST_PRODUCT)
     BAND_NAME = "incident_angle"
 
     def test_memory_leacks_on_read_as_array(self):
-        N = 10
+        m = 10
 
-        for n in range(N):
-            with epr.open(self.PRODUCT_FILE) as p:
+        for n in range(m):
+            with epr.open(PRODUCT_FILE) as p:
                 p.get_band(self.BAND_NAME).read_as_array()
             if n <= 1:
                 m1 = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
@@ -3087,8 +3102,8 @@ class TestMemoryLeaks(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    print("PyEPR: %s" % epr.__version__)
-    print("EPR API: %s" % epr.EPR_C_API_VERSION)
-    print("Numpy: %s" % np.__version__)
-    print("Python: %s" % sys.version)
+    print(f"PyEPR:   {epr.__version__}")
+    print(f"EPR API: {epr.EPR_C_API_VERSION}")
+    print(f"Numpy:   {np.__version__}")
+    print(f"Python:  {sys.version}")
     unittest.main()

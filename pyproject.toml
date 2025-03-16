@@ -80,3 +80,118 @@ version = {attr = "epr.__version__"}
 [tool.cibuildwheel]
 test-requires = "pytest"
 # skip = "pp*"
+
+
+[tool.black]
+line-length = 79
+
+
+[tool.isort]
+profile = "black"
+length_sort = true
+no_inline_sort = true
+include_trailing_comma = true
+use_parentheses = true
+line_length = 79
+known_first_party = ["epr"]
+
+
+[tool.pydocstyle]
+add-ignore = ["D105"]
+# add-ignore = ["D105", "D107"]
+
+
+[tool.ruff]
+line-length = 79
+extend-exclude = ["doc/conf.py"]
+
+
+[tool.ruff.lint]
+preview = true
+select = [
+    # Updated to ruff v0.7.1
+    "F",        # F     Pyflakes
+    "E",        # E/W   pycodestyle
+    "W",        # E/W   pycodestyle
+    "C90",      # C90   mccabe
+    "I",        # I     isort
+    "N",        # N     pep8-naming
+    "D",        # D     pydocstyle
+    "UP",       # UP    pyupgrade
+    "YTT",      # YTT   flake8-2020
+    # "ANN",      # ANN   flake8-annotations
+    # "ASYNC",    # ASYNC flake8-async
+    # "S",        # S     flake8-bandit         # TODO
+    "BLE",      # BLE   flake8-blind-except
+    "FBT",      # FBT   flake8-boolean-trap
+    "B",        # B     flake8-bugbear
+    "A",        # A     flake8-builtins
+    # "COM",      # COM   flake8-commas
+    # "CPY",      # CPY   flake8-copyright      # --preview
+    "C4",       # C4    flake8-comprehensions
+    "DTZ",      # DTZ   flake8-datetimez
+    "T10",      # T10   flake8-debugger
+    "DJ",       # DJ    flake8-django
+    # "EM",       # EM    flake8-errmsg         # TODO
+    "EXE",      # EXE   flake8-executable
+    "FA",       # FA    flake8-future-annotations
+    "ISC",      # ISC   flake8-implicit-str-concat
+    "ICN",      # ICN   flake8-import-conventions
+    # "LOG",      # LOG   flake8-logging
+    "G",        # G     flake8-logging-format
+    "INP",      # INP   flake8-no-pep420
+    "PIE",      # PIE   flake8-pie
+    "T20",      # T20   flake8-print
+    "PYI",      # PYI   flake8-pyi
+    # "PT",       # PT    flake8-pytest-style   # manual
+    "Q",        # Q     flake8-quotes
+    "RSE",      # RSE   flake8-raise
+    "RET",      # RET   flake8-return
+    "SLF",      # SLF   flake8-self
+    "SLOT",     # SLOT  flake8-slots
+    "SIM",      # SIM   flake8-simplify
+    "TID",      # TID   flake8-tidy-imports
+    # "TCH",      # TCH   flake8-type-checking
+    # "INT",      # INT   flake8-gettext
+    "ARG",      # ARG   flake8-unused-arguments
+    "PTH",      # PTH   flake8-use-pathlib
+    # "TD",       # TD    flake8-todos
+    # "FIX",      # FIX   flake8-fixme          # manual
+    # "ERA",      # ERA   eradicate             # manual
+    # "PD",       # PD    pandas-vet
+    "PGH",      # PGH   pygrep-hooks
+    "PL",       # PL    Pylint
+    # "TRY",      # TRY   tryceratops           # manual
+    "FLY",      # FLY   flynt
+    "NPY",      # NPY   NumPy-specific rules
+    # "FAST",     # FAST  FastAPI
+    # "AIR",      # AIR   Airflow
+    "PERF",     # PERF  Perflint
+    # "FURB",     # FURB  refurb                # --preview
+    # "DOC",      # DOC   pydoclint
+    "RUF",      # RUF   Ruff-specific rules
+]
+extend-ignore = [
+    "D203",     # D203 1 blank line required before class docstring
+    "D213",     # D213 Multi-line docstring summary should start at the second line
+]
+
+
+[tool.ruff.format]
+preview = true
+docstring-code-format = true
+
+
+[tool.ruff.lint.per-file-ignores]
+"setup.py" = ["D", "N806", "PLC0415", "PTH110", "PTH118", "PTH207", "T201"]
+"tests/*" = ["D"]
+"tests/test_all.py" = ["RUF012", "T201"]
+"doc/examples/export_gdalvrt.py" = ["D", "PTH110", "PTH122", "T201"]
+"doc/examples/write_bands.py" = ["D", "PTH123", "PLR2004", "PTH118", "T201"]
+"doc/examples/write_bitmask.py" = ["D", "PLR2004", "PTH123", "T201"]
+"doc/examples/write_ndvi.py" = ["D", "PLR0914", "PLR2004", "PTH123", "T201"]
+"doc/examples/update_elements.py" = ["D"]
+
+
+[tool.ruff.lint.isort]
+length-sort = true

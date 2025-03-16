@@ -39,14 +39,14 @@ class NumpyExtension(setuptools.Extension):
     def include_dirs(self):
         from numpy import get_include
 
-        return self._include_dirs + [get_include()]
+        return [*self._include_dirs, get_include()]
 
     @include_dirs.setter
     def include_dirs(self, include_dirs):
         self._include_dirs = include_dirs
 
 
-def setup_extension(eprsrcdir=None, coverage=False):
+def setup_extension(eprsrcdir=None, *, coverage: bool = False):
     import glob
 
     if eprsrcdir:
@@ -66,7 +66,7 @@ def setup_extension(eprsrcdir=None, coverage=False):
 
     ext = NumpyExtension(
         "epr._epr",
-        sources=[os.path.join("epr", "epr.pyx")] + extra_sources,
+        sources=[os.path.join("epr", "epr.pyx"), *extra_sources],
         include_dirs=include_dirs,
         libraries=libraries,
         language="c",
@@ -75,7 +75,7 @@ def setup_extension(eprsrcdir=None, coverage=False):
 
     # compiler directives
     language_level = "3"
-    ext.cython_directives = dict(language_level=language_level)
+    ext.cython_directives = {"language_level": language_level}
     print(f"CYTHON_LANGUAGE_LEVEL: {language_level}")
 
     if coverage:
@@ -84,25 +84,23 @@ def setup_extension(eprsrcdir=None, coverage=False):
     return ext
 
 
-def make_config(eprsrcdir=None, coverage=False):
-    config = {
-        "ext_modules": [setup_extension(eprsrcdir, coverage)],
+def make_config(eprsrcdir=None, *, coverage=False):
+    return {
+        "ext_modules": [setup_extension(eprsrcdir, coverage=coverage)],
     }
-
-    return config
 
 
 def get_parser():
+    import argparse
+
     PYEPR_COVERAGE_STR = os.environ.get("PYEPR_COVERAGE", "").upper()
     DEFAULT_COVERAGE = bool(
-        PYEPR_COVERAGE_STR in ("Y", "YES", "TRUE", "OK", "ON", "1")
+        PYEPR_COVERAGE_STR in {"Y", "YES", "TRUE", "OK", "ON", "1"}
     )
     DEFAULT_EPRAPI_SRC = "extern/epr-api/src"
     if not os.path.exists(DEFAULT_EPRAPI_SRC):
         DEFAULT_EPRAPI_SRC = ""
     DEFAULT_EPRAPI_SRC = os.environ.get("PYEPR_EPRAPI_SRC", DEFAULT_EPRAPI_SRC)
-
-    import argparse
 
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
@@ -129,7 +127,7 @@ if __name__ == "__main__":
     sys.argv[:] = setup_argv
     print("PYEPR_COVERAGE:", extra_args.coverage)
 
-    config = make_config(extra_args.epr_api_src, extra_args.coverage)
+    config = make_config(extra_args.epr_api_src, coverage=extra_args.coverage)
 
     if "-h" in setup_argv or "--help" in setup_argv:
         msg = parser.format_help()
@@ -137,5 +135,5 @@ if __name__ == "__main__":
         print(msg)
         print()
 
-    print(config)
+    print("config:", config)
     setuptools.setup(**config)
