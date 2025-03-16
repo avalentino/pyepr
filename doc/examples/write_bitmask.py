@@ -7,7 +7,7 @@
 # https://github.com/bcdev/epr-api/blob/master/src/examples/write_bitmask.c
 
 """Generates bit mask from ENVISAT flags information as "raw" image
-for (e.g.) Photoshop
+for (e.g.) Photoshop.
 
 Call::
 
@@ -17,11 +17,12 @@ Call::
 Example to call the main function::
 
     $ python3 write_bitmask.py MER_RR__2P_TEST.N1 \
-    'l2_flags.LAND and !l2_flags.BRIGHT' my_flags.raw
+      'l2_flags.LAND and !l2_flags.BRIGHT' my_flags.raw
 
 """
 
 import sys
+
 import epr
 
 
@@ -30,16 +31,24 @@ def main(*argv):
         argv = sys.argv
 
     if len(argv) != 4:
-        print("Usage: write_bitmask <envisat-product> <bitmask-expression> "
-              "<output-file>")
-        print("  where envisat-product is the input filename")
-        print("  and bitmask-expression is a string containing the bitmask "
-              "logic")
-        print("  and output-file is the output filename.")
-        print("Example:")
-        print("  MER_RR__2P_TEST.N1 'l2_flags.LAND and not l2_flags.BRIGHT' "
-              "my_flags.raw")
-        print
+        print(
+            """\
+Usage:
+
+  python3 write_bitmask <envisat-product> <bitmask-expression>
+                        <output-file>
+
+where envisat-product is the input filename and bitmask-expression
+is a string containing the bitmask logic and output-file is the
+output filename.
+
+Example:
+
+  MER_RR__2P_TEST.N1 'l2_flags.LAND and not l2_flags.BRIGHT'
+  my_flags.raw
+
+  """
+        )
         sys.exit(1)
 
     product_file_path = argv[1]
@@ -55,8 +64,9 @@ def main(*argv):
         source_step_x = 1
         source_step_y = 1
 
-        bm_raster = epr.create_bitmask_raster(source_width, source_height,
-                                              source_step_x, source_step_y)
+        bm_raster = epr.create_bitmask_raster(
+            source_width, source_height, source_step_x, source_step_y
+        )
 
         product.read_bitmask_raster(bm_expr, offset_x, offset_y, bm_raster)
 
@@ -64,8 +74,10 @@ def main(*argv):
             bm_raster.data.tofile(out_stream)
 
     print(f"Raw image data successfully written to {image_file_path!r}.")
-    print(f"Data type is 'byte', size is {source_width} x {source_height} "
-          f"pixels.")
+    print(
+        f"Data type is 'byte', size is {source_width} x {source_height} "
+        f"pixels."
+    )
 
 
 if __name__ == "__main__":

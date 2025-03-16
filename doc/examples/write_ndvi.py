@@ -7,7 +7,7 @@
 # https://github.com/bcdev/epr-api/blob/master/src/examples/write_ndvi.c
 
 
-"""Example for using the epr-api
+"""Example for using the epr-api.
 
 Demonstrates how to open a MERIS L1b product and calculate the NDVI.
 
@@ -36,11 +36,20 @@ def main(*argv):
         argv = sys.argv
 
     if len(argv) != 3:
-        print("Usage: write_ndvi <envisat-product> <output-file>")
-        print("  where envisat-product is the input filename")
-        print("  and output-file is the output filename.")
-        print("Example: MER_RR__1P_TEST.N1 my_ndvi.raw")
-        print
+        print(
+            """"
+Usage:
+  python3 write_ndvi <envisat-product> <output-file>
+
+where envisat-product is the input filename
+and output-file is the output filename.
+
+Example:
+
+  MER_RR__1P_TEST.N1 my_ndvi.raw
+
+"""
+        )
         sys.exit(1)
 
     # Open the product
@@ -58,23 +67,25 @@ def main(*argv):
         height = product.get_scene_height()
         subsampling_x = 1
         subsampling_y = 1
-        raster1 = band1.create_compatible_raster(width, height,
-                                                 subsampling_x, subsampling_y)
-        raster2 = band2.create_compatible_raster(width, height,
-                                                 subsampling_x, subsampling_y)
+        raster1 = band1.create_compatible_raster(
+            width, height, subsampling_x, subsampling_y
+        )
+        raster2 = band2.create_compatible_raster(
+            width, height, subsampling_x, subsampling_y
+        )
 
         # Read the radiance into the raster.
         offset_x = 0
         offset_y = 0
 
-        logging.info(f"read {band1_name!r} data")
+        logging.info("read %r data", band1_name)
         band1.read_raster(offset_x, offset_y, raster1)
 
-        logging.info(f"read {band2_name!r} data")
+        logging.info("read %r data", band2_name)
         band2.read_raster(offset_x, offset_y, raster2)
 
         # Open the output file
-        logging.info(f"write ndvi to {argv[2]!r}")
+        logging.info("write ndvi to %r", argv[2])
         with open(argv[2], "wb") as out_stream:
 
             # Loop over all pixel and calculate the NDVI.

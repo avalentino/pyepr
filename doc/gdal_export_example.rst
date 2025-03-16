@@ -51,7 +51,7 @@ The :func:`epr2gdal` function first creates the VRT dataset
 
 .. literalinclude:: examples/export_gdalvrt.py
    :language: python
-   :lines: 101-117
+   :lines: 102-118
 
 and then loops on all :class:`epr.Band`\ s of the PyEPR_ :class:`epr.Product`
 calling the :func:`epr2gdal_band` function on each of them:
@@ -62,7 +62,7 @@ calling the :func:`epr2gdal_band` function on each of them:
 
 .. literalinclude:: examples/export_gdalvrt.py
    :language: python
-   :lines: 136-137
+   :lines: 137-138
 
 The :mod:`export_gdalvrt` module also provides a :data:`epr_to_gdal_type`
 mapping between EPR and GDAL data type identifiers.
@@ -87,7 +87,7 @@ rasters.
 
 .. literalinclude:: examples/export_gdalvrt.py
    :language: python
-   :lines: 54-78
+   :lines: 56-79
 
 .. index:: offset
 
@@ -139,7 +139,7 @@ dataset level when it is created:
 
 .. literalinclude:: examples/export_gdalvrt.py
    :language: python
-   :lines: 50-52
+   :lines: 52-54
 
 .. index:: dataset, band
 
@@ -156,7 +156,7 @@ doubled and an additional offset (one pixel) must be added to the
 
 .. literalinclude:: examples/export_gdalvrt.py
    :language: python
-   :lines: 59-63
+   :lines: 61-65
 
 .. note::
 
@@ -187,7 +187,7 @@ each :class:`epr.Band`:
 
 .. literalinclude:: examples/export_gdalvrt.py
    :language: python
-   :lines: 80-95
+   :lines: 82-96
 
 Metadata are also stored at GDAL_ dataset level by the :func:`epr2gdal`
 function:
@@ -198,7 +198,7 @@ function:
 
 .. literalinclude:: examples/export_gdalvrt.py
    :language: python
-   :lines: 119-126
+   :lines: 120-127
 
 .. index:: MPH, SPH
 
@@ -211,7 +211,7 @@ The  :func:`epr2gdal` function also stores the contents of the *MPH* and the
 
 .. literalinclude:: examples/export_gdalvrt.py
    :language: python
-   :lines: 128-134
+   :lines: 129-135
 
 
 Complete listing

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 import os
-import epr
+
 from osgeo import gdal
 
+import epr
 
 epr_to_gdal_type = {
     epr.E_TID_UNKNOWN: gdal.GDT_Unknown,
@@ -21,11 +22,11 @@ epr_to_gdal_type = {
 }
 
 
-def epr2gdal_band(band, vrt):
+def epr2gdal_band(band, vrt):  # noqa: C901, PLR0914
     product = band.product
     dataset = band.dataset
     record = dataset.read_record(0)
-    field = record.get_field_at(band._field_index - 1)
+    field = record.get_field_at(band._field_index - 1)  # noqa: SLF001
 
     ysize = product.get_scene_height()
     xsize = product.get_scene_width()
@@ -40,8 +41,10 @@ def epr2gdal_band(band, vrt):
             raise RuntimeError(f"unable to open {vrt!r}")
         driver = gdal_ds.GetDriver()
         if driver.ShortName != "VRT":
-            raise TypeError(f"unexpected GDAL driver ({driver.ShortName}). "
-                            f"VRT driver expected")
+            raise TypeError(
+                f"unexpected GDAL driver ({driver.ShortName}). "
+                f"VRT driver expected"
+            )
     else:
         driver = gdal.GetDriverByName("VRT")
         if driver is None:
@@ -96,7 +99,7 @@ def epr2gdal_band(band, vrt):
     return gdal_ds
 
 
-def epr2gdal(product, vrt, overwrite_existing=False):
+def epr2gdal(product, vrt, *, overwrite_existing: bool = False):
     if isinstance(product, str):
         filename = product
         product = epr.open(filename)
@@ -171,13 +174,13 @@ if __name__ == "__main__":
     plt.figure()
     plt.subplot(2, 1, 1)
     plt.imshow(eprdata)
-    plt.grid(True)
+    plt.grid()
     cb = plt.colorbar()
     cb.set_label(unit)
     plt.title("EPR data")
     plt.subplot(2, 1, 2)
     plt.imshow(vrtdata)
-    plt.grid(True)
+    plt.grid()
     cb = plt.colorbar()
     cb.set_label(unit)
     plt.title("VRT data")

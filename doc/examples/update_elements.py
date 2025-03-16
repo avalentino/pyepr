@@ -2,8 +2,8 @@
 
 import numpy as np
 from matplotlib import pyplot as plt
-import epr
 
+import epr
 
 FILENAME = "MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1"
 
@@ -15,7 +15,7 @@ with epr.open(FILENAME) as product:
 # plot water vapour histogram
 plt.figure()
 plt.bar(orig_bins[:-1], wv_orig_histogram, 0.02, label="original")
-plt.grid(True)
+plt.grid()
 plt.title("Water Vapour Histogram")
 plt.savefig("water_vapour_histogram_01.png")
 
@@ -39,9 +39,9 @@ with epr.open(FILENAME) as product:
 # plot histogram of modified data
 plt.figure()
 plt.bar(orig_bins[:-1], wv_orig_histogram, 0.02, label="original")
-plt.grid(True)
+plt.grid()
 plt.title("Water Vapour Histogram")
-plt.hold(True)
+plt.hold()
 plt.bar(new_bins[:-1], wv_new_histogram, 0.02, color="red", label="new")
 plt.legend()
 plt.savefig("water_vapour_histogram_02.png")
@@ -49,7 +49,7 @@ plt.savefig("water_vapour_histogram_02.png")
 # plot the water vapour map
 plt.figure(figsize=(8, 4))
 plt.imshow(new_data)
-plt.grid(True)
+plt.grid()
 plt.title("Water Vapour")
 cb = plt.colorbar()
 cb.set_label(f"[{unit}]")
@@ -74,7 +74,7 @@ with epr.open(FILENAME) as product:
 # plot the water vapour map
 plt.figure(figsize=(8, 4))
 plt.imshow(data)
-plt.grid(True)
+plt.grid()
 plt.title("Water Vapour with box")
 cb = plt.colorbar()
 cb.set_label(f"[{unit}]")

@@ -63,7 +63,7 @@ input product.
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 89-90
+   :lines: 95
 
 Finally the core function (:func:`write_raw_image`) is called on each band
 specified on the command:
@@ -74,7 +74,7 @@ specified on the command:
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 91-92
+   :lines: 96-97
 
 
 The :func:`write_raw_image` core function
@@ -128,7 +128,7 @@ with the band data:
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 28-29
+   :lines: 28-30
 
 Then data are read using the :meth:`epr.Band.read_raster` method:
 
@@ -138,7 +138,7 @@ Then data are read using the :meth:`epr.Band.read_raster` method:
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 31-32
+   :lines: 32-33
 
 Then the output file object is created (in binary mode of course)
 and data are copied to the output file one line at time
@@ -149,7 +149,7 @@ and data are copied to the output file one line at time
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 34-36
+   :lines: 35-37
 
 Please note that it has been used :data:`epr.Raster.data` attribute of the
 :class:`epr.Raster` objects that exposes :class:`epr.Raster` data with the

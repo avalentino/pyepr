@@ -8,6 +8,7 @@
 
 import os
 import sys
+
 import epr
 
 
@@ -25,8 +26,9 @@ def write_raw_image(output_dir, product, band_name):
     source_step_x = 1
     source_step_y = 1
 
-    raster = band.create_compatible_raster(source_w, source_h,
-                                           source_step_x, source_step_y)
+    raster = band.create_compatible_raster(
+        source_w, source_h, source_step_x, source_step_y
+    )
 
     print(f"Reading band {band_name!r}...")
     raster = band.read_raster(0, 0, raster)
@@ -37,12 +39,11 @@ def write_raw_image(output_dir, product, band_name):
         # or better: raster.data.tofile(out_stream)
 
     print(f"Raw image data successfully written to {image_file_path!r}.")
-    print("C data type is %r, element size %u byte(s), "
-          "raster size is %u x %u pixels." % (
-          epr.data_type_id_to_str(raster.data_type),
-          raster.get_elem_size(),
-          raster.get_width(),
-          raster.get_height()))
+    print(
+        f"C data type is {epr.data_type_id_to_str(raster.data_type)!r}, "
+        f"element size {raster.get_elem_size()} byte(s), "
+        f"raster size is {raster.get_width()} x {raster.get_height()} pixels."
+    )
 
 
 def main(*argv):
@@ -53,14 +54,14 @@ def main(*argv):
 
     Call::
 
-        $ python3 write_bands.py <envisat-product>
-                                 <output directory for the raster file>
-                                 <dataset name 1>
-                                 [<dataset name 2> ... <dataset name N>]
+      $ python3 write_bands.py <envisat-product>
+                               <output directory for the raster file>
+                               <dataset name 1>
+                               [<dataset name 2> ... <dataset name N>]
 
     Example::
 
-        $ python3 write_bands.py \
+      $ python3 write_bands.py \
         MER_RR__1PNPDK20020415_103725_000002702005_00094_00649_1059.N1 \
         . latitude
 
@@ -69,18 +70,23 @@ def main(*argv):
         argv = sys.argv
 
     if len(argv) <= 3:
-        print("Usage: write_bands.py <envisat-product> <output-dir> "
-              "<dataset-name-1>")
-        print("                      [<dataset-name-2> ... <dataset-name-N>]")
-        print("  where envisat-product is the input filename")
-        print("  and output-dir is the output directory")
-        print("  and dataset-name-1 is the name of the first band to be "
-              "extracted (mandatory)")
-        print("  and dataset-name-2 ... dataset-name-N are the names of "
-              "further bands to be extracted (optional)")
-        print("Example:")
-        print("  write_bands MER_RR__2P_TEST.N1 . latitude")
-        print()
+        print(
+            """Usage:
+
+  python3 write_bands.py <envisat-product> <output-dir>  <dataset-name-1>
+                         [<dataset-name-2> ... <dataset-name-N>]
+
+where envisat-product is the input filename and output-dir is the
+output directory and dataset-name-1 is the name of the first band
+to be extracted (mandatory) and dataset-name-2 ... dataset-name-N
+are the names of further bands to be extracted (optional)
+
+Example:
+
+  python3 write_bands MER_RR__2P_TEST.N1 . latitude
+
+"""
+        )
         sys.exit(1)
 
     product_file_path = argv[1]
