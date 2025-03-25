@@ -3,6 +3,6 @@ recursive-include tests *.py
 recursive-include src/epr *.pyx *.pxd
 recursive-include extern/epr-api/src *.c *.h
 
-recursive-include doc *.rst *.txt *.py Makefile make.bat *.png
-recursive-include doc/_templates *.html
-# recursive-exclude doc/_build *
+recursive-include docs *.rst *.txt *.py Makefile make.bat *.png
+recursive-include docs/_templates *.html
+# recursive-exclude docs/_build *

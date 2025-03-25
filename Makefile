@@ -10,7 +10,7 @@ EPRAPIROOT = extern/epr-api
 TARGET=epr
 
 .PHONY: default help check coverage clean distclean \
-        lint doc ext wheels \
+        lint docs ext wheels \
         sdist fullsdist cythonize eprsrc ext-coverage coverage-report \
         debug upload
 
@@ -28,7 +28,7 @@ help:
 	@echo "  cleaner   - clean cache files and working directories of al tools"
 	@echo "  distclean - clean all the generated files"
 	@echo "  lint      - perform check with code linter (flake8, black)"
-	@echo "  doc       - generate the sphinx documentation"
+	@echo "  docs      - generate the sphinx documentation"
 	@echo "  ext       - build Python extensions in-place"
 	@echo "  wheels    - build Python wheels"
 	@echo "  fulldist  - build source distribution including pre-built docs and epr-api source code"
@@ -38,7 +38,7 @@ help:
 	@echo "  coverage-report - "
 	@echo "  debug     - "
 
-sdist: doc
+sdist: docs
 	$(PYTHON) -m build --sdist
 	$(PYTHON) -m twine check dist/*.tar.gz
 
@@ -57,8 +57,8 @@ clean:
 	find . -name __pycache__ -type d -exec $(RM) -r {} +
 	# $(RM) -r __pycache__ */__pycache__ */*/__pycache__ */*/*/__pycache__
 	$(RM) src/$(TARGET)/*.c src/$(TARGET)/*.cpp src/$(TARGET)/*.so src/$(TARGET)/*.o
-	if [ -f doc/Makefile ] ; then $(MAKE) -C doc clean; fi
-	$(RM) -r doc/_build
+	if [ -f docs/Makefile ] ; then $(MAKE) -C docs clean; fi
+	$(RM) -r docs/_build
 	$(RM) MANIFEST
 	find . -name '*~' -delete
 	$(RM) src/epr/epr.html
@@ -87,9 +87,9 @@ lint:
 	# $(PYTHON) -m mypy --check-untyped-defs --ignore-missing-imports src/$(TARGET)
 	ruff check src/$(TARGET) tests
 
-doc:
-	mkdir -p doc/_static
-	$(MAKE) -C doc html
+docs:
+	mkdir -p docs/_static
+	$(MAKE) -C docs html
 
 ext: src/epr/epr.pyx
 	$(PYTHON) setup.py build_ext --inplace --epr-api-src=$(EPRAPIROOT)/src

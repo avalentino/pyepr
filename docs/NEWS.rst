@@ -11,6 +11,7 @@ PyEPR 1.2.0 (UNRELEASED)
 * Formatting.
 * Drop the deprecated `print_` methods, `print` should be used instead.
 * `epr` is now a package.
+* Rename `doc` folder into `docs`.
 
 
 PyEPR 1.1.5 (15/10/2023)
