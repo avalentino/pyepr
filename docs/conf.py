@@ -143,6 +143,11 @@ texinfo_documents = [
 epub_exclude_files = ["search.html"]
 
 
+# -- Options for linkcheck ------------------------------------------------
+
+linkcheck_ignore = [f"https://pyepr.readthedocs.io/en/v{version}"]
+
+
 # -- Extension configuration -------------------------------------------------
 
 # -- Options for intersphinx extension ---------------------------------------

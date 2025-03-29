@@ -5,14 +5,20 @@ Change history
 PyEPR 1.2.0 (UNRELEASED)
 ------------------------
 
+* Drop the deprecated `print_` methods, `print` should be used instead.
 * Switch to cython `language_level=3`.
 * Fix the deprecated use of `property` is cython source files.
-* Switch to "src" project layout.
-* Formatting.
-* Drop the deprecated `print_` methods, `print` should be used instead.
 * `epr` is now a package.
+* Switch to "src" project layout.
 * Rename `doc` folder into `docs`.
 * Switch to mathjax_ to build HTML docs.
+* Formatting.
+* Fix broken links.
+* Fix spelling.
+* Enable CI for linting and doc building.
+* Move coverage configuration to pyproject.toml.
+* Fix tests on iterators.
+* Fix unittests of OSX ARM.
 
 .. _mathjax: https://www.mathjax.org
 

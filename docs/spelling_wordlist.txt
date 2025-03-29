@@ -23,6 +23,7 @@ pre
 py
 pyepr
 pypi
+pyproject
 pythonic
 radiances
 rb
@@ -30,5 +31,7 @@ roduct
 scanline
 sdist
 src
+toml
 uchar
 vapour
+unittests
