@@ -12,4 +12,3 @@ Tutorials
    ndvi_example
    update_example
    gdal_export_example
-

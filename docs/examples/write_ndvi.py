@@ -54,7 +54,6 @@ Example:
 
     # Open the product
     with epr.open(argv[1]) as product:
-
         # The NDVI shall be calculated using bands 6 and 8.
         band1_name = "radiance_6"
         band2_name = "radiance_10"
@@ -87,7 +86,6 @@ Example:
         # Open the output file
         logging.info("write ndvi to %r", argv[2])
         with open(argv[2], "wb") as out_stream:
-
             # Loop over all pixel and calculate the NDVI.
             #
             # @NOTE: looping over data matrices is not the best soluton.

@@ -13,9 +13,10 @@ author = "Antonio Valentino"
 
 def get_version(filename):
     import re
+
     from packaging.version import parse as Version
 
-    with open(filename) as fd:
+    with open(filename, encoding="utf-8") as fd:
         data = fd.read()
 
     mobj = re.search(

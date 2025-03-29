@@ -541,7 +541,8 @@ class TestProductLowLevelAPI(unittest.TestCase):
 
     def test_magic(self):
         self.assertEqual(
-            self.product._magic, _EPR_MAGIC_PRODUCT_ID  # noqa: SLF001
+            self.product._magic,  # noqa: SLF001
+            _EPR_MAGIC_PRODUCT_ID,
         )
 
 
@@ -1390,12 +1391,14 @@ class TestBandLowLevelAPI(unittest.TestCase):
 
     def test_field_index(self):
         self.assertEqual(
-            self.band._field_index, self.FIELD_INDEX  # noqa: SLF001
+            self.band._field_index,  # noqa: SLF001
+            self.FIELD_INDEX,
         )
 
     def test_elem_index(self):
         self.assertEqual(
-            self.band._elem_index, self.ELEM_INDEX  # noqa: SLF001
+            self.band._elem_index,  # noqa: SLF001
+            self.ELEM_INDEX,
         )
 
 
