@@ -12,6 +12,9 @@ PyEPR 1.2.0 (UNRELEASED)
 * Drop the deprecated `print_` methods, `print` should be used instead.
 * `epr` is now a package.
 * Rename `doc` folder into `docs`.
+* Switch to mathjax_ to build HTML docs.
+
+.. _mathjax: https://www.mathjax.org
 
 
 PyEPR 1.1.5 (15/10/2023)
