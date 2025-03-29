@@ -33,7 +33,7 @@ in a product file.
 .. _PyEPR: https://pyepr.readthedocs.io
 .. _Python: https://www.python.org
 .. _`EPR API`: https://github.com/bcdev/epr-api
-.. _ENVISAT: http://envisat.esa.int
+.. _ENVISAT: https://earth.esa.int/eogateway/missions/envisat
 .. _ESA: http://earth.esa.int
 """
 

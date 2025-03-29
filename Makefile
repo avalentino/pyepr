@@ -90,6 +90,8 @@ lint:
 docs:
 	mkdir -p docs/_static
 	$(MAKE) -C docs html
+	$(MAKE) -C docs linkcheck
+	$(MAKE) -C docs spelling
 
 ext: src/epr/epr.pyx
 	$(PYTHON) setup.py build_ext --inplace --epr-api-src=$(EPRAPIROOT)/src

@@ -227,7 +227,7 @@ Complete listing
 
 .. _GDAL: https://gdal.org
 .. _PyEPR: https://github.com/avalentino/pyepr
-.. _ENVISAT: https://envisat.esa.int
+.. _ENVISAT: https://earth.esa.int/eogateway/missions/envisat
 
 
 .. raw:: latex

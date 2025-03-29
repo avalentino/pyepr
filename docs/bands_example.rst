@@ -20,7 +20,7 @@ The program is invoked as follows:
     <output directory for the raster file> <dataset name 1> \
     [<dataset name 2> ... <dataset name N>]
 
-.. _ENVISAT: https://envisat.esa.int
+.. _ENVISAT: https://earth.esa.int/eogateway/missions/envisat
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _`write_bands.c`: https://github.com/bcdev/epr-api/blob/master/src/examples/write_bands.c
 
@@ -38,7 +38,7 @@ At first import time the underlying C library is opportunely initialized.
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 1-11
+   :lines: 1-12
 
 
 The main program
@@ -52,7 +52,7 @@ The main program in quite simple (this is just an example).
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 48-
+   :lines: 49-
 
 It performs some basic command line arguments handling and then open the
 input product.
@@ -63,7 +63,7 @@ input product.
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 95
+   :lines: 95-96
 
 Finally the core function (:func:`write_raw_image`) is called on each band
 specified on the command:
@@ -74,7 +74,7 @@ specified on the command:
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 96-97
+   :lines: 97-98
 
 
 The :func:`write_raw_image` core function
@@ -101,7 +101,7 @@ First the output file name is computed using the :mod:`os` module.
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 19-20
+   :lines: 20-21
 
 Then the desired band is retrieved using the :meth:`epr.Product.get_band`
 method and some of its parameters are loaded in to local variables:
@@ -112,7 +112,7 @@ method and some of its parameters are loaded in to local variables:
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 22
+   :lines: 23
 
 Band data are accessed by means of a :class:`epr.Raster` object.
 
@@ -128,7 +128,7 @@ with the band data:
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 28-30
+   :lines: 29-31
 
 Then data are read using the :meth:`epr.Band.read_raster` method:
 
@@ -138,7 +138,7 @@ Then data are read using the :meth:`epr.Band.read_raster` method:
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 32-33
+   :lines: 33-34
 
 Then the output file object is created (in binary mode of course)
 and data are copied to the output file one line at time
@@ -149,7 +149,7 @@ and data are copied to the output file one line at time
 
 .. literalinclude:: examples/write_bands.py
    :language: python
-   :lines: 35-37
+   :lines: 36-38
 
 Please note that it has been used :data:`epr.Raster.data` attribute of the
 :class:`epr.Raster` objects that exposes :class:`epr.Raster` data with the

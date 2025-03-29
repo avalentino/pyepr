@@ -29,7 +29,8 @@ Parameters" record to the standard output::
     import epr
 
     product = epr.Product(
-        'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1')
+        'ASA_IMP_1PNESA20060202_062238_000000152044_00435_20529_0000.N1'
+    )
     dataset = product.get_dataset('MAIN_PROCESSING_PARAMS_ADS')
     record = dataset.read_record(0)
     print(record)
@@ -50,7 +51,7 @@ The user can open a product in update mode (`rb+`) and call the
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _Python: https://www.python.org
 .. _`EPR API`: https://github.com/bcdev/epr-api
-.. _ENVISAT: https://envisat.esa.int
+.. _ENVISAT: https://earth.esa.int/eogateway/missions/envisat
 .. _ESA: https://earth.esa.int
 
 
@@ -209,7 +210,7 @@ is in the Python search path (see also :envvar:`PYTHONPATH`).
 
 The test script automatically downloads and decompresses the ENVISAT sample
 product necessary for testing,
-MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1__,
+MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1,
 if it is not already available in the :file:`tests` directory.
 
 .. note::
@@ -220,8 +221,6 @@ if it is not already available in the :file:`tests` directory.
 
    After the first run the sample product remains in the :file:`tests`
    directory so the internet access is no longer necessary.
-
-__ https://earth.esa.int/services/sample_products/meris/LRC/L2/MER_LRC_2PTGMV20000620_104318_00000104X000_00000_00000_0001.N1.gz
 
 
 .. index:: EPR-API
@@ -430,7 +429,7 @@ Special methods
 ---------------
 
 The Python_ EPR API also implements some `special method`_ in order to make
-EPR programming even handy and, in short, "pythonic_".
+EPR programming even handy and, in short, *pythonic*.
 
 The ``__repr__`` methods have been overridden to provide a little more
 information with respect to the standard implementation.
@@ -555,5 +554,4 @@ or also update all elements of the :class:`epr.Field` in one shot::
 
 
 .. _`special method`: https://docs.python.org/3/reference/datamodel.html
-.. _pythonic: http://www.cafepy.com/article/be_pythonic
 .. _`context manager`: https://docs.python.org/3/library/stdtypes.html#context-manager-types

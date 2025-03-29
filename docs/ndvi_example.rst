@@ -38,7 +38,7 @@ function.
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_ndvi.py
-   :lines: 46-47
+   :lines: 55-56
 
 .. index:: context, open
    pair: with; statement
@@ -191,7 +191,7 @@ used to write the NDVI of the pixel n the file in binary format.
         ndvi.tofile(out_stream)
 
 
-.. _ENVISAT: https://envisat.esa.int
+.. _ENVISAT: https://earth.esa.int/eogateway/missions/envisat
 .. _Python: https://www.python.org
 
 

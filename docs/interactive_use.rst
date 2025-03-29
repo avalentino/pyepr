@@ -18,11 +18,11 @@ The ASAR_ product used in this example is a `free sample`_ available at the
 ESA_ web site.
 
 .. _PyEPR: https://github.com/avalentino/pyepr
-.. _ENVISAT: https://envisat.esa.int
+.. _ENVISAT: https://earth.esa.int/eogateway/missions/envisat
 .. _ASAR: https://earth.esa.int/handbooks/asar/CNTR.html
 .. _Jupyter: https://jupyter.org/
 .. _matplotlib: https://matplotlib.org
-.. _`free sample`: https://earth.esa.int/services/sample_products/asar/IMP/ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1.gz
+.. _`free sample`: https://esar-ds.eo.esa.int/oads/data/ASA_IMP_1P/ASA_IMP_1PNESA20060202_062238_000000152044_00435_20529_0000.N1
 .. _ESA: https://earth.esa.int
 
 
@@ -77,7 +77,7 @@ available classes and functions::
         .. _PyEPR: https://pyepr.readthedocs.io
         .. _Python: https://www.python.org
         .. _`EPR API`: https://github.com/bcdev/epr-api
-        .. _ENVISAT: https://envisat.esa.int
+        .. _ENVISAT: https://earth.esa.int/eogateway/missions/envisat
         .. _ESA: https://earth.esa.int
 
     In [3]: epr.__version__, epr.EPR_C_API_VERSION
@@ -126,8 +126,9 @@ complete commands or to display available functions and classes::
 The first thing to do is to use the :func:`epr.open` function to get an
 instance of the desired ENVISAT_ :class:`epr.Product`::
 
-    In [4]: product = epr.open(\
-    'ASA_IMP_1PNUPA20060202_062233_000000152044_00435_20529_3110.N1')
+    In [4]: product = epr.open(
+        'ASA_IMP_1PNESA20060202_062238_000000152044_00435_20529_0000.N1'
+    )
 
     In [4]: product.
     product.bands                product.get_mph

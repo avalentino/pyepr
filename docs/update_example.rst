@@ -185,7 +185,7 @@ The complete code of the example can be found at
 
 
 .. _PyEPR: https://github.com/avalentino/pyepr
-.. _ENVISAT: https://envisat.esa.int
+.. _ENVISAT: https://earth.esa.int/eogateway/missions/envisat
 .. _Matplotlib: https://matplotlib.org
 
 

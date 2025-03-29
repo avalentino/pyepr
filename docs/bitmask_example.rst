@@ -17,7 +17,7 @@ The program is invoked as follows:
     $ python write_bitmask.py <envisat-product> <bitmask-expression> \
       <output-file>
 
-.. _ENVISAT: https://envisat.esa.int
+.. _ENVISAT: https://earth.esa.int/eogateway/missions/envisat
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _`write_bitmask.c`: https://github.com/bcdev/epr-api/blob/master/src/examples/write_bitmask.c
 
@@ -41,7 +41,7 @@ In order to use the Python_ EPR API the :mod:`epr` module is imported:
     \fvset{fontsize=\footnotesize}
 
 .. literalinclude:: examples/write_bitmask.py
-   :lines: 25
+   :lines: 26
 
 .. index:: product, open
    pair: with; statement
@@ -58,7 +58,7 @@ program exits the ``with`` block.
 
 .. literalinclude:: examples/write_bitmask.py
    :language: python
-   :lines: 57-58
+   :lines: 58-59
 
 .. index:: product
 
@@ -72,7 +72,7 @@ using the :meth:`epr.Product.get_scene_width` and
 
 .. literalinclude:: examples/write_bitmask.py
    :language: python
-   :lines: 61-62
+   :lines: 62-63
 
 The EPR API allows to manage data by means of :class:`epr.Raster` objects, so
 the function :func:`epr.create_bitmask_raster`, specific for bit-masks, is used
@@ -89,7 +89,7 @@ method of the :class:`epr.Product` class:
 
 .. literalinclude:: examples/write_bitmask.py
    :language: python
-   :lines: 70
+   :lines: 71
 
 The :meth:`epr.Product.read_bitmask_raster` method receives in input the
 *bm_expr* parameter that is set via command line:
@@ -100,7 +100,7 @@ The :meth:`epr.Product.read_bitmask_raster` method receives in input the
 
 .. literalinclude:: examples/write_bitmask.py
    :language: python
-   :lines: 54
+   :lines: 55
 
 *bm_expr* is a string that define the logical expression for the definition
 of the bit-mask. In a bit-mask expression, any number of the flag-names
@@ -127,11 +127,11 @@ of the :class:`epr.Raster` objects that exposes data via the
 
 .. literalinclude:: examples/write_bitmask.py
    :language: python
-   :lines: 72-73
+   :lines: 73-74
 
 
 .. _Python: https://www.python.org
-.. _ENVISAT: https://envisat.esa.int
+.. _ENVISAT: https://earth.esa.int/eogateway/missions/envisat
 
 
 .. raw:: latex

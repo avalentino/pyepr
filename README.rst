@@ -49,7 +49,7 @@ any data field contained in a product file.
 .. _PyEPR: https://github.com/avalentino/pyepr
 .. _Python: https://www.python.org
 .. _`EPR API`: https://github.com/bcdev/epr-api
-.. _ENVISAT: https://envisat.esa.int
+.. _ENVISAT: https://earth.esa.int/eogateway/missions/envisat
 .. _ESA: https://earth.esa.int
 
 
