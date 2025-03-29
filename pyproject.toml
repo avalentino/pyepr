@@ -82,6 +82,12 @@ test-requires = "pytest"
 # skip = "pp*"
 
 
+[tool.coverage.run]
+branch = true
+plugins = ["Cython.Coverage"]
+source = ["epr"]
+
+
 [tool.black]
 line-length = 79
 
