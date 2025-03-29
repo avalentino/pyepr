@@ -35,11 +35,25 @@ release = str(_version)
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
+    # "sphinx.ext.autodoc",
+    # "sphinx.ext.autosectionlabel",
+    # "sphinx.ext.autosummary",
+    # "sphinx.ext.coverage",
+    # "sphinx.ext.doctest",
+    # "sphinx.ext.duration",
     "sphinx.ext.extlinks",
+    # "sphinx.ext.githubpages",
+    # "sphinx.ext.graphviz",
     "sphinx.ext.ifconfig",
+    # "sphinx.ext.imgconverter",
+    # "sphinx.ext.inheritance_diagram",
     "sphinx.ext.intersphinx",
+    # "sphinx.ext.linkcode",  # needs_sphinx = "1.2"
+    # "sphinx.ext.napoleon",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
+    # "sphinx.ext.imgmath",
+    # "sphinx.ext.jsmath",
     "sphinx.ext.mathjax",
     "sphinx_rtd_theme",
     "IPython.sphinxext.ipython_console_highlighting",

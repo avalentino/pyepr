@@ -3,6 +3,7 @@ config
 constness
 Cythonizing
 dev
+distutils
 docstrings
 Docstrings
 eader
@@ -11,6 +12,7 @@ gdalvrt
 geo
 Initializer
 iter
+jupyter
 len
 libs
 matadata
