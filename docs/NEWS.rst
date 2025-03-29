@@ -2,7 +2,7 @@ Change history
 ==============
 
 
-PyEPR 1.2.0 (UNRELEASED)
+PyEPR 1.2.0 (29/03/2025)
 ------------------------
 
 * Drop the deprecated `print_` methods, `print` should be used instead.
