@@ -26,7 +26,7 @@ def get_version(filename):
     return Version(mobj.group("version"))
 
 
-_version = get_version("../epr/__init__.py")
+_version = get_version("../src/epr/__init__.py")
 
 version = _version.base_version
 release = str(_version)

@@ -43,25 +43,25 @@ sdist: doc
 	$(PYTHON) -m twine check dist/*.tar.gz
 
 check: ext
-	env PYTHONPATH=. $(PYTHON) tests/test_all.py --verbose
+	env PYTHONPATH=src $(PYTHON) tests/test_all.py --verbose
 
 fullcheck:
 	$(PYTHON) -m tox run
 
 coverage: clean ext-coverage
-	$(PYTHON) -m pytest --doctest-modules --cov=$(TARGET) --cov-report=html --cov-report=term $(TARGET) tests
+	env PYTHONPATH=src $(PYTHON) -m pytest --doctest-modules --cov=$(TARGET) --cov-report=html --cov-report=term src/$(TARGET) tests
 
 clean:
 	$(PYTHON) setup.py clean --all
-	$(RM) -r *.*-info build
+	$(RM) -r src/*.*-info build
 	find . -name __pycache__ -type d -exec $(RM) -r {} +
 	# $(RM) -r __pycache__ */__pycache__ */*/__pycache__ */*/*/__pycache__
-	$(RM) $(TARGET)/*.c $(TARGET)/*.cpp $(TARGET)/*.so $(TARGET)/*.o
+	$(RM) src/$(TARGET)/*.c src/$(TARGET)/*.cpp src/$(TARGET)/*.so src/$(TARGET)/*.o
 	if [ -f doc/Makefile ] ; then $(MAKE) -C doc clean; fi
 	$(RM) -r doc/_build
 	$(RM) MANIFEST
 	find . -name '*~' -delete
-	$(RM) epr/epr.html
+	$(RM) src/epr/epr.html
 	$(RM) epr.p*        # workaround for Cython.Coverage bug #1985
 
 cleaner: clean
@@ -80,24 +80,24 @@ distclean: cleaner
 	$(RM) -r LICENSES
 
 lint:
-	$(PYTHON) -m flake8 --count --statistics $(TARGET) tests
-	$(PYTHON) -m pydocstyle --count $(TARGET)
-	$(PYTHON) -m isort --check $(TARGET) tests
-	$(PYTHON) -m black --check $(TARGET) tests
-	# $(PYTHON) -m mypy --check-untyped-defs --ignore-missing-imports $(TARGET)
-	ruff check $(TARGET) tests
+	$(PYTHON) -m flake8 --count --statistics src/$(TARGET) tests
+	$(PYTHON) -m pydocstyle --count src/$(TARGET)
+	# $(PYTHON) -m isort --check src/$(TARGET) tests
+	$(PYTHON) -m black --check src/$(TARGET) tests
+	# $(PYTHON) -m mypy --check-untyped-defs --ignore-missing-imports src/$(TARGET)
+	ruff check src/$(TARGET) tests
 
 doc:
 	mkdir -p doc/_static
 	$(MAKE) -C doc html
 
-ext: epr/epr.pyx
+ext: src/epr/epr.pyx
 	$(PYTHON) setup.py build_ext --inplace --epr-api-src=$(EPRAPIROOT)/src
 
-cythonize: epr/_epr.c
+cythonize: src/epr/_epr.c
 
-epr/_epr.c: epr/epr.pyx
-	$(CYTHON) $(CYTHONFLAGS) -o epr/_epr.c epr/epr.pyx
+src/epr/_epr.c: src/epr/epr.pyx
+	$(CYTHON) $(CYTHONFLAGS) -o src/epr/_epr.c src/epr/epr.pyx
 
 LICENSES/epr-api.txt:
 	mkdir LICENSES
@@ -108,7 +108,7 @@ eprsrc: LICENSES/epr-api.txt
 fullsdist: eprsrc
 	$(PYTHON) -m build --sdist
 
-ext-coverage: epr/epr.pyx
+ext-coverage: src/epr/epr.pyx
 	env PYEPR_COVERAGE=TRUE $(PYTHON) setup.py build_ext --inplace
 
 debug:

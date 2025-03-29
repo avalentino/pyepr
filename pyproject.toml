@@ -70,6 +70,7 @@ Issues = "https://github.com/avalentino/pyepr/issues"
 
 [tool.setuptools]
 packages = ["epr"]
+package-dir = {"" = "src"}
 include-package-data = false
 
 

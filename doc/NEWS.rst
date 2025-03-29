@@ -7,6 +7,7 @@ PyEPR 1.2.0 (UNRELEASED)
 
 * Switch to cython `language_level=3`.
 * Fix the deprecated use of `property` is cython source files.
+* Switch to "src" project layout.
 * Formatting.
 * Drop the deprecated `print_` methods, `print` should be used instead.
 * `epr` is now a package.

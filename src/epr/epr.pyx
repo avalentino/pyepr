@@ -22,19 +22,17 @@
 
 """Python bindings for ENVISAT Product Reader C API."""
 
-from libc cimport errno
-from libc cimport stdio
-from libc.stdio cimport FILE
-from libc cimport string as cstring
 from posix.stdio cimport fileno
 
-
-from .epr cimport *
-
+cimport numpy as np
+from libc cimport errno, stdio
+from libc cimport string as cstring
+from libc.stdio cimport FILE
 from cpython.object cimport PyObject_AsFileDescriptor
 from cpython.weakref cimport PyWeakref_NewRef
 
-cimport numpy as np
+from .epr cimport *
+
 np.import_array()
 
 import os
@@ -43,6 +41,7 @@ import atexit
 from collections import namedtuple
 
 import numpy as np
+
 
 cdef bint SWAP_BYTES = (sys.byteorder == "little")
 

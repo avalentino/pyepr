@@ -1,6 +1,6 @@
 recursive-include LICENSES *.txt
 recursive-include tests *.py
-recursive-include epr *.pyx *.pxd
+recursive-include src/epr *.pyx *.pxd
 recursive-include extern/epr-api/src *.c *.h
 
 recursive-include doc *.rst *.txt *.py Makefile make.bat *.png
