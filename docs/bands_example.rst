@@ -30,7 +30,7 @@ Import section
 
 To use the Python_ EPR API one have to import :mod:`epr` module.
 
-At first import time the underlaying  C library is opportunely initialized.
+At first import time the underlying C library is opportunely initialized.
 
 .. raw:: latex
 

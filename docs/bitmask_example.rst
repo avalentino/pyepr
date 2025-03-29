@@ -1,4 +1,4 @@
-Exporting bitmasks
+Exporting bit-masks
 -------------------
 
 .. index:: bitmask, ENVISAT
@@ -75,7 +75,7 @@ using the :meth:`epr.Product.get_scene_width` and
    :lines: 61-62
 
 The EPR API allows to manage data by means of :class:`epr.Raster` objects, so
-the function :func:`epr.create_bitmask_raster`, specific for bitmasks, is used
+the function :func:`epr.create_bitmask_raster`, specific for bit-masks, is used
 to create a :class:`epr.Raster` instance.
 
 .. seealso:: :func:`epr.create_raster`

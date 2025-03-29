@@ -950,7 +950,7 @@ Band
 
       Another example is a processing of complete image lines. Then,
       my source has a widths of the complete product (for example 1121
-      for a MERIS RR product), and a height of 1). One can loop over
+      for a MERIS RR product), and a height of 1. One can loop over
       all blocks read into the :clasS:`Raster` and process it.
 
       In addition, it is possible to defined a sub-sampling step for
@@ -979,7 +979,7 @@ Band
 
       .. note::
 
-         *src_width* and *src_height* are the dimantion of the of the source
+         *src_width* and *src_height* are the dimension of the of the source
          area. If one specifies a *step* parameter the resulting
          :class:`Raster` will have a size that is smaller that the specifies
          source size::
@@ -1125,7 +1125,7 @@ Raster
 
    .. note::
 
-      the following attributess are part of the *high level* Python API and
+      the following attributes are part of the *high level* Python API and
       do not have a counterpart in the C API.
 
    .. attribute:: data
@@ -1210,7 +1210,7 @@ EPRTime
 Functions
 ---------
 
-.. function:: open(filename, mode='rb')
+.. function:: open(filename, mode=`rb`)
 
    Open the ENVISAT product.
 
@@ -1303,7 +1303,7 @@ Functions
 
 .. function:: create_bitmask_raster(src_width, src_height[, xstep, ystep])
 
-   Creates a :class:`Raster` to be used for reading bitmasks.
+   Creates a :class:`Raster` to be used for reading bit-masks.
 
    The :class:`Raster` returned always is of type ``byte``.
 

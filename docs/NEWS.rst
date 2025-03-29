@@ -21,7 +21,7 @@ PyEPR 1.1.5 (15/10/2023)
 ------------------------
 
 * Get rid of the deprecated `pip --install-options`.
-* No longer ise the deprecated Cython_ `IF` statement.
+* No longer use the deprecated Cython_ `IF` statement.
 * Build wheels for Python 3.12.
 * Move project metadata to `pyproject.toml`
 
@@ -34,10 +34,10 @@ PyEPR 1.1.4 (07/01/2023)
 * Fix `extlinks` configuration.
 * Modernize documentation generation:
   - drop local theme
-  - drop local sphinxect for IPython console highlighting
+  - drop local sphinx extension for IPython console highlighting
   - use the RTD sphinx theme
   - update sidebar templates
-* Fix comparibility with `packaging` v22.0.
+* Fix compatibility with `packaging` v22.0.
 * Modernize and re-format the Python code.
 * The minimum required Python version is now v3.7.
 
@@ -55,7 +55,7 @@ PyEPR 1.1.2 (06/11/2021)
 ------------------------
 
 * Enable CI testing with Python 3.10.
-* Update the internal copy of EPR C API to v2.3dev_pyerp112.
+* Update the internal copy of EPR C API to v2.3dev_pyepr112.
 
 
 PyEPR 1.1.1 (07/08/2021)
@@ -72,7 +72,7 @@ PyEPR 1.1.0 (06/08/2021)
 * Introduced the ``pyproject.toml`` file.
 * The ``setup.py`` script has been simplified and modernized,
   now it always use setuptools_ and ``setup.cfg``.
-* Now the EPR C API is handled using git submodule.
+* Now the EPR C API is handled using git sub-module.
 * Fixed potential crash in cases in which the EPR C API fails to open the
   requested product
 * Update the test suite to use the public product
@@ -162,7 +162,7 @@ PyEPR 0.9 (27/02/2015)
 ----------------------
 
 * basic support for update mode: products can now be opened in update mode
-  ('rb+') and it is possible to call :meth:`epr.Field.set_elem` and
+  (`rb+`) and it is possible to call :meth:`epr.Field.set_elem` and
   :meth:`epr.Field.set_elems` methods to set :class:`epr.Field` elements
   changing the contents of the :class:`epr.Product` on disk.
   This feature is not available in the EPR C API.
@@ -278,7 +278,7 @@ PyEPR 0.8 (07/09/2013)
 
 * now the :class:`epr.Product` objects have a :meth:`epr.Product.close`
   method that can be used to explicitly close products without relying
-  on the garbage collector behaviour (closes :issue:`7`)
+  on the garbage collector behavior (closes :issue:`7`)
 * new :attr:`epr.Product.closed` (read-only) attribute that can be used to
   check if a :class:`epr.Product` has been closed
 * the :class:`Product` class now supports context management so they can be
@@ -309,8 +309,8 @@ PyEPR 0.7.1 (19/08/2013)
   help
 * several improvements to the documentation:
 
-  - updated the :file:`README.txt` file to mention EPR C API sourced inclusion
-    in the PyEPR 0.7 (and lates) source tar-ball
+  - updated the :file:`README.txt` file to mention EPR C API sources inclusion
+    in the PyEPR 0.7 (and latest) source tar-ball
   - small fix in the installation instructions: the pip_ tool does not have  a
     "--prefix" parameter
   - always use the python3 syntax for the *print* function in all examples in
@@ -367,7 +367,7 @@ PyEPR 0.6 (12/08/2011)
 ----------------------
 
 * full support for `Python 3`_
-* improved code highligh in the documentation
+* improved code highlighting in the documentation
 * depend from cython >= 0.13 instead of cython >= 0.14.1.
   Cythonizing :file:`epr.pyx` with `Python 3`_ requires cython >= 0.15
 

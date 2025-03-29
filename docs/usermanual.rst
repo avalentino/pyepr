@@ -37,7 +37,7 @@ Parameters" record to the standard output::
 
 Since version 0.9 PyEPR_ also include *update* features that are not
 available in the EPR C API.
-The user can open a product in update mode ('rb+') and call the
+The user can open a product in update mode (`rb+`) and call the
 :meth:`epr.Field.set_elem` and :meth:`epr.Field.set_elems` methods of
 :class:`epr.Field` class to update its elements and write changes to disk.
 
@@ -181,7 +181,7 @@ with the system `EPR API`_ C library::
     $ python3 setup.py install --epr-api-src=""
 
 Please note that if the ``setup.py`` script is invoked directly, then the
-user must make sure that setup requirements are propely installed::
+user must make sure that setup requirements are properly installed::
 
     $ python3 -m pip install cython numpy
 
@@ -358,13 +358,13 @@ name of the C enumerate but are spelled all in capital letters.
 
 For example:
 
-============ ============
-    C           Pythn
-============ ============
-e_tid_double E_TID_DOUBLE
-e_smod_1OF1  E_SMOD_1OF1
-e_smid_log   E_SMID_LOG
-============ ============
+============== ==============
+    C              Python
+============== ==============
+`e_tid_double` `E_TID_DOUBLE`
+`e_smod_1OF1`  `E_SMOD_1OF1`
+`e_smid_log`   `E_SMID_LOG`
+============== ==============
 
 
 .. index:: logging, error, exception, EPR-API
@@ -516,14 +516,14 @@ Update support
 --------------
 
 It is not possible to create new ENVISAT_ products for scratch with the
-EPR API. Indeed EPR means "**E**\ NVISAT **P**\ roduct **R**\ eaeder".
+EPR API. Indeed EPR means "**E**\ NVISAT **P**\ roduct **R**\ eader".
 Anyway, since version 0.9, PyEPR_ also include basic *update* features.
 This means that, while it is still not possible to create new
 :class:`Products`, the user can *update* existing ones changing the
 contents of any :class:`Field` in any record with the only exception of
 MPH and SPH :class:`Field`\s.
 
-The user can open a product in update mode ('rb+')::
+The user can open a product in update mode (`rb+`)::
 
     product = epr.open('ASA_IMS_ ... _4650.N1', 'rb+')
 
@@ -531,7 +531,7 @@ and update the :class:`epr.Field` element at a specific index::
 
     field.set_elem(new_value, index)
 
-or also update all elements ol the :class:`epr.Field` in one shot::
+or also update all elements of the :class:`epr.Field` in one shot::
 
     field.set_elems(new_values)
 
