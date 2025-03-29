@@ -471,7 +471,7 @@ Record
       Gets the number of :class:`Field`\ s contained in the :class:`Record`.
 
 
-   .. method:: print_([ostream])
+   .. method:: print([ostream])
 
       Write the :class:`Record` to specified file (default: :data:`sys.stdout`).
 
@@ -666,7 +666,7 @@ Field
       .. versionadded:: 0.9
 
 
-   .. method:: print_([ostream])
+   .. method:: print([ostream])
 
       Write the :class:`Field` to specified file (default: :data:`sys.stdout`).
 

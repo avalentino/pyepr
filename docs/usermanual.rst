@@ -422,7 +422,7 @@ Another example::
         print(band)
 
 
-.. index:: __str__, __repr__, print_,
+.. index:: __str__, __repr__, print,
    pair: special; methods
 
 Special methods
@@ -437,18 +437,18 @@ information with respect to the standard implementation.
 In some cases ``__str__`` method have been overridden to output a verbose
 string representation of the objects and their contents.
 
-If the EPR object has a ``print_`` method (like e.g. :meth:`epr.Record.print_`
-and :meth:`epr.Field.print_`) then the string representation of the object
-will have the same format used by the ``print_`` method.
+If the EPR object has a ``print`` method (like e.g. :meth:`epr.Record.print`
+and :meth:`epr.Field.print`) then the string representation of the object
+will have the same format used by the ``print`` method.
 So writing::
 
     fd.write(str(record))
 
 giver the same result of::
 
-    record.print_(fd)
+    record.print(fd)
 
-Of course the :meth:`epr.Record.print_` method is more efficient for writing
+Of course the :meth:`epr.Record.print` method is more efficient for writing
 to file.
 
 .. index:: __iter__
