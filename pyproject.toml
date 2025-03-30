@@ -80,8 +80,9 @@ version = {attr = "epr.__version__"}
 
 
 [tool.cibuildwheel]
+skip = "pp*"
 test-requires = "pytest"
-# skip = "pp*"
+test-command = "pytest -v {project}/tests"
 
 
 [tool.coverage.run]
