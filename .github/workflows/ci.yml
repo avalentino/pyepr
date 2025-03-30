@@ -53,6 +53,13 @@ jobs:
           python -m build
           python -m twine check dist/*
 
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: |
+            dist/*.tar.gz
+
       - name: Install
         shell: bash
         run: |
