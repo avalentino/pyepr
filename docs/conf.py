@@ -100,7 +100,7 @@ html_context = {
     "github_user": "avalentino",
     "github_repo": "pyepr",
     "github_version": "master",
-    "conf_py_path": "/doc/",
+    "conf_py_path": "/docs/",
 }
 
 # -- Options for HTMLHelp output ------------------------------------------
