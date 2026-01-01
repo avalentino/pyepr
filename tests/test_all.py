@@ -1,4 +1,4 @@
-# Copyright (C) 2011-2025, Antonio Valentino <antonio.valentino@tiscali.it>
+# Copyright (C) 2011-2026, Antonio Valentino <antonio.valentino@tiscali.it>
 #
 # This file is part of PyEPR.
 #
