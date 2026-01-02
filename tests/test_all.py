@@ -65,7 +65,7 @@ EPR_TO_NUMPY_TYPE = {
 }
 
 
-def has_epr_c_bug_pyepr009():
+def has_epr_c_bug_pyepr009() -> bool:
     if "_pyepr" in epr.EPR_C_API_VERSION:
         v = epr.EPR_C_API_VERSION
         epr_version, _, pyepr_version = str(v).partition("_pyepr")
@@ -728,14 +728,12 @@ class TestDatasetHighLevelAPI(unittest.TestCase):
             )
 
     def test_iter(self):
-        index = 0
-        for record in self.dataset:
+        for index, record in enumerate(self.dataset):
             ref_record = self.dataset.read_record(index)
             self.assertEqual(
                 record.get_field_names(), ref_record.get_field_names()
             )
-            index += 1
-        self.assertEqual(index, self.dataset.get_num_records())
+        self.assertEqual(index + 1, self.dataset.get_num_records())
 
     def test_repr(self):
         pattern = (
@@ -1915,12 +1913,10 @@ class TestRecordHighLevelAPI(unittest.TestCase):
         self.assertEqual(self.record.get_field_names(), names)
 
     def test_iter(self):
-        index = 0
-        for field in self.record:
+        for index, field in enumerate(self.record):
             ref_field = self.record.get_field_at(index)
             self.assertEqual(field.get_name(), ref_field.get_name())
-            index += 1
-        self.assertEqual(index, self.record.get_num_fields())
+        self.assertEqual(index + 1, self.record.get_num_fields())
 
     def test_repr_type(self):
         self.assertTrue(isinstance(repr(self.record), str))
