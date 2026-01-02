@@ -229,7 +229,7 @@ Python vs C API
 ---------------
 
 The Python_ EPR API is fully object oriented.
-The main structures of the `C API`_ have been implemented as objects while
+The main structures of the C API have been implemented as objects while
 C function have been logically grouped and mapped onto object methods.
 
 The entire process of defining an object oriented API for Python_ has
@@ -238,8 +238,6 @@ API,
 
 Of course there are also some differences that are illustrated in the
 following sections.
-
-.. _`C API`: https://rawgit.com/bcdev/epr-api/master/docs/epr_c_api/index.html
 
 
 .. index:: memory, product

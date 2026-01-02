@@ -311,7 +311,7 @@ Dealing with image data is simple as well::
 .. figure:: images/ASA_IMP_crop.*
    :width: 100%
 
-   Image data read from the "proc_data" band
+   Image data read from the `proc_data`` band
 
 
 .. _iterable: https://docs.python.org/3/glossary.html#term-iterable

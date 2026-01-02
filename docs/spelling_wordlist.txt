@@ -2,6 +2,7 @@ api
 config
 constness
 Cythonizing
+de
 dev
 distutils
 docstrings
@@ -31,7 +32,9 @@ roduct
 scanline
 sdist
 src
+str
 toml
 uchar
 vapour
 unittests
+vectorized

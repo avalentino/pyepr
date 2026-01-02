@@ -79,7 +79,7 @@ It is a description of a raster file that the GDAL_ library uses for low level
 data access.
 Of course the entire machinery works because data in :class:`epr.Band`\s and
 :class:`epr.Dataset`\ s of ENVISAT_ products are stored as contiguous
-rasters.
+raster files.
 
 .. raw:: latex
 

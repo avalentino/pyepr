@@ -52,8 +52,6 @@ ENVISAT Product Reader Python API
     * `CI status page <https://github.com/avalentino/pyepr/actions>`_
     * `PyEPR project page on PyPi <http://pypi.python.org/pypi/pyepr>`_
     * EPR-API `project page <https://github.com/bcdev/epr-api>`_
-    * EPR-API `documentation
-      <https://rawgithub.com/bcdev/epr-api/master/docs/epr_c_api/index.html>`_
 
     __ PyEPR_
 
@@ -108,6 +106,6 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
-along with PyEPR.  If not, see <http://www.gnu.org/licenses/>.
+along with PyEPR.  If not, see <https://www.gnu.org/licenses/>.
 
-.. _`GNU General Public License`: http://www.gnu.org/licenses/gpl-3.0.html
+.. _`GNU General Public License`: https://www.gnu.org/licenses/gpl-3.0.html
