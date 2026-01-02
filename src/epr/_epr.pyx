@@ -689,7 +689,7 @@ cdef class Field(EprObject):
         """
         cdef void* buf = NULL
         cdef int ndim = 1
-        cdef np.npy_intp shape[1]
+        cdef np.npy_intp[1] shape
         cdef np.ndarray out
         cdef EPR_Time* t = NULL
         cdef np.NPY_TYPES dtype
@@ -1391,7 +1391,7 @@ cdef class Raster(EprObject):
     # --- high level interface ------------------------------------------------
     cdef np.ndarray toarray(self):
         cdef np.NPY_TYPES dtype = _epr_to_numpy_type_id(self._ptr.data_type)
-        cdef np.npy_intp shape[2]
+        cdef np.npy_intp[2] shape
         cdef np.ndarray result
 
         if dtype == np.NPY_NOTYPE:
