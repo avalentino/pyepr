@@ -81,4 +81,4 @@ from ._epr import (  # noqa: F401
     get_scaling_method_name,
 )
 
-__version__ = "1.2.1.dev0"
+__version__ = "1.3.0.dev0"
