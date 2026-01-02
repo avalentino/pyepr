@@ -16,13 +16,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           submodules: 'true'
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.x"
 
@@ -32,7 +32,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install sphinx sphinxcontrib-spelling
           python -m pip install .
-          python3 -m pip install -r requirements-dev.txt
+          if [ -f requirements-dev.txt ]; then python -m pip install -r requirements-dev.txt; fi
 
       - name: Build docs
         run: |

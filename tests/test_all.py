@@ -39,8 +39,6 @@ except ImportError:
 
 import numpy as np
 import numpy.testing as npt
-
-import epr
 from epr._epr import (
     _EPR_MAGIC_FIELD,  # noqa: PLC2701
     _EPR_MAGIC_RASTER,  # noqa: PLC2701
@@ -48,6 +46,8 @@ from epr._epr import (
     _EPR_MAGIC_BAND_ID,  # noqa: PLC2701
     _EPR_MAGIC_PRODUCT_ID,  # noqa: PLC2701
 )
+
+import epr
 
 EPR_TO_NUMPY_TYPE = {
     # epr.E_TID_UNKNOWN:  np.NPY_NOTYPE,

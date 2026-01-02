@@ -65,7 +65,7 @@ content-type = "text/x-rst"
 Homepage = "https://github.com/avalentino/pyepr"
 Documentation = "https://pyepr.readthedocs.io"
 Repository = "https://github.com/avalentino/pyepr.git"
-Changelog = "https://github.com/avalentino/pyepr/blob/main/docs/NEWS.rst"
+Changelog = "https://pyepr.readthedocs.io/en/latest/NEWS.html"
 Issues = "https://github.com/avalentino/pyepr/issues"
 
 
