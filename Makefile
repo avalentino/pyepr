@@ -93,15 +93,15 @@ docs:
 	$(MAKE) -C docs linkcheck
 	$(MAKE) -C docs spelling
 
-ext: src/epr/epr.pyx
+ext: src/epr/_epr.pyx src/epr/_epr.pxd
 	$(PYTHON) setup.py build_ext --inplace --epr-api-src=$(EPRAPIROOT)/src
 
 cythonize: src/epr/_epr.c
 
-src/epr/_epr.c: src/epr/epr.pyx
-	$(CYTHON) $(CYTHONFLAGS) -o src/epr/_epr.c src/epr/epr.pyx
+src/epr/_epr.c: src/epr/_epr.pyx src/epr/_epr.pxd
+	$(CYTHON) $(CYTHONFLAGS) -o src/epr/_epr.c src/epr/_epr.pyx
 
-ext-coverage: src/epr/epr.pyx
+ext-coverage: src/epr/_epr.pyx src/epr/_epr.pxd
 	env PYEPR_COVERAGE=TRUE $(PYTHON) setup.py build_ext --inplace
 
 debug:

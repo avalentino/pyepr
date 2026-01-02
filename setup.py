@@ -66,7 +66,7 @@ def setup_extension(eprsrcdir=None, *, coverage: bool = False):
 
     ext = NumpyExtension(
         "epr._epr",
-        sources=[os.path.join("src", "epr", "epr.pyx"), *extra_sources],
+        sources=[os.path.join("src", "epr", "_epr.pyx"), *extra_sources],
         include_dirs=include_dirs,
         libraries=libraries,
         language="c",

@@ -31,7 +31,7 @@ from libc.stdio cimport FILE
 from cpython.object cimport PyObject_AsFileDescriptor
 from cpython.weakref cimport PyWeakref_NewRef
 
-from .epr cimport *
+from ._epr cimport *
 
 np.import_array()
 
