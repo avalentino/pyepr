@@ -1,4 +1,3 @@
 [submodule "extern/epr-api"]
 	path = extern/epr-api
 	url = https://github.com/avalentino/epr-api.git
-	branch = pyepr

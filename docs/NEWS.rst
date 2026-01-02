@@ -5,7 +5,7 @@ Change history
 PyEPR 1.2.1 (UNRELEASED)
 ------------------------
 
-* TBW
+* Update the bundled epr-api library source code to v2.3.
 
 
 PyEPR 1.2.0 (29/03/2025)
