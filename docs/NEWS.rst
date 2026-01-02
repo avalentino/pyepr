@@ -6,6 +6,7 @@ PyEPR 1.3.0 (UNRELEASED)
 ------------------------
 
 * Update the bundled epr-api library source code to v2.3.
+* Improve typing support.
 
 
 PyEPR 1.2.0 (29/03/2025)

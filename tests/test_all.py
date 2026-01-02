@@ -19,6 +19,7 @@ import os
 import re
 import sys
 import shutil
+import typing
 import numbers
 import pathlib
 import zipfile
@@ -34,11 +35,15 @@ from packaging.version import parse as Version  # noqa: N812
 try:
     import resource
 except ImportError:
-    resource = None
+    have_resource = False
+else:
+    have_resource = True
 
 
 import numpy as np
 import numpy.testing as npt
+
+import epr
 from epr._epr import (
     _EPR_MAGIC_FIELD,  # noqa: PLC2701
     _EPR_MAGIC_RASTER,  # noqa: PLC2701
@@ -46,8 +51,6 @@ from epr._epr import (
     _EPR_MAGIC_BAND_ID,  # noqa: PLC2701
     _EPR_MAGIC_PRODUCT_ID,  # noqa: PLC2701
 )
-
-import epr
 
 EPR_TO_NUMPY_TYPE = {
     # epr.E_TID_UNKNOWN:  np.NPY_NOTYPE,
@@ -67,8 +70,8 @@ EPR_TO_NUMPY_TYPE = {
 
 def has_epr_c_bug_pyepr009() -> bool:
     if "_pyepr" in epr.EPR_C_API_VERSION:
-        v = epr.EPR_C_API_VERSION
-        epr_version, _, pyepr_version = str(v).partition("_pyepr")
+        v_str = epr.EPR_C_API_VERSION
+        epr_version, _, pyepr_version = v_str.partition("_pyepr")
         v = Version(epr_version), Version(pyepr_version)
         v_ref = Version("2.3dev"), Version("082")
         return v < v_ref
@@ -828,11 +831,11 @@ class TestBand(unittest.TestCase):  # noqa: PLR0904
     HEIGHT = 100
     SCALING_FACTOR = 1.0
     SCALING_OFFSET = 0.0
-    UNIT = None
+    UNIT: str | None = None
     RTOL = 1e-7
     DATA_TYPE = np.float32
     # fmt: off
-    TEST_DATA = np.asarray([
+    TEST_DATA: np.typing.NDArray = np.asarray([
         [228., 213., 235., 256., 239., 260., 210., 197., 233., 213.],
         [246., 248., 333., 317., 272., 247., 247., 221., 221., 205.],
         [239., 297., 412., 381., 301., 226., 262., 256., 229., 214.],
@@ -1305,7 +1308,7 @@ class TestAnnotationBand(TestBand):
     UNIT = "deg"
     RTOL = 1e-7
     # fmt: off
-    TEST_DATA = np.asarray([
+    TEST_DATA: np.typing.NDArray = np.asarray([
         [21.86950111, 21.86438370, 21.85926437, 21.85414696, 21.84902954,
          21.84391022, 21.83879280, 21.83367538, 21.82855606, 21.82343864],
         [21.86950302, 21.86438560, 21.85926628, 21.85414886, 21.84903145,
@@ -1545,7 +1548,7 @@ class TestRaster(unittest.TestCase):
     RASTER_DATA_TYPE = epr.E_TID_FLOAT
     RASTER_ELEM_SIZE = 4
     RTOL = 1e-7
-    TEST_DATA = np.zeros((10, 10))
+    TEST_DATA: np.typing.NDArray = np.zeros((10, 10))
 
     def setUp(self):
         self.raster = epr.create_raster(
@@ -1660,7 +1663,7 @@ class TestRasterRead(TestRaster):
     BAND_NAME = TestBand.BAND_NAME
     RASTER_XOFFSET = TestBand.XOFFSET
     RASTER_YOFFSET = TestBand.YOFFSET
-    TEST_DATA = TestBand.TEST_DATA
+    TEST_DATA: np.typing.NDArray = TestBand.TEST_DATA
 
     def setUp(self):
         self.product = epr.Product(PRODUCT_FILE)
@@ -1691,7 +1694,7 @@ class TestAnnotatedRasterRead(TestRasterRead):
     BAND_NAME = TestAnnotationBand.BAND_NAME
     RASTER_XOFFSET = TestAnnotationBand.XOFFSET
     RASTER_YOFFSET = TestAnnotationBand.YOFFSET
-    TEST_DATA = TestAnnotationBand.TEST_DATA
+    TEST_DATA: np.typing.NDArray = TestAnnotationBand.TEST_DATA
     RTOL = 1e-6
 
     @unittest.skipIf(EPR_C_BUG_PYEPR009, "buggy EPR_C_API detected")
@@ -2065,7 +2068,7 @@ class TestField(unittest.TestCase):
     FIELD_TYPE = epr.E_TID_UCHAR
     # FIELD_TYPE_NAME = 'uchar'
     FIELD_NUM_ELEMS = 1
-    FIELD_VALUES = (0,)
+    FIELD_VALUES: typing.Sequence[int | epr.EPRTime] = (0,)
     FIELD_UNIT = "flag"
     FIELD_OFFSET = 16
 
@@ -3082,7 +3085,7 @@ class TestLibVersion(unittest.TestCase):
     platform.python_implementation() == "PyPy",
     "skip memory leak check on PyPy",
 )
-@unittest.skipIf(resource is None, '"resource" module not available')
+@unittest.skipIf(not have_resource, '"resource" module not available')
 class TestMemoryLeaks(unittest.TestCase):
     # See gh-10 (https://github.com/avalentino/pyepr/issues/10)
 

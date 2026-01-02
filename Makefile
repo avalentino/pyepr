@@ -36,6 +36,7 @@ help:
 	@echo "  debug     - generate debug build"
 	@echo "  ext-coverage    - build the extension in-place with tracing enabled"
 	@echo "  coverage-report - generate the coverage report"
+	@echo "  stubs     - generate Python typing stubs for cython modules"
 
 dist:
 	$(PYTHON) -m build
@@ -51,7 +52,7 @@ coverage: clean ext-coverage
 	env PYTHONPATH=src $(PYTHON) -m pytest --doctest-modules --cov=$(TARGET) --cov-report=html --cov-report=term src/$(TARGET) tests
 
 clean:
-	$(PYTHON) setup.py clean --all
+	# $(PYTHON) setup.py clean --all
 	$(RM) -r src/*.*-info build
 	find . -name __pycache__ -type d -exec $(RM) -r {} +
 	# $(RM) -r __pycache__ */__pycache__ */*/__pycache__ */*/*/__pycache__
@@ -78,12 +79,12 @@ distclean: cleaner
 	$(RM) $(TEST_DATSET)
 
 lint:
-	$(PYTHON) -m flake8 --count --statistics src/$(TARGET) tests
+	# $(PYTHON) -m flake8 --count --statistics src/$(TARGET) tests
 	$(PYTHON) -m pydocstyle --count src/$(TARGET)
 	# $(PYTHON) -m isort --check src/$(TARGET) tests
 	$(PYTHON) -m black --check src/$(TARGET) tests
-	# $(PYTHON) -m mypy --check-untyped-defs --ignore-missing-imports src/$(TARGET)
-	ruff check src/$(TARGET) tests
+	$(PYTHON) -m mypy --check-untyped-defs src/$(TARGET)  # --ignore-missing-imports
+	# ruff check src/$(TARGET) tests
 	codespell
 
 docs:
@@ -109,3 +110,9 @@ debug:
 wheels:
 	# Requires docker
 	python3 -m cibuildwheel --platform auto
+
+stubs:
+	env PYTHONPATH=src stubgen -v -m epr._epr -o src
+	mv src/epr/_epr.pyi _epr.pyi
+	grep -v _cython _epr.pyi | grep -v __pyx_ | grep -v _typeshed | grep -v Incomplete > src/epr/_epr.pyi
+	$(RM) _epr.pyi

@@ -54,10 +54,12 @@ jobs:
           python -m black --check src/${PACKAGE} tests
           # python -m black --diff src/${PACKAGE} tests
 
-      # - name: Lint (mypy)
-      #   run: |
-      #     python -m mypy --version
-      #     python -m mypy ${PACKAGE}
+      - name: Lint (mypy)
+        env:
+          PYTHONPATH: src
+        run: |
+          python -m mypy --version
+          python -m mypy --check-untyped-defs --ignore-missing-imports -p ${PACKAGE}
 
       - name: Lint (ruff)
         run: |

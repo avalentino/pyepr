@@ -79,14 +79,14 @@ docs = [
 ]
 test = ["pytest", "packaging"]
 coverage = ["pytest-cov", "coverage[toml]", {include-group = "test"}]
-lint = ["flake8", "pydocstyle", "isort", "black", "ruff", "codespell"]
+lint = ["flake8", "pydocstyle", "isort", "black", "ruff", "mypy", "codespell"]
 dev = [
     "python-build",
     "twine",
     "setuptools >=77",
     "packaging",
-    "cython>=3",
-    "numpy>=2",
+    "cython >=3",
+    "numpy >=2",
     {include-group = "docs"},
     {include-group = "test"},
     {include-group = "coverage"},
@@ -97,11 +97,14 @@ dev = [
 [tool.setuptools]
 packages = ["epr"]
 package-dir = {"" = "src"}
-include-package-data = false
 
 
 [tool.setuptools.dynamic]
 version = {attr = "epr.__version__"}
+
+
+[tool.setuptools.package-data]
+epr = ["py.typed", "*.pyi"]
 
 
 [tool.cibuildwheel]
@@ -171,12 +174,10 @@ quiet-level = 3
 ignore-words="docs/spelling_wordlist.txt"
 
 
-# [tool.mypy]
-# exclude = [
-#     "^docs/conf\\.py$",
-#     # "two\.pyi$",      # files ending with "two.pyi"
-#     # "^three\.",       # files starting with "three."
-# ]
+[tool.mypy]
+exclude = [
+    "^docs/conf\\.py$",
+]
 
 
 [tool.ruff]
@@ -286,6 +287,7 @@ docstring-code-format = true
 
 [tool.ruff.lint.isort]
 length-sort = true
+known-first-party = ["epr"]
 
 
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]
