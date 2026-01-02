@@ -3,7 +3,7 @@ requires = [
     "setuptools >=77.0.0",
     "packaging",
     "cython >=3.0",
-    "numpy",
+    "numpy >=2",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -36,7 +36,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: GIS",
 ]
 dependencies = [
-    "numpy>=1.7",
+    "numpy >=1.26.4",
 ]
 dynamic = ["version"]
 
@@ -67,6 +67,31 @@ Documentation = "https://pyepr.readthedocs.io"
 Repository = "https://github.com/avalentino/pyepr.git"
 Changelog = "https://pyepr.readthedocs.io/en/latest/NEWS.html"
 Issues = "https://github.com/avalentino/pyepr/issues"
+
+
+[dependency-groups]
+docs = [
+    "sphinx",
+    "sphinx_rtd_theme",
+    "sphinxcontrib-spelling",
+    "packaginhg",
+    "ipython",
+]
+test = ["pytest", "packaging"]
+coverage = ["pytest-cov", "coverage[toml]", {include-group = "test"}]
+lint = ["flake8", "pydocstyle", "isort", "black", "ruff"]
+dev = [
+    "python-build",
+    "twine",
+    "setuptools >=77",
+    "packaging",
+    "cython>=3",
+    "numpy>=2",
+    {include-group = "docs"},
+    {include-group = "test"},
+    {include-group = "coverage"},
+    {include-group = "lint"},
+]
 
 
 [tool.setuptools]
