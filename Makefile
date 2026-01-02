@@ -84,7 +84,7 @@ lint:
 	$(PYTHON) -m black --check src/$(TARGET) tests
 	# $(PYTHON) -m mypy --check-untyped-defs --ignore-missing-imports src/$(TARGET)
 	ruff check src/$(TARGET) tests
-	# codespell
+	codespell
 
 docs:
 	mkdir -p docs/_static

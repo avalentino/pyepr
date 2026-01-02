@@ -193,10 +193,10 @@ Product
             for example ``flags.LAND OR flags.CLOUD`` or
             ``NOT flags.WATER AND flags.TURBID_S``
       :param xoffset:
-            across-track co-ordinate in pixel co-ordinates (zero-based)
+            across-track coordinate in pixel coordinates (zero-based)
             of the upper right corner of the source-region
       :param yoffset:
-            along-track co-ordinate in pixel co-ordinates (zero-based)
+            along-track coordinate in pixel coordinates (zero-based)
             of the upper right corner of the source-region
       :param raster:
             the raster for the bit-mask. The data type of the raster
@@ -994,17 +994,17 @@ Band
 
       The source-region is a defined part of the whole ENVISAT
       :class:`Product` image, which shall be read into a :class:`Raster`.
-      In this routine the co-ordinates are specified, where the
+      In this routine the coordinates are specified, where the
       source-region to be read starts.
       The dimension of the region and the sub-sampling are attributes
       of the :class:`Raster` into which the data are read.
 
       :param xoffset:
-            across-track source co-ordinate in pixel co-ordinates
+            across-track source coordinate in pixel coordinates
             (zero-based) of the upper right corner of the source-region.
             Default 0.
       :param yoffset:
-            along-track source co-ordinate in pixel co-ordinates
+            along-track source coordinate in pixel coordinates
             (zero-based) of the upper right corner of the source-region.
             Default 0.
       :param raster:
@@ -1034,7 +1034,7 @@ Band
 
       The source-region is a defined part of the whole ENVISAT
       :class:`Product` image, which shall be read into a :class:`Raster`.
-      In this routine the co-ordinates are specified, where the
+      In this routine the coordinates are specified, where the
       source-region to be read starts.
       The dimension of the region and the sub-sampling are attributes
       of the :class:`Raster` into which the data are read.
@@ -1048,11 +1048,11 @@ Band
             into the :class:`Raster`, If not provided reads as much as
             possible
       :param xoffset:
-            across-track source co-ordinate in pixel co-ordinates
+            across-track source coordinate in pixel coordinates
             (zero-based) of the upper right corner of the source-region.
             Default 0.
       :param yoffset:
-            along-track source co-ordinate in pixel co-ordinates
+            along-track source coordinate in pixel coordinates
             (zero-based) of the upper right corner of the source-region.
             Default 0.
       :param xstep:
@@ -1161,7 +1161,7 @@ Raster
       :param y:
             the (zero-based) Y coordinate of the pixel
       :returns:
-            the typed value at the given co-ordinate
+            the typed value at the given coordinate
 
 
    .. method:: get_elem_size()

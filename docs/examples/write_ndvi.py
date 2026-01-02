@@ -88,7 +88,7 @@ Example:
         with open(argv[2], "wb") as out_stream:
             # Loop over all pixel and calculate the NDVI.
             #
-            # @NOTE: looping over data matrices is not the best soluton.
+            # @NOTE: looping over data matrices is not the best solution.
             #        It is done here just for demostrative purposes
             for j in range(height):
                 for i in range(width):

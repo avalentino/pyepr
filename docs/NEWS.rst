@@ -218,7 +218,7 @@ PyEPR 0.9 (27/02/2015)
 * the *index* parameter of the :meth:`epr.Dataset.read_record` method is
   now optional (defaults to zero)
 * the deprecated `__revision__` variable has been removed
-* declarations of the EPR C API have been moved to the new :file:`epr.pyd`
+* declarations of the EPR C API have been moved to the new :file:`epr.pxd`
 * the `const_char` and `const_void` definitions have been dropped,
   no longer necessary with Cython_ >= 0.19
 * minimum required version for Cython_ is now 0.19

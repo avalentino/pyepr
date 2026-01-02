@@ -295,7 +295,7 @@ cdef class _CLib:
             msg = <char*>epr_get_last_err_message()
             epr_clear_err()
             raise ImportError(
-                f"unable to inizialize EPR API library: "
+                f"unable to initialize EPR API library: "
                 f"{_to_str(msg, 'ascii')}"
             )
 
@@ -531,7 +531,7 @@ cdef class Field(EprObject):
             offset += info.tot_size
 
         if not found:
-            raise EPRError("inable to compute field offset")
+            raise EPRError("unable to compute field offset")
         elif absolute:
             offset += self._parent._get_offset(absolute)
 
@@ -688,7 +688,7 @@ cdef class Field(EprObject):
             the field
         """
         cdef void* buf = NULL
-        cdef int nd = 1
+        cdef int ndim = 1
         cdef np.npy_intp shape[1]
         cdef np.ndarray out
         cdef EPR_Time* t = NULL
@@ -759,7 +759,7 @@ cdef class Field(EprObject):
         elif etype == e_tid_string:
             if shape[0] != 1:
                 raise ValueError(f"unexpected number of elements: {shape[0]}")
-            nd = 0
+            ndim = 0
             dtype = np.NPY_STRING
             buf = <char*>epr_get_field_elem_as_str(self._ptr)
             if buf is NULL:
@@ -771,7 +771,7 @@ cdef class Field(EprObject):
         else:
             raise ValueError("invalid field type")
 
-        out = np.PyArray_SimpleNewFromData(nd, shape, dtype, <void*>buf)
+        out = np.PyArray_SimpleNewFromData(ndim, shape, dtype, <void*>buf)
         # np.PyArray_CLEARFLAG(out, NPY_ARRAY_WRITEABLE)  # new in numpy 1.7
         # Make the ndarray keep a reference to this object
         np.set_array_base(out, self)
@@ -1047,13 +1047,13 @@ cdef class Record(EprObject):
             # elif isinstance(self._parent, Product):
             (<Product>self._parent)._check_write_mode()
 
-    cdef inline uint _get_offset(self, bint absolure=0):
+    cdef inline uint _get_offset(self, bint absolute=0):
         cdef EPR_RecordInfo* info = <EPR_RecordInfo*>self._ptr.info
         cdef uint offset = self._index * info.tot_size
 
         # assert self._index is not None
 
-        if absolure:
+        if absolute:
             offset += (<Dataset>self._parent)._get_offset()
 
         return offset
@@ -1363,7 +1363,7 @@ cdef class Raster(EprObject):
         :param y:
             the (zero-based) Y coordinate of the pixel
         :returns:
-            the typed value at the given co-ordinate
+            the typed value at the given coordinate
         """
         if (x < 0 or <uint>x >= self._ptr.raster_width or
                 y < 0 or <uint>y >= self._ptr.raster_height):
@@ -1808,7 +1808,7 @@ cdef class Band(EprObject):
             src_width = scene_width
         elif src_width > scene_width:
             raise ValueError(
-                f"requeted raster width ({src_width}) is too large for the "
+                f"requested raster width ({src_width}) is too large for the "
                 f"Band (scene_width={scene_width})"
             )
 
@@ -1816,7 +1816,7 @@ cdef class Band(EprObject):
             src_height = scene_height
         elif src_height > scene_height:
             raise ValueError(
-                f"requeted raster height ({src_height}) is too large for the "
+                f"requested raster height ({src_height}) is too large for the "
                 f"Band (scene_height={scene_height})"
             )
 
@@ -1852,16 +1852,16 @@ cdef class Band(EprObject):
 
         The source-region is a defined part of the whole ENVISAT
         product image, which shall be read into a raster.
-        In this routine the co-ordinates are specified, where the
+        In this routine the coordinates are specified, where the
         source-region to be read starts.
         The dimension of the region and the sub-sampling are attributes
         of the raster into which the data are read.
 
         :param xoffset:
-            across-track source co-ordinate in pixel co-ordinates
+            across-track source coordinate in pixel coordinates
             (zero-based) of the upper right corner of the source-region
         :param yoffset:
-            along-track source co-ordinate in pixel co-ordinates
+            along-track source coordinate in pixel coordinates
             (zero-based) of the upper right corner of the source-region
         :param raster:
             :class:`Raster` instance set with appropriate parameters to
@@ -1921,7 +1921,7 @@ cdef class Band(EprObject):
 
         The source-region is a defined part of the whole ENVISAT
         product image, which shall be read into a raster.
-        In this routine the co-ordinates are specified, where the
+        In this routine the coordinates are specified, where the
         source-region to be read starts.
         The dimension of the region and the sub-sampling are attributes
         of the raster into which the data are read.
@@ -1933,10 +1933,10 @@ cdef class Band(EprObject):
             the height (along track dimension) of the source to be read
             into the raster. If not provided reads as much as possible
         :param xoffset:
-            across-track source co-ordinate in pixel co-ordinates
+            across-track source coordinate in pixel coordinates
             (zero-based) of the upper right corner of the source-region
         :param yoffset:
-            along-track source co-ordinate in pixel co-ordinates
+            along-track source coordinate in pixel coordinates
             (zero-based) of the upper right corner of the source-region
         :param xstep:
             the sub-sampling step across track of the source when
@@ -2571,10 +2571,10 @@ cdef class Product(EprObject):
             ``NOT flags.WATER AND flags.TURBID_S``
 
        :param xoffset:
-            across-track co-ordinate in pixel co-ordinates (zero-based)
+            across-track coordinate in pixel coordinates (zero-based)
             of the upper right corner of the source-region
        :param yoffset:
-            along-track co-ordinate in pixel co-ordinates (zero-based)
+            along-track coordinate in pixel coordinates (zero-based)
             of the upper right corner of the source-region
        :param raster:
             the raster for the bit-mask. The data type of the raster

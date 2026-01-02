@@ -38,6 +38,11 @@ jobs:
           python -m flake8 --version
           python -m flake8 --count --show-source --statistics src/${PACKAGE} tests
 
+      - name: Lint (pydocstyle)
+        run: |
+          python -m pydocstyle --version
+          python -m pydocstyle --count src/${PACKAGE}
+
       # - name: Lint (isort)
       #   run: |
       #     python -m isort --version
@@ -59,7 +64,7 @@ jobs:
           ruff --version
           ruff check src/${PACKAGE} tests
 
-      - name: Lint (pydocstyle)
+      - name: Lint (codespell)
         run: |
-          python -m pydocstyle --version
-          python -m pydocstyle --count src/${PACKAGE}
+          codespell --version
+          codespell --count src/${PACKAGE} tests

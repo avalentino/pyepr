@@ -74,12 +74,12 @@ docs = [
     "sphinx",
     "sphinx_rtd_theme",
     "sphinxcontrib-spelling",
-    "packaginhg",
+    "packaging",
     "ipython",
 ]
 test = ["pytest", "packaging"]
 coverage = ["pytest-cov", "coverage[toml]", {include-group = "test"}]
-lint = ["flake8", "pydocstyle", "isort", "black", "ruff"]
+lint = ["flake8", "pydocstyle", "isort", "black", "ruff", "codespell"]
 dev = [
     "python-build",
     "twine",
@@ -164,10 +164,11 @@ match='(?!(test_|conf)).*\.py'
 
 
 [tool.codespell]
-skip = "*.pdf,*.ipynb,docs/spelling_wordlist.txt"
+skip = "*.pdf,*.ipynb,./docs/spelling_wordlist.txt,*.N1,extern,./src/epr/*.c"
 count = true
 quiet-level = 3
-# ignore-words-list = "nd"
+# ignore-words-list = ""
+ignore-words="docs/spelling_wordlist.txt"
 
 
 # [tool.mypy]

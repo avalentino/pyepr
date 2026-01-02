@@ -203,7 +203,7 @@ function:
 .. index:: MPH, SPH
 
 The  :func:`epr2gdal` function also stores the contents of the *MPH* and the
-*SPH* records as GDAL_ dataset matadata in custom domains:
+*SPH* records as GDAL_ dataset metadata in custom domains:
 
 .. raw:: latex
 
