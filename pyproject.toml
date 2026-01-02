@@ -1,6 +1,6 @@
 [build-system]
 requires = [
-    "setuptools >=61.0.0",
+    "setuptools >=77.0.0",
     "packaging",
     "cython >=3.0",
     "numpy",
@@ -16,8 +16,8 @@ authors = [
 description = "Python ENVISAT Product Reader API"
 requires-python = ">=3.10, <4"
 keywords = ["satellite", "reader", "envisat"]
-license = {text = "GPL-3.0-or-later"}
-# license-files = ["LICENSE.txt", "LICENSES/*"]
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE.txt", "LICENSES/*"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Other Environment",
