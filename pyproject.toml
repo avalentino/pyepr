@@ -14,7 +14,7 @@ authors = [
     {name = "Antonio Valentino", email = "antonio.valentino@tiscali.it"},
 ]
 description = "Python ENVISAT Product Reader API"
-requires-python = ">=3.9, <4"
+requires-python = ">=3.10, <4"
 keywords = ["satellite", "reader", "envisat"]
 license = {text = "GPL-3.0-or-later"}
 # license-files = ["LICENSE.txt", "LICENSES/*"]
@@ -65,7 +65,7 @@ content-type = "text/x-rst"
 Homepage = "https://github.com/avalentino/pyepr"
 Documentation = "https://pyepr.readthedocs.io"
 Repository = "https://github.com/avalentino/pyepr.git"
-Changelog = "https://github.com/avalentino/pyepr/blob/master/doc/NEWS.rst"
+Changelog = "https://github.com/avalentino/pyepr/blob/main/docs/NEWS.rst"
 Issues = "https://github.com/avalentino/pyepr/issues"
 
 
@@ -85,6 +85,19 @@ test-requires = "pytest"
 test-command = "pytest -v {project}/tests"
 
 
+[tool.pytest.ini_options]
+addopts = [
+    # "--ignore=examples/",
+    "--import-mode=importlib",
+]
+# markers = [
+    # "webtest: mark a test as a webtest.",
+    # builtin markers
+    # "slow: mark test as slow to run.",
+    # "remote_data: Apply to tests that require data from remote servers.",
+    # "hugemem: mark test as using a lot of memory.",
+# ]
+
 [tool.coverage.run]
 branch = true
 plugins = ["Cython.Coverage"]
@@ -93,96 +106,138 @@ source = ["epr"]
 
 [tool.black]
 line-length = 79
+preview = true
+enable-unstable-feature = [
+    "hug_parens_with_braces_and_square_brackets",
+    "multiline_string_handling",
+    "string_processing",
+    "wrap_long_dict_values_in_parens",
+]
+# target-version = ['py310']
+# extend-exclude = "packagename/parse/*"
 
 
 [tool.isort]
 profile = "black"
 length_sort = true
+multi_line_output = 3
 no_inline_sort = true
 include_trailing_comma = true
 use_parentheses = true
 line_length = 79
+# force_grid_wrap = 0
+# ensure_newline_before_comments = true
 known_first_party = ["epr"]
+# skip_glob = ["packagename/parse/*"]
 
 
 [tool.pydocstyle]
+# convention = "numpy"
 add-ignore = ["D105"]
 # add-ignore = ["D105", "D107"]
+match='(?!(test_|conf)).*\.py'
+
+
+[tool.codespell]
+skip = "*.pdf,*.ipynb,docs/spelling_wordlist.txt"
+count = true
+quiet-level = 3
+# ignore-words-list = "nd"
+
+
+# [tool.mypy]
+# exclude = [
+#     "^docs/conf\\.py$",
+#     # "two\.pyi$",      # files ending with "two.pyi"
+#     # "^three\.",       # files starting with "three."
+# ]
 
 
 [tool.ruff]
 line-length = 79
-extend-exclude = ["doc/conf.py"]
+# indent-width = 4
+# target-version = "py310"
+extend-exclude = ["docs/conf.py"]
 
 
 [tool.ruff.lint]
 preview = true
 select = [
-    # Updated to ruff v0.7.1
-    "F",        # F     Pyflakes
-    "E",        # E/W   pycodestyle
-    "W",        # E/W   pycodestyle
-    "C90",      # C90   mccabe
-    "I",        # I     isort
-    "N",        # N     pep8-naming
-    "D",        # D     pydocstyle
-    "UP",       # UP    pyupgrade
-    "YTT",      # YTT   flake8-2020
-    # "ANN",      # ANN   flake8-annotations
-    # "ASYNC",    # ASYNC flake8-async
-    # "S",        # S     flake8-bandit         # TODO
-    "BLE",      # BLE   flake8-blind-except
-    "FBT",      # FBT   flake8-boolean-trap
-    "B",        # B     flake8-bugbear
-    "A",        # A     flake8-builtins
-    # "COM",      # COM   flake8-commas
-    # "CPY",      # CPY   flake8-copyright      # --preview
-    "C4",       # C4    flake8-comprehensions
-    "DTZ",      # DTZ   flake8-datetimez
-    "T10",      # T10   flake8-debugger
-    "DJ",       # DJ    flake8-django
-    # "EM",       # EM    flake8-errmsg         # TODO
-    "EXE",      # EXE   flake8-executable
-    "FA",       # FA    flake8-future-annotations
-    "ISC",      # ISC   flake8-implicit-str-concat
-    "ICN",      # ICN   flake8-import-conventions
-    # "LOG",      # LOG   flake8-logging
-    "G",        # G     flake8-logging-format
-    "INP",      # INP   flake8-no-pep420
-    "PIE",      # PIE   flake8-pie
-    "T20",      # T20   flake8-print
-    "PYI",      # PYI   flake8-pyi
-    # "PT",       # PT    flake8-pytest-style   # manual
-    "Q",        # Q     flake8-quotes
-    "RSE",      # RSE   flake8-raise
-    "RET",      # RET   flake8-return
-    "SLF",      # SLF   flake8-self
-    "SLOT",     # SLOT  flake8-slots
-    "SIM",      # SIM   flake8-simplify
-    "TID",      # TID   flake8-tidy-imports
-    # "TCH",      # TCH   flake8-type-checking
-    # "INT",      # INT   flake8-gettext
-    "ARG",      # ARG   flake8-unused-arguments
-    "PTH",      # PTH   flake8-use-pathlib
-    # "TD",       # TD    flake8-todos
-    # "FIX",      # FIX   flake8-fixme          # manual
-    # "ERA",      # ERA   eradicate             # manual
-    # "PD",       # PD    pandas-vet
-    "PGH",      # PGH   pygrep-hooks
-    "PL",       # PL    Pylint
-    # "TRY",      # TRY   tryceratops           # manual
-    "FLY",      # FLY   flynt
-    "NPY",      # NPY   NumPy-specific rules
-    # "FAST",     # FAST  FastAPI
-    # "AIR",      # AIR   Airflow
-    "PERF",     # PERF  Perflint
-    # "FURB",     # FURB  refurb                # --preview
-    # "DOC",      # DOC   pydoclint
-    "RUF",      # RUF   Ruff-specific rules
+    # ruff --version  # ruff 0.11.6
+    "E",        #  E/W pycodestyle
+    "W",        #  E/W pycodestyle
+    "F",        #    F Pyflakes
+    "D",        #    D pydocstyle
+    "N",        #    N pep8-naming
+    "I",        #    I isort
+    "C90",      #  C90 mccabe
+    "UP",       #   UP pyupgrade
+    # --- flake8 ---
+    "YTT",      #  YTT flake8-2020
+    # "ANN",    #  ANN flake8-annotations
+    # "ASYNC",  #ASYNC flake8-async
+    # "S",      #    S flake8-bandit
+    "BLE",      #  BLE flake8-blind-except
+    "FBT",      #  FBT flake8-boolean-trap
+    "B",        #    B flake8-bugbear
+    "A",        #    A flake8-builtins
+    # "COM",    #  COM flake8-commas
+    "C4",       #   C4 flake8-comprehensions
+    # "CPY",    #  CPY flake8-copyright
+    "DTZ",      #  DTZ flake8-datetimez
+    "T10",      #  T10 flake8-debugger
+    "DJ",       #   DJ flake8-django
+    # "EM",     #   EM flake8-errmsg
+    "EXE",      #  EXE flake8-executable
+    # "FIX",    #  FIX flake8-fixme         # manual
+    "FA",       #   FA flake8-future-annotations
+    # "INT",    #  INT flake8-gettext
+    "ISC",      #  ISC flake8-implicit-str-concat
+    "ICN",      #  ICN flake8-import-conventions
+    # "LOG",    #  LOG flake8-logging
+    "G",        #    G flake8-logging-format
+    "INP",      #  INP flake8-no-pep420
+    "PIE",      #  PIE flake8-pie
+    "T20",      #  T20 flake8-print
+    "PYI",      #  PYI flake8-pyi
+    # "PT",     #   PT flake8-pytest-style  # manual
+    "Q",        #    Q flake8-quotes
+    "RSE",      #  RSE flake8-raise
+    "RET",      #  RET flake8-return
+    "SLF",      #  SLF flake8-self
+    "SIM",      #  SIM flake8-simplify
+    "SLOT",     # SLOT flake8-slots
+    "TID",      #  TID flake8-tidy-imports
+    # "TD",     #   TD flake8-todos
+    # "TC",     #   TC flake8-type-checking
+    "ARG",      #  ARG flake8-unused-arguments
+    "PTH",      #  PTH flake8-use-pathlib
+    # --- misc ---
+    # "AIR",    #  AIR Airflow
+    # "ERA",    #  ERA eradicate             # manual
+    # "FAST",   # FAST FastAPI
+    "FLY",      #  FLY flynt
+    "NPY",      #  NPY NumPy-specific rules
+    # "PD",     #   PD pandas-vet
+    "PERF",     # PERF Perflint
+    # "DOC",    #  DOC pydoclint
+    "PGH",      #  PGH pygrep-hooks
+    "PL",       #   PL Pylint
+    # "FURB",   # FURB refurb                # --preview
+    "RUF",      #  RUF Ruff-specific rules
+    # "TRY",    #  TRY tryceratops           # manual
 ]
 extend-ignore = [
+    # "D105",     # D105 Missing docstring in magic method
+    # "D107",     # D107 Missing docstring in `__init__`
     "D203",     # D203 1 blank line required before class docstring
     "D213",     # D213 Multi-line docstring summary should start at the second line
+    # "ISC001",   # ISC001 Implicitly concatenated string literals on one line
+    # "PLR2004",  # PLR2004 Magic value used in comparison, consider replacing 2 with a constant variable
+    # "PLR0913",  # PLR0913 Too many arguments in function definition
+    # "PLW1514",  # PLW1514 `open` in text mode without explicit `encoding` argument
+    # "RET504",   # RET504 Unnecessary assignment before `return` statement
+    # "RET505",   # RET505 Unnecessary `elif` after `return` statement
 ]
 
 
@@ -205,3 +260,11 @@ docstring-code-format = true
 
 [tool.ruff.lint.isort]
 length-sort = true
+
+
+[tool.ruff.lint.flake8-import-conventions.extend-aliases]
+"xml.etree.ElementTree" = "etree"
+
+
+# [tool.ruff.lint.pydocstyle]
+# convention = "numpy"  # Accepts: "google", "numpy", or "pep257".

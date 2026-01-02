@@ -8,4 +8,5 @@ pytest-cov
 python-build
 sphinx
 sphinx_rtd_theme
+sphinxcontrib-spelling
 twine

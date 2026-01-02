@@ -2,7 +2,7 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
@@ -15,20 +15,20 @@ repos:
     -   id: detect-private-key
 
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.11.2
+    rev: v0.14.10
     hooks:
     -   id: ruff
         args: [--fix, --config=pyproject.toml]
     -   id: ruff-format
 
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v3.19.1
+    rev: v3.21.2
     hooks:
     -   id: pyupgrade
-        args: [--py39-plus]
+        args: [--py310-plus]
 
 # -   repo: https://github.com/pycqa/flake8
-#     rev: 7.1.1
+#     rev: 7.3.0
 #     hooks:
 #     -   id: flake8
 
@@ -39,24 +39,43 @@ repos:
 #         exclude: tests|examples|data|docs
 
 # -   repo: https://github.com/pycqa/isort
-#     rev: 5.13.2
+#     rev: 7.0.0
 #     hooks:
 #     -   id: isort
 #         name: isort (python)
 
 # -   repo: https://github.com/psf/black-pre-commit-mirror
-#     rev: 24.10.0
+#     rev: 25.12.0
 #     hooks:
 #     -   id: black
-#         language_version: python3.9
+#         language_version: python3.10
+#     -   id: black-jupyter
+#         language_version: python3.10
+
+# -   repo: https://github.com/tweag/FawltyDeps
+#     rev: v0.20.0
+#     hooks:
+#     -   id: check-undeclared
+#     -   id: check-unused
 
 # -   repo: https://github.com/pre-commit/mirrors-mypy
-#     rev: v1.12.0
+#     rev: v1.19.1
 #     hooks:
 #     -   id: mypy
+#         additional_dependencies:
+#         -   tokenize-rt==3.2.0
+#         -   numpy>=1.21
+#         exclude: |
+#             (?x)^(
+#                 docs/conf.py
+#             )
 
 # -   repo: https://github.com/codespell-project/codespell
-#     rev: v2.2.4
+#     rev: v2.4.1
 #     hooks:
 #     -   id: codespell
 #         additional_dependencies: [tomli]
+#         exclude: |
+#             (?x)^(
+#                 docs/spelling_wordlist.txt
+#             )

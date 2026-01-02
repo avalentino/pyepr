@@ -1,6 +1,7 @@
 #!/usr/bin/make -f
 
 PYTHON=python3
+SPHINX_APIDOC=sphinx-apidoc
 TARGET=epr
 
 CYTHON=$(PYTHON) -m cython
@@ -38,10 +39,10 @@ help:
 
 dist:
 	$(PYTHON) -m build
-	$(PYTHON) -m twine check dist/*
+	$(PYTHON) -m twine check dist/*.tar.gz dist/*.whl
 
 check: ext
-	env PYTHONPATH=src $(PYTHON) tests/test_all.py --verbose
+	env PYTHONPATH=src $(PYTHON) -m pytest --doctest-modules src/$(TARGET) tests
 
 fullcheck:
 	$(PYTHON) -m tox run
@@ -83,6 +84,8 @@ lint:
 	$(PYTHON) -m black --check src/$(TARGET) tests
 	# $(PYTHON) -m mypy --check-untyped-defs --ignore-missing-imports src/$(TARGET)
 	ruff check src/$(TARGET) tests
+	# ruff check $(TARGET) tests
+	# codespell
 
 docs:
 	mkdir -p docs/_static
