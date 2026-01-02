@@ -2134,6 +2134,38 @@ class TestField(unittest.TestCase):
         self.assertEqual(self.field.tot_size, tot_size)
 
 
+class TestFieldGetElems(unittest.TestCase):
+    def setUp(self):
+        self.product = epr.Product(PRODUCT_FILE)
+        self.record = self.product.get_sph()
+
+    def test_string_get_elem_int(self):
+        field = self.record.get_field("LINE_LENGTH")
+        value = field.get_elem()
+        self.assertIsInstance(value, int)
+        self.assertEqual(value, 1452)
+
+    def test_string_get_elem_str(self):
+        field = self.record.get_field("SPH_DESCRIPTOR")
+        value = field.get_elem()
+        self.assertIsInstance(value, bytes)
+        self.assertEqual(value, b"AP Mode Medium Res. Image")
+
+    def test_string_get_elems_int(self):
+        field = self.record.get_field("LINE_LENGTH")
+        value = field.get_elems()
+        self.assertIsInstance(value, np.ndarray)
+        self.assertTrue(np.isdtype(value.dtype, "integral"))
+        self.assertEqual(value.item(), 1452)
+
+    def test_string_get_elems_str(self):
+        field = self.record.get_field("SPH_DESCRIPTOR")
+        value = field.get_elems()
+        self.assertIsInstance(value, np.ndarray)
+        self.assertFalse(np.isdtype(value.dtype, "numeric"))
+        self.assertEqual(value.item(), b"AP Mode Medium Res. Image")
+
+
 class TestFieldRW(TestField):
     OPEN_MODE = "rb+"
 

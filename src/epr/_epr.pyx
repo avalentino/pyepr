@@ -758,18 +758,23 @@ cdef class Field(EprObject):
                 pyepr_null_ptr_error(msg)
         elif etype == e_tid_string:
             if shape[0] != 1:
-                raise ValueError(f"unexpected number of elements: {shape[0]}")
-            ndim = 0
-            dtype = np.NPY_STRING
-            buf = <char*>epr_get_field_elem_as_str(self._ptr)
-            if buf is NULL:
-                pyepr_null_ptr_error(msg)
+                raise ValueError(
+                    f"unexpected number of elements: {shape[0]} "
+                    "for e_tid_string"
+                )
+            elem = self.get_elem()
+            return np.asarray(elem)
+            # ndim = 0
+            # dtype = np.NPY_STRING
+            # buf = <char*>epr_get_field_elem_as_str(self._ptr)
+            # if buf is NULL:
+            #     pyepr_null_ptr_error(msg)
         # elif etype == e_tid_unknown:
         #     pass
         # elif etype = e_tid_spare:
         #     pass
         else:
-            raise ValueError("invalid field type")
+            raise ValueError(f"invalid field type: {etype}")
 
         out = np.PyArray_SimpleNewFromData(ndim, shape, dtype, <void*>buf)
         # np.PyArray_CLEARFLAG(out, NPY_ARRAY_WRITEABLE)  # new in numpy 1.7
