@@ -628,7 +628,7 @@ cdef class Field(EprObject):
 
         This function is for getting the elements of a field.
 
-        :param index:
+        :param int index:
             the zero-based index of element to be returned, must not be
             negative
         :returns:
@@ -838,7 +838,7 @@ cdef class Field(EprObject):
 
         :param elem:
             value of the element to set
-        :param index:
+        :param int index:
             the zero-based index of element to be set, must not be
             negative. Default: 0.
         """
@@ -1108,9 +1108,9 @@ cdef class Record(EprObject):
         element to the *ostream* text file or (default) the ASCII output
         will be printed to standard output (:data:`sys.stdout`).
 
-        :param field_index:
+        :param int field_index:
             the index of field in the record
-        :param element_index:
+        :param int element_index:
             the index of element in the specified field
         :param ostream:
             the (opened) output file object
@@ -1139,7 +1139,7 @@ cdef class Record(EprObject):
         The field is here identified through the given name.
         It contains the field info and all corresponding values.
 
-        :param name:
+        :param str name:
             the the name of required field
         :returns:
             the specified :class:`Field` or raises an exception
@@ -1161,7 +1161,7 @@ cdef class Record(EprObject):
 
         Gets a field at the specified position within the record.
 
-        :param index:
+        :param int index:
             the zero-based index (position within record) of the field
         :returns:
             the field or raises and exception (:exc:`EPRValueError`)
@@ -1363,9 +1363,9 @@ cdef class Raster(EprObject):
         This function is for getting the values of the elements of a
         raster (i.e. pixel).
 
-        :param x:
+        :param int x:
             the (zero-based) X coordinate of the pixel
-        :param y:
+        :param int y:
             the (zero-based) Y coordinate of the pixel
         :returns:
             the typed value at the given coordinate
@@ -1475,18 +1475,18 @@ def create_raster(EPR_EDataTypeId data_type, uint src_width, uint src_height,
     :param data_type:
         the type of the data to stored in the raster, must be one of
         E_TID_*
-    :param src_width:
+    :param int src_width:
         the width (across track dimension) of the source to be read
         into the raster.
         See description of :meth:`Band.create_compatible_raster`
-    :param src_height:
+    :param int src_height:
         the height (along track dimension) of the source to be read
         into the raster.
         See description of :meth:`Band.create_compatible_raster`
-    :param xstep:
+    :param int xstep:
         the sub-sampling step across track of the source when reading
         into the raster
-    :param ystep:
+    :param int ystep:
         the sub-sampling step along track of the source when reading
         into the raster
     :returns:
@@ -1514,16 +1514,16 @@ def create_bitmask_raster(uint src_width, uint src_height,
 
     The raster returned always is of type ``byte``.
 
-    :param src_width:
+    :param int src_width:
         the width (across track dimension) of the source to be read
         into the raster
-    :param src_height:
+    :param int src_height:
         the height (along track dimension) of the source to be read
         into the raster
-    :param xstep:
+    :param int xstep:
         the sub-sampling step across track of the source when reading
         into the raster
-    :param ystep:
+    :param int ystep:
         the sub-sampling step along track of the source when reading
         into the raster
     :returns:
@@ -1775,16 +1775,16 @@ cdef class Band(EprObject):
         can be set differently for the across track (source_step_x) and
         along track (source_step_y) directions.
 
-        :param src_width:
+        :param int src_width:
             the width (across track dimension) of the source to be read
             into the raster (default: scene_width)
-        :param src_height:
+        :param int src_height:
             the height (along track dimension) of the source to be read
             into the raster (default: scene_height)
-        :param xstep:
+        :param int xstep:
             the sub-sampling step across track of the source when
             reading into the raster (default=1)
-        :param ystep:
+        :param int ystep:
             the sub-sampling step along track of the source when
             reading into the raster (default=1)
         :returns:
@@ -1862,13 +1862,13 @@ cdef class Band(EprObject):
         The dimension of the region and the sub-sampling are attributes
         of the raster into which the data are read.
 
-        :param xoffset:
+        :param int xoffset:
             across-track source coordinate in pixel coordinates
             (zero-based) of the upper right corner of the source-region
-        :param yoffset:
+        :param int yoffset:
             along-track source coordinate in pixel coordinates
             (zero-based) of the upper right corner of the source-region
-        :param raster:
+        :param epr.Raster raster:
             :class:`Raster` instance set with appropriate parameters to
             read into. If not provided a new :class:`Raster` is
             instantiated
@@ -1931,22 +1931,22 @@ cdef class Band(EprObject):
         The dimension of the region and the sub-sampling are attributes
         of the raster into which the data are read.
 
-        :param src_width:
+        :param int src_width:
             the width (across track dimension) of the source to be read
             into the raster. If not provided reads as much as possible
-        :param src_height:
+        :param int src_height:
             the height (along track dimension) of the source to be read
             into the raster. If not provided reads as much as possible
-        :param xoffset:
+        :param int xoffset:
             across-track source coordinate in pixel coordinates
             (zero-based) of the upper right corner of the source-region
-        :param yoffset:
+        :param int yoffset:
             along-track source coordinate in pixel coordinates
             (zero-based) of the upper right corner of the source-region
-        :param xstep:
+        :param int xstep:
             the sub-sampling step across track of the source when
             reading into the raster
-        :param ystep:
+        :param int ystep:
             the sub-sampling step along track of the source when
             reading into the raster
         :returns:
@@ -2144,9 +2144,9 @@ cdef class Dataset(EprObject):
         In both cases, the record in which the data is read into will
         be  returned.
 
-        :param index:
+        :param int index:
             the zero-based record index (default: 0)
-        :param record:
+        :param epr.Record record:
             a pre-created record to reduce memory reallocation, can be
             ``None`` (default) to let the function allocate a new
             record
@@ -2439,7 +2439,7 @@ cdef class Product(EprObject):
 
         Gets the dataset at the specified position within the product.
 
-        :param index:
+        :param int index:
             the index identifying the position of the dataset, starting
             with 0, must not be negative
         :returns:
@@ -2457,7 +2457,7 @@ cdef class Product(EprObject):
 
         Gets the dataset corresponding to the specified dataset name.
 
-        :param name:
+        :param str name:
             the dataset name
         :returns:
             the requested :class:`Dataset` instance
@@ -2478,7 +2478,7 @@ cdef class Product(EprObject):
         Gets the :class:`DSD` (dataset descriptor) at the specified
         position within the product.
 
-        :param index:
+        :param int index:
             the index identifying the position of the :class:`DSD`,
             starting with 0, must not be negative
         :returns:
@@ -2523,7 +2523,7 @@ cdef class Product(EprObject):
 
         Gets the band corresponding to the specified name.
 
-        :param name:
+        :param str name:
             the name of the band
         :returns:
             the requested :class:`Band` instance, or raises a
@@ -2542,7 +2542,7 @@ cdef class Product(EprObject):
 
         Gets the band at the specified position within the product.
 
-        :param index:
+        :param int index:
             the index identifying the position of the band, starting
             with 0, must not be negative
         :returns:
@@ -2567,21 +2567,20 @@ cdef class Product(EprObject):
         the a certain dimension and sub-sampling as defined in the
         given raster.
 
-        :param bm_expr:
+        :param str bm_expr:
             a string holding the logical expression for the definition
             of the bit-mask. In a bit-mask expression, any number of
             the flag-names (found in the DDDB) can be composed with
             "(", ")", "NOT", "AND", "OR". Valid bit-mask expression are
             for example ``flags.LAND OR flags.CLOUD`` or
             ``NOT flags.WATER AND flags.TURBID_S``
-
-       :param xoffset:
+       :param int xoffset:
             across-track coordinate in pixel coordinates (zero-based)
             of the upper right corner of the source-region
-       :param yoffset:
+       :param int yoffset:
             along-track coordinate in pixel coordinates (zero-based)
             of the upper right corner of the source-region
-       :param raster:
+       :param epr.Raster raster:
             the raster for the bit-mask. The data type of the raster
             must be either e_tid_uchar or e_tid_char
         :returns:
@@ -2757,9 +2756,9 @@ def open(filename, str mode="rb"):
     SPH and all DSDs, organized the table with parameter of line length
     and tie points number.
 
-    :param product_file_path:
+    :param PathLike product_file_path:
         the path to the ENVISAT product file
-    :param mode:
+    :param str mode:
         string that specifies the mode in which the file is opened.
         Allowed values: "rb", "rb+" for read-write mode.
         Default: mode="rb".

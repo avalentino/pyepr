@@ -83,7 +83,7 @@ Product
 
       Gets the band corresponding to the specified name.
 
-      :param name:
+      :param str name:
             the name of the band
       :returns:
             the requested :class:`Band` instance, or raises a
@@ -95,7 +95,7 @@ Product
       Gets the :class:`Band` at the specified position within the
       :class:`product`.
 
-      :param index:
+      :param int index:
             the index identifying the position of the :class:`Band`, starting
             with 0, must not be negative
       :returns:
@@ -107,7 +107,7 @@ Product
 
       Gets the :class:`Dataset` corresponding to the specified dataset name.
 
-      :param name:
+      :param str name:
             the :class:`Dataset` name
       :returns:
             the requested :class:`Dataset` instance
@@ -118,7 +118,7 @@ Product
       Gets the :class:`Dataset` at the specified position within the
       :class:`Product`.
 
-      :param index:
+      :param int index:
             the index identifying the position of the :class:`Dataset`,
             starting with 0, must not be negative
       :returns:
@@ -132,7 +132,7 @@ Product
       Gets the :class:`DSD` (:class:`Dataset` descriptor) at the specified
       position within the :class:`Product`.
 
-      :param index:
+      :param int index:
             the index identifying the position of the :class:`DSD`,
             starting with 0, must not be negative
       :returns:
@@ -185,20 +185,20 @@ Product
       the a certain dimension and sub-sampling as defined in the
       given raster.
 
-      :param bm_expr:
+      :param str bm_expr:
             a string holding the logical expression for the definition
             of the bit-mask. In a bit-mask expression, any number of
             the flag-names (found in the DDDB) can be composed with
             "(", ")", "NOT", "AND", "OR". Valid bit-mask expression are
             for example ``flags.LAND OR flags.CLOUD`` or
             ``NOT flags.WATER AND flags.TURBID_S``
-      :param xoffset:
+      :param int xoffset:
             across-track coordinate in pixel coordinates (zero-based)
             of the upper right corner of the source-region
-      :param yoffset:
+      :param int yoffset:
             along-track coordinate in pixel coordinates (zero-based)
             of the upper right corner of the source-region
-      :param raster:
+      :param int raster:
             the raster for the bit-mask. The data type of the raster
             must be either :data:`E_TID_UCHAR` or :data:`E_TID_CHAR`
       :returns:
@@ -262,7 +262,7 @@ Product
       Return a complex array that is the combination of two bands.
 
       Return a complex array reading the real part from the band named
-      "iname" and the imaginary part from the band named "qname".
+      `iname` and the imaginary part from the band named `qname`.
 
       :param str iname:
          name of the band containing the real part of the complex array
@@ -273,6 +273,8 @@ Product
          and `qname`) do not belong to the same dataset, or if
          `imane` / `qname` does not correspond to the real/imaginary
          components (respectively) of the dataset
+
+      .. versionadded:: 1.3
 
    .. rubric:: Special methods
 
@@ -365,9 +367,9 @@ Dataset
       In both cases, the :class:`Record` in which the data is read into will
       be returned.
 
-      :param index:
+      :param int index:
             the zero-based :class:`Record` index (default: 0)
-      :param record:
+      :param epr.Record record:
             a pre-created :class:`Record` to reduce memory reallocation,
             can be ``None`` (default) to let the function allocate a new
             :class:`Record`
@@ -462,7 +464,7 @@ Record
       The :class:`Field` is here identified through the given name.
       It contains the :class:`Field` info and all corresponding values.
 
-      :param name:
+      :param str name:
             the the name of required :class:`Field`
       :returns:
             the specified :class:`Field` or raises an exception
@@ -474,7 +476,7 @@ Record
       Gets a :class:`Field` at the specified position within the
       :class:`Record`.
 
-      :param index:
+      :param int index:
             the zero-based index (position within :class:`Record`) of the
             :class:`Field`
       :returns:
@@ -513,9 +515,9 @@ Record
       element to the *ostream* text file or (default) the ASCII output
       will be printed to standard output (:data:`sys.stdout`).
 
-      :param field_index:
+      :param int field_index:
             the index of :class:`Field` in the :class:`Record`
-      :param element_index:
+      :param int element_index:
             the index of element in the specified :class:`Field`
       :param ostream:
             the (opened) output file object
@@ -620,7 +622,7 @@ Field
 
       This function is for getting the elements of a :class:`Field`.
 
-      :param index:
+      :param int index:
             the zero-based index of element to be returned, must not be
             negative. Default: 0.
       :returns:
@@ -654,7 +656,7 @@ Field
 
       :param elem:
             value of the element to set
-      :param index:
+      :param int index:
             the zero-based index of element to be set, must not be
             negative. Default: 0.
 
@@ -975,18 +977,18 @@ Band
       This step can be set differently for the across track (source_step_x)
       and along track (source_step_y) directions.
 
-      :param src_width:
+      :param int src_width:
             the width (across track dimension) of the source to be read
             into the :class:`Raster`. Default: scene width (see
             :attr:`Product.get_scene_width`)
-      :param src_height:
+      :param int src_height:
             the height (along track dimension) of the source to be read
             into the :class:`Raster`. Default: scene height (see
             :attr:`Product.get_scene_height`)
-      :param xstep:
+      :param int xstep:
             the sub-sampling step across track of the source when reading
             into the :class:`Raster`. Default: 1.
-      :param ystep:
+      :param int ystep:
             the sub-sampling step along track of the source when reading
             into the :class:`Raster`. Default: 1.
       :returns:
@@ -1015,15 +1017,15 @@ Band
       The dimension of the region and the sub-sampling are attributes
       of the :class:`Raster` into which the data are read.
 
-      :param xoffset:
+      :param int xoffset:
             across-track source coordinate in pixel coordinates
             (zero-based) of the upper right corner of the source-region.
             Default 0.
-      :param yoffset:
+      :param int yoffset:
             along-track source coordinate in pixel coordinates
             (zero-based) of the upper right corner of the source-region.
             Default 0.
-      :param raster:
+      :param epr.Raster raster:
             :class:`Raster` instance set with appropriate parameters to
             read into. If not provided a new :class:`Raster` is
             instantiated
@@ -1055,26 +1057,26 @@ Band
       The dimension of the region and the sub-sampling are attributes
       of the :class:`Raster` into which the data are read.
 
-      :param src_width:
+      :param int src_width:
             the width (across track dimension) of the source to be read
             into the :class:`Raster`. If not provided reads as much as
             possible
-      :param src_height:
+      :param int src_height:
             the height (along track dimension) of the source to be read
             into the :class:`Raster`, If not provided reads as much as
             possible
-      :param xoffset:
+      :param int xoffset:
             across-track source coordinate in pixel coordinates
             (zero-based) of the upper right corner of the source-region.
             Default 0.
-      :param yoffset:
+      :param int yoffset:
             along-track source coordinate in pixel coordinates
             (zero-based) of the upper right corner of the source-region.
             Default 0.
-      :param xstep:
+      :param int xstep:
             the sub-sampling step across track of the source when
             reading into the :class:`Raster`. Default: 1
-      :param ystep:
+      :param int ystep:
             the sub-sampling step along track of the source when
             reading into the :class:`Raster`. Default: 1
       :returns:
@@ -1172,9 +1174,9 @@ Raster
       This function is for getting the values of the elements of a
       :class:`Raster` (i.e. pixel)
 
-      :param x:
+      :param int x:
             the (zero-based) X coordinate of the pixel
-      :param y:
+      :param int y:
             the (zero-based) Y coordinate of the pixel
       :returns:
             the typed value at the given coordinate
@@ -1234,9 +1236,9 @@ Functions
    reads MPH, SPH and all :class:`DSD`\ s, organized the table with
    parameter of line length and tie points number.
 
-   :param product_file_path:
+   :param PathLike product_file_path:
         the path to the ENVISAT :class:`Product` file
-   :param mode:
+   :param str mode:
         string that specifies the mode in which the file is opened.
         Allowed values: `rb` for read-only mode, `rb+` for read-write
         mode. Default: mode=`rb`.
@@ -1297,18 +1299,18 @@ Functions
 
         .. seealso:: `Data type Identifiers`_
 
-   :param src_width:
+   :param int src_width:
         the width (across track dimension) of the source to be read
         into the :class:`Raster`.
         See description of :meth:`Band.create_compatible_raster`
-   :param src_height:
+   :param int src_height:
         the height (along track dimension) of the source to be read
         into the :class:`Raster`.
         See description of :meth:`Band.create_compatible_raster`
-   :param xstep:
+   :param int xstep:
         the sub-sampling step across track of the source when reading
         into the :class:`Raster`. Default: 1.
-   :param ystep:
+   :param int ystep:
         the sub-sampling step along track of the source when reading
         into the :class:`Raster`. Default: 1.
    :returns:
@@ -1323,16 +1325,16 @@ Functions
 
    The :class:`Raster` returned always is of type ``byte``.
 
-   :param src_width:
+   :param int src_width:
         the width (across track dimension) of the source to be read
         into the :class:`Raster`
-   :param src_height:
+   :param int src_height:
         the height (along track dimension) of the source to be read
         into the :class:`Raster`
-   :param xstep:
+   :param int xstep:
         the sub-sampling step across track of the source when reading
         into the :class:`Raster`. Default: 1.
-   :param ystep:
+   :param int ystep:
         the sub-sampling step along track of the source when reading
         into the :class:`Raster`. Default: 1.
    :returns:
@@ -1363,9 +1365,9 @@ EPRError
 
       Initializer.
 
-      :param message:
+      :param str message:
             error message
-      :param code:
+      :param int code:
             EPR error code
 
 
