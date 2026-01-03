@@ -9,6 +9,7 @@ docstrings
 Docstrings
 eader
 epr
+freethreading
 gdalvrt
 geo
 iname

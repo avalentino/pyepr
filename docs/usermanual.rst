@@ -553,3 +553,20 @@ or also update all elements of the :class:`epr.Field` in one shot::
 
 .. _`special method`: https://docs.python.org/3/reference/datamodel.html
 .. _`context manager`: https://docs.python.org/3/library/stdtypes.html#context-manager-types
+
+
+.. _free-threading:
+
+Thread safety and "freethreading" support
+-----------------------------------------
+
+The `epr` extension is based on a C library that **is not thread safe**.
+
+The use of `epr` in multi-thread applications requires a proper locking
+mechanism to be implemented on the client side.
+
+The `epr` extension module is marked as `freethreading_compatible` only to
+allow its use with a "Free-Threaded" Python interpreter (e.g. Python 3.14t).
+Nevertheless, is such situations, special care shall taken to avoid that
+the functions and classes provided by the `epr` extension module are use
+concurrently by the application.

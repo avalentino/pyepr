@@ -30,6 +30,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Free Threading :: 2 - Beta",
     "Programming Language :: Cython",
     "Topic :: Software Development :: Libraries",
     "Topic :: Scientific/Engineering",
@@ -109,6 +110,7 @@ epr = ["py.typed", "*.pyi"]
 
 [tool.cibuildwheel]
 skip = "pp*"
+enable = ["cpython-freethreading"]
 test-requires = "pytest"
 test-command = "pytest -v {project}/tests"
 

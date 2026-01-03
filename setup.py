@@ -21,6 +21,7 @@ import os
 import sys
 
 import setuptools
+from packaging.version import Version
 
 try:
     import Cython
@@ -80,6 +81,14 @@ def setup_extension(eprsrcdir=None, *, coverage: bool = False):
 
     if coverage:
         ext.cython_directives["linetrace"] = True
+
+    try:
+        import Cython
+    except ImportError:
+        pass
+    else:
+        if Version(Cython.__version__) >= Version("3.1.0b1"):
+            ext.cython_directives["freethreading_compatible"] = True
 
     return ext
 

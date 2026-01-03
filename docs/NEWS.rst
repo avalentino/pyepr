@@ -9,6 +9,10 @@ PyEPR 1.3.0 (UNRELEASED)
 * Improve typing support.
 * Improve support for complex data like, e.g., SAR SLC products.
   New :func:`epr.Product.get_complex_band_as_array()` function.
+* Mark the `epr` extension module as "freethreading" compatible.
+  Please refer to the :ref:`free-threading` section in the :doc:`usermanual`
+  for more details about the freethreading and multi-threading compatibility
+  of the module.
 
 
 PyEPR 1.2.0 (29/03/2025)
