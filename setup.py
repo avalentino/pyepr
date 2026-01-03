@@ -87,7 +87,7 @@ def setup_extension(eprsrcdir=None, *, coverage: bool = False):
     except ImportError:
         pass
     else:
-        if Version(Cython.__version__) >= Version("3.1.0b1"):
+        if Version(Cython.__version__) >= Version("3.1.0"):
             ext.cython_directives["freethreading_compatible"] = True
 
     return ext
