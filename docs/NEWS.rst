@@ -2,7 +2,7 @@ Change history
 ==============
 
 
-PyEPR 1.3.0 (UNRELEASED)
+PyEPR 1.3.0 (03/01/2026)
 ------------------------
 
 * Update the bundled epr-api library source code to v2.3.
