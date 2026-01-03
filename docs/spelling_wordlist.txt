@@ -1,6 +1,7 @@
 api
 config
 constness
+cython
 Cythonizing
 de
 dev

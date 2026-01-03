@@ -79,7 +79,7 @@ docs = [
     "ipython",
 ]
 test = ["pytest", "packaging"]
-coverage = ["pytest-cov", "coverage[toml]", {include-group = "test"}]
+coverage = ["pytest-cov", "coverage[toml]", "cython", {include-group = "test"}]
 lint = ["flake8", "pydocstyle", "isort", "black", "ruff", "mypy", "codespell"]
 dev = [
     "python-build",
@@ -169,7 +169,7 @@ match='(?!(test_|conf)).*\.py'
 
 
 [tool.codespell]
-skip = "*.pdf,*.ipynb,./docs/spelling_wordlist.txt,*.N1,extern,./src/epr/*.c,./docs/_build"
+skip = "*.pdf,*.ipynb,./docs/spelling_wordlist.txt,*.N1,extern,./src/epr/*.c,./docs/_build,./htmlcov"
 count = true
 quiet-level = 3
 # ignore-words-list = ""

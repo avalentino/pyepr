@@ -40,7 +40,7 @@ extensions = [
     # "sphinx.ext.autosectionlabel",
     # "sphinx.ext.autosummary",
     # "sphinx.ext.coverage",
-    # "sphinx.ext.doctest",
+    "sphinx.ext.doctest",
     # "sphinx.ext.duration",
     "sphinx.ext.extlinks",
     # "sphinx.ext.githubpages",
