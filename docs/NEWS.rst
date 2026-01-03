@@ -7,6 +7,8 @@ PyEPR 1.3.0 (UNRELEASED)
 
 * Update the bundled epr-api library source code to v2.3.
 * Improve typing support.
+* Improve support for complex data like, e.g., SAR SLC products.
+  New :func:`epr.Product.get_complex_band_as_array()` function.
 
 
 PyEPR 1.2.0 (29/03/2025)
@@ -23,7 +25,7 @@ PyEPR 1.2.0 (29/03/2025)
 * Fix broken links.
 * Fix spelling.
 * Enable CI for linting and doc building.
-* Move coverage configuration to pyproject.toml.
+* Move coverage configuration to `pyproject.toml`.
 * Fix tests on iterators.
 * Fix unittests of OSX ARM.
 

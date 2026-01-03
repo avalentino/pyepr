@@ -11,6 +11,7 @@ eader
 epr
 gdalvrt
 geo
+iname
 Initializer
 iter
 jupyter
@@ -26,6 +27,7 @@ pyepr
 pypi
 pyproject
 pythonic
+qname
 radiances
 rb
 roduct

@@ -257,6 +257,22 @@ Product
 
       Return the list of :class:`Band`\ s in the :class:`Product`.
 
+   .. method:: get_complex_band_as_array(iname, qname, *, strict=True)
+
+      Return a complex array that is the combination of two bands.
+
+      Return a complex array reading the real part from the band named
+      "iname" and the imaginary part from the band named "qname".
+
+      :param str iname:
+         name of the band containing the real part of the complex array
+      :param str qname:
+         name of the band containing the imaginary part of the complex array
+      :param bool strict:
+         raise a `ValueError` if the and names provided in input (`iname`
+         and `qname`) do not belong to the same dataset, or if
+         `imane` / `qname` does not correspond to the real/imaginary
+         components (respectively) of the dataset
 
    .. rubric:: Special methods
 

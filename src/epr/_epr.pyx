@@ -2678,6 +2678,45 @@ cdef class Product(EprObject):
 
         return [self.get_band_at(idx) for idx in range(num_bands)]
 
+    def get_complex_band_as_array(
+        self, str iname, str qname, *, bint strict=True
+    ):
+        """get_complex_band_as_array(self, iname, qname, *, strict=True)
+
+        Return a complex array that is the combination of two bands.
+
+        Return a complex array reading the real part from the band named
+        "iname" and the imaginary part from the band named "qname".
+
+        :param str iname:
+            name of the band containing the real part of the complex array
+        :param str qname:
+            name of the band containing the imaginary part of the complex array
+        :param bool strict:
+            raise a `ValueError` if the and names provided in input (`iname`
+            and `qname`) do not belong to the same dataset, or if
+            `imane` / `qname` does not correspond to the real/imaginary
+            components (respectively) of the dataset
+        """
+        re = self.get_band(iname)
+        im = self.get_band(qname)
+        if strict:
+            if re.dataset.get_name() != im.dataset.get_name():
+                raise ValueError(
+                    "the input bands does not belong to the same dataset"
+                )
+            if not iname.startswith("i"):
+                raise ValueError(
+                    f"'iname' ('{iname}') does not correspond to the "
+                    "real component of a complex band"
+                )
+            if not qname.startswith("q"):
+                raise ValueError(
+                    f"'qname' ('{qname}') does not correspond to the "
+                    "imaginary component of a complex band"
+                )
+        return re.read_as_array() + 1j * im.read_as_array()
+
     # @TODO: iter on both datasets and bands (??)
     # def __iter__(self):
     #     return itertools.chain((self.datasets(), self.bands()))

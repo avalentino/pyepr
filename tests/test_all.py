@@ -3135,6 +3135,41 @@ class TestMemoryLeaks(unittest.TestCase):
         self.assertLessEqual(m2 - m1, 8)
 
 
+class TestComplexBand(unittest.TestCase):
+    def setUp(self):
+        self.product = epr.open(PRODUCT_FILE)
+
+    def tearDown(self):
+        self.product.close()
+
+    def test_get_complex_band_as_array(self):
+        iname = "proc_data_1"
+        qname = "proc_data_2"
+        cdata = self.product.get_complex_band_as_array(
+            iname, qname, strict=False
+        )
+        self.assertIsInstance(cdata, np.ndarray)
+        self.assertTrue(np.iscomplexobj(cdata))
+
+        re = self.product.get_band(iname).read_as_array()
+        self.assertEqual(cdata.shape, re.shape)
+        npt.assert_array_equal(cdata.real, re)
+        del re
+
+        im = self.product.get_band(qname).read_as_array()
+        self.assertEqual(cdata.shape, im.shape)
+        npt.assert_array_equal(cdata.imag, im)
+        del im
+
+    def test_get_complex_band_as_array_not_same_dataset(self):
+        iname = "proc_data_1"
+        qname = "proc_data_2"
+        with self.assertRaisesRegex(
+            ValueError, "the input bands does not belong to the same dataset"
+        ):
+            self.product.get_complex_band_as_array(iname, qname, strict=True)
+
+
 if __name__ == "__main__":
     print(f"PyEPR:   {epr.__version__}")
     print(f"EPR API: {epr.EPR_C_API_VERSION}")
