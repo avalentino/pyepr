@@ -79,7 +79,13 @@ docs = [
     "ipython",
 ]
 test = ["pytest", "packaging"]
-coverage = ["pytest-cov", "coverage[toml]", "cython", {include-group = "test"}]
+coverage = [
+    "pytest-cov",
+    "coverage[toml]",
+    "cython",
+    "numpy >=2",
+    {include-group = "test"},
+]
 lint = ["flake8", "pydocstyle", "isort", "black", "ruff", "mypy", "codespell"]
 dev = [
     "python-build",

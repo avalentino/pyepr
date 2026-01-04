@@ -63,7 +63,6 @@ jobs:
         shell: bash
         run: |
           python -m pip install --group test
-          if [ -f requirements-test.txt ]; then pip install -r requirements-test.txt; fi
 
       - name: Test with pytest
         run: |
@@ -154,8 +153,7 @@ jobs:
         shell: bash
         run: |
           python -m pip install --upgrade setuptools pip
-          python -m pip install --group dev
-          if [ -f requirements-dev.txt ]; then python -m pip install -r requirements-dev.txt; fi
+          python -m pip install --group coverage
 
       - name: Build and install
         run: |

@@ -57,7 +57,7 @@ clean:
 	find . -name __pycache__ -type d -exec $(RM) -r {} +
 	# $(RM) -r __pycache__ */__pycache__ */*/__pycache__ */*/*/__pycache__
 	$(RM) src/$(TARGET)/*.c src/$(TARGET)/*.cpp src/$(TARGET)/*.so src/$(TARGET)/*.o
-	if [ -f docs/Makefile ] ; then $(MAKE) -C docs clean; fi
+	# if [ -f docs/Makefile ] ; then $(MAKE) -C docs clean; fi
 	$(RM) -r docs/_build
 	$(RM) MANIFEST
 	find . -name '*~' -delete
