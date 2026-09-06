@@ -3,15 +3,8 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-# -- Project information -----------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-
-project = "PyEPR"
-copyright = "2011-2026, Antonio Valentino"
-author = "Antonio Valentino"
-
-
-def get_version(filename):
+# -- Version utils -----------------------------------------------------------
+def _get_version(filename):
     import re
 
     from packaging.version import parse as Version
@@ -27,10 +20,19 @@ def get_version(filename):
     return Version(mobj.group("version"))
 
 
-_version = get_version("../src/epr/__init__.py")
+# -- Project information -----------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+
+project = "PyEPR"
+copyright = "2011-2026, Antonio Valentino"
+author = "Antonio Valentino"
+
+
+_version = _get_version("../src/epr/__init__.py")
 
 version = _version.base_version
 release = str(_version)
+
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -61,14 +63,22 @@ extensions = [
     "IPython.sphinxext.ipython_directive",
 ]
 
+try:
+    import sphinxcontrib.spelling  # noqa: F401
+except ImportError:
+    pass
+else:
+    extensions.append("sphinxcontrib.spelling")
+
 templates_path = ["_templates"]
 master_doc = "index"
 exclude_patterns = [
     "_build",
     "Thumbs.db",
     ".DS_Store",
-    "**/empty.txt",
+    "**/.gitkeep",
 ]
+
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -102,11 +112,9 @@ html_context = {
     "conf_py_path": "/docs/",
 }
 
-# -- Options for HTMLHelp output ------------------------------------------
 
-htmlhelp_basename = "PyEPRdoc"
-
-# -- Options for LaTeX output ---------------------------------------------
+# -- Options for LaTeX output ------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-latex-output
 
 latex_elements = {
     "papersize": "a4paper",
@@ -119,49 +127,37 @@ latex_documents = [
 ]
 latex_domain_indices = False
 
-# -- Options for manual page output ---------------------------------------
-
-man_pages = [(master_doc, "pyepr", "PyEPR Documentation", [author], 1)]
-
-# -- Options for Texinfo output -------------------------------------------
-
-texinfo_documents = [
-    (
-        master_doc,
-        "PyEPR",
-        "PyEPR Documentation",
-        author,
-        "PyEPR",
-        "One line description of project.",
-        "Miscellaneous",
-    ),
-]
-
-# -- Options for Epub output ----------------------------------------------
-
-epub_exclude_files = ["search.html"]
-
 
 # -- Options for linkcheck ------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-the-linkcheck-builder
 
-linkcheck_ignore = [f"https://pyepr.readthedocs.io/en/v{version}"]
+linkcheck_ignore = [
+    f"https://pyepr.readthedocs.io/en/v{version}",
+    "https://www.openhub.net",
+    "https://www.gnu.org/licenses/gpl-3.0.html",
+]
 
 
 # -- Extension configuration -------------------------------------------------
 
 # -- Options for intersphinx extension ---------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html#configuration
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "numpy": ("https://docs.scipy.org/doc/numpy", None),
 }
 
+
 # -- Options for extlinks extension ------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/extensions/extlinks.html#module-sphinx.ext.extlinks
 
 extlinks = {
     "issue": ("https://github.com/avalentino/pyepr/issues/%s", "gh-%s"),
 }
 
+
 # -- Options for todo extension ----------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/extensions/todo.html#configuration
 
 todo_include_todos = True

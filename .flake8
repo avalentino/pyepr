@@ -1,4 +1,5 @@
 [flake8]
+min-python-version = 3.11
 # max_line_length = 79
 # max-complexity = 10
 doctests = true
@@ -23,6 +24,10 @@ doctests = true
 # - I  # flake8-import-order: not compatible with isort
 # - SC  # flake8-spellcheck: too aggressive
 # - CNL  # flake8-class-newline: incompatible with black
+# - JS  # flake8-multiline-containers: not compatibel with ruff preview
+# - ANN  # flake8-annotations: too aggressive
+# - C  # flake8-commas: too aggressive
+# - PT  # flake8-pytest-style: test suite compatibel with unittest
 extend-ignore = E203,E501,E701,W503,SC,CNL
 extend-select = W504,B950
 per-file-ignores =

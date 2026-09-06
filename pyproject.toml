@@ -1,6 +1,6 @@
 [build-system]
 requires = [
-    "setuptools >=77.0.0",
+    "setuptools >=77.0.3",
     "packaging",
     "cython >=3.1",
     "numpy >=2",
@@ -78,7 +78,7 @@ docs = [
     "packaging",
     "ipython",
 ]
-test = ["pytest", "packaging"]
+test = ["pytest", "packaging", "pooch"]
 coverage = [
     "pytest-cov",
     "coverage[toml]",
@@ -94,6 +94,7 @@ dev = [
     "packaging",
     "cython >=3",
     "numpy >=2",
+    "tox",
     {include-group = "docs"},
     {include-group = "test"},
     {include-group = "coverage"},
@@ -123,16 +124,9 @@ test-command = "pytest -v {project}/tests"
 
 [tool.pytest.ini_options]
 addopts = [
-    # "--ignore=examples/",
     "--import-mode=importlib",
 ]
-# markers = [
-    # "webtest: mark a test as a webtest.",
-    # builtin markers
-    # "slow: mark test as slow to run.",
-    # "remote_data: Apply to tests that require data from remote servers.",
-    # "hugemem: mark test as using a lot of memory.",
-# ]
+
 
 [tool.coverage.run]
 branch = true
@@ -145,12 +139,10 @@ line-length = 79
 preview = true
 enable-unstable-feature = [
     "hug_parens_with_braces_and_square_brackets",
-    "multiline_string_handling",
     "string_processing",
     "wrap_long_dict_values_in_parens",
 ]
-# target-version = ['py310']
-# extend-exclude = "packagename/parse/*"
+target-version = ['py311']
 
 
 [tool.isort]
@@ -168,7 +160,6 @@ known_first_party = ["epr"]
 
 
 [tool.pydocstyle]
-# convention = "numpy"
 add-ignore = ["D105"]
 # add-ignore = ["D105", "D107"]
 match='(?!(test_|conf)).*\.py'
@@ -178,7 +169,6 @@ match='(?!(test_|conf)).*\.py'
 skip = "*.pdf,*.ipynb,./docs/spelling_wordlist.txt,*.N1,extern,./src/epr/*.c,./docs/_build,./htmlcov"
 count = true
 quiet-level = 3
-# ignore-words-list = ""
 ignore-words="docs/spelling_wordlist.txt"
 
 
@@ -190,15 +180,15 @@ exclude = [
 
 [tool.ruff]
 line-length = 79
-# indent-width = 4
-# target-version = "py310"
+target-version = "py311"
 extend-exclude = ["docs/conf.py"]
 
 
 [tool.ruff.lint]
 preview = true
 select = [
-    # ruff --version  # ruff 0.11.6
+    # ruff --version  # ruff 0.16.3
+    # ruff linter
     "E",        #  E/W pycodestyle
     "W",        #  E/W pycodestyle
     "F",        #    F Pyflakes
@@ -267,12 +257,7 @@ extend-ignore = [
     # "D107",     # D107 Missing docstring in `__init__`
     "D203",     # D203 1 blank line required before class docstring
     "D213",     # D213 Multi-line docstring summary should start at the second line
-    # "ISC001",   # ISC001 Implicitly concatenated string literals on one line
-    # "PLR2004",  # PLR2004 Magic value used in comparison, consider replacing 2 with a constant variable
-    # "PLR0913",  # PLR0913 Too many arguments in function definition
-    # "PLW1514",  # PLW1514 `open` in text mode without explicit `encoding` argument
-    # "RET504",   # RET504 Unnecessary assignment before `return` statement
-    # "RET505",   # RET505 Unnecessary `elif` after `return` statement
+    "RUF105"    # RUF105 noqa-comments
 ]
 
 
@@ -300,7 +285,3 @@ known-first-party = ["epr"]
 
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]
 "xml.etree.ElementTree" = "etree"
-
-
-# [tool.ruff.lint.pydocstyle]
-# convention = "numpy"  # Accepts: "google", "numpy", or "pep257".

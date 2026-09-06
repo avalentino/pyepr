@@ -52,7 +52,6 @@ coverage: clean ext-coverage
 	env PYTHONPATH=src $(PYTHON) -m pytest --doctest-modules --cov=$(TARGET) --cov-report=html --cov-report=term src/$(TARGET) tests
 
 clean:
-	# $(PYTHON) setup.py clean --all
 	$(RM) -r src/*.*-info build
 	find . -name __pycache__ -type d -exec $(RM) -r {} +
 	# $(RM) -r __pycache__ */__pycache__ */*/__pycache__ */*/*/__pycache__
@@ -90,6 +89,7 @@ lint:
 docs:
 	mkdir -p docs/_static
 	$(MAKE) -C docs html
+	$(MAKE) -C docs doctest
 	$(MAKE) -C docs linkcheck
 	$(MAKE) -C docs spelling
 
