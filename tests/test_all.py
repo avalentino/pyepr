@@ -22,15 +22,11 @@ import shutil
 import typing
 import numbers
 import pathlib
-import zipfile
 import operator
 import platform
 import tempfile
 import unittest
 import functools
-from urllib.request import urlopen
-
-from packaging.version import parse as Version  # noqa: N812
 
 try:
     import resource
@@ -41,15 +37,17 @@ else:
 
 
 import numpy as np
-import numpy.testing as npt
+import pooch
+from numpy import testing as npt
+from packaging.version import parse as Version  # noqa: N812
 
 import epr
-from epr._epr import (
-    _EPR_MAGIC_FIELD,  # noqa: PLC2701
-    _EPR_MAGIC_RASTER,  # noqa: PLC2701
-    _EPR_MAGIC_RECORD,  # noqa: PLC2701
-    _EPR_MAGIC_BAND_ID,  # noqa: PLC2701
-    _EPR_MAGIC_PRODUCT_ID,  # noqa: PLC2701
+from epr._epr import (  # noqa: PLC2701
+    _EPR_MAGIC_FIELD,
+    _EPR_MAGIC_RASTER,
+    _EPR_MAGIC_RECORD,
+    _EPR_MAGIC_BAND_ID,
+    _EPR_MAGIC_PRODUCT_ID,
 )
 
 EPR_TO_NUMPY_TYPE = {
@@ -84,9 +82,24 @@ EPR_C_BUG_BCEPR002 = EPR_C_BUG_PYEPR009
 
 
 TESTDIR = pathlib.Path(__file__).parent
-TEST_PRODUCT = "ASA_APM_1PNPDE20091007_025628_000000432083_00118_39751_9244.N1"
+TESTDATADIR = TESTDIR / "data"
+TEST_PRODUCT = "ASA_APM_1PNDSI20091007_025628_000000432083_00118_39751_0000.N1"
 TEST_PRODUCT_BM_EXPR = None
-PRODUCT_FILE = TESTDIR / TEST_PRODUCT
+PRODUCT_FILE = TESTDATADIR / TEST_PRODUCT
+
+
+def _create_pooch() -> pooch.Pooch:
+    pooch_obj = pooch.create(
+        path=TESTDATADIR,
+        base_url="https://github.com/avalentino/pyepr-test-data/raw/v1.0.0/",
+    )
+
+    registry_file = TESTDATADIR / "registry.txt"
+    pooch_obj.load_registry(registry_file)
+    return pooch_obj
+
+
+DATA_MANAGER = _create_pooch()
 
 
 def quiet(func):
@@ -96,7 +109,7 @@ def quiet(func):
         syserr = sys.stderr
         try:
             # using '/dev/null' doesn't work in python 3 because the file
-            # object coannot be converted into a C FILE*
+            # object cannot be converted into a C FILE*
             # with file(os.devnull) as fd:
             with tempfile.TemporaryFile("w+", encoding="utf-8") as fd:
                 sys.stdout = fd
@@ -132,21 +145,10 @@ def equal_products(product1, product2):
 
 
 def setUpModule():
-    filename = PRODUCT_FILE
-    baseurl = "http://www.brockmann-consult.de/beam/data/products/ASAR"
-    url = baseurl + "/" + pathlib.Path(TEST_PRODUCT).with_suffix(".zip").name
-    zipfilename = filename.with_name(filename.name + ".zip")
-    if not filename.exists():
-        with urlopen(url) as src, zipfilename.open("wb") as dst:
-            for data in src:
-                dst.write(data)
-
-        with zipfile.ZipFile(zipfilename) as arch:
-            arch.extractall(TESTDIR)
-
-        zipfilename.unlink()
-
+    filename_str = DATA_MANAGER.fetch(TEST_PRODUCT)
+    filename = pathlib.Path(filename_str)
     assert filename.exists()
+    assert filename == PRODUCT_FILE
 
 
 class TestOpenProduct(unittest.TestCase):
@@ -211,8 +213,8 @@ class TestOpenProduct(unittest.TestCase):
 
 class TestProduct(unittest.TestCase):  # noqa: PLR0904
     OPEN_MODE = "rb"
-    ID_STRING = "ASA_APM_1PNPDE20091007_025628_000000432083_00118"
-    TOT_SIZE = 22903686
+    ID_STRING = TEST_PRODUCT[:48]
+    TOT_SIZE = 22911746
 
     DATASET_NAMES = [
         "MDS1_SQ_ADS",
@@ -836,16 +838,16 @@ class TestBand(unittest.TestCase):  # noqa: PLR0904
     DATA_TYPE = np.float32
     # fmt: off
     TEST_DATA: np.typing.NDArray = np.asarray([
-        [228., 213., 235., 256., 239., 260., 210., 197., 233., 213.],
-        [246., 248., 333., 317., 272., 247., 247., 221., 221., 205.],
-        [239., 297., 412., 381., 301., 226., 262., 256., 229., 214.],
-        [212., 279., 328., 318., 279., 231., 253., 274., 240., 242.],
-        [199., 236., 245., 262., 282., 265., 261., 255., 255., 239.],
-        [214., 218., 284., 300., 269., 266., 272., 224., 292., 238.],
-        [240., 241., 300., 308., 248., 254., 269., 230., 276., 256.],
-        [256., 261., 265., 269., 263., 262., 279., 279., 300., 367.],
-        [273., 262., 262., 239., 270., 284., 344., 380., 416., 447.],
-        [292., 286., 303., 261., 284., 374., 445., 431., 422., 416.],
+        [255., 333., 313., 295., 264., 306., 299., 330., 399., 335.],
+        [254., 233., 320., 325., 281., 247., 249., 228., 217., 210.],
+        [243., 266., 399., 397., 320., 237., 251., 261., 236., 210.],
+        [216., 254., 323., 324., 286., 240., 242., 271., 253., 230.],
+        [199., 226., 241., 259., 276., 272., 261., 252., 259., 235.],
+        [221., 212., 264., 305., 271., 264., 275., 224., 284., 251.],
+        [243., 235., 285., 312., 260., 242., 270., 233., 267., 259.],
+        [248., 259., 266., 261., 269., 254., 274., 278., 287., 347.],
+        [270., 262., 263., 238., 260., 280., 323., 374., 406., 437.],
+        [303., 278., 303., 270., 264., 352., 434., 435., 423., 412.],
     ])
     # fmt: on
 
@@ -1309,26 +1311,26 @@ class TestAnnotationBand(TestBand):
     RTOL = 1e-7
     # fmt: off
     TEST_DATA: np.typing.NDArray = np.asarray([
-        [21.86950111, 21.86438370, 21.85926437, 21.85414696, 21.84902954,
-         21.84391022, 21.83879280, 21.83367538, 21.82855606, 21.82343864],
-        [21.86950302, 21.86438560, 21.85926628, 21.85414886, 21.84903145,
-         21.84391212, 21.83879471, 21.83367729, 21.82855797, 21.82344055],
-        [21.86950302, 21.86438560, 21.85926628, 21.85414886, 21.84903145,
-         21.84391212, 21.83879471, 21.83367729, 21.82855797, 21.82344055],
-        [21.86950302, 21.86438560, 21.85926628, 21.85414886, 21.84903145,
-         21.84391212, 21.83879471, 21.83367729, 21.82855797, 21.82344055],
-        [21.86950493, 21.86438751, 21.85926819, 21.85415077, 21.84903335,
-         21.84391403, 21.83879662, 21.83367920, 21.82855987, 21.82344246],
-        [21.86950493, 21.86438751, 21.85926819, 21.85415077, 21.84903335,
-         21.84391403, 21.83879661, 21.83367920, 21.82855987, 21.82344246],
-        [21.86950493, 21.86438751, 21.85926819, 21.85415077, 21.84903335,
-         21.84391403, 21.83879661, 21.83367912, 21.82855987, 21.82344246],
-        [21.86950683, 21.86438942, 21.85927009, 21.85415268, 21.84903526,
-         21.84391594, 21.83879852, 21.83368111, 21.82856178, 21.82344437],
-        [21.86950683, 21.86438942, 21.85927009, 21.85415268, 21.84903526,
-         21.84391594, 21.83879852, 21.83368111, 21.82856178, 21.82344437],
-        [21.86950683, 21.86438942, 21.85927009, 21.85415268, 21.84903526,
-         21.84391594, 21.83879852, 21.83368111, 21.82856178, 21.82344437],
+        [21.869589, 21.864470, 21.859352, 21.854235, 21.849115,
+         21.843998, 21.838880, 21.833761, 21.828644, 21.823524],
+        [21.869589, 21.864470, 21.859352, 21.854235, 21.849115,
+         21.843998, 21.838880, 21.833761, 21.828644, 21.823524],
+        [21.869590, 21.864471, 21.859354, 21.854237, 21.849117,
+         21.844000, 21.838882, 21.833763, 21.828646, 21.823526],
+        [21.869590, 21.864471, 21.859354, 21.854237, 21.849117,
+         21.844000, 21.838882, 21.833763, 21.828646, 21.823526],
+        [21.869590, 21.864471, 21.859354, 21.854237, 21.849117,
+         21.844000, 21.838882, 21.833763, 21.828646, 21.823526],
+        [21.869593, 21.864473, 21.859356, 21.854239, 21.849120,
+         21.844002, 21.838884, 21.833765, 21.828648, 21.823528],
+        [21.869593, 21.864473, 21.859356, 21.854239, 21.849120,
+         21.844002, 21.838884, 21.833765, 21.828648, 21.823528],
+        [21.869595, 21.864475, 21.859358, 21.854240, 21.849121,
+         21.844004, 21.838886, 21.833767, 21.828650, 21.823530],
+        [21.869595, 21.864475, 21.859358, 21.854240, 21.849121,
+         21.844004, 21.838886, 21.833767, 21.828650, 21.823530],
+        [21.869595, 21.864475, 21.859358, 21.854240, 21.849121,
+         21.844004, 21.838886, 21.833767, 21.828650, 21.823530],
     ])
     # fmt: on
 
@@ -2212,58 +2214,15 @@ class TestFieldWrite(unittest.TestCase):
     FIELD_UNIT = ""
     FIELD_INDEX = 3
     FIELD_NUM_ELEMS = 1452
+    # fmt: off
     FIELD_VALUES = (
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        2417,
-        2282,
-        2280,
-        2393,
-        2440,
-        2697,
-        3119,
-        3577,
-        3853,
-        3688,
-        3784,
-        4201,
-        3846,
-        2821,
-        2186,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 2264, 2123, 2187, 2255, 2332,
+        2646, 3065, 3496, 3622, 3436, 3694, 3921, 3298, 2368, 1974,
     )
+    # fmt: on
 
     def setUp(self):
         self.filename = PRODUCT_FILE.with_name(PRODUCT_FILE.name + "_")
@@ -2607,7 +2566,7 @@ class TestTimeField(TestField):
     FIELD_TYPE_NAME = "time"
     FIELD_NUM_ELEMS = 1
     FIELD_VALUES = (
-        epr.EPRTime(days=3567, seconds=10588, microseconds=239091),
+        epr.EPRTime(days=3567, seconds=10588, microseconds=239048),
     )
     FIELD_UNIT = "MJD"
     FIELD_OFFSET = 0

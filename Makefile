@@ -7,7 +7,7 @@ TARGET=epr
 CYTHON=$(PYTHON) -m cython
 CYTHONFLAGS=-3
 
-TEST_DATSET = tests/$(shell grep N1 tests/test_all.py | cut -d '"' -f 2)
+TEST_DATSET = tests/data/$(shell grep N1 tests/test_all.py | cut -d '"' -f 2)
 
 EPRAPIROOT = extern/epr-api
 
