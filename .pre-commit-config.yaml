@@ -15,9 +15,9 @@ repos:
     -   id: detect-private-key
 
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.10
+    rev: v0.16.6
     hooks:
-    -   id: ruff
+    -   id: ruff-check
         args: [--fix, --config=pyproject.toml]
     -   id: ruff-format
 
@@ -25,7 +25,7 @@ repos:
     rev: v3.21.2
     hooks:
     -   id: pyupgrade
-        args: [--py310-plus]
+        args: [--py311-plus]
 
 # -   repo: https://github.com/pycqa/flake8
 #     rev: 7.3.0
@@ -39,18 +39,18 @@ repos:
 #         exclude: tests|examples|data|docs|setup.py
 
 # -   repo: https://github.com/pycqa/isort
-#     rev: 7.0.0
+#     rev: 9.0.1
 #     hooks:
 #     -   id: isort
 #         name: isort (python)
 
 # -   repo: https://github.com/psf/black-pre-commit-mirror
-#     rev: 25.12.0
+#     rev: 26.5.1
 #     hooks:
 #     -   id: black
-#         language_version: python3.10
+#         language_version: python3.11
 #     -   id: black-jupyter
-#         language_version: python3.10
+#         language_version: python3.11
 
 # -   repo: https://github.com/tweag/FawltyDeps
 #     rev: v0.20.0
@@ -59,7 +59,7 @@ repos:
 #     -   id: check-unused
 
 # -   repo: https://github.com/pre-commit/mirrors-mypy
-#     rev: v1.19.1
+#     rev: v2.3.1
 #     hooks:
 #     -   id: mypy
 #         additional_dependencies:
@@ -71,7 +71,7 @@ repos:
 #             )
 
 # -   repo: https://github.com/codespell-project/codespell
-#     rev: v2.4.1
+#     rev: v2.4.3
 #     hooks:
 #     -   id: codespell
 #         additional_dependencies: [tomli]
