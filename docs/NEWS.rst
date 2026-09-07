@@ -5,7 +5,13 @@ Change history
 PyEPR 1.3.1 (UNRELEASED)
 ------------------------
 
-* TBW
+* Update project fields.
+* The minimum required Cython_ version is now v3.1.
+* Update pre-commit configuration.
+* Update project configuration files.
+* Use Pooch_ for test data management.
+
+.. _Pooch: https://www.fatiando.org/pooch/latest/
 
 
 PyEPR 1.3.0 (03/01/2026)
