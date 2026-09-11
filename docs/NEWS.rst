@@ -10,6 +10,7 @@ PyEPR 1.3.1 (UNRELEASED)
 * Update pre-commit configuration.
 * Update project configuration files.
 * Use Pooch_ for test data management.
+* Support builds with the Python stable API.
 
 .. _Pooch: https://www.fatiando.org/pooch/latest/
 
