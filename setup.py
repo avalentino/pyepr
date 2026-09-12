@@ -84,7 +84,10 @@ def setup_extension(
         ("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")
     ]
     if coverage:
-        define_macros.append(("CYTHON_TRACE_NOGIL", "1"))
+        define_macros.extend([
+            ("CYTHON_TRACE_NOGIL", "1"),
+            ("CYTHON_USE_SYS_MONITORING", "0"),
+        ])
         if py_limited_api is not None:
             warnings.warn(
                 "The use of 'limited_api` is not compatible with the "

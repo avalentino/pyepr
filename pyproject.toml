@@ -129,8 +129,9 @@ addopts = [
 
 [tool.coverage.run]
 branch = true
+core = "ctrace"
 plugins = ["Cython.Coverage"]
-source = ["epr"]
+source_pkgs = ["epr"]
 
 
 [tool.black]
