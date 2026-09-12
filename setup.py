@@ -177,9 +177,11 @@ def get_parser():
     parser.add_argument(
         "--epr-api-src",
         default=DEFAULT_EPRAPI_SRC,
-        help="set the path to the EPR-API source tree. "
-        "If not set uses the system libraries for epr-api. "
-        "Default: %(default)s",
+        help=(
+            "set the path to the EPR-API source tree. "
+            "If not set uses the system libraries for epr-api. "
+            "Default: %(default)s"
+        ),
     )
     parser.add_argument(
         "--use-stable-api",
