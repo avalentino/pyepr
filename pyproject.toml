@@ -116,9 +116,8 @@ epr = ["py.typed", "*.pyi"]
 
 
 [tool.cibuildwheel]
-skip = "pp*"
 enable = ["cpython-freethreading"]
-test-requires = "pytest"
+test-groups = ["test"]
 test-command = "pytest -v {project}/tests"
 
 
