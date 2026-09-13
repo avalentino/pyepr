@@ -14,7 +14,7 @@ authors = [
     {name = "Antonio Valentino", email = "antonio.valentino@tiscali.it"},
 ]
 description = "Python ENVISAT Product Reader API"
-requires-python = ">=3.10, <4"
+requires-python = ">=3.11, <4"
 keywords = ["satellite", "reader", "envisat"]
 license = "GPL-3.0-or-later"
 license-files = ["LICENSE.txt", "LICENSES/*"]
