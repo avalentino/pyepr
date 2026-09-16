@@ -27,6 +27,7 @@ import platform
 import tempfile
 import unittest
 import functools
+import sysconfig
 
 try:
     import resource
@@ -49,6 +50,9 @@ from epr._epr import (  # noqa: PLC2701
     _EPR_MAGIC_BAND_ID,
     _EPR_MAGIC_PRODUCT_ID,
 )
+
+FREE_THREAD = sysconfig.get_config_var("Py_GIL_DISABLED")
+
 
 EPR_TO_NUMPY_TYPE = {
     # epr.E_TID_UNKNOWN:  np.NPY_NOTYPE,
@@ -3071,12 +3075,14 @@ class TestLibVersion(unittest.TestCase):
         self.assertTrue(isinstance(epr.EPR_C_API_VERSION, str))
 
 
-# only PyPy 3 seems to be affected
 @unittest.skipIf(
     platform.python_implementation() == "PyPy",
     "skip memory leak check on PyPy",
 )
-@unittest.skipIf(not have_resource, '"resource" module not available')
+@unittest.skipIf(
+    FREE_THREAD, "skip memory leak check on free threading builds"
+)
+@unittest.skipIf(not have_resource, "'resource' module not available")
 class TestMemoryLeaks(unittest.TestCase):
     # See gh-10 (https://github.com/avalentino/pyepr/issues/10)
 
