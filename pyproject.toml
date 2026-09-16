@@ -121,6 +121,10 @@ test-groups = ["test"]
 test-command = "pytest -v {project}/tests"
 
 
+[tool.cibuildwheel.linux]
+environment-pass = ["PY_LIMITED_API"]
+
+
 [tool.pytest.ini_options]
 addopts = [
     "--import-mode=importlib",
