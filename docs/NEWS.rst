@@ -11,6 +11,8 @@ PyEPR 1.3.1 (UNRELEASED)
 * Update project configuration files.
 * Use Pooch_ for test data management.
 * Support builds with the Python stable API.
+* Drop support for Python < 3.11 and numpy < 2.
+* Build wheels for stable API ``cp311``.
 
 .. _Pooch: https://www.fatiando.org/pooch/latest/
 
