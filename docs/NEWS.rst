@@ -2,7 +2,7 @@ Change history
 ==============
 
 
-PyEPR 1.3.1 (UNRELEASED)
+PyEPR 1.3.1 (16/09/2026)
 ------------------------
 
 * Update project fields.
