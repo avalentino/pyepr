@@ -373,7 +373,7 @@ PyEPR 0.7 (04/08/2013)
 
 * more detailed error messages in case of open failures
 * new sphinx theme for the HTML documentation
-* `Travis-CI`_ has been set-up for the project
+* Travis-CI has been set-up for the project
 * now the source tar-ball also includes a copy of the EPR C API sources
   so that no external C library is required to build PyEPR.
 
@@ -391,8 +391,6 @@ PyEPR 0.7 (04/08/2013)
     (ref. doc. PO-RS-MDA-GS-2009_4/C
   - fix incorrect reading of "incident_angle" bands (closes :issue:`6`).
     The issue is in the EPR C API.
-
-.. _`Travis-CI`: https://travis-ci.org/avalentino/pyepr
 
 
 PyEPR 0.6.1 (26/04/2012)
